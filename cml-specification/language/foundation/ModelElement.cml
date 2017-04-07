@@ -1,9 +1,0 @@
-
-// Model (Abstract Syntax)
-
-abstract concept ModelElement
-{
-    parentScope: Scope?;
-}
-
-// Validator (Well-Formedness Rules)
