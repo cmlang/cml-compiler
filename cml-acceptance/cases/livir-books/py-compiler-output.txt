@@ -1,0 +1,12 @@
+model files:
+- setup.py
+- livir_books/__init__.py
+
+Product files:
+- livir_books/product.py
+
+Book files:
+- livir_books/book.py
+
+BookStore files:
+- livir_books/book_store.py

@@ -63,12 +63,12 @@ class TargetFileRendererImpl implements TargetFileRenderer
 
         if (targetFile.getTemplateFile().isPresent())
         {
-            final String targetLanguage = targetFile.getExtension();
+            final String targetLanguageExtension = targetFile.getExtension();
             final String contents = templateRenderer.renderTemplate(
                 targetFile.getTemplateFile().get(),
                 targetFile.getTemplateName(),
                 args,
-                targetLanguage);
+                targetLanguageExtension);
 
             final String path = targetDirPath + File.separatorChar + targetFile.getPath();
             fileSystem.createFile(path, contents);

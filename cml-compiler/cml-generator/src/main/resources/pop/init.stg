@@ -1,0 +1,10 @@
+
+init(target, model) ::= <<
+__all__ = [
+    <model.concepts:concept_module();separator=",\n">
+]
+>>
+
+concept_module(concept) ::= <<
+"<concept.name; format="underscore-case">"
+>>

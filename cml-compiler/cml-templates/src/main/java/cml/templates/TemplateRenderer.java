@@ -22,7 +22,7 @@ public interface TemplateRenderer
         TemplateFile templateFile,
         String templateName,
         Map<String, Object> args,
-        @Nullable String targetLanguage);
+        @Nullable String targetLanguageExtension);
 
     static TemplateRenderer create(Console console)
     {
@@ -46,13 +46,13 @@ class TemplateRendererImpl implements TemplateRenderer
         TemplateFile templateFile,
         String templateName,
         Map<String, Object> args,
-        @Nullable String targetLanguage)
+        @Nullable String targetLanguageExtension)
     {
         final STGroupFile groupFile = new TemplateGroupFile(templateFile.getPath());
 
-        if (targetLanguage != null)
+        if (targetLanguageExtension != null)
         {
-            final Optional<TemplateGroupFile> languageTemplates = loadLanguageTemplates(targetLanguage);
+            final Optional<TemplateGroupFile> languageTemplates = loadLanguageTemplates(targetLanguageExtension);
 
             languageTemplates.ifPresent(groupFile::importTemplates);
         }
@@ -80,11 +80,11 @@ class TemplateRendererImpl implements TemplateRenderer
             templateName, templateFile.getPath());
     }
 
-    private static Optional<TemplateGroupFile> loadLanguageTemplates(@Nullable String targetLanguage)
+    private static Optional<TemplateGroupFile> loadLanguageTemplates(@Nullable String targetLanguageExtension)
     {
         try
         {
-            return Optional.of(new TemplateGroupFile(format(LANGUAGE_GROUP, targetLanguage)));
+            return Optional.of(new TemplateGroupFile(format(LANGUAGE_GROUP, targetLanguageExtension)));
         }
         catch (IllegalArgumentException ignored)
         {

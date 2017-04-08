@@ -1,6 +1,6 @@
 import "/patterns/class.stg"
 
-conceptFile(target, concept) ::= <<
+concept_file(target, concept) ::= <<
 package <target.packageName>;
 
 import java.util.*;

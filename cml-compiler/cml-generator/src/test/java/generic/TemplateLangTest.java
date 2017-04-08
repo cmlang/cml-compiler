@@ -29,16 +29,16 @@ public abstract class TemplateLangTest extends TemplateTest
     private static final String LANG_GROUP_PATH = "lang/%s";
 
     @Parameters
-    public static Collection<String> targetLanguages()
+    public static Collection<String> targetLanguageExtension()
     {
-        return asList("java", "python");
+        return asList("java", "py");
     }
 
-    private final String targetLanguage;
+    private final String targetLanguageExtension;
 
-    protected TemplateLangTest(String targetLanguage)
+    protected TemplateLangTest(String targetLanguageExtension)
     {
-        this.targetLanguage = targetLanguage;
+        this.targetLanguageExtension = targetLanguageExtension;
     }
 
     @Override
@@ -46,7 +46,7 @@ public abstract class TemplateLangTest extends TemplateTest
     {
         super.setUp();
 
-        groupFile.importTemplates(createTemplateGroupFile(format(LANG_GROUP_PATH, targetLanguage)));
+        groupFile.importTemplates(createTemplateGroupFile(format(LANG_GROUP_PATH, targetLanguageExtension)));
     }
 
     protected void testTemplateWithConcept(String templateName, Concept concept, String expectedOutputPath)
@@ -74,7 +74,7 @@ public abstract class TemplateLangTest extends TemplateTest
 
     protected void assertThatOutputMatches(String expectedOutputPath, String actualOutput) throws IOException
     {
-        expectedOutputPath = format(EXPECTED_OUTPUT_PATH, targetLanguage, getTemplatePath(), expectedOutputPath);
+        expectedOutputPath = format(EXPECTED_OUTPUT_PATH, targetLanguageExtension, getTemplatePath(), expectedOutputPath);
 
         final URL expectedOutputResource = getClass().getResource(expectedOutputPath);
         assertNotNull("Expected output resource must exist: " + expectedOutputPath, expectedOutputResource);

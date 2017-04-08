@@ -1,0 +1,13 @@
+
+modelFiles(target, model) ::= <<
+setup|setup.py
+init|<python_file_name(target.moduleName)>/__init__.py
+>>
+
+conceptFiles(target, concept) ::= <<
+concept_file|<python_file_name(target.moduleName)>/<python_file_name(concept.name)>.py
+>>
+
+python_file_name(name) ::= <<
+<name; format="underscore-case">
+>>

@@ -38,15 +38,18 @@ public class AcceptanceTest
     private static final String FRONTEND_TARGET_DIR = FRONTEND_DIR + "/target";
     private static final String COMPILER_JAR = FRONTEND_TARGET_DIR + "/cml-compiler-jar-with-dependencies.jar";
 
-    private static final String CLIENT_BASE_DIR = BASE_DIR + "/cml-clients";
+    private static final String CLIENT_BASE_DIR = BASE_DIR + "/" + "cml-clients";
     private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
 
     private static final String CASES_DIR = "cases";
-    private static final String COMPILER_OUTPUT_FILENAME = "/compiler-output.txt";
-    private static final String CLIENT_OUTPUT_FILENAME = "/client-output.txt";
+    private static final String COMPILER_OUTPUT_FILENAME = "compiler-output.txt";
+    private static final String CLIENT_OUTPUT_FILENAME = "client-output.txt";
 
     private static final String TARGET_DIR = "target/acceptance-test";
     private static final String POJ = "poj"; // plain old Java
+
+    private static final String JAVA = "java";
+    private static final String PYTHON = "py";
 
     private static final int SUCCESS = 0;
     private static final int FAILURE__SOURCE_DIR_NOT_FOUND = 1;
@@ -57,8 +60,9 @@ public class AcceptanceTest
 
     @DataPoints("success-cases")
     public static Case[] successCases = {
-        new Case("livir-books", "poj", "java", "livir-console"),
-        new Case("mini-cml-language", "cmlc", "java", "mcml-compiler")
+        new Case("livir-books", "livir-console", "poj", JAVA),
+        new Case("livir-books", "livir-console", "pop", PYTHON),
+        new Case("mini-cml-language", "mcml-compiler", "cmlc", JAVA)
     };
 
     @BeforeClass
@@ -83,15 +87,20 @@ public class AcceptanceTest
     @Theory
     public void success(@FromDataPoints("success-cases") final Case successCase) throws Exception
     {
-        final String sourceDir = CASES_DIR + "/" + successCase.getName();
+        final String sourceDir = CASES_DIR + "/" + successCase.getModuleName();
+        final String outputBasePath = sourceDir + "/" + successCase.getTargetLanguageExtension() + "-";
 
-        compileAndVerifyOutput(sourceDir, successCase.getTargetType(), SUCCESS);
-        buildMavenModule(TARGET_DIR);
+        compileAndVerifyOutput(
+            sourceDir,
+            successCase.getTargetType(),
+            outputBasePath + COMPILER_OUTPUT_FILENAME,
+            SUCCESS);
+        installGeneratedModule(TARGET_DIR, successCase);
 
-        final String actualClientOutput = executeJavaClient(successCase);
+        final String actualClientOutput = executeClient(successCase);
         assertThatOutputMatches(
             "client's output",
-            sourceDir + CLIENT_OUTPUT_FILENAME,
+            outputBasePath + CLIENT_OUTPUT_FILENAME,
             actualClientOutput);
     }
 
@@ -101,7 +110,7 @@ public class AcceptanceTest
         compileAndVerifyOutput(
             CASES_DIR + "/unknown-dir",
             POJ,
-            CASES_DIR + "/missing-source-dir",
+            CASES_DIR + "/missing-source-dir/" + COMPILER_OUTPUT_FILENAME,
             FAILURE__SOURCE_DIR_NOT_FOUND);
     }
 
@@ -171,22 +180,23 @@ public class AcceptanceTest
         final String targetType,
         final int expectedExitCode) throws CommandLineException, IOException
     {
-        compileAndVerifyOutput(sourceDir, targetType, sourceDir, expectedExitCode);
+        compileAndVerifyOutput(
+            sourceDir,
+            targetType,
+            sourceDir + "/" + COMPILER_OUTPUT_FILENAME,
+            expectedExitCode);
     }
 
     private void compileAndVerifyOutput(
         final String sourceDir,
         final String targetType,
-        final String expectedOutputDir,
+        final String expectedOutputPath,
         final int expectedExitCode) throws CommandLineException, IOException
     {
         final String actualCompilerOutput = executeJar(
             COMPILER_JAR, asList(sourceDir, TARGET_DIR, targetType), expectedExitCode);
 
-        assertThatOutputMatches(
-            "compiler's output",
-            expectedOutputDir + COMPILER_OUTPUT_FILENAME,
-            actualCompilerOutput);
+        assertThatOutputMatches("compiler's output", expectedOutputPath, actualCompilerOutput);
     }
 
     private void assertThatOutputMatches(
@@ -196,6 +206,19 @@ public class AcceptanceTest
     {
         final String expectedOutput = Files.toString(new File(expectedOutputPath), OUTPUT_FILE_ENCODING);
         assertEquals(reason, expectedOutput, actualOutput);
+    }
+
+    private static void installGeneratedModule(final String baseDir, final Case successCase)
+        throws MavenInvocationException, IOException, CommandLineException
+    {
+        if (successCase.getTargetLanguageExtension().equals(JAVA))
+        {
+            buildMavenModule(baseDir);
+        }
+        else if (successCase.getTargetLanguageExtension().equals(PYTHON))
+        {
+            installPythonPackage(baseDir);
+        }
     }
 
     private static void buildMavenModule(final String baseDir) throws MavenInvocationException
@@ -215,7 +238,104 @@ public class AcceptanceTest
         if (result.getExitCode() != 0) throw new MavenInvocationException("Exit code: " + result.getExitCode());
     }
 
-    private String executeJar(
+    private static void installPythonPackage(final String baseDir) throws IOException, CommandLineException
+    {
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        int exitCode;
+
+        try
+        {
+            // development mode - https://packaging.python.org/distributing/#working-in-development-mode
+            final Commandline commandLine = new Commandline();
+            commandLine.setExecutable(pythonCmd("pip3"));
+            commandLine.createArg().setValue("install");
+            commandLine.createArg().setValue("-e");
+            commandLine.createArg().setValue(baseDir);
+
+            final Writer writer = new OutputStreamWriter(outputStream);
+            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
+            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
+
+            System.out.println("Installing Python package: " + commandLine);
+
+            exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+        }
+        finally
+        {
+            outputStream.close();
+        }
+
+        if (exitCode != 0)
+        {
+            System.out.printf("--- pip's output:");
+            System.out.print(new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING));
+            System.out.printf("---");
+        }
+
+        assertThat("exit code: ", exitCode, is(0));
+    }
+
+    private static String executeClient(final Case successCase)
+        throws MavenInvocationException, IOException, CommandLineException
+    {
+        switch (successCase.getTargetLanguageExtension())
+        {
+            case JAVA:
+                return executeJavaClient(successCase);
+            case PYTHON:
+                return executePythonClient(successCase);
+            default:
+                return "Unknown language: " + successCase.getTargetLanguageExtension();
+        }
+    }
+
+    private static String executeJavaClient(Case successCase)
+        throws CommandLineException, IOException, MavenInvocationException
+    {
+        final String clientModuleDir = CLIENT_BASE_DIR + successCase.getClientPath();
+        buildMavenModule(clientModuleDir);
+
+        final File clientTargetDir = new File(clientModuleDir, "target");
+        assertThat("Client target dir must exist: " + clientTargetDir, clientTargetDir.exists(), is(true));
+
+        final String clientJarPath = clientTargetDir.getPath() + "/" + successCase.getClientName() + CLIENT_JAR_SUFFIX;
+
+        return executeJar(clientJarPath, emptyList(), SUCCESS);
+    }
+
+    private static String executePythonClient(Case successCase) throws CommandLineException, IOException
+    {
+        final String clientModulePath = CLIENT_BASE_DIR + successCase.getClientPath() + ".py";
+        assertThat(
+            "Client module must exist: " + clientModulePath,
+            new File(clientModulePath).exists(), is(true));
+
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try
+        {
+            // Executing Python module - https://www.python.org/dev/peps/pep-0338/#current-behaviour
+            final Commandline commandLine = new Commandline();
+            commandLine.setExecutable(pythonCmd("python3"));
+            commandLine.createArg().setValue(clientModulePath);
+
+            final Writer writer = new OutputStreamWriter(outputStream);
+            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
+            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
+
+            System.out.println("Launching Python module: " + commandLine);
+
+            executeCommandLine(commandLine, systemOut, systemErr, 10);
+        }
+        finally
+        {
+            outputStream.close();
+        }
+
+        return new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING);
+    }
+
+    private static String executeJar(
         final String jarPath,
         final List<String> args,
         final int expectedExitCode) throws CommandLineException, IOException
@@ -236,21 +356,7 @@ public class AcceptanceTest
         return new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING);
     }
 
-    private String executeJavaClient(Case successCase)
-        throws CommandLineException, IOException, MavenInvocationException
-    {
-        final String clientModuleDir = CLIENT_BASE_DIR + successCase.getClientPath();
-        buildMavenModule(clientModuleDir);
-
-        final File clientTargetDir = new File(clientModuleDir, "target");
-        assertThat("Client target dir must exist: " + clientTargetDir, clientTargetDir.exists(), is(true));
-
-        final String clientJarPath = clientTargetDir.getPath() + "/" + successCase.getClientName() + CLIENT_JAR_SUFFIX;
-
-        return executeJar(clientJarPath, emptyList(), SUCCESS);
-    }
-
-    private int executeJar(
+    private static int executeJar(
         final String jarPath,
         final List<String> args,
         final ByteArrayOutputStream outputStream) throws CommandLineException
@@ -284,6 +390,12 @@ public class AcceptanceTest
         System.out.println("Output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
 
         return exitCode;
+    }
+
+    private static String pythonCmd(String cmd)
+    {
+        final String pythonHomeDir = System.getenv("PYTHON_HOME");
+        return pythonHomeDir + "/bin/" + cmd;
     }
 
 }

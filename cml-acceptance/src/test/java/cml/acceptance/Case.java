@@ -6,27 +6,32 @@ class Case
 {
     private static final String CLIENT_PATH = "/%s-clients/%s";
     
-    private final String name;
-    private final String targetType;
+    private final String moduleName;
     private final String clientName;
-    private final String languageName;
+    private final String targetType;
+    private final String targetLanguageExtension;
 
-    Case(String name, String targetType, String languageName, String clientName)
+    Case(String moduleName, String clientName, String targetType, String targetLanguageExtension)
     {
-        this.name = name;
-        this.targetType = targetType;
-        this.languageName = languageName;
+        this.moduleName = moduleName;
         this.clientName = clientName;
+        this.targetType = targetType;
+        this.targetLanguageExtension = targetLanguageExtension;
     }
 
-    String getName()
+    String getModuleName()
     {
-        return name;
+        return moduleName;
     }
 
     String getTargetType()
     {
         return targetType;
+    }
+
+    String getTargetLanguageExtension()
+    {
+        return targetLanguageExtension;
     }
 
     String getClientName()
@@ -36,6 +41,6 @@ class Case
 
     String getClientPath()
     {
-        return format(CLIENT_PATH, languageName, clientName);
+        return format(CLIENT_PATH, targetLanguageExtension, clientName);
     }
 }

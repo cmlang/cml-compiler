@@ -20,3 +20,9 @@ target poj
     packagePath = "livir/books";
 }
 
+target pop
+{
+    version = "1.0.1";
+    moduleName = "livir_books";
+}
+
