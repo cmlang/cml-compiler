@@ -12,7 +12,7 @@ jdk:
   - oraclejdk8
 
 env:
-  - PYTHON_HOME=$(dirname $(dirname $(which python3)))
+  - PYTHON_HOME="$(dirname $(dirname $(which python3)))"
 
 script:
   - cd cml-acceptance
