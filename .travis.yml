@@ -11,11 +11,6 @@ cache:
 jdk:
   - oraclejdk8
 
-addons:
-  apt:
-    packages:
-      - python3.6
-
 env:
   - PYTHON_HOME=$(dirname $(dirname $(which python3)))
 
