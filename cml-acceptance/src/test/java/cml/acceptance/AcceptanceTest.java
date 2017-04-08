@@ -242,11 +242,11 @@ public class AcceptanceTest
     {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
         {
-            // development mode - https://packaging.python.org/distributing/#working-in-development-mode
+            // --upgrade: overwriting previous installation - https://packaging.python.org/installing
             final Commandline commandLine = new Commandline();
             commandLine.setExecutable(pythonCmd("pip3"));
             commandLine.createArg().setValue("install");
-            commandLine.createArg().setValue("-e");
+            commandLine.createArg().setValue("--upgrade");
             commandLine.createArg().setValue(baseDir);
 
             final Writer writer = new OutputStreamWriter(outputStream);
