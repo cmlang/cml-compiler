@@ -64,7 +64,7 @@ public class AcceptanceTest
     @BeforeClass
     public static void buildCompiler() throws MavenInvocationException
     {
-        buildModule(COMPILER_DIR);
+        buildMavenModule(COMPILER_DIR);
 
         final File targetDir = new File(FRONTEND_TARGET_DIR);
         assertThat("Target dir must exist: " + targetDir, targetDir.exists(), is(true));
@@ -86,16 +86,9 @@ public class AcceptanceTest
         final String sourceDir = CASES_DIR + "/" + successCase.getName();
 
         compileAndVerifyOutput(sourceDir, successCase.getTargetType(), SUCCESS);
-        buildModule(TARGET_DIR);
+        buildMavenModule(TARGET_DIR);
 
-        final String clientModuleDir = CLIENT_BASE_DIR + successCase.getClientPath();
-        buildModule(clientModuleDir);
-
-        final File clientTargetDir = new File(clientModuleDir, "target");
-        assertThat("Client target dir must exist: " + clientTargetDir, clientTargetDir.exists(), is(true));
-
-        final String clientJarPath = clientTargetDir.getPath() + "/" + successCase.getClientName() + CLIENT_JAR_SUFFIX;
-        final String actualClientOutput = executeJar(clientJarPath, emptyList(), SUCCESS);
+        final String actualClientOutput = executeJavaClient(successCase);
         assertThatOutputMatches(
             "client's output",
             sourceDir + CLIENT_OUTPUT_FILENAME,
@@ -205,7 +198,7 @@ public class AcceptanceTest
         assertEquals(reason, expectedOutput, actualOutput);
     }
 
-    private static void buildModule(final String baseDir) throws MavenInvocationException
+    private static void buildMavenModule(final String baseDir) throws MavenInvocationException
     {
         System.out.println("Building: " + baseDir);
 
@@ -241,6 +234,20 @@ public class AcceptanceTest
         }
 
         return new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING);
+    }
+
+    private String executeJavaClient(Case successCase)
+        throws CommandLineException, IOException, MavenInvocationException
+    {
+        final String clientModuleDir = CLIENT_BASE_DIR + successCase.getClientPath();
+        buildMavenModule(clientModuleDir);
+
+        final File clientTargetDir = new File(clientModuleDir, "target");
+        assertThat("Client target dir must exist: " + clientTargetDir, clientTargetDir.exists(), is(true));
+
+        final String clientJarPath = clientTargetDir.getPath() + "/" + successCase.getClientName() + CLIENT_JAR_SUFFIX;
+
+        return executeJar(clientJarPath, emptyList(), SUCCESS);
     }
 
     private int executeJar(
