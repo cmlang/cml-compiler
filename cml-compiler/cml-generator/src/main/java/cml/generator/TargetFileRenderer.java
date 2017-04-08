@@ -6,8 +6,8 @@ import cml.language.features.Target;
 import cml.templates.TemplateRenderer;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public interface TargetFileRenderer
 {
@@ -49,7 +49,7 @@ class TargetFileRendererImpl implements TargetFileRenderer
         String fileType,
         Map<String, Object> templateArgs)
     {
-        final Set<TargetFile> targetFiles = targetFileRepository.findTargetFiles(target, fileType, templateArgs);
+        final List<TargetFile> targetFiles = targetFileRepository.findTargetFiles(target, fileType, templateArgs);
 
         targetFiles.forEach(targetFile -> renderTargetFile(targetFile, targetDirPath, templateArgs));
     }

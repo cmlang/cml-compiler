@@ -5,18 +5,18 @@ import cml.templates.TemplateFile;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import static java.util.Arrays.stream;
-import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.toSet;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 interface TargetFileRepository
 {
     boolean templatesFoundFor(Target target);
-    Set<TargetFile> findTargetFiles(Target target, String fileType, Map<String, Object> args);
+    List<TargetFile> findTargetFiles(Target target, String fileType, Map<String, Object> args);
 
     static TargetFileRepository create(TemplateRepository templateRepository, TemplateRenderer templateRenderer)
     {
@@ -28,7 +28,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
 {
     private static final String STG_EXT = ".stg";
     private static final String GROUP_FILES = "files" + STG_EXT;
-    private static final String FILES_SUFFIX = "Files";
+    private static final String FILES_SUFFIX = "_files";
     private static final String FILE_LINE_SEPARATOR = "\\|";
     private static final String TEMPLATE_NAME_SEPARATOR = ":";
 
@@ -49,7 +49,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     }
 
     @Override
-    public Set<TargetFile> findTargetFiles(
+    public List<TargetFile> findTargetFiles(
         final Target target,
         final String fileType,
         final Map<String, Object> args)
@@ -63,11 +63,11 @@ class TargetFileRepositoryImpl implements TargetFileRepository
             return stream(files.split("\n"))
                 .map(line -> line.split(FILE_LINE_SEPARATOR))
                 .map(pair -> createTargetFile(pair[1], target.getName(), pair[0]))
-                .collect(toSet());
+                .collect(toList());
         }
         else
         {
-            return emptySet();
+            return emptyList();
         }
     }
 
