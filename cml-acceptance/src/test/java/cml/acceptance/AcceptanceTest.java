@@ -38,7 +38,7 @@ public class AcceptanceTest
     private static final String FRONTEND_TARGET_DIR = FRONTEND_DIR + "/target";
     private static final String COMPILER_JAR = FRONTEND_TARGET_DIR + "/cml-compiler-jar-with-dependencies.jar";
 
-    private static final String CLIENT_BASE_DIR = BASE_DIR + "/java-clients";
+    private static final String CLIENT_BASE_DIR = BASE_DIR + "/cml-clients";
     private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
 
     private static final String CASES_DIR = "cases";
@@ -57,8 +57,8 @@ public class AcceptanceTest
 
     @DataPoints("success-cases")
     public static Case[] successCases = {
-        new Case("livir-books", "poj", "livir-console"),
-        new Case("mini-cml-language", "cmlc", "mcml-compiler")
+        new Case("livir-books", "poj", "java", "livir-console"),
+        new Case("mini-cml-language", "cmlc", "java", "mcml-compiler")
     };
 
     @BeforeClass
@@ -88,13 +88,13 @@ public class AcceptanceTest
         compileAndVerifyOutput(sourceDir, successCase.getTargetType(), SUCCESS);
         buildModule(TARGET_DIR);
 
-        final String clientModuleDir = CLIENT_BASE_DIR + "/" + successCase.getJavaClient();
+        final String clientModuleDir = CLIENT_BASE_DIR + successCase.getClientPath();
         buildModule(clientModuleDir);
 
         final File clientTargetDir = new File(clientModuleDir, "target");
         assertThat("Client target dir must exist: " + clientTargetDir, clientTargetDir.exists(), is(true));
 
-        final String clientJarPath = clientTargetDir.getPath() + "/" + successCase.getJavaClient() + CLIENT_JAR_SUFFIX;
+        final String clientJarPath = clientTargetDir.getPath() + "/" + successCase.getClientName() + CLIENT_JAR_SUFFIX;
         final String actualClientOutput = executeJar(clientJarPath, emptyList(), SUCCESS);
         assertThatOutputMatches(
             "client's output",

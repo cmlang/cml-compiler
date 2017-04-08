@@ -1,16 +1,22 @@
 package cml.acceptance;
 
+import static java.lang.String.format;
+
 class Case
 {
+    private static final String CLIENT_PATH = "/%s-clients/%s";
+    
     private final String name;
     private final String targetType;
-    private final String javaClient;
+    private final String clientName;
+    private final String languageName;
 
-    Case(String name, String targetType, String javaClient)
+    Case(String name, String targetType, String languageName, String clientName)
     {
         this.name = name;
         this.targetType = targetType;
-        this.javaClient = javaClient;
+        this.languageName = languageName;
+        this.clientName = clientName;
     }
 
     String getName()
@@ -23,8 +29,13 @@ class Case
         return targetType;
     }
 
-    String getJavaClient()
+    String getClientName()
     {
-        return javaClient;
+        return clientName;
+    }
+
+    String getClientPath()
+    {
+        return format(CLIENT_PATH, languageName, clientName);
     }
 }
