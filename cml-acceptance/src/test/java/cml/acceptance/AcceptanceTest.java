@@ -240,11 +240,7 @@ public class AcceptanceTest
 
     private static void installPythonPackage(final String baseDir) throws IOException, CommandLineException
     {
-        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        int exitCode;
-
-        try
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
         {
             // development mode - https://packaging.python.org/distributing/#working-in-development-mode
             final Commandline commandLine = new Commandline();
@@ -259,21 +255,14 @@ public class AcceptanceTest
 
             System.out.println("Installing Python package: " + commandLine);
 
-            exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
-        }
-        finally
-        {
-            outputStream.close();
-        }
+            final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
 
-        if (exitCode != 0)
-        {
-            System.out.printf("--- pip's output:");
-            System.out.print(new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING));
-            System.out.printf("---");
-        }
+            System.out.println("pip's exit code: " + exitCode);
+            System.out.println(
+                "pip's output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
 
-        assertThat("exit code: ", exitCode, is(0));
+            assertThat("exit code: ", exitCode, is(0));
+        }
     }
 
     private static String executeClient(final Case successCase)
@@ -306,10 +295,10 @@ public class AcceptanceTest
 
     private static String executePythonClient(Case successCase) throws CommandLineException, IOException
     {
-        final String clientModulePath = CLIENT_BASE_DIR + successCase.getClientPath() + ".py";
+        final String clientPath = CLIENT_BASE_DIR + successCase.getClientPath() + ".py";
         assertThat(
-            "Client module must exist: " + clientModulePath,
-            new File(clientModulePath).exists(), is(true));
+            "Client must exist: " + clientPath,
+            new File(clientPath).exists(), is(true));
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try
@@ -317,15 +306,18 @@ public class AcceptanceTest
             // Executing Python module - https://www.python.org/dev/peps/pep-0338/#current-behaviour
             final Commandline commandLine = new Commandline();
             commandLine.setExecutable(pythonCmd("python3"));
-            commandLine.createArg().setValue(clientModulePath);
+            commandLine.createArg().setValue(clientPath);
 
             final Writer writer = new OutputStreamWriter(outputStream);
             final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
             final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
 
-            System.out.println("Launching Python module: " + commandLine);
+            System.out.println("Launching Python client: " + commandLine);
 
-            executeCommandLine(commandLine, systemOut, systemErr, 10);
+            int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+
+            System.out.println("Python client's exit code: " + exitCode);
+            System.out.println("Output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
         }
         finally
         {
