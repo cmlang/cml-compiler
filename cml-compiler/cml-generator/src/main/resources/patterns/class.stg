@@ -6,7 +6,7 @@ import "/patterns/to_string.stg"
 class(concept) ::= <<
 <class7(
     concept=concept,
-    classNameSuffix="",
+    class_name_suffix="",
     ancestors=concept.directAncestors,
     interfaces=[],
     fieldAncestors=[],
@@ -15,10 +15,10 @@ class(concept) ::= <<
 )>
 >>
 
-class2(concept, classNameSuffix) ::= <<
+class2(concept, class_name_suffix) ::= <<
 <class7(
     concept=concept,
-    classNameSuffix=classNameSuffix,
+    class_name_suffix=class_name_suffix,
     ancestors=[],
     interfaces=[concept],
     fieldAncestors=concept.allAncestors,
@@ -28,25 +28,42 @@ class2(concept, classNameSuffix) ::= <<
 >>
 
 class7(
-    concept, classNameSuffix,
+    concept, class_name_suffix,
     ancestors, interfaces,
     fieldAncestors, 
     delegatedProperties, superProperties
 ) ::= <<
-<abstract(concept, superProperties)>class <type_name(concept)><classNameSuffix><ancestorList(ancestors)><interfaceList(interfaces)>
-{
-    <ancestorFields(fieldAncestors)>
-    <propertyFields(fieldAncestors, concept.properties)>
-    <constructorForClients(concept, classNameSuffix, superProperties)>
-    <primaryConstructor(concept, classNameSuffix, superProperties, fieldAncestors)>
-    <fieldGetters(concept)>
-    <delegatedGetters(concept, delegatedProperties)>
-    <class_to_string(concept)>
-}
+<class_abstract()><\\>
+<structure("class", class_header(), class_declarations())>
 >>
 
-abstract(concept, superProperties) ::= <<
-<if(concept.abstract && superProperties)>abstract <endif>
+class_abstract() ::= <<
+<if(concept.abstract && superProperties)><abstract_keyword()><endif>
+>>
+
+class_header() ::= <<
+<type_name(concept)><class_name_suffix><ancestor_list(concept.abstract, ancestors, interfaces)>
+>>
+
+class_declarations() ::= <<
+<class_fields()><class_constructors()><class_getters()><class_to_string()>
+>>
+
+class_fields() ::= <<
+<ancestorFields(fieldAncestors)><\\>
+<propertyFields(fieldAncestors, concept.properties)>
+>>
+
+class_constructors() ::= <<
+<constructorForClients(concept, class_name_suffix, superProperties)><\\>
+<primaryConstructor(concept, class_name_suffix, superProperties, fieldAncestors)>
+>>
+
+class_getters() ::= <<
+<newLineIf(concept.allProperties)><\\>
+<fieldGetters(concept)><\\>
+<newLineIf2(concept.properties, delegatedProperties)><\\>
+<delegatedGetters(concept, delegatedProperties)>
 >>
 
 ancestorFieldDecl(concept) ::= <<
@@ -57,19 +74,12 @@ propertyFieldDecl(property) ::= <<
 private final <field_type(property.type)> <field_name(property)>;
 >>
 
-ancestorList(ancestors) ::= <<
-<if(ancestors)> extends <ancestors:type_name();separator=", "><endif>
->>
-
-interfaceList(interfaces) ::= <<
-<if(interfaces)> implements <interfaces:type_name();separator=", "><endif>
->>
-
 ancestorFields(fieldAncestors) ::= <<
 <fieldAncestors:ancestorFieldDecl();separator="\n">
 >>
 
 propertyFields(fieldAncestors, fieldProperties) ::= <<
+<newLineIf2(fieldAncestors, fieldProperties)><\\>
 <newLineIf2(fieldAncestors, fieldProperties)><\\>
 <fieldProperties:propertyFieldDecl();separator="\n">
 >>
@@ -149,7 +159,8 @@ superArgs(property) ::= <<
 <field_name(property)>
 >>
 
-class_to_string(concept) ::= <<
+class_to_string() ::= <<
+<newLineIf(concept.allProperties)><\\>
 <newLineIf(concept.allProperties)><\\>
 <to_string(concept)>
 >>

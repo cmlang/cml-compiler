@@ -1,5 +1,5 @@
-class Book
-{
+class Book:
+
     private final String self.__title;
     private final Book self.__sequel;
     private final Set[Category] self.__categories;
@@ -30,4 +30,3 @@ class Book
             self.sequel,
             self.categories
         )
-}

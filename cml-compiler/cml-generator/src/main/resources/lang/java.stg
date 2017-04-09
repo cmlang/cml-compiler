@@ -8,6 +8,10 @@ modifier(m) ::= <<
 <m><\ >
 >>
 
+abstract_keyword() ::= <<
+abstract<\ >
+>>
+
 // Blocks
 
 block(statements) ::= <<
@@ -125,6 +129,13 @@ get<property.name; format="pascal-case">()
 
 interface_keyword() ::= "interface "
 
-interface_ancestor_header(ancestors, ancestor_list) ::= <<
-<if(ancestors)><\ >extends<\ ><ancestor_list><endif>
+// Classes
+
+class_keyword() ::= "class "
+
+// Ancestors
+
+ancestor_list(abstract, ancestors, interfaces) ::= <<
+<if(ancestors)> extends <ancestors:type_name();separator=", "><endif><\\>
+<if(interfaces)> implements <interfaces:type_name();separator=", "><endif>
 >>

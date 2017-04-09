@@ -1,5 +1,5 @@
-class Book
-{
+class Book:
+
     private final String self.__title;
 
     public Book(String self.__title)
@@ -16,4 +16,3 @@ class Book
             type(self).__name__,
             self.title
         )
-}

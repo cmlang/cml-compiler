@@ -5,6 +5,18 @@ import "/generic/generic.stg"
 
 modifier(m) ::= ""
 
+abstract_keyword() ::= ""
+
+// Structures
+
+structure(keyword, header, content) ::= <<
+<block_header(keyword, header)><\\>
+<structure_block_preamble()><\\>
+<block({<content>})>
+>>
+
+structure_block_preamble() ::= ""
+
 // Blocks
 
 block_header(keyword, content) ::= <<
@@ -26,8 +38,4 @@ interface_operation(name, params, result_type) ::= <<
 operation_header(name, params, result_type) ::= <<
 <block_header("operation", {<operation_header_content(name, params, result_type)>})>
 >>
-
-// Interfaces
-
-interface_preamble() ::= ""
 

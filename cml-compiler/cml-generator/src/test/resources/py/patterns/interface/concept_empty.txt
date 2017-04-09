@@ -1,2 +1,2 @@
-class EmptyBook (ABC):
+class EmptyBook(ABC):
 

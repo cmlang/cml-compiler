@@ -1,4 +1,4 @@
-class Book (ABC, Product, StockItem):
+class Book(ABC, Product, StockItem):
 
     @abstractproperty
     def title(self) -> String:

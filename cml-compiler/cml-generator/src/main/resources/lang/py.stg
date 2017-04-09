@@ -2,6 +2,10 @@
 import "/lang/common.stg"
 import "/patterns/getter.stg"
 
+// Structures
+
+structure_block_preamble() ::= "<\n>"
+
 // Blocks
 
 block(statements) ::= <<
@@ -110,10 +114,25 @@ getter_call(property) ::= <<
 
 // Interfaces
 
-interface_preamble() ::= "<\n>"
-
 interface_keyword() ::= "class "
 
 interface_ancestor_header(ancestors, ancestor_list) ::= <<
 <\ >(ABC<if(ancestors)>, <ancestor_list><endif>)
+>>
+
+// Classes
+
+class_keyword() ::= "class "
+
+// Ancestors
+
+ancestor_list(abstract, ancestors, interfaces) ::= <<
+<if(abstract || ancestors || interfaces)>(<endif><\\>
+<if(abstract)>ABC<if(ancestors || interfaces)>, <endif><endif><\\>
+<if(ancestors)><\\>
+<ancestors:type_name();separator=", "><\\>
+<if(interfaces)>, <endif><\\>
+<endif><\\>
+<if(interfaces)><interfaces:type_name();separator=", "><endif><\\>
+<if(abstract || ancestors || interfaces)>)<endif>
 >>

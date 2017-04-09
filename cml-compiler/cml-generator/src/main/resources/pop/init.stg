@@ -1,10 +1,11 @@
 
 init(target, model) ::= <<
-__all__ = [
-    <model.concepts:concept_module();separator=",\n">
-]
+<model.concepts:concept_module();separator="\n">
 >>
 
 concept_module(concept) ::= <<
-"<concept.name; format="underscore-case">"
+>>
+
+concept_module_disabled(concept) ::= <<
+from . import <concept.name; format="underscore-case">
 >>

@@ -1,5 +1,5 @@
-class BookImpl implements Book
-{
+class BookImpl(ABC, Book):
+
     private final Base self.__base;
     private final Product self.__product;
     private final StockItem self.__stock_item;
@@ -35,4 +35,3 @@ class BookImpl implements Book
             self.quantity,
             self.title
         )
-}

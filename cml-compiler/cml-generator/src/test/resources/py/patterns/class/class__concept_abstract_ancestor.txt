@@ -1,5 +1,5 @@
-abstract class Book extends Product
-{
+class Book(ABC, Product):
+
     private final String self.__title;
 
     public Book(String self.__description, String self.__title)
@@ -18,4 +18,3 @@ abstract class Book extends Product
             self.description,
             self.title
         )
-}

@@ -135,7 +135,7 @@ public class ClassTest extends TemplateLangTest
         assertNotNull("Expected template: " + templateName, template);
 
         template.add("concept", concept);
-        template.add("classNameSuffix", "Impl");
+        template.add("class_name_suffix", "Impl");
 
         final String result = template.render();
         assertThatOutputMatches(expectedOutputFileName, result);

@@ -3,19 +3,17 @@ import "/generic/generic.stg"
 import "/patterns/getter.stg"
 
 interface(concept, classNameSuffix) ::= <<
-<block_header("interface",{<type_name(concept)><ancestor_list(concept.directAncestors)>})><\\>
-<interface_preamble()><\\>
-<block({<interface_declarations()>})>
+<structure("interface", {<interface_header()>}, {<interface_declarations()>})>
+>>
+
+interface_header() ::= <<
+<type_name(concept)><ancestor_list(true, concept.directAncestors, [])>
 >>
 
 interface_declarations() ::= <<
 <concept.properties:interface_getter();separator="\n"><\\>
 <createMethodForClients(concept, classNameSuffix)><\\>
 <createMethodForDescendants(concept, classNameSuffix)>
->>
-
-ancestor_list(ancestors) ::= <<
-<interface_ancestor_header(ancestors, {<ancestors:type_name();separator=", ">})>
 >>
 
 createMethodForClients(concept, classNameSuffix) ::= <<
