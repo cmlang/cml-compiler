@@ -1,4 +1,3 @@
-import "/patterns/class.stg"
 
 concept_file(target, concept) ::= <<
 <class(concept)>

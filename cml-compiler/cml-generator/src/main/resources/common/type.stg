@@ -1,0 +1,16 @@
+
+type_name(named_element) ::= <<
+<if(named_element.primitive)><\\>
+<primitive_type_name(named_element.name)><\\>
+<else><\\>
+<named_element.name; format="pascal-case"><\\>
+<endif>
+>>
+
+primitive_type_name(element_name) ::= <<
+<(primitive_type_template_name(element_name))()>
+>>
+
+primitive_type_template_name(element_name) ::= <<
+primitive_type_<element_name; format="underscore-case">
+>>

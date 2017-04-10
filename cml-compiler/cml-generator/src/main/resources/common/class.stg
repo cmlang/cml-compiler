@@ -1,0 +1,149 @@
+
+import "/common/generic.stg"
+import "/common/getter.stg"
+import "/common/to_string.stg"
+
+class(concept) ::= <<
+<class7(
+    concept=concept,
+    class_name_suffix="",
+    ancestors=concept.directAncestors,
+    interfaces=[],
+    field_ancestors=[],
+    delegated_properties=[],
+    superProperties=concept.inheritedProperties
+)>
+>>
+
+class2(concept, class_name_suffix) ::= <<
+<class7(
+    concept=concept,
+    class_name_suffix=class_name_suffix,
+    ancestors=[],
+    interfaces=[concept],
+    field_ancestors=concept.allAncestors,
+    delegated_properties=concept.inheritedProperties,
+    superProperties=[]
+)>
+>>
+
+class7(
+    concept, class_name_suffix,
+    ancestors, interfaces,
+    field_ancestors,
+    delegated_properties, superProperties
+) ::= <<
+<class_abstract()><\\>
+<structure("class", class_header(), class_declarations(field_ancestors, concept.properties))>
+>>
+
+class_abstract() ::= <<
+<if(concept.abstract && superProperties)><abstract_keyword()><endif>
+>>
+
+class_header() ::= <<
+<type_name(concept)><class_name_suffix><ancestor_list(concept.abstract, ancestors, interfaces)>
+>>
+
+class_declarations(ancestors, properties) ::= <<
+<line_list([
+    class_fields(ancestors, properties),
+    class_constructors([concept.name, class_name_suffix], ancestors, properties),
+    class_getters(),
+    class_to_string()
+])>
+>>
+
+class_fields(ancestors, properties) ::= <<
+<ancestor_fields(ancestors)><\\>
+<emptyLineIf2(ancestors, properties)><\\>
+<property_fields(concept.properties)>
+>>
+
+class_constructors(class_name, ancestors, properties) ::= <<
+<line_list([
+    client_constructor(class_name, superProperties, properties),
+    primary_constructor(class_name, superProperties, properties, ancestors)
+])>
+>>
+
+class_getters() ::= <<
+<line_list([
+    field_getters(concept.properties),
+    delegated_getters(delegated_properties)
+])>
+>>
+
+ancestor_fields(ancestors) ::= <<
+<ancestors:field_decl();separator="\n">
+>>
+
+property_fields(properties) ::= <<
+<properties:field_decl();separator="\n">
+>>
+
+field_getters(properties) ::= <<
+<properties:class_getter();separator="\n\n">
+>>
+
+delegated_getters(properties) ::= <<
+<properties:delegate_getter();separator="\n\n">
+>>
+
+client_constructor(class_name, superProperties, properties) ::= <<
+<if(!concept.abstract && concept.allAncestors && !superProperties)><\\>
+<modifier("public")><\\>
+<constructor(class_name, concept.allProperties, client_constructor_statements())><\\>
+<endif>
+>>
+
+client_constructor_statements() ::= <<
+<concept.allAncestors:createInvocation();separator="\n"><\\>
+<emptyLineIf2(concept.allAncestors, concept.properties)><\\>
+<concept.properties:field_init();separator="\n">
+>>
+
+primary_constructor(class_name, superProperties, properties, ancestors) ::= <<
+<if(ancestors || properties)><\\>
+<modifier("public")><\\>
+<constructor(class_name, [ancestors, superProperties, properties], primary_constructor_statements())><\\>
+<endif>
+>>
+
+primary_constructor_statements() ::= <<
+<super_constructor(superProperties)><\\>
+<if(superProperties)><\\>
+<properties:field_init();separator="\n"><\\>
+<else><\\>
+<[ancestors, properties]:field_init();separator="\n"><\\>
+<endif>
+>>
+
+createInvocation(concept) ::= <<
+<field_name(concept)> = <\\>
+<type_name(concept)>.create(<\\>
+<concept.allAncestors:field_name();separator=", "><\\>
+<commaIf2(concept.allAncestors, concept.properties)><\\>
+<concept.properties:field_name();separator=", "><\\>
+);
+>>
+
+super_constructor(inherited_properties) ::= <<
+<if(inherited_properties)><\\>
+super(<inherited_properties:superArgs();separator=", ">);
+<endif>
+>>
+
+superArgs(property) ::= <<
+<field_name(property)>
+>>
+
+class_to_string() ::= <<
+<to_string(concept)>
+>>
+
+class_to_string__() ::= <<
+<newLineIf(concept.allProperties)><\\>
+<newLineIf(concept.allProperties)><\\>
+<to_string(concept)>
+>>

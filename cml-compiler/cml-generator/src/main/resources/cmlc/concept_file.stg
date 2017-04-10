@@ -5,6 +5,7 @@ package <target.packageName>;
 import java.util.*;
 import org.jetbrains.annotations.*;
 
-public <class(concept)>
->>
+public <interface(concept, "Impl")>
 
+<class2(concept, "Impl")>
+>>

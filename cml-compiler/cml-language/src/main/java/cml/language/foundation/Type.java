@@ -2,13 +2,27 @@ package cml.language.foundation;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Optional;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableCollection;
 
 public interface Type extends NamedElement
 {
+    Collection<String> primitiveTypeNames = unmodifiableCollection(asList(
+        "Boolean", "Integer", "Decimal", "String", "Regex", // main primitive types
+        "Byte", "Short", "Long", "Float", "Double", "Char" // remaining primitive types
+    ));
+
     String REQUIRED = "required";
     String OPTIONAL = "optional";
     String SET = "set";
+
+    default boolean isPrimitive()
+    {
+        return primitiveTypeNames.contains(getName());
+    }
 
     Optional<String> getCardinality();
 

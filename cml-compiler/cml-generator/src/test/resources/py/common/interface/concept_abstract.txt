@@ -1,0 +1,10 @@
+class Book(ABC):
+
+    @abstractproperty
+    def title(self) -> str:
+        pass
+
+    static Book create(str title)
+    {
+        return new BookImpl(title);
+    }

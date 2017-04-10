@@ -1,0 +1,16 @@
+class Book(Product):
+
+    def __init__(self, description: str, title: str):
+        super(description);
+        self.__title = title
+
+    @property
+    def title(self) -> str:
+        return self.__title
+
+    def __str__(self) -> str:
+        return "%s(description=%s, title=%s)" % (
+            type(self).__name__,
+            self.description,
+            self.title
+        )

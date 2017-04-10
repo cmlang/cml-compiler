@@ -1,4 +1,0 @@
-
-type_name(named_element) ::= <<
-<named_element.name; format="pascal-case">
->>

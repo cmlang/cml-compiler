@@ -1,0 +1,11 @@
+class Book(ABC):
+
+    @abstractproperty
+    def title(self) -> str:
+        pass
+    @abstractproperty
+    def sequel(self) -> Book:
+        pass
+    @abstractproperty
+    def categories(self) -> Set[Category]:
+        pass

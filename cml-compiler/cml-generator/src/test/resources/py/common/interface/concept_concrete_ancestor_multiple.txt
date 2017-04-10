@@ -1,0 +1,15 @@
+class Book(ABC, Product, StockItem):
+
+    @abstractproperty
+    def title(self) -> str:
+        pass
+
+    static Book create(str base_property, str title)
+    {
+        return new BookImpl(base_property, title);
+    }
+
+    static Book create(Base base, Product product, StockItem stock_item, str title)
+    {
+        return new BookImpl(base, product, stock_item, title);
+    }

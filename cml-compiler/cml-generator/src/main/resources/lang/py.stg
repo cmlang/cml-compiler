@@ -1,8 +1,7 @@
 
-import "/lang/common.stg"
-import "/patterns/getter.stg"
+import "/common/lang.stg"
 
-// Settings
+// Language
 
 lang ::= [
     "fields": false
@@ -23,8 +22,6 @@ block_header_terminator() ::= <<
 >>
 
 // Strings
-
-type_string() ::= "str"
 
 to_string_name() ::= "__str__"
 
@@ -155,4 +152,18 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 <if(interfaces)><interfaces:type_name();separator=", "><endif><\\>
 <if(abstract || ancestors || interfaces)>)<endif>
 >>
+
+// Types
+
+primitive_type_boolean() ::= "bool"
+primitive_type_integer() ::= "int"
+primitive_type_decimal() ::= "decimal"
+primitive_type_string() ::= "str"
+primitive_type_regex() ::= "Pattern"
+primitive_type_byte() ::= "int"
+primitive_type_short() ::= "int"
+primitive_type_long() ::= "long"
+primitive_type_float() ::= "float"
+primitive_type_double() ::= "float"
+primitive_type_char() ::= "int"
 
