@@ -1,13 +1,8 @@
 class Book:
 
-    private final String self.__title;
-    private final Book self.__sequel;
-
-    public Book(String self.__title, Book self.__sequel)
-    {
-        this.self.__title = self.__title;
-        this.self.__sequel = self.__sequel;
-    }
+    def __init__(self, title: String, sequel: Book):
+        self.__title = title
+        self.__sequel = sequel
 
     @property
     def title(self) -> String:

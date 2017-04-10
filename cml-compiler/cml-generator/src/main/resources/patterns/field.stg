@@ -1,8 +1,12 @@
 
 import "/patterns/type.stg"
 
-field_type(type) ::= <<
-<({field_type_<type.kind>})(type)>
+field_type(named_element) ::= <<
+<if(named_element.type)><\\>
+<({field_type_<named_element.type.kind>})(named_element.type)><\\>
+<else><\\>
+<type_name(named_element)><\\>
+<endif>
 >>
 
 field_type_required(type) ::= <<

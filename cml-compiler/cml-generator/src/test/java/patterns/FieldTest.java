@@ -1,6 +1,6 @@
 package patterns;
 
-import cml.language.features.Concept;
+import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import generic.TemplateLangTest;
 import org.junit.Test;
@@ -18,15 +18,6 @@ public class FieldTest extends TemplateLangTest
     protected String getTemplatePath()
     {
         return "patterns/field";
-    }
-
-    @Test
-    public void field_name() throws IOException
-    {
-        for (String name : commonNameFormats)
-        {
-            field_name(name);
-        }
     }
 
     @Test
@@ -53,18 +44,13 @@ public class FieldTest extends TemplateLangTest
         field_type(cardinality, "set.txt");
     }
 
-    private void field_name(String name) throws IOException
-    {
-        testTemplateWithNamedElement("field_name", Concept.create(name), "expected.txt");
-    }
-
     private void field_type(String cardinality, String expectedOutputPath) throws IOException
     {
         for (String name : commonNameFormats)
         {
-            final Type type = Type.create(name, cardinality);
+            final Property property = Property.create(name, null, Type.create(name, cardinality));
 
-            testTemplateWithType("field_type", type, expectedOutputPath);
+            testTemplateWithNamedElement("field_type", property, expectedOutputPath);
         }
     }
 }

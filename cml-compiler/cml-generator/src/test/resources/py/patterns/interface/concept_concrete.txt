@@ -10,7 +10,7 @@ class Book(ABC):
     def categories(self) -> Set[Category]:
         pass
 
-    static Book create(String self.__title, Book self.__sequel, Set[Category] self.__categories)
+    static Book create(String title, Book sequel, Set[Category] categories)
     {
-        return new BookImpl(self.__title, self.__sequel, self.__categories);
+        return new BookImpl(title, sequel, categories);
     }

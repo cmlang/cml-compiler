@@ -4,7 +4,7 @@ class Book(ABC):
     def title(self) -> String:
         pass
 
-    static Book create(String self.__title)
+    static Book create(String title)
     {
-        return new BookImpl(self.__title);
+        return new BookImpl(title);
     }

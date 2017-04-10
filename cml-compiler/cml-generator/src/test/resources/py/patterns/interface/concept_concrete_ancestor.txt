@@ -4,12 +4,12 @@ class Book(ABC, Product):
     def title(self) -> String:
         pass
 
-    static Book create(String self.__title)
+    static Book create(String title)
     {
-        return new BookImpl(self.__title);
+        return new BookImpl(title);
     }
 
-    static Book create(Product self.__product, String self.__title)
+    static Book create(Product product, String title)
     {
-        return new BookImpl(self.__product, self.__title);
+        return new BookImpl(product, title);
     }

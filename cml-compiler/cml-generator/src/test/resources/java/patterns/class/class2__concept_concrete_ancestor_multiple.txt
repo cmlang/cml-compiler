@@ -25,22 +25,22 @@ class BookImpl implements Book
 
     public String getTitle()
     {
-        return title;
+        return this.title;
     }
 
     public String getBaseProperty()
     {
-        return base.getBaseProperty();
+        return this.base.getBaseProperty();
     }
 
     public String getDescription()
     {
-        return product.getDescription();
+        return this.product.getDescription();
     }
 
     public Integer getQuantity()
     {
-        return stockItem.getQuantity();
+        return this.stockItem.getQuantity();
     }
 
     public String toString()

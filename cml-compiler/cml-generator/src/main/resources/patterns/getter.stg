@@ -27,7 +27,7 @@ delegate_getter(property) ::= <<
     name={<getter_name(property)>},
     params=[],
     result_type={<getter_type(property.type)>},
-    statements={<return({<field_name(property.parentScope)>.<getter_call(property)>})>}
+    statements={<return({<field_access(property.parentScope)>.<getter_call(property)>})>}
 )>
 >>
 

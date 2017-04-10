@@ -1,19 +1,12 @@
 class BookImpl(Book):
 
-    private final Product self.__product;
-    private final Intermediate self.__intermediate;
+    def __init__(self, description: String):
+        product = Product.create(description);
+        intermediate = Intermediate.create(product);
 
-    public BookImpl(String self.__description)
-    {
-        self.__product = Product.create(self.__description);
-        self.__intermediate = Intermediate.create(self.__product);
-    }
-
-    public BookImpl(Product self.__product, Intermediate self.__intermediate)
-    {
-        this.self.__product = self.__product;
-        this.self.__intermediate = self.__intermediate;
-    }
+    def __init__(self, product: Product, intermediate: Intermediate):
+        self.__product = product
+        self.__intermediate = intermediate
 
     def description(self) -> String:
         return self.__product.description

@@ -15,6 +15,10 @@ newLineIfEither(cond1, cond2) ::= <<
 <if(cond1 || cond2)><\n><endif>
 >>
 
+emptyLineIfEither(cond1, cond2) ::= <<
+<if(cond1 || cond2)><\n><\n><endif>
+>>
+
 commaIf(cond) ::= <<
 <if(cond)>, <endif>
 >>
@@ -22,3 +26,22 @@ commaIf(cond) ::= <<
 commaIf2(cond1, cond2) ::= <<
 <if(cond1 && cond2)>, <endif>
 >>
+
+line_list(list) ::= <<
+<if(list)><\\>
+<trim_template(all_lines(list))><\\>
+<endif>
+>>
+
+trim_template(template) ::= <<
+<trim((template))>
+>>
+
+all_lines(list) ::= <<
+<first_line(list)><line_list(rest(list))>
+>>
+
+first_line(list) ::= <<
+<first(list)><\n><\n>
+>>
+

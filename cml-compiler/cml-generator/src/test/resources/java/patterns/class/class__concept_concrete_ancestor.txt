@@ -10,7 +10,7 @@ class Book extends Product
 
     public String getTitle()
     {
-        return title;
+        return this.title;
     }
 
     public String toString()

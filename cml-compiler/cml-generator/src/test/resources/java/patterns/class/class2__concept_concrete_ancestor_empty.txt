@@ -17,7 +17,7 @@ class BookImpl implements Book
 
     public String getDescription()
     {
-        return product.getDescription();
+        return this.product.getDescription();
     }
 
     public String toString()

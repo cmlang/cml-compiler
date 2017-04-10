@@ -69,7 +69,7 @@ public abstract class TemplateLangTest extends TemplateTest
     protected void testTemplateWithNamedElement(String templateName, NamedElement namedElement, String expectedOutputPath)
         throws IOException
     {
-        testTemplate(templateName, "namedElement", namedElement, expectedOutputPath);
+        testTemplate(templateName, "named_element", namedElement, expectedOutputPath);
     }
 
     protected void assertThatOutputMatches(String expectedOutputPath, String actualOutput) throws IOException

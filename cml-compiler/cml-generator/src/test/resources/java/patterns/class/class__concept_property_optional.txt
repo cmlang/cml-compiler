@@ -11,12 +11,12 @@ class Book
 
     public String getTitle()
     {
-        return title;
+        return this.title;
     }
 
     public Optional<Book> getSequel()
     {
-        return Optional.ofNullable(sequel);
+        return Optional.ofNullable(this.sequel);
     }
 
     public String toString()

@@ -13,17 +13,17 @@ class Book
 
     public String getTitle()
     {
-        return title;
+        return this.title;
     }
 
     public Optional<Book> getSequel()
     {
-        return Optional.ofNullable(sequel);
+        return Optional.ofNullable(this.sequel);
     }
 
     public Set<Category> getCategories()
     {
-        return Collections.unmodifiableSet(categories);
+        return Collections.unmodifiableSet(this.categories);
     }
 
     public String toString()

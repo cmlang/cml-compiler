@@ -47,7 +47,7 @@ createAncestorParam(concept) ::= <<
 >>
 
 createPropertyParam(property) ::= <<
-<field_type(property.type)> <field_name(property)>
+<field_type(property)> <field_name(property)>
 >>
 
 createArgList(ancestors, properties) ::= <<

@@ -1,18 +1,10 @@
 class BookImpl(ABC, Book):
 
-    private final Base self.__base;
-    private final Product self.__product;
-    private final StockItem self.__stock_item;
-
-    private final String self.__title;
-
-    public BookImpl(Base self.__base, Product self.__product, StockItem self.__stock_item, String self.__title)
-    {
-        this.self.__base = self.__base;
-        this.self.__product = self.__product;
-        this.self.__stock_item = self.__stock_item;
-        this.self.__title = self.__title;
-    }
+    def __init__(self, base: Base, product: Product, stock_item: StockItem, title: String):
+        self.__base = base
+        self.__product = product
+        self.__stock_item = stock_item
+        self.__title = title
 
     @property
     def title(self) -> String:

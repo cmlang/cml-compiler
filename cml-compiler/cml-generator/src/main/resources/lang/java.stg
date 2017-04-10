@@ -2,6 +2,12 @@
 import "/lang/common.stg"
 import "/patterns/getter.stg"
 
+// Settings
+
+lang ::= [
+    "fields": true
+]
+
 // Modifiers
 
 modifier(m) ::= <<
@@ -62,11 +68,12 @@ operation_keyword() ::= ""
 interface_operation_body() ::= ";"
 
 operation_header_content(name, params, result_type) ::= <<
-<result_type> <name>(<params:param_decl(); separator=", ">)
+<if(result_type)><result_type><\ ><endif><\\>
+<name>(<params:var_decl(); separator=", ">)
 >>
 
-param_decl(param) ::= <<
-<fieldTypeDecl(param)> <field_name(param)>
+var_decl(typed_element) ::= <<
+<field_type(typed_element)> <field_name(typed_element)>
 >>
 
 return(expression) ::= <<
@@ -75,8 +82,16 @@ return <expression>;
 
 // Fields
 
-field_name(namedElement) ::= <<
-<namedElement.name; format="camel-case">
+field_init(named_element) ::= <<
+<field_access(named_element)> = <field_name(named_element)>;
+>>
+
+field_name(named_element) ::= <<
+<named_element.name; format="camel-case">
+>>
+
+field_access(named_element) ::= <<
+this.<field_name(named_element)>
 >>
 
 field_type_optional(type) ::= <<
@@ -85,6 +100,10 @@ field_type_optional(type) ::= <<
 
 field_type_set(type) ::= <<
 Set\<<type_name(type)>\>
+>>
+
+field_decl(typed_element) ::= <<
+private final <var_decl(typed_element)>;
 >>
 
 // Getters
@@ -110,15 +129,15 @@ Set\<<type_name(type)>\>
 >>
 
 getter_field_value_required(property) ::= <<
-<field_name(property)>
+<field_access(property)>
 >>
 
 getter_field_value_optional(property) ::= <<
-Optional.ofNullable(<field_name(property)>)
+Optional.ofNullable(<field_access(property)>)
 >>
 
 getter_field_value_set(property) ::= <<
-Collections.unmodifiableSet(<field_name(property)>)
+Collections.unmodifiableSet(<field_access(property)>)
 >>
 
 getter_call(property) ::= <<
@@ -133,9 +152,14 @@ interface_keyword() ::= "interface "
 
 class_keyword() ::= "class "
 
+constructor_name(class_name) ::= <<
+<class_name; format="pascal-case">
+>>
+
 // Ancestors
 
 ancestor_list(abstract, ancestors, interfaces) ::= <<
 <if(ancestors)> extends <ancestors:type_name();separator=", "><endif><\\>
 <if(interfaces)> implements <interfaces:type_name();separator=", "><endif>
 >>
+

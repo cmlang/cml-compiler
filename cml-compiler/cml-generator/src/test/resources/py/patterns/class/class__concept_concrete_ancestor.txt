@@ -1,12 +1,8 @@
 class Book(Product):
 
-    private final String self.__title;
-
-    public Book(String self.__description, String self.__title)
-    {
-        super(self.__description);
-        this.self.__title = self.__title;
-    }
+    def __init__(self, description: String, title: String):
+        super(description);
+        self.__title = title
 
     @property
     def title(self) -> String:

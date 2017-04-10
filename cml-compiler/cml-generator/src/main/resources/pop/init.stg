@@ -6,6 +6,6 @@ init(target, model) ::= <<
 concept_module(concept) ::= <<
 >>
 
-concept_module_disabled(concept) ::= <<
+concept_module__(concept) ::= <<
 from . import <concept.name; format="underscore-case">
 >>

@@ -36,6 +36,16 @@ interface_operation(name, params, result_type) ::= <<
 >>
 
 operation_header(name, params, result_type) ::= <<
-<block_header("operation", {<operation_header_content(name, params, result_type)>})>
+<block_header("operation", operation_header_content(name, params, result_type))>
 >>
 
+// Classes
+
+constructor(class_name, params, statements) ::= <<
+<class_operation(
+    name=constructor_name(class_name),
+    params=params,
+    result_type=[],
+    statements=statements
+)>
+>>

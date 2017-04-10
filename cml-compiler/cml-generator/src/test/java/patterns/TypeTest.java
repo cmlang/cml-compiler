@@ -29,7 +29,7 @@ public class TypeTest extends TemplateTest
     {
         final ST template = getTemplate("type_name");
 
-        template.add("namedElement", Type.create(name, null));
+        template.add("named_element", Type.create(name, null));
 
         final String result = template.render();
 

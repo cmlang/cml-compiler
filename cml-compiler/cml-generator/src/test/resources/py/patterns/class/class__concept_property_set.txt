@@ -1,15 +1,9 @@
 class Book:
 
-    private final String self.__title;
-    private final Book self.__sequel;
-    private final Set[Category] self.__categories;
-
-    public Book(String self.__title, Book self.__sequel, Set[Category] self.__categories)
-    {
-        this.self.__title = self.__title;
-        this.self.__sequel = self.__sequel;
-        this.self.__categories = self.__categories;
-    }
+    def __init__(self, title: String, sequel: Book, categories: Set[Category]):
+        self.__title = title
+        self.__sequel = sequel
+        self.__categories = categories
 
     @property
     def title(self) -> String:
