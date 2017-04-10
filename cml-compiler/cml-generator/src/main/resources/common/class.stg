@@ -130,12 +130,8 @@ createInvocation(concept) ::= <<
 
 super_constructor(inherited_properties) ::= <<
 <if(inherited_properties)><\\>
-super(<inherited_properties:superArgs();separator=", ">);
+<super_constructor_call(inherited_properties:field_name())>
 <endif>
->>
-
-superArgs(property) ::= <<
-<field_name(property)>
 >>
 
 class_to_string() ::= <<
@@ -146,4 +142,8 @@ class_to_string__() ::= <<
 <newLineIf(concept.allProperties)><\\>
 <newLineIf(concept.allProperties)><\\>
 <to_string(concept)>
+>>
+
+class_operation(name, params, result_type, statements) ::= <<
+<operation_header(name, params, result_type)><block(statements)>
 >>

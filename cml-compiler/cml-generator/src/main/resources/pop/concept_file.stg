@@ -1,5 +1,13 @@
 
+import "/files/python.stg"
+
 concept_file(target, concept) ::= <<
+<concept.directAncestors:concept_file_import(); separator="\n">
+
 <class(concept)>
+>>
+
+concept_file_import(ancestor) ::= <<
+from .<python_file_name(ancestor.name)> import *
 >>
 

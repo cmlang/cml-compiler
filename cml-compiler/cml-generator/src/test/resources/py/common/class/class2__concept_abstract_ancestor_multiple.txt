@@ -1,6 +1,6 @@
 class BookImpl(ABC, Book):
 
-    def __init__(self, base: Base, product: Product, stock_item: StockItem, title: str):
+    def __init__(self, base: Base, product: Product, stock_item: StockItem, title: str) -> None:
         self.__base = base
         self.__product = product
         self.__stock_item = stock_item

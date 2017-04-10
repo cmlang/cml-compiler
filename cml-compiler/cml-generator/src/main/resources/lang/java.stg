@@ -25,6 +25,14 @@ block(statements) ::= <<
 }
 >>
 
+// Statement
+
+statement_terminator() ::= ";"
+
+// Call
+
+super_constructor_name() ::= "super"
+
 // Strings
 
 to_string_name() ::= "toString"
@@ -61,8 +69,6 @@ to_string_field_value_set(property) ::= <<
 // Operations
 
 operation_keyword() ::= ""
-
-interface_operation_body() ::= ";"
 
 operation_header_content(name, params, result_type) ::= <<
 <if(result_type)><result_type><\ ><endif><\\>

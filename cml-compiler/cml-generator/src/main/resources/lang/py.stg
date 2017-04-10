@@ -21,6 +21,10 @@ block_header_terminator() ::= <<
 :<\n>
 >>
 
+// Call
+
+super_constructor_name() ::= "super().__init__"
+
 // Strings
 
 to_string_name() ::= "__str__"
@@ -45,11 +49,9 @@ self.<getter_call(property)>
 
 operation_keyword() ::= "def "
 
-interface_operation_body() ::= "    pass"
-
 operation_header_content(name, params, result_type) ::= <<
 <name>(self<commaIf(params)><params:var_decl(); separator=", ">)<\\>
-<if(result_type)> -> <result_type><endif>
+<\ >-><\ ><if(result_type)><result_type><else>None<endif>
 >>
 
 var_decl(typed_element) ::= <<
@@ -133,6 +135,8 @@ interface_keyword() ::= "class "
 interface_ancestor_header(ancestors, ancestor_list) ::= <<
 <\ >(ABC<if(ancestors)>, <ancestor_list><endif>)
 >>
+
+interface_operation_body() ::= "    pass"
 
 // Classes
 

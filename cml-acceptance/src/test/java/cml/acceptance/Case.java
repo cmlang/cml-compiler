@@ -24,6 +24,11 @@ class Case
         return moduleName;
     }
 
+    String getModuleDir()
+    {
+        return moduleName.replace("-", "_");
+    }
+
     String getTargetType()
     {
         return targetType;

@@ -217,6 +217,7 @@ public class AcceptanceTest
         }
         else if (successCase.getTargetLanguageExtension().equals(PYTHON))
         {
+            checkPythonTypes(baseDir + "/" + successCase.getModuleDir());
             installPythonPackage(baseDir);
         }
     }
@@ -236,6 +237,33 @@ public class AcceptanceTest
         final InvocationResult result = invoker.execute(request);
 
         if (result.getExitCode() != 0) throw new MavenInvocationException("Exit code: " + result.getExitCode());
+    }
+
+    private static void checkPythonTypes(final String moduleDir) throws IOException, CommandLineException
+    {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
+        {
+            // https://github.com/python/mypy
+            final Commandline commandLine = new Commandline();
+            commandLine.setExecutable(pythonCmd("python3"));
+            commandLine.createArg().setValue("-m");
+            commandLine.createArg().setValue("mypy");
+            commandLine.createArg().setValue(moduleDir);
+
+            final Writer writer = new OutputStreamWriter(outputStream);
+            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
+            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
+
+            System.out.println("Checking types of Python module: " + commandLine);
+
+            final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+
+            System.out.println("mypy's exit code: " + exitCode);
+            System.out.println(
+                "mypy's output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
+
+            assertThat("mypy's exit code: ", exitCode, is(0));
+        }
     }
 
     private static void installPythonPackage(final String baseDir) throws IOException, CommandLineException
@@ -261,7 +289,7 @@ public class AcceptanceTest
             System.out.println(
                 "pip's output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
 
-            assertThat("exit code: ", exitCode, is(0));
+            assertThat("pip's exit code: ", exitCode, is(0));
         }
     }
 

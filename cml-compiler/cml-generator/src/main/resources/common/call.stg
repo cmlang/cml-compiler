@@ -1,0 +1,10 @@
+
+import "/common/statement.stg"
+
+call(name, args) ::= <<
+<name>(<args; separator=", ">)
+>>
+
+super_constructor_call(args) ::= <<
+<call(super_constructor_name(), args)><statement_terminator()>
+>>

@@ -1,7 +1,7 @@
 class Book(ABC, Product):
 
-    def __init__(self, description: str, title: str):
-        super(description);
+    def __init__(self, description: str, title: str) -> None:
+        super().__init__(description)
         self.__title = title
 
     @property

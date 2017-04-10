@@ -1,6 +1,6 @@
 class Book:
 
-    def __init__(self, title: str, sequel: Book, categories: Set[Category]):
+    def __init__(self, title: str, sequel: Book, categories: Set[Category]) -> None:
         self.__title = title
         self.__sequel = sequel
         self.__categories = categories

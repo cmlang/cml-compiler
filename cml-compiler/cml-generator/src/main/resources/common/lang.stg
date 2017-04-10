@@ -5,6 +5,8 @@ import "/common/getter.stg"
 import "/common/to_string.stg"
 import "/common/interface.stg"
 import "/common/class.stg"
+import "/common/statement.stg"
+import "/common/call.stg"
 
 // Modifiers
 
@@ -31,14 +33,6 @@ block_header(keyword, content) ::= <<
 block_header_terminator() ::= ""
 
 // Operations
-
-class_operation(name, params, result_type, statements) ::= <<
-<operation_header(name, params, result_type)><block(statements)>
->>
-
-interface_operation(name, params, result_type) ::= <<
-<operation_header(name, params, result_type)><interface_operation_body()>
->>
 
 operation_header(name, params, result_type) ::= <<
 <block_header("operation", operation_header_content(name, params, result_type))>

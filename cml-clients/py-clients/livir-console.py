@@ -1,6 +1,6 @@
 
-import livir_books
+from livir_books import *
 
-# book = Book()
+book = Book(3, "ISBN-1234", "Python's Book")
 
-print("Hello, World!")
+print("Book: %s" % book)

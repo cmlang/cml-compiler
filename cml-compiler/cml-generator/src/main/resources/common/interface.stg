@@ -10,6 +10,14 @@ interface_header() ::= <<
 <type_name(concept)><ancestor_list(true, concept.directAncestors, [])>
 >>
 
+interface_operation(name, params, result_type) ::= <<
+<operation_header(name, params, result_type)><\\>
+<statement_terminator()><\\>
+<interface_operation_body()>
+>>
+
+interface_operation_body() ::= ""
+
 interface_declarations() ::= <<
 <concept.properties:interface_getter();separator="\n"><\\>
 <createMethodForClients(concept, classNameSuffix)><\\>

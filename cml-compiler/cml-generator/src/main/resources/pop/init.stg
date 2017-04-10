@@ -1,11 +1,10 @@
 
+import "/files/python.stg"
+
 init(target, model) ::= <<
 <model.concepts:concept_module();separator="\n">
 >>
 
 concept_module(concept) ::= <<
->>
-
-concept_module__(concept) ::= <<
-from . import <concept.name; format="underscore-case">
+from .<python_file_name(concept.name)> import *
 >>

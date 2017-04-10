@@ -1,10 +1,10 @@
 class BookImpl(Book):
 
-    def __init__(self, description: str):
+    def __init__(self, description: str) -> None:
         product = Product.create(description);
         intermediate = Intermediate.create(product);
 
-    def __init__(self, product: Product, intermediate: Intermediate):
+    def __init__(self, product: Product, intermediate: Intermediate) -> None:
         self.__product = product
         self.__intermediate = intermediate
 

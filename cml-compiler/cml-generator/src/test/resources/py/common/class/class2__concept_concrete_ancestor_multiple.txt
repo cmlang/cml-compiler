@@ -1,13 +1,13 @@
 class BookImpl(Book):
 
-    def __init__(self, base_property: str, description: str, quantity: int, title: str):
+    def __init__(self, base_property: str, description: str, quantity: int, title: str) -> None:
         base = Base.create(base_property);
         product = Product.create(base, description);
         stock_item = StockItem.create(base, quantity);
 
         self.__title = title
 
-    def __init__(self, base: Base, product: Product, stock_item: StockItem, title: str):
+    def __init__(self, base: Base, product: Product, stock_item: StockItem, title: str) -> None:
         self.__base = base
         self.__product = product
         self.__stock_item = stock_item
