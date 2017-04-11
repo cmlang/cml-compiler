@@ -27,7 +27,7 @@ concept Model: Scope
 {
 }
 
-target cmlc
+target cmlc_java
 {
     groupId = "mcml";
     artifactId = "mcml-language";

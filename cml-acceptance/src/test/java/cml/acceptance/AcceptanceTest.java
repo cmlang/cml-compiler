@@ -62,7 +62,8 @@ public class AcceptanceTest
     public static Case[] successCases = {
         new Case("livir-books", "livir-console", "poj", JAVA),
         new Case("livir-books", "livir-console", "pop", PYTHON),
-        new Case("mini-cml-language", "mcml-compiler", "cmlc", JAVA)
+        new Case("mini-cml-language", "mcml-compiler", "cmlc_java", JAVA)
+//        new Case("mini-cml-language", "mcml-compiler", "cmlc_py", PYTHON)
     };
 
     @BeforeClass

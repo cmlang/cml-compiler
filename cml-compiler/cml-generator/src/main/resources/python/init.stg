@@ -1,5 +1,5 @@
 
-import "/files/python.stg"
+import "/python/files.stg"
 
 init(target, model) ::= <<
 <model.concepts:concept_module();separator="\n">

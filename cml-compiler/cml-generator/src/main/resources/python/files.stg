@@ -1,7 +1,7 @@
 
 model_files(target, model) ::= <<
-setup|setup.py
-init|<python_file_name(target.moduleName)>/__init__.py
+python:setup|setup.py
+python:init|<python_file_name(target.moduleName)>/__init__.py
 >>
 
 concept_files(target, concept) ::= <<
