@@ -1,12 +1,3 @@
 
 import "/files/python.stg"
 
-model_files(target, model) ::= <<
-setup|setup.py
-init|<python_file_name(target.moduleName)>/__init__.py
->>
-
-concept_files(target, concept) ::= <<
-concept_file|<python_file_name(target.moduleName)>/<python_file_name(concept.name)>.py
->>
-

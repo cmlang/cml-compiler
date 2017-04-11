@@ -1,0 +1,8 @@
+
+model_files(target, model) ::= <<
+maven:pom|pom.xml
+>>
+
+concept_files(target, concept) ::= <<
+concept_file|src/main/java/<target.packagePath>/<concept.name>.java
+>>
