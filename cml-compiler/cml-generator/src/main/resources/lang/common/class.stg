@@ -1,7 +1,7 @@
 
-import "/common/generic.stg"
-import "/common/getter.stg"
-import "/common/to_string.stg"
+import "/lang/common/generic.stg"
+import "/lang/common/getter.stg"
+import "/lang/common/to_string.stg"
 
 class(concept) ::= <<
 <class7(

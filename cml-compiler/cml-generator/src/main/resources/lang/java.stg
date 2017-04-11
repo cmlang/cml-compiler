@@ -1,5 +1,5 @@
 
-import "/common/lang.stg"
+import "/lang/common.stg"
 
 // Language
 

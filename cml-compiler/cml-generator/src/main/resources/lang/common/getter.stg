@@ -1,5 +1,5 @@
 
-import "/common/field.stg"
+import "/lang/common/field.stg"
 
 interface_getter(property) ::= <<
 <interface_getter_annotations(property)><\\>

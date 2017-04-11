@@ -1,6 +1,6 @@
 
-import "/common/generic.stg"
-import "/common/getter.stg"
+import "/lang/common/generic.stg"
+import "/lang/common/getter.stg"
 
 interface(concept, classNameSuffix) ::= <<
 <structure("interface", {<interface_header()>}, {<interface_declarations()>})>

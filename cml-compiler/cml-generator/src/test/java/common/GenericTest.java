@@ -25,7 +25,7 @@ public class GenericTest extends TemplateTest
     @Override
     protected String getTemplatePath()
     {
-        return "common/generic";
+        return "lang/common/generic";
     }
 
     @Theory

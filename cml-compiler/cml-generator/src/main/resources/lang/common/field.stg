@@ -1,5 +1,5 @@
 
-import "/common/type.stg"
+import "/lang/common/type.stg"
 
 field_type(named_element) ::= <<
 <if(named_element.type)><\\>

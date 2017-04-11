@@ -1,12 +1,12 @@
 
-import "/common/type.stg"
-import "/common/field.stg"
-import "/common/getter.stg"
-import "/common/to_string.stg"
-import "/common/interface.stg"
-import "/common/class.stg"
-import "/common/statement.stg"
-import "/common/call.stg"
+import "/lang/common/type.stg"
+import "/lang/common/field.stg"
+import "/lang/common/getter.stg"
+import "/lang/common/to_string.stg"
+import "/lang/common/interface.stg"
+import "/lang/common/class.stg"
+import "/lang/common/statement.stg"
+import "/lang/common/call.stg"
 
 // Modifiers
 

@@ -1,5 +1,5 @@
 
-import "/common/statement.stg"
+import "/lang/common/statement.stg"
 
 call(name, args) ::= <<
 <name>(<args; separator=", ">)
