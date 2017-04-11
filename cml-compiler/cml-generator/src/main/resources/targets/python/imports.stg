@@ -1,0 +1,13 @@
+
+concept_file_import_list(concept) ::= <<
+<concept.directAncestors:concept_file_import(); separator="\n">
+>>
+
+concept_file_import(ancestor) ::= <<
+from .<python_file_name(ancestor.name)> import *
+>>
+
+python_file_name(name) ::= <<
+<name; format="underscore-case">
+>>
+

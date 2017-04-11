@@ -1,13 +1,12 @@
 
-import "/targets/python/files.stg"
+import "/targets/python/imports.stg"
 
 concept_file(target, concept) ::= <<
-<concept.directAncestors:concept_file_import(); separator="\n">
+<concept_file_import_list(concept)>
 
-<class(concept)>
+<interface(concept, "Impl")>
+
+<class2(concept, "Impl")>
 >>
 
-concept_file_import(ancestor) ::= <<
-from .<python_file_name(ancestor.name)> import *
->>
 
