@@ -14,6 +14,9 @@ jdk:
 env:
   - PYTHON_HOME="$(dirname $(dirname $(which python3)))"
 
+before_install:
+  - python3 -m pip install -U mypy
+
 script:
   - cd cml-acceptance
   - mvn clean install
