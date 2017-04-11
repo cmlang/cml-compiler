@@ -1,9 +1,10 @@
 package cml.templates;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
+
+import static java.lang.String.format;
 
 public interface TemplateRepository
 {
@@ -17,10 +18,12 @@ public interface TemplateRepository
 
 class TemplateRepositoryImpl implements TemplateRepository
 {
+    private static final String TARGET_TYPE_DIR_PATH = "/targets/%s/%s";
+
     @Override
     public Optional<TemplateFile> findTemplate(final String targetType, final String fileName)
     {
-        final String path = File.separatorChar + targetType + File.separatorChar + fileName;
+        final String path = format(TARGET_TYPE_DIR_PATH, targetType, fileName);
 
         try (InputStream stream = getClass().getResourceAsStream(path))
         {

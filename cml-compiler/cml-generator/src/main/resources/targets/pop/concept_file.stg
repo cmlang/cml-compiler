@@ -1,5 +1,5 @@
 
-import "/python/files.stg"
+import "/targets/python/files.stg"
 
 concept_file(target, concept) ::= <<
 <concept.directAncestors:concept_file_import(); separator="\n">
