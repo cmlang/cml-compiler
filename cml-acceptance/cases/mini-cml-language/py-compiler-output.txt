@@ -1,0 +1,18 @@
+model files:
+- setup.py
+- mini_cml_language/__init__.py
+
+ModelElement files:
+- mini_cml_language/model_element.py
+
+NamedElement files:
+- mini_cml_language/named_element.py
+
+PropertyList files:
+- mini_cml_language/property_list.py
+
+Concept files:
+- mini_cml_language/concept.py
+
+Model files:
+- mini_cml_language/model.py

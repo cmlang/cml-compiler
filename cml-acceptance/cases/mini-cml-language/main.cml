@@ -1,7 +1,8 @@
 
 abstract concept ModelElement
 {
-    parentScope: Scope?;
+    parent: ModelElement?;
+    elements: ModelElement*;
 }
 
 abstract concept NamedElement: ModelElement
@@ -9,12 +10,7 @@ abstract concept NamedElement: ModelElement
     name: String;
 }
 
-abstract concept Scope: ModelElement
-{
-    elements: ModelElement*;
-}
-
-abstract concept PropertyList: Scope
+abstract concept PropertyList: ModelElement
 {
 }
 
@@ -23,7 +19,7 @@ concept Concept: NamedElement, PropertyList
     abstracted: Boolean;
 }
 
-concept Model: Scope
+concept Model: ModelElement
 {
 }
 
@@ -34,5 +30,11 @@ target cmlc_java
     version = "1.0.1-SNAPSHOT";
     packageName = "mcml.language";
     packagePath = "mcml/language";
+}
+
+target cmlc_py
+{
+    version = "1.0.1";
+    moduleName = "mini_cml_language";
 }
 

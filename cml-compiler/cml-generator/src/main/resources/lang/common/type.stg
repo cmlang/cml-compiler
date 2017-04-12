@@ -2,8 +2,10 @@
 type_name(named_element) ::= <<
 <if(named_element.primitive)><\\>
 <primitive_type_name(named_element.name)><\\>
+<elseif(named_element.name)><\\>
+<class_type_name(named_element.name)><\\>
 <else><\\>
-<named_element.name; format="pascal-case"><\\>
+<class_type_name(named_element)><\\>
 <endif>
 >>
 

@@ -17,12 +17,18 @@ abstract_keyword() ::= <<
 abstract<\ >
 >>
 
+new_keyword() ::= <<
+new<\ >
+>>
+
 // Blocks
 
 block(statements) ::= <<
-<\n>{
-    <statements>
-}
+<\n>{<\n><indent()><statements; anchor><\n>}
+>>
+
+block_empty() ::= <<
+<\ >{}
 >>
 
 // Statement
@@ -39,7 +45,7 @@ to_string_name() ::= "toString"
 
 to_string_expr(concept) ::= <<
 new StringBuilder(<type_name(concept)>.class.getSimpleName())
-    <to_string_appends(concept.allProperties)>
+<indent()><to_string_appends(concept.allProperties); anchor>
 >>
 
 to_string_appends(properties) ::= <<
@@ -66,11 +72,17 @@ to_string_field_value_set(property) ::= <<
 .append(<getter_call(property)>)
 >>
 
-// Operations
+// Operation
 
 operation_keyword() ::= ""
 
-operation_header_content(name, params, result_type) ::= <<
+operation_name(name) ::= <<
+<name; format="camel-case">
+>>
+
+static_operation_modifier() ::= "static "
+
+operation_header_content(instance, name, params, result_type) ::= <<
 <if(result_type)><result_type><\ ><endif><\\>
 <name>(<params:var_decl(); separator=", ">)
 >>
@@ -79,8 +91,12 @@ var_decl(typed_element) ::= <<
 <field_type(typed_element)> <field_name(typed_element)>
 >>
 
+local_var_decl(typed_element) ::= <<
+<var_decl(typed_element)>
+>>
+
 return(expression) ::= <<
-return <expression>;
+return <expression; anchor>;
 >>
 
 // Fields
@@ -155,6 +171,10 @@ interface_keyword() ::= "interface "
 
 class_keyword() ::= "class "
 
+class_type_name(name) ::= <<
+<name; format="pascal-case">
+>>
+
 constructor_name(class_name) ::= <<
 <class_name; format="pascal-case">
 >>
@@ -166,7 +186,7 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 <if(interfaces)> implements <interfaces:type_name();separator=", "><endif>
 >>
 
-// Types
+// Type
 
 primitive_type_boolean() ::= "boolean"
 primitive_type_integer() ::= "int"
@@ -179,4 +199,8 @@ primitive_type_long() ::= "long"
 primitive_type_float() ::= "float"
 primitive_type_double() ::= "double"
 primitive_type_char() ::= "char"
+
+type_hint_name(name) ::=<<
+<class_type_name(name)>
+>>
 

@@ -1,10 +1,13 @@
 
 concept_file_import_list(concept) ::= <<
-<concept.directAncestors:concept_file_import(); separator="\n">
+from typing import *
+from abc import *
+
+<concept.dependencies:concept_file_import(); separator="\n">
 >>
 
-concept_file_import(ancestor) ::= <<
-from .<python_file_name(ancestor.name)> import *
+concept_file_import(name) ::= <<
+from .<python_file_name(name)> import <type_name(name)>
 >>
 
 python_file_name(name) ::= <<

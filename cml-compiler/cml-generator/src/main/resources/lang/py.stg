@@ -7,19 +7,17 @@ lang ::= [
     "fields": false
 ]
 
-// Structures
-
-structure_block_preamble() ::= "<\n>"
-
 // Blocks
 
 block(statements) ::= <<
-    <statements>
+<\n><indent()><statements; anchor>
 >>
 
-block_header_terminator() ::= <<
-:<\n>
+block_empty() ::= <<
+<\n><indent()>pass
 >>
+
+block_header_terminator() ::= ":"
 
 // Call
 
@@ -33,12 +31,16 @@ to_string_expr(concept) ::= <<
 "%s(<\\>
 <if(concept.allProperties)><\\>
 <concept.allProperties:{p|<getter_call(p)>=%s}; separator=", ">)" % (
-    type(self).__name__,
-    <to_string_fields(concept.allProperties, ",\n")>
+<indent()><to_string_expr_params(concept); anchor>
 )<\\>
 <else><\\>
 )" % type(self).__name__<\\>
 <endif>
+>>
+
+to_string_expr_params(concept) ::= <<
+type(self).__name__,
+<to_string_fields(concept.allProperties, ",\n")>
 >>
 
 to_string_field(property) ::= <<
@@ -49,13 +51,26 @@ self.<getter_call(property)>
 
 operation_keyword() ::= "def "
 
-operation_header_content(name, params, result_type) ::= <<
-<name>(self<commaIf(params)><params:var_decl(); separator=", ">)<\\>
+operation_name(name) ::= <<
+<name; format="underscore-case">
+>>
+
+static_operation_modifier() ::= "@staticmethod<\n>"
+
+operation_header_content(instance, name, params, result_type) ::= <<
+<name>(<\\>
+<if(instance)>self<endif><\\>
+<commaIf2(instance, params)><\\>
+<params:var_decl(); separator=", ">)<\\>
 <\ >-><\ ><if(result_type)><result_type><else>None<endif>
 >>
 
 var_decl(typed_element) ::= <<
 <field_name(typed_element)>: <field_type(typed_element)>
+>>
+
+local_var_decl(typed_element) ::= <<
+<field_name(typed_element)>
 >>
 
 return(expression) ::= <<
@@ -128,6 +143,10 @@ getter_call(property) ::= <<
 <property.name; format="underscore-case">
 >>
 
+// Structure
+
+structure_preamble() ::= "<\n>"
+
 // Interfaces
 
 interface_keyword() ::= "class "
@@ -136,11 +155,17 @@ interface_ancestor_header(ancestors, ancestor_list) ::= <<
 <\ >(ABC<if(ancestors)>, <ancestor_list><endif>)
 >>
 
-interface_operation_body() ::= "    pass"
+interface_operation_body() ::= <<
+<block_empty()>
+>>
 
 // Classes
 
 class_keyword() ::= "class "
+
+class_type_name(name) ::= <<
+<name; format="pascal-case">
+>>
 
 constructor_name(class_name) ::= "__init__"
 
@@ -148,16 +173,16 @@ constructor_name(class_name) ::= "__init__"
 
 ancestor_list(abstract, ancestors, interfaces) ::= <<
 <if(abstract || ancestors || interfaces)>(<endif><\\>
-<if(abstract)>ABC<if(ancestors || interfaces)>, <endif><endif><\\>
 <if(ancestors)><\\>
 <ancestors:type_name();separator=", "><\\>
 <if(interfaces)>, <endif><\\>
 <endif><\\>
 <if(interfaces)><interfaces:type_name();separator=", "><endif><\\>
+<if(abstract)><if(ancestors || interfaces)>, <endif>ABC<endif><\\>
 <if(abstract || ancestors || interfaces)>)<endif>
 >>
 
-// Types
+// Type
 
 primitive_type_boolean() ::= "bool"
 primitive_type_integer() ::= "int"
@@ -170,4 +195,8 @@ primitive_type_long() ::= "long"
 primitive_type_float() ::= "float"
 primitive_type_double() ::= "float"
 primitive_type_char() ::= "int"
+
+type_hint_name(name) ::=<<
+'<class_type_name(name)>'
+>>
 

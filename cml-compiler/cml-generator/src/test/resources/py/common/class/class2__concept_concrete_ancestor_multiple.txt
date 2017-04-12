@@ -1,12 +1,5 @@
 class BookImpl(Book):
 
-    def __init__(self, base_property: str, description: str, quantity: int, title: str) -> None:
-        base = Base.create(base_property);
-        product = Product.create(base, description);
-        stock_item = StockItem.create(base, quantity);
-
-        self.__title = title
-
     def __init__(self, base: Base, product: Product, stock_item: StockItem, title: str) -> None:
         self.__base = base
         self.__product = product
@@ -17,12 +10,15 @@ class BookImpl(Book):
     def title(self) -> str:
         return self.__title
 
+    @property
     def base_property(self) -> str:
         return self.__base.base_property
 
+    @property
     def description(self) -> str:
         return self.__product.description
 
+    @property
     def quantity(self) -> int:
         return self.__stock_item.quantity
 

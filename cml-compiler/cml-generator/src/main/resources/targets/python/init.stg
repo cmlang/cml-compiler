@@ -1,10 +1,13 @@
 
-import "/targets/python/files.stg"
+import "/targets/python/imports.stg"
 
 init(target, model) ::= <<
-<model.concepts:concept_module();separator="\n">
+__all__ = [
+<indent()><model.concepts:{concept|"<python_file_name(concept.name)>"};separator=",\n", anchor>
+]
+
+<model.concepts:{concept|<concept_file_import(concept.name)>};separator="\n">
 >>
 
-concept_module(concept) ::= <<
-from .<python_file_name(concept.name)> import *
->>
+
+

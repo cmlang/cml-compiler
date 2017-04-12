@@ -1,8 +1,13 @@
 
+import "/lang/common/type.stg"
 import "/lang/common/statement.stg"
 
 call(name, args) ::= <<
-<name>(<args; separator=", ">)
+<name>(<args:field_name(); separator=", ">)
+>>
+
+new_call(class_name, args) ::= <<
+<call({<new_keyword()><type_name(class_name)>}, args)>
 >>
 
 super_constructor_call(args) ::= <<

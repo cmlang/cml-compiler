@@ -10,7 +10,6 @@ class Book(ABC):
     def categories(self) -> Set[Category]:
         pass
 
-    static Book create(str title, Book sequel, Set[Category] categories)
-    {
-        return new BookImpl(title, sequel, categories);
-    }
+    @staticmethod
+    def create_book(title: str, sequel: Book, categories: Set[Category]) -> Book:
+        return BookImpl(title, sequel, categories)

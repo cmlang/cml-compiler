@@ -37,12 +37,12 @@ class BookImpl implements Book
     public String toString()
     {
         return new StringBuilder(Book.class.getSimpleName())
-            .append('(')
-            .append("baseProperty=").append(String.format("\"%s\"", getBaseProperty())).append(", ")
-            .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
-            .append("quantity=").append(String.format("\"%s\"", getQuantity())).append(", ")
-            .append("title=").append(String.format("\"%s\"", getTitle()))
-            .append(')')
-            .toString();
+                   .append('(')
+                   .append("baseProperty=").append(String.format("\"%s\"", getBaseProperty())).append(", ")
+                   .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
+                   .append("quantity=").append(String.format("\"%s\"", getQuantity())).append(", ")
+                   .append("title=").append(String.format("\"%s\"", getTitle()))
+                   .append(')')
+                   .toString();
     }
 }

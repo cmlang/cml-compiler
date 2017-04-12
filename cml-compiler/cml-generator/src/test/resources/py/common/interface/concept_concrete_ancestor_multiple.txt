@@ -1,15 +1,16 @@
-class Book(ABC, Product, StockItem):
+class Book(Product, StockItem, ABC):
 
     @abstractproperty
     def title(self) -> str:
         pass
 
-    static Book create(str base_property, str title)
-    {
-        return new BookImpl(base_property, title);
-    }
+    @staticmethod
+    def create_book(base_property: str, title: str) -> Book:
+        base = Base.create_base_impl(base_property)
+        product = Product.create_product_impl(base)
+        stock_item = StockItem.create_stock_item_impl(base)
+        return BookImpl(base, product, stock_item, title)
 
-    static Book create(Base base, Product product, StockItem stock_item, str title)
-    {
-        return new BookImpl(base, product, stock_item, title);
-    }
+    @staticmethod
+    def create_book_impl(base: Base, product: Product, stock_item: StockItem, title: str) -> Book:
+        return BookImpl(base, product, stock_item, title)

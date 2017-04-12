@@ -112,6 +112,7 @@ public class GenericTest extends TemplateTest
     @Test
     public void line_list()
     {
+        testLineList(emptyList(), "");
         testLineList(asList("a"), "a");
         testLineList(asList("a", "b"), "a\n\nb");
         testLineList(asList("a", null), "a");

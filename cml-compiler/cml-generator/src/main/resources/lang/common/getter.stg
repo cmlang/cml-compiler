@@ -1,36 +1,6 @@
 
 import "/lang/common/field.stg"
 
-interface_getter(property) ::= <<
-<interface_getter_annotations(property)><\\>
-<interface_operation(
-    name={<getter_name(property)>},
-    params=[],
-    result_type={<getter_type(property.type)>}
-)>
->>
-
-class_getter(property) ::= <<
-<class_getter_annotations(property)><\\>
-<modifier("public")><\\>
-<class_operation(
-    name={<getter_name(property)>},
-    params=[],
-    result_type={<getter_type(property.type)>},
-    statements={<return({<getter_field_value(property)>})>}
-)>
->>
-
-delegate_getter(property) ::= <<
-<modifier("public")><\\>
-<class_operation(
-    name={<getter_name(property)>},
-    params=[],
-    result_type={<getter_type(property.type)>},
-    statements={<return({<field_access(property.parentScope)>.<getter_call(property)>})>}
-)>
->>
-
 getter_type(type) ::= <<
 <({getter_type_<type.kind>})(type)>
 >>

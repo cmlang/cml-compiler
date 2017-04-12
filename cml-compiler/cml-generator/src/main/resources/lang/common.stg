@@ -1,51 +1,22 @@
 
+import "/lang/common/generic.stg"
+import "/lang/common/indentation.stg"
+import "/lang/common/block.stg"
+import "/lang/common/keyword.stg"
 import "/lang/common/type.stg"
 import "/lang/common/field.stg"
+import "/lang/common/operation.stg"
 import "/lang/common/getter.stg"
 import "/lang/common/to_string.stg"
+import "/lang/common/structure.stg"
 import "/lang/common/interface.stg"
 import "/lang/common/class.stg"
 import "/lang/common/statement.stg"
 import "/lang/common/call.stg"
 
-// Modifiers
 
-modifier(m) ::= ""
 
-abstract_keyword() ::= ""
 
-// Structures
 
-structure(keyword, header, content) ::= <<
-<block_header(keyword, header)><\\>
-<structure_block_preamble()><\\>
-<block({<content>})>
->>
 
-structure_block_preamble() ::= ""
-
-// Blocks
-
-block_header(keyword, content) ::= <<
-<({<keyword>_keyword})()><content><block_header_terminator()>
->>
-
-block_header_terminator() ::= ""
-
-// Operations
-
-operation_header(name, params, result_type) ::= <<
-<block_header("operation", operation_header_content(name, params, result_type))>
->>
-
-// Classes
-
-constructor(class_name, params, statements) ::= <<
-<class_operation(
-    name=constructor_name(class_name),
-    params=params,
-    result_type=[],
-    statements=statements
-)>
->>
 

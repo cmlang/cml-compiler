@@ -1,0 +1,14 @@
+interface Book extends Intermediate
+{
+    static Book createBook(String description)
+    {
+        Product product = Product.createProductImpl(description);
+        Intermediate intermediate = Intermediate.createIntermediateImpl(product);
+        return new BookImpl(product, intermediate);
+    }
+
+    static Book createBookImpl(Product product, Intermediate intermediate)
+    {
+        return new BookImpl(product, intermediate);
+    }
+}

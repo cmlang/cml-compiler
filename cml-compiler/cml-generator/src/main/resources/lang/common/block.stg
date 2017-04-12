@@ -1,0 +1,6 @@
+
+block_header(keyword, content) ::= <<
+<({<keyword>_keyword})()><content><block_header_terminator()>
+>>
+
+block_header_terminator() ::= ""

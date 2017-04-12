@@ -67,6 +67,21 @@ public class InterfaceTest extends LangTest
     }
 
     @Test
+    public void concept_concrete_ancestor_empty() throws IOException
+    {
+        final Concept productConcept = Concept.create("Product");
+        productConcept.addElement(Property.create("description", null, Type.create("String", null)));
+
+        final Concept intermediateConcept = Concept.create("Intermediate");
+        intermediateConcept.addDirectAncestor(productConcept);
+
+        final Concept bookConcept = Concept.create("Book");
+        bookConcept.addDirectAncestor(intermediateConcept);
+
+        testInterfaceTemplateWithCreateMethod(bookConcept, "concept_concrete_ancestor_empty.txt");
+    }
+
+    @Test
     public void concept_concrete_ancestor_multiple() throws IOException
     {
         final Concept baseConcept = Concept.create("Base");
@@ -138,7 +153,7 @@ public class InterfaceTest extends LangTest
         final ST template = getTemplate("interface");
 
         template.add("concept", concept);
-        template.add("classNameSuffix", "Impl");
+        template.add("class_name_suffix", "Impl");
 
         final String result = template.render();
 

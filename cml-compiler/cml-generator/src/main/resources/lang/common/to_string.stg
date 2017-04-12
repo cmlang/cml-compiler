@@ -1,11 +1,11 @@
 
 to_string(concept) ::= <<
 <modifier("public")><\\>
-<class_operation(
-    name={<to_string_name()>},
+<instance_operation(
+    name=to_string_name(),
     params=[],
     result_type=primitive_type_name("String"),
-    statements={<return({<to_string_expr(concept)>})>}
+    statements=return(to_string_expr(concept))
 )>
 >>
 

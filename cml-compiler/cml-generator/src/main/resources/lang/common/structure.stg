@@ -1,0 +1,9 @@
+
+import "/lang/common/block.stg"
+
+structure(keyword, header, base_list, sections) ::= <<
+<block_header(keyword, header)><\\>
+<if(base_list)><structure_preamble()><block(line_list(sections))><else><block_empty()><endif>
+>>
+
+structure_preamble() ::= ""

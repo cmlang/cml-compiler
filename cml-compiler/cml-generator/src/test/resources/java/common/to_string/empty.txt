@@ -1,7 +1,7 @@
 public String toString()
 {
     return new StringBuilder(SomeConcept.class.getSimpleName())
-        .append('(')
-        .append(')')
-        .toString();
+               .append('(')
+               .append(')')
+               .toString();
 }

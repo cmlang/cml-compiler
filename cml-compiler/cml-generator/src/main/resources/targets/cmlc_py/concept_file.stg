@@ -6,6 +6,7 @@ concept_file(target, concept) ::= <<
 
 <interface(concept, "Impl")>
 
+
 <class2(concept, "Impl")>
 >>
 

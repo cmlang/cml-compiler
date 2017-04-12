@@ -16,10 +16,10 @@ class Book extends Product
     public String toString()
     {
         return new StringBuilder(Book.class.getSimpleName())
-            .append('(')
-            .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
-            .append("title=").append(String.format("\"%s\"", getTitle()))
-            .append(')')
-            .toString();
+                   .append('(')
+                   .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
+                   .append("title=").append(String.format("\"%s\"", getTitle()))
+                   .append(')')
+                   .toString();
     }
 }

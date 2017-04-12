@@ -1,0 +1,19 @@
+
+instance_operation(name, params, result_type, statements) ::= <<
+<instance_operation_header(name, params, result_type)><\\>
+<block(statements)>
+>>
+
+instance_operation_header(name, params, result_type) ::= <<
+<block_header("operation", operation_header_content(true, name, params, result_type))>
+>>
+
+static_operation(name, params, result_type, statements) ::= <<
+<static_operation_header(name, params, result_type)><\\>
+<block(statements)>
+>>
+
+static_operation_header(name, params, result_type) ::= <<
+<static_operation_modifier()><\\>
+<block_header("operation", operation_header_content(false, name, params, result_type))>
+>>

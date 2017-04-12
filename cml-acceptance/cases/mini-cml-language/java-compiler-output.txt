@@ -7,9 +7,6 @@ ModelElement files:
 NamedElement files:
 - src/main/java/mcml/language/NamedElement.java
 
-Scope files:
-- src/main/java/mcml/language/Scope.java
-
 PropertyList files:
 - src/main/java/mcml/language/PropertyList.java
 

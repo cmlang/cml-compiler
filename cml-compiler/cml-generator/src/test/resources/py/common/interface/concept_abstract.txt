@@ -4,7 +4,6 @@ class Book(ABC):
     def title(self) -> str:
         pass
 
-    static Book create(str title)
-    {
-        return new BookImpl(title);
-    }
+    @staticmethod
+    def create_book_impl(title: str) -> Book:
+        return BookImpl(title)

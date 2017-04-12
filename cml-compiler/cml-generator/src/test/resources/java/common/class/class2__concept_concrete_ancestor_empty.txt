@@ -3,12 +3,6 @@ class BookImpl implements Book
     private final Product product;
     private final Intermediate intermediate;
 
-    public BookImpl(String description)
-    {
-        product = Product.create(description);
-        intermediate = Intermediate.create(product);
-    }
-
     public BookImpl(Product product, Intermediate intermediate)
     {
         this.product = product;
@@ -23,9 +17,9 @@ class BookImpl implements Book
     public String toString()
     {
         return new StringBuilder(Book.class.getSimpleName())
-            .append('(')
-            .append("description=").append(String.format("\"%s\"", getDescription()))
-            .append(')')
-            .toString();
+                   .append('(')
+                   .append("description=").append(String.format("\"%s\"", getDescription()))
+                   .append(')')
+                   .toString();
     }
 }

@@ -1,10 +1,10 @@
 public String toString()
 {
     return new StringBuilder(SomeConcept.class.getSimpleName())
-        .append('(')
-        .append("someProperty=").append(String.format("\"%s\"", getSomeProperty())).append(", ")
-        .append("optionalProperty=").append(getOptionalProperty().isPresent() ? String.format("\"%s\"", getOptionalProperty()) : "not present").append(", ")
-        .append("setProperty=").append(getSetProperty())
-        .append(')')
-        .toString();
+               .append('(')
+               .append("someProperty=").append(String.format("\"%s\"", getSomeProperty())).append(", ")
+               .append("optionalProperty=").append(getOptionalProperty().isPresent() ? String.format("\"%s\"", getOptionalProperty()) : "not present").append(", ")
+               .append("setProperty=").append(getSetProperty())
+               .append(')')
+               .toString();
 }

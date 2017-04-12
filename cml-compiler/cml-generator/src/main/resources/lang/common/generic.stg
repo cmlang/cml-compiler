@@ -3,6 +3,10 @@ newLineIf(cond) ::= <<
 <if(cond)><\n><endif>
 >>
 
+emptyLineIf(cond1) ::= <<
+<if(cond1)><\n><\n><endif>
+>>
+
 newLineIf2(cond1, cond2) ::= <<
 <if(cond1 && cond2)><\n><endif>
 >>

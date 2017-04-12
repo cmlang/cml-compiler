@@ -5,14 +5,36 @@ import cml.language.foundation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.concat;
 
 public interface Concept extends NamedElement, PropertyList
 {
     boolean isAbstract();
+
+    default List<String> getDependencies()
+    {
+        return concat(
+            getAllAncestors().stream().map(Concept::getName),
+            getPropertyTypes().stream().map(Type::getName))
+            .filter(name -> !name.equals(getName()))
+            .distinct()
+            .collect(toList());
+    }
+
+    default List<Type> getPropertyTypes()
+    {
+        return getAllProperties().stream()
+            .map(Property::getType)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(type -> !type.isPrimitive())
+            .collect(toList());
+    }
 
     default List<Concept> getAllAncestors()
     {

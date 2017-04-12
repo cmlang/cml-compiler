@@ -1,73 +1,98 @@
 
 import "/lang/common/generic.stg"
+import "/lang/common/operation.stg"
 import "/lang/common/getter.stg"
 
-interface(concept, classNameSuffix) ::= <<
-<structure("interface", {<interface_header()>}, {<interface_declarations()>})>
+interface(concept, class_name_suffix) ::= <<
+<structure(
+    keyword="interface",
+    header=interface_header(),
+    base_list=concept.allProperties,
+    sections = [
+        interface_getters(),
+        interface_client_create(),
+        interface_descendant_create([concept.allAncestors, concept.properties])
+    ]
+)>
 >>
 
 interface_header() ::= <<
 <type_name(concept)><ancestor_list(true, concept.directAncestors, [])>
 >>
 
+interface_getters() ::= <<
+<concept.properties:interface_getter();separator="\n">
+>>
+
+interface_client_create() ::= <<
+<if(!concept.abstract && class_name_suffix)><\\>
+<interface_create(
+    interface_name(),
+    concept.allProperties,
+    class_client_constructor_statements()
+)><\\>
+<endif>
+>>
+
+interface_descendant_create(params) ::= <<
+<if((concept.abstract || concept.directAncestors) && class_name_suffix)><\\>
+<interface_create(
+    interface_impl_name(),
+    params,
+    return(new_call(interface_impl_name(), params))
+)><\\>
+<endif>
+>>
+
+interface_create(name, params, statements) ::= <<
+<static_operation(
+    name=interface_create_name(name),
+    params=params,
+    result_type=interface_name(),
+    statements=statements
+)>
+>>
+
+interface_create_name(name) ::= <<
+<operation_name(({create<name>}))>
+>>
+
+class_client_constructor_statements() ::= <<
+<concept.allAncestors:create_invocation();separator="\n"><\\>
+<newLineIf(concept.allAncestors)><\\>
+<return(new_call(interface_impl_name(), [concept.allAncestors, concept.properties]))>
+>>
+
+create_invocation(concept) ::= <<
+<local_var_decl(concept)> = <\\>
+<type_name(concept)>.<interface_create_name(interface_impl_name())>(<\\>
+<concept.allAncestors:field_name();separator=", "><\\>
+<commaIf2(concept.allAncestors, concept.properties)><\\>
+<concept.properties:field_name();separator=", "><\\>
+)<statement_terminator()>
+>>
+
+interface_getter(property) ::= <<
+<interface_getter_annotations(property)><\\>
+<interface_operation(
+    name=getter_name(property),
+    params=[],
+    result_type=getter_type(property.type)
+)>
+>>
+
 interface_operation(name, params, result_type) ::= <<
-<operation_header(name, params, result_type)><\\>
+<instance_operation_header(name, params, result_type)><\\>
 <statement_terminator()><\\>
 <interface_operation_body()>
 >>
 
 interface_operation_body() ::= ""
 
-interface_declarations() ::= <<
-<concept.properties:interface_getter();separator="\n"><\\>
-<createMethodForClients(concept, classNameSuffix)><\\>
-<createMethodForDescendants(concept, classNameSuffix)>
+interface_name() ::= <<
+<type_name(concept)>
 >>
 
-createMethodForClients(concept, classNameSuffix) ::= <<
-<if(!concept.abstract && classNameSuffix)>
-<newLineIf(concept.properties)><\\>
-static <type_name(concept)> create(<createParamList([], concept.allProperties)>)
-{
-    return new <type_name(concept)><classNameSuffix>(<createArgList([], concept.allProperties)>);
-}<\\>
-<endif>
->>
-
-createMethodForDescendants(concept, classNameSuffix) ::= <<
-<if((concept.abstract || concept.directAncestors) && classNameSuffix)>
-<newLineIf(concept.properties)><\\>
-static <type_name(concept)> create(<createParamList(concept.allAncestors, concept.properties)>)
-{
-    return new <type_name(concept)><classNameSuffix>(<createArgList(concept.allAncestors, concept.properties)>);
-}<\\>
-<endif>
->>
-
-createParamList(ancestors, properties) ::= <<
-<ancestors:createAncestorParam();separator=", "><\\>
-<commaIf2(ancestors, properties)><\\>
-<properties:createPropertyParam();separator=", ">
->>
-
-createAncestorParam(concept) ::= <<
-<type_name(concept)> <field_name(concept)>
->>
-
-createPropertyParam(property) ::= <<
-<field_type(property)> <field_name(property)>
->>
-
-createArgList(ancestors, properties) ::= <<
-<ancestors:createAncestorArg();separator=", "><\\>
-<commaIf2(ancestors, properties)><\\>
-<properties:createPropertyArg();separator=", ">
->>
-
-createAncestorArg(concept) ::= <<
-<field_name(concept)>
->>
-
-createPropertyArg(property) ::= <<
-<field_name(property)>
+interface_impl_name() ::= <<
+<type_name(concept)><class_name_suffix>
 >>

@@ -22,10 +22,10 @@ class Book
     public String toString()
     {
         return new StringBuilder(Book.class.getSimpleName())
-            .append('(')
-            .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
-            .append("sequel=").append(getSequel().isPresent() ? String.format("\"%s\"", getSequel()) : "not present")
-            .append(')')
-            .toString();
+                   .append('(')
+                   .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
+                   .append("sequel=").append(getSequel().isPresent() ? String.format("\"%s\"", getSequel()) : "not present")
+                   .append(')')
+                   .toString();
     }
 }
