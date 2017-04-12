@@ -1,8 +1,8 @@
 class Book(ABC):
 
     @abstractproperty
-    def title(self) -> str:
+    def title(self) -> 'str':
         pass
     @abstractproperty
-    def sequel(self) -> Book:
+    def sequel(self) -> 'Book':
         pass

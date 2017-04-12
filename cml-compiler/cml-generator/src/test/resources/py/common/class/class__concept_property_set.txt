@@ -1,23 +1,23 @@
 class Book:
 
-    def __init__(self, title: str, sequel: Book, categories: Set[Category]) -> None:
+    def __init__(self, title: 'str', sequel: 'Book', categories: 'Set[Category]') -> 'None':
         self.__title = title
         self.__sequel = sequel
         self.__categories = categories
 
     @property
-    def title(self) -> str:
+    def title(self) -> 'str':
         return self.__title
 
     @property
-    def sequel(self) -> Book:
+    def sequel(self) -> 'Book':
         return self.__sequel
 
     @property
-    def categories(self) -> Set[Category]:
+    def categories(self) -> 'Set[Category]':
         return self.__categories
 
-    def __str__(self) -> str:
+    def __str__(self) -> 'str':
         return "%s(title=%s, sequel=%s, categories=%s)" % (
             type(self).__name__,
             self.title,

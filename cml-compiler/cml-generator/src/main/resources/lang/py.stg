@@ -62,11 +62,11 @@ operation_header_content(instance, name, params, result_type) ::= <<
 <if(instance)>self<endif><\\>
 <commaIf2(instance, params)><\\>
 <params:var_decl(); separator=", ">)<\\>
-<\ >-><\ ><if(result_type)><result_type><else>None<endif>
+<\ >-><\ >'<if(result_type)><result_type><else>None<endif>'
 >>
 
 var_decl(typed_element) ::= <<
-<field_name(typed_element)>: <field_type(typed_element)>
+<field_name(typed_element)>: '<field_type(typed_element)>'
 >>
 
 local_var_decl(typed_element) ::= <<

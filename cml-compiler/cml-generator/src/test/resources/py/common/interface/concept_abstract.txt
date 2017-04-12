@@ -1,9 +1,9 @@
 class Book(ABC):
 
     @abstractproperty
-    def title(self) -> str:
+    def title(self) -> 'str':
         pass
 
     @staticmethod
-    def create_book_impl(title: str) -> Book:
+    def create_book_impl(title: 'str') -> 'Book':
         return BookImpl(title)

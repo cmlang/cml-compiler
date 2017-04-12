@@ -9,8 +9,8 @@ public class Launcher
 {
     public static void main(final String[] args)
     {
-        final Model model = Model.create(null, emptySet());
-        final Concept concept = Concept.create(null, emptySet(), "SomeConcept", true);
+        final Model model = Model.createModel(null, emptySet());
+        final Concept concept = Concept.createConcept(null, emptySet(), "SomeConcept", true);
 
         System.out.println("Mini-CML Compiler");
         System.out.println();

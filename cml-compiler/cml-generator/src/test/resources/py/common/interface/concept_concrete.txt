@@ -1,15 +1,15 @@
 class Book(ABC):
 
     @abstractproperty
-    def title(self) -> str:
+    def title(self) -> 'str':
         pass
     @abstractproperty
-    def sequel(self) -> Book:
+    def sequel(self) -> 'Book':
         pass
     @abstractproperty
-    def categories(self) -> Set[Category]:
+    def categories(self) -> 'Set[Category]':
         pass
 
     @staticmethod
-    def create_book(title: str, sequel: Book, categories: Set[Category]) -> Book:
+    def create_book(title: 'str', sequel: 'Book', categories: 'Set[Category]') -> 'Book':
         return BookImpl(title, sequel, categories)

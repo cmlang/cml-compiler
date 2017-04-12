@@ -1,5 +1,5 @@
 class StringTitledBook(ABC):
 
     @abstractproperty
-    def title(self) -> str:
+    def title(self) -> 'str':
         pass
