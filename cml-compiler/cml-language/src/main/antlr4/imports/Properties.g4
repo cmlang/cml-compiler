@@ -2,9 +2,9 @@ grammar Properties;
 
 import Literals, Names, Types;
 
-propertyListNode:
-    '{' (propertyNode ';')* '}';
+propertyList:
+    '{' (propertyDeclaration ';')* '}';
 
-propertyNode returns [Property property]:
-    NAME (':' typeNode)? ('=' STRING)?;
+propertyDeclaration returns [Property property]:
+    NAME (':' typeDeclaration)? ('=' STRING)?;
 

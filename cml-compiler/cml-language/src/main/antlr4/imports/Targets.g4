@@ -3,6 +3,6 @@ grammar Targets;
 import Names, Properties;
 
 targetDeclaration returns [Target target]:
-    'target' NAME propertyListNode;
+    'target' NAME propertyList;
 
 

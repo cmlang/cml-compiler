@@ -39,10 +39,10 @@ public class ModelSynthesizer extends CMLBaseListener
 
         ctx.concept = Concept.create(name, _abstract);
 
-        if (ctx.propertyListNode() != null)
+        if (ctx.propertyList() != null)
         {
-            ctx.propertyListNode()
-               .propertyNode()
+            ctx.propertyList()
+               .propertyDeclaration()
                .forEach(node -> ctx.concept.addElement(node.property));
         }
     }
@@ -54,26 +54,26 @@ public class ModelSynthesizer extends CMLBaseListener
 
         ctx.target = Target.create(name);
 
-        if (ctx.propertyListNode() != null)
+        if (ctx.propertyList() != null)
         {
-            ctx.propertyListNode()
-               .propertyNode()
+            ctx.propertyList()
+               .propertyDeclaration()
                .forEach(node -> ctx.target.addElement(node.property));
         }
     }
 
     @Override
-    public void exitPropertyNode(PropertyNodeContext ctx)
+    public void exitPropertyDeclaration(PropertyDeclarationContext ctx)
     {
         final String name = ctx.NAME().getText();
-        final Type type = (ctx.typeNode() == null) ? null : ctx.typeNode().type;
+        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final String value = (ctx.STRING() == null) ? null : unwrap(ctx.STRING().getText());
 
         ctx.property = Property.create(name, value, type);
     }
 
     @Override
-    public void exitTypeNode(TypeNodeContext ctx)
+    public void exitTypeDeclaration(TypeDeclarationContext ctx)
     {
         final String name = ctx.NAME().getText();
         final String cardinality = (ctx.CARDINALITY() == null) ? null : ctx.CARDINALITY().getText();

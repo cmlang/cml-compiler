@@ -4,10 +4,10 @@ import Names, Properties;
 
 conceptDeclaration returns [Concept concept]:
     ABSTRACT? 'concept' NAME
-    (':' ancestorListNode)?
-    (';' | propertyListNode);
+    (':' ancestorList)?
+    (';' | propertyList);
 
-ancestorListNode:
+ancestorList:
     NAME (',' NAME)*;
 
 ABSTRACT:

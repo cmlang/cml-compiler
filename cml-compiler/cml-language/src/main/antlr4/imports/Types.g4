@@ -2,7 +2,7 @@ grammar Types;
 
 import Names;
 
-typeNode returns [Type type]:
+typeDeclaration returns [Type type]:
     NAME CARDINALITY?;
 
 CARDINALITY:
