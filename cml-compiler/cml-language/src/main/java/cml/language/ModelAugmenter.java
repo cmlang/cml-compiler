@@ -4,8 +4,8 @@ import cml.language.features.Concept;
 import cml.language.features.Model;
 import cml.language.foundation.NamedElement;
 import cml.language.grammar.CMLBaseListener;
-import cml.language.grammar.CMLParser.ConceptNodeContext;
-import cml.language.grammar.CMLParser.ModelNodeContext;
+import cml.language.grammar.CMLParser.ConceptDeclarationContext;
+import cml.language.grammar.CMLParser.CompilationUnitContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
@@ -17,13 +17,13 @@ public class ModelAugmenter extends CMLBaseListener
     private Model model;
 
     @Override
-    public void enterModelNode(ModelNodeContext ctx)
+    public void enterCompilationUnit(CompilationUnitContext ctx)
     {
         model = ctx.model;
     }
 
     @Override
-    public void enterConceptNode(ConceptNodeContext ctx)
+    public void enterConceptDeclaration(ConceptDeclarationContext ctx)
     {
         if (ctx.ancestorListNode() != null)
         {

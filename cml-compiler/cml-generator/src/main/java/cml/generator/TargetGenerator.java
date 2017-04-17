@@ -3,8 +3,8 @@ package cml.generator;
 import cml.io.Console;
 import cml.language.features.Target;
 import cml.language.grammar.CMLBaseListener;
-import cml.language.grammar.CMLParser.ConceptNodeContext;
-import cml.language.grammar.CMLParser.ModelNodeContext;
+import cml.language.grammar.CMLParser.ConceptDeclarationContext;
+import cml.language.grammar.CMLParser.CompilationUnitContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ class TargetGenerator extends CMLBaseListener
     }
 
     @Override
-    public void enterModelNode(ModelNodeContext ctx)
+    public void enterCompilationUnit(CompilationUnitContext ctx)
     {
         console.println("%s files:", MODEL);
 
@@ -45,7 +45,7 @@ class TargetGenerator extends CMLBaseListener
     }
 
     @Override
-    public void enterConceptNode(ConceptNodeContext ctx)
+    public void enterConceptDeclaration(ConceptDeclarationContext ctx)
     {
         console.println("\n%s files:", ctx.concept.getName());
         

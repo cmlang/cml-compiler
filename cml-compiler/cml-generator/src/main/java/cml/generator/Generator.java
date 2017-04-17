@@ -4,7 +4,7 @@ import cml.io.Console;
 import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.language.features.Target;
-import cml.language.grammar.CMLParser.ModelNodeContext;
+import cml.language.grammar.CMLParser.CompilationUnitContext;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface Generator
 {
-    int generate(ModelNodeContext modelNodeContext, final String targetType, final String targetDirPath);
+    int generate(CompilationUnitContext compilationUnitContext, final String targetType, final String targetDirPath);
 
     static Generator create(Console console, FileSystem fileSystem)
     {
@@ -49,9 +49,9 @@ class GeneratorImpl implements Generator
     }
 
     @Override
-    public int generate(ModelNodeContext modelNodeContext, final String targetType, final String targetDirPath)
+    public int generate(CompilationUnitContext compilationUnitContext, final String targetType, final String targetDirPath)
     {
-        final Optional<Target> target = modelNodeContext.model.getTarget(targetType);
+        final Optional<Target> target = compilationUnitContext.model.getTarget(targetType);
         if (!target.isPresent())
         {
             console.println("Source files have not declared target type: %s", targetType);
@@ -74,7 +74,7 @@ class GeneratorImpl implements Generator
             target.get(), targetDirPath
         );
 
-        walker.walk(targetGenerator, modelNodeContext);
+        walker.walk(targetGenerator, compilationUnitContext);
 
         return SUCCESS;
     }

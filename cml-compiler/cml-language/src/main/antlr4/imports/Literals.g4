@@ -1,0 +1,5 @@
+lexer grammar Literals;
+
+STRING:
+    '"' .*? '"';
+

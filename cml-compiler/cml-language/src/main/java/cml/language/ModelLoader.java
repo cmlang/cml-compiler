@@ -4,7 +4,7 @@ import cml.io.Console;
 import cml.io.SourceFile;
 import cml.language.grammar.CMLLexer;
 import cml.language.grammar.CMLParser;
-import cml.language.grammar.CMLParser.ModelNodeContext;
+import cml.language.grammar.CMLParser.CompilationUnitContext;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -17,7 +17,7 @@ import static java.util.Optional.empty;
 
 public interface ModelLoader
 {
-    Optional<ModelNodeContext> loadModel(SourceFile sourceFile);
+    Optional<CompilationUnitContext> loadModel(SourceFile sourceFile);
 
     static ModelLoader create(Console console)
     {
@@ -35,7 +35,7 @@ class ModelLoaderImpl implements ModelLoader
     }
 
     @Override
-    public Optional<ModelNodeContext> loadModel(SourceFile sourceFile)
+    public Optional<CompilationUnitContext> loadModel(SourceFile sourceFile)
     {
         try (final FileInputStream fileInputStream = new FileInputStream(sourceFile.getPath()))
         {
@@ -43,15 +43,15 @@ class ModelLoaderImpl implements ModelLoader
             final CMLLexer lexer = new CMLLexer(input);
             final CommonTokenStream tokens = new CommonTokenStream(lexer);
             final CMLParser parser = new CMLParser(tokens);
-            final ModelNodeContext modelNodeContext = parser.modelNode();
+            final CompilationUnitContext compilationUnitContext = parser.compilationUnit();
             final ParseTreeWalker walker = new ParseTreeWalker();
             final ModelSynthesizer modelSynthesizer = new ModelSynthesizer();
             final ModelAugmenter modelInheritor = new ModelAugmenter();
 
-            walker.walk(modelSynthesizer, modelNodeContext);
-            walker.walk(modelInheritor, modelNodeContext);
+            walker.walk(modelSynthesizer, compilationUnitContext);
+            walker.walk(modelInheritor, compilationUnitContext);
 
-            return Optional.of(modelNodeContext);
+            return Optional.of(compilationUnitContext);
         }
         catch (final IOException exception)
         {

@@ -13,26 +13,26 @@ public class ModelSynthesizer extends CMLBaseListener
     private static final String QUOTE = "\"";
 
     @Override
-    public void exitModelNode(ModelNodeContext ctx)
+    public void exitCompilationUnit(CompilationUnitContext ctx)
     {
         ctx.model = Model.create();
 
-        if (ctx.modelElementNode() != null)
+        if (ctx.declarations() != null)
         {
-            ctx.modelElementNode()
+            ctx.declarations()
                .stream()
-               .filter(node -> node.conceptNode() != null)
-               .forEach(node -> ctx.model.addElement(node.conceptNode().concept));
+               .filter(node -> node.conceptDeclaration() != null)
+               .forEach(node -> ctx.model.addElement(node.conceptDeclaration().concept));
 
-            ctx.modelElementNode()
+            ctx.declarations()
                .stream()
-               .filter(node -> node.targetNode() != null)
-               .forEach(node -> ctx.model.addElement(node.targetNode().target));
+               .filter(node -> node.targetDeclaration() != null)
+               .forEach(node -> ctx.model.addElement(node.targetDeclaration().target));
         }
     }
 
     @Override
-    public void exitConceptNode(ConceptNodeContext ctx)
+    public void exitConceptDeclaration(ConceptDeclarationContext ctx)
     {
         final String name = ctx.NAME().getText();
         final boolean _abstract = ctx.ABSTRACT() != null;
@@ -48,7 +48,7 @@ public class ModelSynthesizer extends CMLBaseListener
     }
 
     @Override
-    public void exitTargetNode(TargetNodeContext ctx)
+    public void exitTargetDeclaration(TargetDeclarationContext ctx)
     {
         final String name = ctx.NAME().getText();
 
