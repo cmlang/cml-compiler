@@ -7,3 +7,4 @@ compilationUnit returns [Model model]:
 
 declarations:
     conceptDeclaration | targetDeclaration;
+
