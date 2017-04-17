@@ -1,10 +1,5 @@
 grammar Properties;
 
-@header
-{
-import cml.language.foundation.*;
-}
-
 import Literals, Names, Types;
 
 propertyListNode:

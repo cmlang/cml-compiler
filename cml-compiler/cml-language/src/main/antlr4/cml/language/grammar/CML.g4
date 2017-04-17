@@ -2,15 +2,10 @@ grammar CML;
 
 @header
 {
-import cml.language.foundation.*;
 import cml.language.features.*;
+import cml.language.foundation.*;
 }
 
-import Concepts, Targets, Ignored;
+import CompilationUnits, Ignored;
 
-compilationUnit returns [Model model]:
-    declarations*;
-
-declarations:
-    conceptDeclaration | targetDeclaration;
 

@@ -1,10 +1,5 @@
 grammar Concepts;
 
-@header
-{
-import cml.language.features.*;
-}
-
 import Names, Properties;
 
 conceptDeclaration returns [Concept concept]:
