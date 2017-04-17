@@ -1,10 +1,15 @@
 lexer grammar Ignored;
 
-// Ignoring whitespace:
+// import: none
+
+// Ignoring Whitespace:
+
 WS:
     ( ' ' | '\t' | '\f' | '\n' | '\r' )+ -> skip;
 
-// Ignoring comments:
+
+// Ignoring Comments:
+
 COMMENT:
     ('//' .*? '\n' | '(*' .*? '*)' ) -> skip;
 
