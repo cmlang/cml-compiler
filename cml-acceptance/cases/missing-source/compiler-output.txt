@@ -1,2 +1,2 @@
-Main source file (main.cml) missing in source dir: cases/missing-source
+Main source file (main.cml) missing in source dir: ./source
 Unable to parse source files.

@@ -5,7 +5,6 @@ import org.apache.maven.shared.invoker.*;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.WriterStreamConsumer;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
@@ -20,6 +19,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertEquals;
 import static org.codehaus.plexus.util.FileUtils.*;
 import static org.codehaus.plexus.util.cli.CommandLineUtils.executeCommandLine;
@@ -41,11 +41,6 @@ public class AcceptanceTest
     private static final String CLIENT_BASE_DIR = BASE_DIR + "/" + "cml-clients";
     private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
 
-    private static final String CASES_DIR = "cases";
-    private static final String COMPILER_OUTPUT_FILENAME = "compiler-output.txt";
-    private static final String CLIENT_OUTPUT_FILENAME = "client-output.txt";
-
-    private static final String TARGET_DIR = "target/acceptance-test";
     private static final String POJ = "poj"; // plain old Java
 
     private static final String JAVA = "java";
@@ -75,138 +70,158 @@ public class AcceptanceTest
         assertThat("Target dir must exist: " + targetDir, targetDir.exists(), is(true));
     }
 
-    @Before
-    public void cleanTargetDir() throws IOException
-    {
-        System.out.println("\n--------------------------");
-        System.out.println("Cleaning target dir: " + TARGET_DIR);
-
-        forceMkdir(new File(TARGET_DIR));
-        cleanDirectory(TARGET_DIR);
-    }
-
     @Theory
     public void success(@FromDataPoints("success-cases") final Case successCase) throws Exception
     {
-        final String sourceDir = CASES_DIR + "/" + successCase.getModuleName();
-        final String outputBasePath = sourceDir + "/" + successCase.getTargetLanguageExtension() + "-";
+        cleanTargetDir(successCase.getModulePath(), successCase.getTargetType());
 
         compileAndVerifyOutput(
-            sourceDir,
+            successCase.getModulePath(),
             successCase.getTargetType(),
-            outputBasePath + COMPILER_OUTPUT_FILENAME,
+            successCase.getExpectedCompilerOutputPath(),
             SUCCESS);
-        installGeneratedModule(TARGET_DIR, successCase);
+        installGeneratedModule(successCase.getTargetDirPath(), successCase);
 
         final String actualClientOutput = executeClient(successCase);
-        assertThatOutputMatches(
-            "client's output",
-            outputBasePath + CLIENT_OUTPUT_FILENAME,
-            actualClientOutput);
+        assertThatOutputMatches("client's output", successCase.getExpectedClientOutputPath(), actualClientOutput);
     }
 
     @Test
     public void missing_source_dir() throws Exception
     {
+        final String modulePath = Case.CASES_DIR + "/missing-source-dir";
+
+        cleanTargetDir(modulePath, POJ);
         compileAndVerifyOutput(
-            CASES_DIR + "/unknown-dir",
+            modulePath,
             POJ,
-            CASES_DIR + "/missing-source-dir/" + COMPILER_OUTPUT_FILENAME,
+            modulePath + "/" + Case.COMPILER_OUTPUT_FILENAME,
             FAILURE__SOURCE_DIR_NOT_FOUND);
     }
 
     @Test
     public void missing_source_file() throws Exception
     {
-        compileAndVerifyOutput(CASES_DIR + "/missing-source", POJ, FAILURE__SOURCE_FILE_NOT_FOUND);
+        final String modulePath = Case.CASES_DIR + "/missing-source";
+
+        cleanTargetDir(modulePath, POJ);
+        compileAndVerifyOutput(modulePath, POJ, FAILURE__SOURCE_FILE_NOT_FOUND);
     }
 
     @Test
     public void parsing_failed() throws Exception
     {
-        compileWithTargetTypeAndVerifyOutput(
-            CASES_DIR + "/parsing-failed",
-            "poj",
-            FAILURE__PARSING_FAILED);
+        final String modulePath = Case.CASES_DIR + "/parsing-failed";
+
+        cleanTargetDir(modulePath, POJ);
+        compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__PARSING_FAILED);
     }
 
     @Test
     public void target_type_unknown() throws Exception
     {
-        compileWithTargetTypeAndVerifyOutput(
-            CASES_DIR + "/target-type-unknown",
-            "unknown_target",
-            FAILURE__TARGET_TYPE_UNKNOWN);
+        final String modulePath = Case.CASES_DIR + "/target-type-unknown";
+
+        cleanTargetDir(modulePath, "unknown_target");
+        compileWithTargetTypeAndVerifyOutput(modulePath, "unknown_target", FAILURE__TARGET_TYPE_UNKNOWN);
     }
 
     @Test
     public void target_type_undeclared() throws Exception
     {
-        compileAndVerifyOutput(
-            CASES_DIR + "/target-type-undeclared",
-            POJ, 
-            FAILURE__TARGET_TYPE_UNDECLARED);
+        final String modulePath = Case.CASES_DIR + "/target-type-undeclared";
+
+        cleanTargetDir(modulePath, POJ);
+        compileAndVerifyOutput(modulePath, POJ, FAILURE__TARGET_TYPE_UNDECLARED);
     }
 
     @Test
     public void target_dir_created() throws Exception
     {
-        final File targetDir = new File(TARGET_DIR);
+        final String modulePath = Case.CASES_DIR + "/target-dir-created";
+        final File targetDir = new File(getTargetDirPath(modulePath, POJ));
 
         forceDelete(targetDir);
         assertThat("Target dir must NOT exist: " + targetDir, targetDir.exists(), is(false));
 
-        compileAndVerifyOutput(CASES_DIR + "/target-dir-created", POJ, SUCCESS);
+        compileAndVerifyOutput(modulePath, POJ, SUCCESS);
         assertThat("Target dir must exist: " + targetDir, targetDir.exists(), is(true));
     }
 
     @Test
     public void target_dir_cleaned() throws Exception
     {
-        final File bookFile = new File(TARGET_DIR, "src/main/java/books/Book.java");
-        final File bookStoreFile = new File(TARGET_DIR, "src/main/java/books/BookStore.java");
+        final String modulePath = Case.CASES_DIR + "/target-dir-cleaned";
+        final File targetDir = new File(getTargetDirPath(modulePath, POJ));
+
+        final File bookFile = new File(targetDir, "src/main/java/books/Book.java");
+        final File bookStoreFile = new File(targetDir, "src/main/java/books/BookStore.java");
 
         // Ensures there is already content in the target dir:
-        compileAndVerifyOutput(CASES_DIR + "/target-dir-created", POJ, SUCCESS);
+        final String tempModulePath = Case.CASES_DIR + "/target-dir-created";
+        compileAndVerifyOutput(tempModulePath, POJ, SUCCESS);
+        cleanTargetDir(modulePath, POJ);
+        copyDirectoryStructure(
+            new File(getTargetDirPath(tempModulePath, POJ)),
+            new File(getTargetDirPath(modulePath, POJ)));
         assertThat("Book must exist: " + bookFile, bookFile.exists(), is(true));
         assertThat("BookStore must NOT exist: " + bookFile, bookStoreFile.exists(), is(false));
 
         // Verifies that the previously generated target has been cleaned before generating the new one:
-        compileAndVerifyOutput(CASES_DIR + "/target-dir-cleaned", POJ, SUCCESS);
+        compileAndVerifyOutput(modulePath, POJ, SUCCESS);
         assertThat("Book must NOT exist: " + bookFile, bookFile.exists(), is(false));
         assertThat("BookStore must exist: " + bookFile, bookStoreFile.exists(), is(true));
     }
 
     private void compileAndVerifyOutput(
-        final String sourceDir,
+        final String modulePath,
         final String targetType,
         final int expectedExitCode) throws CommandLineException, IOException
     {
-        compileWithTargetTypeAndVerifyOutput(sourceDir, targetType, expectedExitCode);
+        compileWithTargetTypeAndVerifyOutput(modulePath, targetType, expectedExitCode);
     }
 
     private void compileWithTargetTypeAndVerifyOutput(
-        final String sourceDir,
+        final String modulePath,
         final String targetType,
         final int expectedExitCode) throws CommandLineException, IOException
     {
         compileAndVerifyOutput(
-            sourceDir,
+            modulePath,
             targetType,
-            sourceDir + "/" + COMPILER_OUTPUT_FILENAME,
+            modulePath + "/" + Case.COMPILER_OUTPUT_FILENAME,
             expectedExitCode);
     }
 
     private void compileAndVerifyOutput(
-        final String sourceDir,
+        final String modulePath,
         final String targetType,
         final String expectedOutputPath,
         final int expectedExitCode) throws CommandLineException, IOException
     {
         final String actualCompilerOutput = executeJar(
-            COMPILER_JAR, asList(sourceDir, TARGET_DIR, targetType), expectedExitCode);
+            modulePath,
+            COMPILER_JAR,
+            singletonList(targetType),
+            expectedExitCode);
 
         assertThatOutputMatches("compiler's output", expectedOutputPath, actualCompilerOutput);
+    }
+
+    private void cleanTargetDir(String currentDirPath, String targetType) throws IOException
+    {
+        final String targetDirPath = getTargetDirPath(currentDirPath, targetType);
+
+        System.out.println("\n--------------------------");
+        System.out.println("Cleaning target dir: " + targetDirPath);
+
+        forceMkdir(new File(targetDirPath));
+        cleanDirectory(targetDirPath);
+    }
+
+    private String getTargetDirPath(String currentDirPath, String targetType)
+    {
+        return currentDirPath + "/targets/" + targetType;
     }
 
     private void assertThatOutputMatches(
@@ -328,7 +343,7 @@ public class AcceptanceTest
 
         final String clientJarPath = clientTargetDir.getPath() + "/" + successCase.getClientName() + CLIENT_JAR_SUFFIX;
 
-        return executeJar(clientJarPath, emptyList(), SUCCESS);
+        return executeJar(clientTargetDir.getPath(), clientJarPath, emptyList(), SUCCESS);
     }
 
     private static String executePythonClient(Case successCase) throws CommandLineException, IOException
@@ -366,6 +381,7 @@ public class AcceptanceTest
     }
 
     private static String executeJar(
+        final String currentDirPath,
         final String jarPath,
         final List<String> args,
         final int expectedExitCode) throws CommandLineException, IOException
@@ -374,7 +390,7 @@ public class AcceptanceTest
 
         try
         {
-            final int actualExitCode = executeJar(jarPath, args, outputStream);
+            final int actualExitCode = executeJar(currentDirPath, jarPath, args, outputStream);
 
             assertThat("exit code", actualExitCode, is(expectedExitCode));
         }
@@ -387,6 +403,7 @@ public class AcceptanceTest
     }
 
     private static int executeJar(
+        final String currentDirPath,
         final String jarPath,
         final List<String> args,
         final ByteArrayOutputStream outputStream) throws CommandLineException
@@ -401,6 +418,7 @@ public class AcceptanceTest
         assertThat("Java exec file must exit: " + javaExecFile, javaExecFile.exists(), is(true));
 
         final Commandline commandLine = new Commandline();
+        commandLine.setWorkingDirectory(currentDirPath);
         commandLine.setExecutable(javaExecFile.getAbsolutePath());
 
         commandLine.createArg().setValue("-jar");
