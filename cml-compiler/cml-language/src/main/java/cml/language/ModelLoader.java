@@ -1,6 +1,8 @@
 package cml.language;
 
 import cml.io.Console;
+import cml.io.Directory;
+import cml.io.FileSystem;
 import cml.io.SourceFile;
 import cml.language.foundation.Model;
 import cml.language.grammar.CMLLexer;
@@ -14,34 +16,48 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
-import static java.util.Optional.empty;
-
 public interface ModelLoader
 {
-    Optional<Model> loadModel(SourceFile sourceFile);
+    int loadModel(Model model, Directory sourceDir);
 
-    static ModelLoader create(Console console)
+    static ModelLoader create(Console console, FileSystem fileSystem)
     {
-        return new ModelLoaderImpl(console);
+        return new ModelLoaderImpl(console, fileSystem);
     }
 }
 
 class ModelLoaderImpl implements ModelLoader
 {
-    private final Console console;
+    private static final String MAIN_SOURCE = "main.cml";
 
-    ModelLoaderImpl(final Console console)
+    private static final int SUCCESS = 0;
+    private static final int FAILURE__PARSING_FAILED = 3;
+    private static final int FAILURE__SOURCE_FILE_NOT_FOUND = 2;
+
+    private final Console console;
+    private final FileSystem fileSystem;
+
+    ModelLoaderImpl(final Console console, final FileSystem fileSystem)
     {
         this.console = console;
+        this.fileSystem = fileSystem;
     }
 
     @Override
-    public Optional<Model> loadModel(SourceFile sourceFile)
+    public int loadModel(Model model, Directory sourceDir)
     {
-        try (final FileInputStream fileInputStream = new FileInputStream(sourceFile.getPath()))
+        final Optional<SourceFile> sourceFile = fileSystem.findSourceFile(sourceDir, MAIN_SOURCE);
+        if (!sourceFile.isPresent())
+        {
+            console.println(
+                "Main source file (%s) missing in source dir: %s", MAIN_SOURCE,
+                sourceDir.getPath());
+            return FAILURE__SOURCE_FILE_NOT_FOUND;
+        }
+
+        try (final FileInputStream fileInputStream = new FileInputStream(sourceFile.get().getPath()))
         {
             final CompilationUnitContext compilationUnitContext = parse(fileInputStream);
-            final Model model = Model.create();
             final ModelSynthesizer modelSynthesizer = new ModelSynthesizer(model);
             final ModelAugmenter modelInheritor = new ModelAugmenter(model);
             final ParseTreeWalker walker = new ParseTreeWalker();
@@ -49,12 +65,15 @@ class ModelLoaderImpl implements ModelLoader
             walker.walk(modelSynthesizer, compilationUnitContext);
             walker.walk(modelInheritor, compilationUnitContext);
 
-            return Optional.of(model);
+            return SUCCESS;
         }
-        catch (final IOException exception)
+        catch (final Throwable exception)
         {
-            console.println("I/O Error: %s", exception.getMessage());
-            return empty();
+            if (exception.getMessage() != null)
+            {
+                console.println("Parsing Error: %s", exception.getMessage());
+            }
+            return FAILURE__PARSING_FAILED;
         }
     }
 

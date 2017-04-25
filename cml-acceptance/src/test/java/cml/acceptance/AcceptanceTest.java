@@ -122,6 +122,15 @@ public class AcceptanceTest
     }
 
     @Test
+    public void parsing_failed() throws Exception
+    {
+        compileWithTargetTypeAndVerifyOutput(
+            CASES_DIR + "/parsing-failed",
+            "poj",
+            FAILURE__PARSING_FAILED);
+    }
+
+    @Test
     public void target_type_unknown() throws Exception
     {
         compileWithTargetTypeAndVerifyOutput(

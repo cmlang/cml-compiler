@@ -1,0 +1,1 @@
+The main.cml source file is purposely empty; in order to fail the parsing.
