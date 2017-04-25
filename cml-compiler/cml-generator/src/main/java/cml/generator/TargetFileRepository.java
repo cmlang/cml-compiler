@@ -62,7 +62,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
             final String files = templateRenderer.renderTemplate(fileTemplates.get(), templateName, args);
             return stream(files.split("\n"))
                 .map(line -> line.split(FILE_LINE_SEPARATOR))
-                .map(pair -> createTargetFile(pair[1], target.getName(), pair[0]))
+                .map(pair -> createTargetFile(pair[1], target.getType().get(), pair[0]))
                 .collect(toList());
         }
         else
@@ -73,7 +73,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
 
     private Optional<TemplateFile> findTemplatesForTarget(Target target)
     {
-        return templateRepository.findTemplate(target.getName(), GROUP_FILES);
+        return templateRepository.findTemplate(target.getType().get(), GROUP_FILES);
     }
 
     private TargetFile createTargetFile(String path, String targetType, String templateName)

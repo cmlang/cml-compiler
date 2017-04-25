@@ -11,12 +11,12 @@ public final class Launcher
 
     public static void main(final String... args)
     {
-        final String targetType = args[0];
+        final String targetName = args[0];
         final String sourceDirPath = SOURCE_DIR;
-        final String targetDirPath = TARGETS_DIR + "/" + targetType;
+        final String targetDirPath = TARGETS_DIR + "/" + targetName;
 
         final Compiler compiler = Compiler.create();
-        final int exitCode = compiler.compile(sourceDirPath, targetDirPath, targetType);
+        final int exitCode = compiler.compile(sourceDirPath, targetDirPath, targetName);
 
         System.exit(exitCode);
     }

@@ -1,1 +1,1 @@
-No templates found for target type: unknown_target
+No templates found for target type: unknown

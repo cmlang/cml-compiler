@@ -11,8 +11,9 @@ concept Book: Product
 
 concept BookStore;
 
-target poj
+target livir_poj
 {
+    type = "poj";
     groupId = "livir";
     artifactId = "livir-books";
     version = "1.0.1-SNAPSHOT";
@@ -20,8 +21,9 @@ target poj
     packagePath = "livir/books";
 }
 
-target pop
+target livir_pop
 {
+    type = "pop";
     version = "1.0.1";
     moduleName = "livir_books";
 }

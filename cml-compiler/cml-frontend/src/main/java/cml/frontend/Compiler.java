@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface Compiler
 {
-    int compile(String sourceDirPath, String targetDirPath, String targetType);
+    int compile(String sourceDirPath, String targetDirPath, String targetName);
 
     static Compiler create()
     {
@@ -41,7 +41,7 @@ class CompilerImpl implements Compiler
     }
 
     @Override
-    public int compile(final String sourceDirPath, final String targetDirPath, final String targetType)
+    public int compile(final String sourceDirPath, final String targetDirPath, final String targetName)
     {
         final Optional<Directory> sourceDir = fileSystem.findDirectory(sourceDirPath);
         if (!sourceDir.isPresent())
@@ -55,7 +55,7 @@ class CompilerImpl implements Compiler
 
         if (exitCode == 0)
         {
-            return generator.generate(model, targetType, targetDirPath);
+            return generator.generate(model, targetName, targetDirPath);
         }
         else
         {

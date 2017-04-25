@@ -73,5 +73,9 @@ class TargetFileRendererImpl implements TargetFileRenderer
             final String path = targetDirPath + File.separatorChar + targetFile.getPath();
             fileSystem.createFile(path, contents);
         }
+        else
+        {
+            console.println(" (not found template for: %s)", targetFile.getPath());
+        }
     }
 }

@@ -51,14 +51,15 @@ public class AcceptanceTest
     private static final int FAILURE__SOURCE_FILE_NOT_FOUND = 2;
     private static final int FAILURE__PARSING_FAILED = 3;
     private static final int FAILURE__TARGET_TYPE_UNKNOWN = 101;
-    private static final int FAILURE__TARGET_TYPE_UNDECLARED = 102;
+    private static final int FAILURE__TARGET_TYPE_UNDEFINED = 102;
+    private static final int FAILURE__TARGET_NAME_UNDECLARED = 103;
 
     @DataPoints("success-cases")
     public static Case[] successCases = {
-        new Case("livir-books", "livir-console", "poj", JAVA),
-        new Case("livir-books", "livir_console", "pop", PYTHON),
-        new Case("mini-cml-language", "mcml-compiler", "cmlc_java", JAVA),
-        new Case("mini-cml-language", "mcml_compiler", "cmlc_py", PYTHON)
+        new Case("livir-books", "livir-console", "livir_poj", JAVA),
+        new Case("livir-books", "livir_console", "livir_pop", PYTHON),
+        new Case("mini-cml-language", "mcml-compiler", "mcml_java", JAVA),
+        new Case("mini-cml-language", "mcml_compiler", "mcml_py", PYTHON)
     };
 
     @BeforeClass
@@ -73,11 +74,11 @@ public class AcceptanceTest
     @Theory
     public void success(@FromDataPoints("success-cases") final Case successCase) throws Exception
     {
-        cleanTargetDir(successCase.getModulePath(), successCase.getTargetType());
+        cleanTargetDir(successCase.getModulePath(), successCase.getTargetName());
 
         compileAndVerifyOutput(
             successCase.getModulePath(),
-            successCase.getTargetType(),
+            successCase.getTargetName(),
             successCase.getExpectedCompilerOutputPath(),
             SUCCESS);
         installGeneratedModule(successCase.getTargetDirPath(), successCase);
@@ -127,12 +128,21 @@ public class AcceptanceTest
     }
 
     @Test
-    public void target_type_undeclared() throws Exception
+    public void target_undeclared() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/target-type-undeclared";
+        final String modulePath = Case.CASES_DIR + "/target-undeclared";
 
-        cleanTargetDir(modulePath, POJ);
-        compileAndVerifyOutput(modulePath, POJ, FAILURE__TARGET_TYPE_UNDECLARED);
+        cleanTargetDir(modulePath, "some_target_name");
+        compileAndVerifyOutput(modulePath, "some_target_name", FAILURE__TARGET_NAME_UNDECLARED);
+    }
+
+    @Test
+    public void target_type_undefined() throws Exception
+    {
+        final String modulePath = Case.CASES_DIR + "/target-type-undefined";
+
+        cleanTargetDir(modulePath, "some_target");
+        compileAndVerifyOutput(modulePath, "some_target", FAILURE__TARGET_TYPE_UNDEFINED);
     }
 
     @Test

@@ -2,6 +2,7 @@ concept BookStore;
 
 target poj
 {
+    type = "poj";
     groupId = "books";
     artifactId = "books";
     version = "1.0.1-SNAPSHOT";

@@ -1,8 +1,8 @@
 concept Book;
 
-target poj
+target some_target
 {
-    type = "poj";
+    // type not defined on purpose
     groupId = "books";
     artifactId = "books";
     version = "1.0.1-SNAPSHOT";

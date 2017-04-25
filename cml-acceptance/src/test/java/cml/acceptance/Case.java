@@ -12,14 +12,14 @@ class Case
 
     private final String moduleName;
     private final String clientName;
-    private final String targetType;
+    private final String targetName;
     private final String targetLanguageExtension;
 
-    Case(String moduleName, String clientName, String targetType, String targetLanguageExtension)
+    Case(String moduleName, String clientName, String targetName, String targetLanguageExtension)
     {
         this.moduleName = moduleName;
         this.clientName = clientName;
-        this.targetType = targetType;
+        this.targetName = targetName;
         this.targetLanguageExtension = targetLanguageExtension;
     }
 
@@ -33,9 +33,9 @@ class Case
         return moduleName.replace("-", "_");
     }
 
-    String getTargetType()
+    String getTargetName()
     {
-        return targetType;
+        return targetName;
     }
 
     String getTargetLanguageExtension()
@@ -60,7 +60,7 @@ class Case
 
     String getTargetDirPath()
     {
-        return getModulePath() + "/targets/" + getTargetType();
+        return getModulePath() + "/targets/" + getTargetName();
     }
 
     String getOutputBasePath()

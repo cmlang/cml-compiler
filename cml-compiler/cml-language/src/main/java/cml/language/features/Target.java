@@ -1,15 +1,17 @@
 package cml.language.features;
 
-import cml.language.foundation.ModelElement;
-import cml.language.foundation.NamedElement;
-import cml.language.foundation.PropertyList;
-import cml.language.foundation.Scope;
+import cml.language.foundation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface Target extends NamedElement, PropertyList
 {
+     default Optional<String> getType()
+     {
+         return getProperty("type").flatMap(Property::getValue);
+     }
+
     static Target create(String name)
     {
         return new TargetImpl(name);

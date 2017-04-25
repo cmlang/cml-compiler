@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface Generator
 {
-    int generate(Model model, final String targetType, final String targetDirPath);
+    int generate(Model model, final String targetName, final String targetDirPath);
 
     static Generator create(Console console, FileSystem fileSystem)
     {
@@ -29,7 +29,8 @@ class GeneratorImpl implements Generator
 {
     private static final int SUCCESS = 0;
     private static final int FAILURE__TARGET_TYPE_UNKNOWN = 101;
-    private static final int FAILURE__TARGET_TYPE_UNDECLARED = 102;
+    private static final int FAILURE__TARGET_TYPE_UNDEFINED = 102;
+    private static final int FAILURE__TARGET_NAME_UNDECLARED = 103;
 
     private final Console console;
     private final FileSystem fileSystem;
@@ -49,18 +50,25 @@ class GeneratorImpl implements Generator
     }
 
     @Override
-    public int generate(Model model, final String targetType, final String targetDirPath)
+    public int generate(Model model, final String targetName, final String targetDirPath)
     {
-        final Optional<Target> target = model.getTarget(targetType);
+        final Optional<Target> target = model.getTarget(targetName);
         if (!target.isPresent())
         {
-            console.println("Source files have not declared target type: %s", targetType);
-            return FAILURE__TARGET_TYPE_UNDECLARED;
+            console.println("Source files have not declared target name: %s", targetName);
+            return FAILURE__TARGET_NAME_UNDECLARED;
+        }
+
+        final Optional<String> targetType = target.get().getType();
+        if (!targetType.isPresent())
+        {
+            console.println("Target type not defined for target: %s", target.get().getName());
+            return FAILURE__TARGET_TYPE_UNDEFINED;
         }
 
         if (!targetFileRepository.templatesFoundFor(target.get()))
         {
-            console.println("No templates found for target type: %s", targetType);
+            console.println("No templates found for target type: %s", targetType.get());
             return FAILURE__TARGET_TYPE_UNKNOWN;
         }
 

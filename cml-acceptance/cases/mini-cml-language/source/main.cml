@@ -23,8 +23,9 @@ concept Model: ModelElement
 {
 }
 
-target cmlc_java
+target mcml_java
 {
+    type = "cmlc_java";
     groupId = "mcml";
     artifactId = "mcml-language";
     version = "1.0.1-SNAPSHOT";
@@ -32,8 +33,9 @@ target cmlc_java
     packagePath = "mcml/language";
 }
 
-target cmlc_py
+target mcml_py
 {
+    type = "cmlc_py";
     version = "1.0.1";
     moduleName = "mini_cml_language";
 }
