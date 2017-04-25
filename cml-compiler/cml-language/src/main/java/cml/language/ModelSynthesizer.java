@@ -1,7 +1,7 @@
 package cml.language;
 
 import cml.language.features.Concept;
-import cml.language.features.Model;
+import cml.language.foundation.Model;
 import cml.language.features.Target;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
