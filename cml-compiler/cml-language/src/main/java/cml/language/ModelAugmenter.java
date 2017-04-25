@@ -5,21 +5,19 @@ import cml.language.foundation.Model;
 import cml.language.foundation.NamedElement;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
-import cml.language.grammar.CMLParser.CompilationUnitContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ModelAugmenter extends CMLBaseListener
+class ModelAugmenter extends CMLBaseListener
 {
-    private Model model;
+    private final Model model;
 
-    @Override
-    public void enterCompilationUnit(CompilationUnitContext ctx)
+    ModelAugmenter(Model model)
     {
-        model = ctx.model;
+        this.model = model;
     }
 
     @Override

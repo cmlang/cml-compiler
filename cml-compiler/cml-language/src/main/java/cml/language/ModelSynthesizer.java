@@ -1,33 +1,38 @@
 package cml.language;
 
 import cml.language.features.Concept;
-import cml.language.foundation.Model;
 import cml.language.features.Target;
+import cml.language.foundation.Model;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
 
-public class ModelSynthesizer extends CMLBaseListener
+class ModelSynthesizer extends CMLBaseListener
 {
     private static final String QUOTE = "\"";
+
+    private final Model model;
+
+    ModelSynthesizer(Model model)
+    {
+        this.model = model;
+    }
 
     @Override
     public void exitCompilationUnit(CompilationUnitContext ctx)
     {
-        ctx.model = Model.create();
-
         if (ctx.declarations() != null)
         {
             ctx.declarations()
                .stream()
                .filter(node -> node.conceptDeclaration() != null)
-               .forEach(node -> ctx.model.addElement(node.conceptDeclaration().concept));
+               .forEach(node -> model.addElement(node.conceptDeclaration().concept));
 
             ctx.declarations()
                .stream()
                .filter(node -> node.targetDeclaration() != null)
-               .forEach(node -> ctx.model.addElement(node.targetDeclaration().target));
+               .forEach(node -> model.addElement(node.targetDeclaration().target));
         }
     }
 

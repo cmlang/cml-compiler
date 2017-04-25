@@ -5,7 +5,7 @@ import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.io.SourceFile;
 import cml.language.features.Concept;
-import cml.language.grammar.CMLParser.CompilationUnitContext;
+import cml.language.foundation.Model;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,13 +46,11 @@ public class ModelLoaderTest
 
     private Concept loadConcept(String sourceFileName)
     {
-        final CompilationUnitContext compilationUnitContext = loadModel(sourceFileName);
-        
-        return compilationUnitContext.model.getConcepts().get(0);
+        return loadModel(sourceFileName).getConcepts().get(0);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    private CompilationUnitContext loadModel(String sourceFileName)
+    private Model loadModel(String sourceFileName)
     {
         final Directory directory = fileSystem.findDirectory("src/test/resources/cml/language/ModelLoader").get();
         final SourceFile sourceFile = fileSystem.findSourceFile(directory, sourceFileName).get();

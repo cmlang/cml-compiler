@@ -1,15 +1,15 @@
 package cml.generator;
 
 import cml.io.Console;
+import cml.language.ModelVisitor;
+import cml.language.features.Concept;
 import cml.language.features.Target;
-import cml.language.grammar.CMLBaseListener;
-import cml.language.grammar.CMLParser.ConceptDeclarationContext;
-import cml.language.grammar.CMLParser.CompilationUnitContext;
+import cml.language.foundation.Model;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class TargetGenerator extends CMLBaseListener
+class TargetGenerator implements ModelVisitor.Delegate
 {
     private static final String MODEL = "model";
     private static final String CONCEPT = "concept";
@@ -37,19 +37,19 @@ class TargetGenerator extends CMLBaseListener
     }
 
     @Override
-    public void enterCompilationUnit(CompilationUnitContext ctx)
+    public void visit(Model model)
     {
         console.println("%s files:", MODEL);
 
-        generateTargetFiles(MODEL, ctx.model);
+        generateTargetFiles(MODEL, model);
     }
 
     @Override
-    public void enterConceptDeclaration(ConceptDeclarationContext ctx)
+    public void visit(Concept concept)
     {
-        console.println("\n%s files:", ctx.concept.getName());
-        
-        generateTargetFiles(CONCEPT, ctx.concept);
+        console.println("\n%s files:", concept.getName());
+
+        generateTargetFiles(CONCEPT, concept);
     }
 
     private void generateTargetFiles(String elementType, Object modelElement)

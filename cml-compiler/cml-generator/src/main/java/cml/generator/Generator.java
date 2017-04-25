@@ -3,17 +3,17 @@ package cml.generator;
 import cml.io.Console;
 import cml.io.Directory;
 import cml.io.FileSystem;
+import cml.language.ModelVisitor;
 import cml.language.features.Target;
-import cml.language.grammar.CMLParser.CompilationUnitContext;
+import cml.language.foundation.Model;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.util.Optional;
 
 public interface Generator
 {
-    int generate(CompilationUnitContext compilationUnitContext, final String targetType, final String targetDirPath);
+    int generate(Model model, final String targetType, final String targetDirPath);
 
     static Generator create(Console console, FileSystem fileSystem)
     {
@@ -49,9 +49,9 @@ class GeneratorImpl implements Generator
     }
 
     @Override
-    public int generate(CompilationUnitContext compilationUnitContext, final String targetType, final String targetDirPath)
+    public int generate(Model model, final String targetType, final String targetDirPath)
     {
-        final Optional<Target> target = compilationUnitContext.model.getTarget(targetType);
+        final Optional<Target> target = model.getTarget(targetType);
         if (!target.isPresent())
         {
             console.println("Source files have not declared target type: %s", targetType);
@@ -68,13 +68,13 @@ class GeneratorImpl implements Generator
         targetDir.ifPresent(fileSystem::cleanDirectory);
 
 
-        final ParseTreeWalker walker = new ParseTreeWalker();
         final TargetGenerator targetGenerator = new TargetGenerator(
             console, targetFileRenderer,
             target.get(), targetDirPath
         );
+        final ModelVisitor modelVisitor = new ModelVisitor(targetGenerator);
 
-        walker.walk(targetGenerator, compilationUnitContext);
+        modelVisitor.visit(model);
 
         return SUCCESS;
     }
