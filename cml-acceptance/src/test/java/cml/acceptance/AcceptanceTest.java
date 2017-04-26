@@ -62,6 +62,13 @@ public class AcceptanceTest
         new Case("mini-cml-language", "mcml_compiler", "mcml_py", PYTHON)
     };
 
+    @DataPoints("failing-modules")
+    public static String[] failingModules = {
+        "failed_parsing",
+        "failed_invalid_module_name",
+        "failed_missing_ancestor"
+    };
+
     @BeforeClass
     public static void buildCompiler() throws MavenInvocationException
     {
@@ -87,6 +94,15 @@ public class AcceptanceTest
         assertThatOutputMatches("client's output", successCase.getExpectedClientOutputPath(), actualClientOutput);
     }
 
+    @Theory
+    public void failed_loading_model(@FromDataPoints("failing-modules") final String moduleName) throws Exception
+    {
+        final String modulePath = Case.CASES_DIR + File.separator + moduleName;
+
+        cleanTargetDir(modulePath, POJ);
+        compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
+    }
+
     @Test
     public void missing_source_dir() throws Exception
     {
@@ -107,15 +123,6 @@ public class AcceptanceTest
 
         cleanTargetDir(modulePath, POJ);
         compileAndVerifyOutput(modulePath, POJ, FAILURE__SOURCE_FILE_NOT_FOUND);
-    }
-
-    @Test
-    public void parsing_failed() throws Exception
-    {
-        final String modulePath = Case.CASES_DIR + "/parsing-failed";
-
-        cleanTargetDir(modulePath, POJ);
-        compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
     }
 
     @Test
@@ -181,15 +188,6 @@ public class AcceptanceTest
         compileAndVerifyOutput(modulePath, POJ, SUCCESS);
         assertThat("Book must NOT exist: " + bookFile, bookFile.exists(), is(false));
         assertThat("BookStore must exist: " + bookFile, bookStoreFile.exists(), is(true));
-    }
-
-    @Test
-    public void missing_ancestor() throws Exception
-    {
-        final String modulePath = Case.CASES_DIR + "/missing_ancestor";
-
-        cleanTargetDir(modulePath, POJ);
-        compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
     }
 
     private void compileAndVerifyOutput(

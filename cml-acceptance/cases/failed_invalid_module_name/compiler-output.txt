@@ -1,0 +1,2 @@
+Error: Module declaration name (some_module_name) should match the module's directory name: failed_invalid_module_name
+Unable to parse source files.
