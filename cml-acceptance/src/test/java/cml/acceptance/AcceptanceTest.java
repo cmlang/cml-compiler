@@ -64,9 +64,10 @@ public class AcceptanceTest
 
     @DataPoints("failing-modules")
     public static String[] failingModules = {
-        "failed_parsing",
         "failed_invalid_module_name",
-        "failed_missing_ancestor"
+        "failed_missing_ancestor",
+        "failed_missing_concept_in_type",
+        "failed_parsing"
     };
 
     @BeforeClass

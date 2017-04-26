@@ -3,7 +3,9 @@ package cml.language;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.NamedElement;
+import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
+import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -13,6 +15,8 @@ import java.util.stream.Collectors;
 
 class ModelAugmenter extends CMLBaseListener
 {
+    private static final String UNABLE_TO_FIND_CONCEPT_IN_TYPE_DECLARATION = "Unable to find concept in type declaration: %s";
+    
     private final Module module;
 
     ModelAugmenter(Module module)
@@ -52,6 +56,22 @@ class ModelAugmenter extends CMLBaseListener
                 throw new ModelAugmentationException(
                     "Unable to find ancestors: %s",
                     missingAncestors.substring(1, missingAncestors.length() - 1));
+            }
+        }
+    }
+
+    @Override
+    public void enterTypeDeclaration(CMLParser.TypeDeclarationContext ctx)
+    {
+        final Type type = ctx.type;
+
+        if (!type.isPrimitive())
+        {
+            module.getConcept(type.getName()).ifPresent(type::setConcept);
+
+            if (!type.getConcept().isPresent())
+            {
+                throw new ModelAugmentationException(UNABLE_TO_FIND_CONCEPT_IN_TYPE_DECLARATION, type.getName());
             }
         }
     }

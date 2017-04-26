@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.features.Concept;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -25,6 +26,9 @@ public interface Type extends NamedElement
     }
 
     Optional<String> getCardinality();
+
+    Optional<Concept> getConcept();
+    void setConcept(Concept module);
 
     default String getKind()
     {
@@ -56,6 +60,8 @@ class TypeImpl implements Type
     private final NamedElement namedElement;
     private final @Nullable String cardinality;
 
+    private @Nullable Concept concept;
+
     TypeImpl(String name, @Nullable String cardinality)
     {
         this.namedElement = NamedElement.create(this, name);
@@ -78,6 +84,18 @@ class TypeImpl implements Type
     public Optional<String> getCardinality()
     {
         return Optional.ofNullable(cardinality);
+    }
+
+    @Override
+    public Optional<Concept> getConcept()
+    {
+        return Optional.ofNullable(concept);
+    }
+
+    @Override
+    public void setConcept(Concept concept)
+    {
+        this.concept = concept;
     }
 }
 

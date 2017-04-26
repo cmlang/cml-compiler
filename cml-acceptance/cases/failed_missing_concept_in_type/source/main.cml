@@ -1,0 +1,11 @@
+
+concept SomeConcept
+{
+    someProperty: MissingConcept;
+}
+
+target poj
+{
+    type = "poj";
+}
+
