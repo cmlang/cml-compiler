@@ -9,7 +9,11 @@ concept Book: Product
     title: String;
 }
 
-concept BookStore;
+concept BookStore
+{
+    books: Book*;
+    customers: Customer*;
+}
 
 target livir_poj
 {

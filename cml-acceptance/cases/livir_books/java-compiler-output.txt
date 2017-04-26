@@ -9,3 +9,6 @@ BookStore files:
 
 Product files:
 - src/main/java/livir/books/Product.java
+
+Customer files:
+- src/main/java/livir/books/Customer.java

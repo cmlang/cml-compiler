@@ -10,3 +10,6 @@ BookStore files:
 
 Product files:
 - livir_books/product.py
+
+Customer files:
+- livir_books/customer.py

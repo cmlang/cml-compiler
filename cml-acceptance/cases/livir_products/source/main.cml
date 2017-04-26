@@ -4,3 +4,8 @@ concept Product
     quantity: Integer;
 }
 
+concept Customer
+{
+    name: String;
+}
+
