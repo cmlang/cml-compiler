@@ -1,2 +1,1 @@
-Main source file missing in source dir.
-Unable to parse source files.
+Error: Main source file missing in source dir.

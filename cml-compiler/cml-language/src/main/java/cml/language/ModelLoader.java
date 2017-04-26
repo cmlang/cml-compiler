@@ -59,9 +59,13 @@ class ModelLoaderImpl implements ModelLoader
         }
         catch (final Throwable exception)
         {
-            if (exception.getMessage() != null)
+            if (exception.getMessage() == null)
             {
-                console.println("Error: %s", exception.getMessage());
+                 console.error("Unable to parse source files.");
+            }
+            else
+            {
+                console.error(exception.getMessage());
             }
 
             if (!(exception instanceof ModelLoadingException))
@@ -87,14 +91,14 @@ class ModelLoaderImpl implements ModelLoader
         final Optional<Directory> sourceDir = fileSystem.findDirectory(sourceDirPath);
         if (!sourceDir.isPresent())
         {
-            console.println("Source dir missing.");
+            console.error("Source dir missing.");
             return FAILURE__SOURCE_DIR_NOT_FOUND;
         }
 
         final Optional<SourceFile> sourceFile = fileSystem.findSourceFile(sourceDir.get(), MAIN_SOURCE);
         if (!sourceFile.isPresent())
         {
-            console.println("Main source file missing in source dir.");
+            console.error("Main source file missing in source dir.");
             return FAILURE__SOURCE_FILE_NOT_FOUND;
         }
 

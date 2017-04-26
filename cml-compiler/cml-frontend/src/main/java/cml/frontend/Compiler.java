@@ -16,7 +16,7 @@ public interface Compiler
         final FileSystem fileSystem = FileSystem.create();
         final ModelLoader modelLoader = ModelLoader.create(console, fileSystem);
         final Generator generator = Generator.create(console, fileSystem);
-        return new CompilerImpl(console, modelLoader, generator);
+        return new CompilerImpl(modelLoader, generator);
     }
 }
 
@@ -24,13 +24,11 @@ class CompilerImpl implements Compiler
 {
     private static final String TARGETS_DIR = "/targets";
 
-    private final Console console;
     private final ModelLoader modelLoader;
     private final Generator generator;
 
-    CompilerImpl(Console console, ModelLoader modelLoader, Generator generator)
+    CompilerImpl(ModelLoader modelLoader, Generator generator)
     {
-        this.console = console;
         this.modelLoader = modelLoader;
         this.generator = generator;
     }
@@ -45,11 +43,8 @@ class CompilerImpl implements Compiler
         {
             return generator.generate(model, targetName, modulePath + TARGETS_DIR + "/" + targetName);
         }
-        else
-        {
-            console.println("Unable to parse source files.");
-            return exitCode;
-        }
+
+        return exitCode;
     }
 }
 

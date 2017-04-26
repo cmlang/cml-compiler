@@ -1,3 +1,2 @@
 line 10:0 mismatched input '<EOF>' expecting NAME
 Error: No name provided for concept.
-Unable to parse source files.

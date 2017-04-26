@@ -1,2 +1,1 @@
 Error: Unable to find ancestors: MissingAncestor, AnotherMissingAncestor
-Unable to parse source files.
