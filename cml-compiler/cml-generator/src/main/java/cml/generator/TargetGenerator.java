@@ -4,7 +4,7 @@ import cml.io.Console;
 import cml.language.ModelVisitor;
 import cml.language.features.Concept;
 import cml.language.features.Target;
-import cml.language.foundation.Model;
+import cml.language.Model;
 
 import java.util.HashMap;
 import java.util.Map;

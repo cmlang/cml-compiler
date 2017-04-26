@@ -1,0 +1,6 @@
+module module_name
+{
+    import another_module;
+}
+
+concept SomeConcept: AnotherConcept;

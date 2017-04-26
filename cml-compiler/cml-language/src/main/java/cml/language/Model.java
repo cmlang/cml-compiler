@@ -1,7 +1,10 @@
-package cml.language.foundation;
+package cml.language;
 
 import cml.language.features.Concept;
+import cml.language.features.Module;
 import cml.language.features.Target;
+import cml.language.foundation.ModelElement;
+import cml.language.foundation.Scope;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,12 +13,19 @@ import static java.util.stream.Collectors.toList;
 
 public interface Model extends Scope
 {
-    default List<Concept> getConcepts()
+    default List<Module> getModules()
     {
         return getElements().stream()
-                            .filter(e -> e instanceof Concept)
-                            .map(e -> (Concept)e)
+                            .filter(e -> e instanceof Module)
+                            .map(e -> (Module)e)
                             .collect(toList());
+    }
+
+    default List<Concept> getConcepts()
+    {
+        return getModules().stream()
+                           .flatMap(m -> m.getConcepts().stream())
+                           .collect(toList());
     }
 
     default Optional<Concept> getConcept(String name)
@@ -25,10 +35,9 @@ public interface Model extends Scope
 
     default List<Target> getTargets()
     {
-        return getElements().stream()
-                            .filter(e -> e instanceof Target)
-                            .map(e -> (Target)e)
-                            .collect(toList());
+        return getModules().stream()
+                           .flatMap(m -> m.getTargets().stream())
+                           .collect(toList());
     }
 
     default Optional<Target> getTarget(String name)

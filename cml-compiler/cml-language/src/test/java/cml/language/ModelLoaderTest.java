@@ -1,20 +1,23 @@
 package cml.language;
 
 import cml.io.Console;
-import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.language.features.Concept;
-import cml.language.foundation.Model;
+import cml.language.features.Import;
+import cml.language.features.Module;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ModelLoaderTest
 {
+    public static final String BASE_PATH = "src/test/resources/cml/language/ModelLoader/";
+
     private FileSystem fileSystem;
     private ModelLoader modelLoader;
 
@@ -23,6 +26,38 @@ public class ModelLoaderTest
     {
         fileSystem = FileSystem.create();
         modelLoader = ModelLoader.create(Console.create(), fileSystem);
+    }
+
+    @Test
+    public void module()
+    {
+        final String moduleName = "module_name";
+        final Module module = loadModule(moduleName);
+        final Concept concept = module.getConcepts().get(0);
+
+        assertThat(module.getName(), is(moduleName));
+        assertThat(concept.getName(), is("SomeConcept"));
+
+        final String anotherModuleName = "another_module";
+        final Import _import = module.getImports().get(0);
+        final Module anotherModule = _import.getModule().get();
+        final Concept anotherConcept = anotherModule.getConcepts().get(0);
+
+        assertThat(_import.getName(), is(anotherModuleName));
+        assertThat(anotherModule.getName(), is(anotherModuleName));
+        assertThat(anotherConcept.getName(), is("AnotherConcept"));
+        assertThat(concept.getDirectAncestors().get(0), is(sameInstance(anotherConcept)));
+    }
+
+    @Test
+    public void invalid_module_name()
+    {
+        final Model model = Model.create();
+        final String modulePath = BASE_PATH + "invalid_module_name";
+
+        final int result = modelLoader.loadModel(model, modulePath);
+
+        assertThat(result, is(3));
     }
 
     @Test
@@ -43,19 +78,22 @@ public class ModelLoaderTest
         assertTrue("Concept should be abstract.", concept.isAbstract());
     }
 
+    private Module loadModule(String sourceFileName)
+    {
+        return loadModel(sourceFileName).getModules().get(0);
+    }
+
     private Concept loadConcept(String sourceFileName)
     {
         return loadModel(sourceFileName).getConcepts().get(0);
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
-    private Model loadModel(String dirName)
+    private Model loadModel(String moduleName)
     {
-        final String path = "src/test/resources/cml/language/ModelLoader/" + dirName;
-        final Directory sourceDir = fileSystem.findDirectory(path).get();
         final Model model = Model.create();
+        final String modulePath = BASE_PATH + moduleName;
 
-        modelLoader.loadModel(model, sourceDir);
+        modelLoader.loadModel(model, modulePath);
 
         return model;
     }

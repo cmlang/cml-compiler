@@ -14,6 +14,9 @@ public interface FileSystem
     Optional<Directory> findDirectory(String path);
     Optional<SourceFile> findSourceFile(Directory directory, String name);
 
+    String extractParentPath(String path);
+    String extractName(String path);
+
     void createFile(String path, String content);
     void cleanDirectory(Directory directory);
 
@@ -31,7 +34,7 @@ class FileSystemImpl implements FileSystem
     @Override
     public Optional<Directory> findDirectory(final String path)
     {
-        final File file = new File(path);
+        final File file = getCanonicalFile(path);
         final Directory directory = file.isDirectory() ? new Directory(path) : null;
         return Optional.ofNullable(directory);
     }
@@ -39,9 +42,23 @@ class FileSystemImpl implements FileSystem
     @Override
     public Optional<SourceFile> findSourceFile(final Directory directory, final String name)
     {
-        final File file = new File(new File(directory.getPath()), name);
+        final File file = getCanonicalFile(directory.getPath() + File.separator + name);
         final SourceFile sourceFile = file.isFile() ? new SourceFile(file.getPath()) : null;
         return Optional.ofNullable(sourceFile);
+    }
+
+    @Override
+    public String extractParentPath(String path)
+    {
+        final File file = getCanonicalFile(path);
+        return file.getParentFile().getPath();
+    }
+
+    @Override
+    public String extractName(String path)
+    {
+        final File file = getCanonicalFile(path);
+        return file.getName();
     }
 
     @Override
@@ -77,6 +94,19 @@ class FileSystemImpl implements FileSystem
         catch (final IOException exception)
         {
             throw new RuntimeException(EXCEPTION_DIRECTORY_DELETION_FAILED + directory.getPath(), exception);
+        }
+    }
+
+    private static File getCanonicalFile(String path)
+    {
+        File file = new File(path);
+        try
+        {
+            return file.getCanonicalFile();
+        }
+        catch (IOException exception)
+        {
+            return file.getAbsoluteFile();
         }
     }
 }

@@ -1,7 +1,7 @@
 package cml.language;
 
 import cml.language.features.Concept;
-import cml.language.foundation.Model;
+import cml.language.features.Module;
 import cml.language.foundation.NamedElement;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 class ModelAugmenter extends CMLBaseListener
 {
-    private final Model model;
+    private final Module module;
 
-    ModelAugmenter(Model model)
+    ModelAugmenter(Module module)
     {
-        this.model = model;
+        this.module = module;
     }
 
     @Override
@@ -31,7 +31,7 @@ class ModelAugmenter extends CMLBaseListener
                                                   .collect(Collectors.toList());
 
             final List<Concept> foundAncestors = ancestorNames.stream()
-                                                         .map(name -> model.getConcept(name))
+                                                         .map(name -> module.getConcept(name))
                                                          .filter(Optional::isPresent)
                                                          .map(Optional::get)
                                                          .collect(Collectors.toList());

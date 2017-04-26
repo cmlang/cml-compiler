@@ -10,6 +10,4 @@ conceptDeclaration returns [Concept concept]:
 ancestorList:
     NAME (',' NAME)*;
 
-ABSTRACT:
-    'abstract';
 

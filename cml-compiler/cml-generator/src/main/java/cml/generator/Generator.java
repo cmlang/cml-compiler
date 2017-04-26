@@ -5,7 +5,7 @@ import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.language.ModelVisitor;
 import cml.language.features.Target;
-import cml.language.foundation.Model;
+import cml.language.Model;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
 

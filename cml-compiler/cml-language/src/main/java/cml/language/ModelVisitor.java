@@ -1,7 +1,6 @@
 package cml.language;
 
 import cml.language.features.Concept;
-import cml.language.foundation.Model;
 
 public class ModelVisitor
 {

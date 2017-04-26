@@ -1,10 +1,10 @@
 grammar CompilationUnits;
 
-import Concepts, Targets;
+import Modules, Concepts, Targets;
 
-compilationUnit returns [Model model]:
+compilationUnit:
     declarations*;
 
 declarations:
-    conceptDeclaration | targetDeclaration;
+    moduleDeclaration | conceptDeclaration | targetDeclaration;
 

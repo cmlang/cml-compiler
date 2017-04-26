@@ -1,2 +1,2 @@
-Main source file (main.cml) missing in source dir: ./source
+Main source file missing in source dir.
 Unable to parse source files.

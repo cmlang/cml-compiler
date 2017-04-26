@@ -1,22 +1,30 @@
 package cml.language;
 
 import cml.language.features.Concept;
+import cml.language.features.Import;
+import cml.language.features.Module;
 import cml.language.features.Target;
-import cml.language.foundation.Model;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
 
+import static java.lang.String.format;
+
 class ModelSynthesizer extends CMLBaseListener
 {
     private static final String QUOTE = "\"";
+    private static final String INVALID_MODULE_NAME = "Module declaration name (%s) should match the module's directory name: %s";
+    private static final String NO_NAME_PROVIDED_FOR_CONCEPT = "No name provided for concept.";
+    private static final String NO_NAME_PROVIDED_FOR_TYPE = "No name provided for type.";
+    private static final String NO_NAME_PROVIDED_FOR_PROPERTY = "No name provided for property.";
+    private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for target.";
 
-    private final Model model;
+    private final Module module;
 
-    ModelSynthesizer(Model model)
+    ModelSynthesizer(Module module)
     {
-        this.model = model;
+        this.module = module;
     }
 
     @Override
@@ -27,18 +35,48 @@ class ModelSynthesizer extends CMLBaseListener
             ctx.declarations()
                .stream()
                .filter(node -> node.conceptDeclaration() != null)
-               .forEach(node -> model.addElement(node.conceptDeclaration().concept));
+               .forEach(node -> module.addElement(node.conceptDeclaration().concept));
 
             ctx.declarations()
                .stream()
                .filter(node -> node.targetDeclaration() != null)
-               .forEach(node -> model.addElement(node.targetDeclaration().target));
+               .forEach(node -> module.addElement(node.targetDeclaration().target));
         }
+    }
+
+    @Override
+    public void exitModuleDeclaration(ModuleDeclarationContext ctx)
+    {
+        final String name = ctx.NAME().getText();
+
+        if (!name.equals(module.getName()))
+        {
+            throw new ModelSynthesisException(format(INVALID_MODULE_NAME, name, module.getName()));
+        }
+
+        if (ctx.importDeclaration() != null)
+        {
+            ctx.importDeclaration()
+               .forEach(node -> module.addElement(node._import));
+        }
+    }
+
+    @Override
+    public void exitImportDeclaration(ImportDeclarationContext ctx)
+    {
+        final String name = ctx.NAME().getText();
+
+        ctx._import = Import.create(name);
     }
 
     @Override
     public void exitConceptDeclaration(ConceptDeclarationContext ctx)
     {
+        if (ctx.NAME() == null)
+        {
+            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_CONCEPT);
+        }
+
         final String name = ctx.NAME().getText();
         final boolean _abstract = ctx.ABSTRACT() != null;
 
@@ -55,6 +93,11 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitTargetDeclaration(TargetDeclarationContext ctx)
     {
+        if (ctx.NAME() == null)
+        {
+            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_TARGET);
+        }
+
         final String name = ctx.NAME().getText();
 
         ctx.target = Target.create(name);
@@ -70,6 +113,11 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitPropertyDeclaration(PropertyDeclarationContext ctx)
     {
+        if (ctx.NAME() == null)
+        {
+            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_PROPERTY);
+        }
+
         final String name = ctx.NAME().getText();
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final String value = (ctx.STRING() == null) ? null : unwrap(ctx.STRING().getText());
@@ -80,6 +128,11 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitTypeDeclaration(TypeDeclarationContext ctx)
     {
+        if (ctx.NAME() == null)
+        {
+            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_TYPE);
+        }
+
         final String name = ctx.NAME().getText();
         final String cardinality = (ctx.CARDINALITY() == null) ? null : ctx.CARDINALITY().getText();
 
