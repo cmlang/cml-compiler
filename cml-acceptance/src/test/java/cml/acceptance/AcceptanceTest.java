@@ -98,7 +98,7 @@ public class AcceptanceTest
     @Theory
     public void error_loading_model(@FromDataPoints("failing-modules") final String moduleName) throws Exception
     {
-        final String modulePath = Case.CASES_DIR + File.separator + "error" + File.separator + moduleName;
+        final String modulePath = getErrorModulePath(moduleName);
 
         cleanTargetDir(modulePath, POJ);
         compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
@@ -107,7 +107,7 @@ public class AcceptanceTest
     @Test
     public void missing_source_dir() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/missing-source-dir";
+        final String modulePath = getErrorModulePath("missing-source-dir");
 
         cleanTargetDir(modulePath, POJ);
         compileAndVerifyOutput(
@@ -120,7 +120,7 @@ public class AcceptanceTest
     @Test
     public void missing_source_file() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/missing-source";
+        final String modulePath = getErrorModulePath("missing-source");
 
         cleanTargetDir(modulePath, POJ);
         compileAndVerifyOutput(modulePath, POJ, FAILURE__SOURCE_FILE_NOT_FOUND);
@@ -129,7 +129,7 @@ public class AcceptanceTest
     @Test
     public void target_type_unknown() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/target-type-unknown";
+        final String modulePath = getErrorModulePath("target-type-unknown");
 
         cleanTargetDir(modulePath, "unknown_target");
         compileWithTargetTypeAndVerifyOutput(modulePath, "unknown_target", FAILURE__TARGET_TYPE_UNKNOWN);
@@ -138,7 +138,7 @@ public class AcceptanceTest
     @Test
     public void target_undeclared() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/target-undeclared";
+        final String modulePath = getErrorModulePath("target-undeclared");
 
         cleanTargetDir(modulePath, "some_target_name");
         compileAndVerifyOutput(modulePath, "some_target_name", FAILURE__TARGET_NAME_UNDECLARED);
@@ -147,7 +147,7 @@ public class AcceptanceTest
     @Test
     public void target_type_undefined() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/target-type-undefined";
+        final String modulePath = getErrorModulePath("target-type-undefined");
 
         cleanTargetDir(modulePath, "some_target");
         compileAndVerifyOutput(modulePath, "some_target", FAILURE__TARGET_TYPE_UNDEFINED);
@@ -464,4 +464,8 @@ public class AcceptanceTest
         return pythonHomeDir + "/bin/" + cmd;
     }
 
+    private static String getErrorModulePath(String moduleName)
+    {
+        return Case.CASES_DIR + File.separator + "error" + File.separator + moduleName;
+    }
 }
