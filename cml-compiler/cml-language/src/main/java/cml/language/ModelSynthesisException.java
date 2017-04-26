@@ -1,9 +1,9 @@
 package cml.language;
 
-public class ModelSynthesisException extends RuntimeException
+class ModelSynthesisException extends ModelLoadingException
 {
-    public ModelSynthesisException(String message)
+    ModelSynthesisException(String message, Object... args)
     {
-        super(message);
+        super(message, args);
     }
 }

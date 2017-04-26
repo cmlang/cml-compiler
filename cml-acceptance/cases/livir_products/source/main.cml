@@ -1,0 +1,6 @@
+
+concept Product
+{
+    quantity: Integer;
+}
+

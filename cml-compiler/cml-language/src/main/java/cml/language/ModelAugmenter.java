@@ -40,12 +40,19 @@ class ModelAugmenter extends CMLBaseListener
                                                                   .map(NamedElement::getName)
                                                                   .collect(Collectors.toList());
 
+            foundAncestors.forEach(ancestor -> ctx.concept.addDirectAncestor(ancestor));
+
             final List<String> missingAncestorNames = ancestorNames.stream()
                                                                    .filter(name -> !foundAncestorNames.contains(name))
                                                                    .collect(Collectors.toList());
 
-            foundAncestors.forEach(ancestor -> ctx.concept.addDirectAncestor(ancestor));
-            missingAncestorNames.forEach(name -> ctx.concept.addMissingAncestor(name));
+            if (missingAncestorNames.size() > 0)
+            {
+                final String missingAncestors = missingAncestorNames.toString();
+                throw new ModelAugmentationException(
+                    "Unable to find ancestors: %s",
+                    missingAncestors.substring(1, missingAncestors.length() - 1));
+            }
         }
     }
 }

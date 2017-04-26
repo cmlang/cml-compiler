@@ -1,6 +1,6 @@
-concept Product
+module livir_books
 {
-    quantity: Integer;
+    import livir_products;
 }
 
 concept Book: Product

@@ -5,11 +5,9 @@ import cml.language.foundation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.concat;
 
 public interface Concept extends NamedElement, PropertyList
@@ -50,10 +48,6 @@ public interface Concept extends NamedElement, PropertyList
     List<Concept> getDirectAncestors();
     void addDirectAncestor(Concept concept);
 
-    @SuppressWarnings("unused")
-    List<String> getMissingAncestors();
-    void addMissingAncestor(String missingAncestor);
-
     default List<Property> getInheritedProperties()
     {
         return getAllAncestors().stream()
@@ -84,7 +78,6 @@ class ConceptImpl implements Concept
     private final NamedElement namedElement;
     private final Scope scope;
     private final List<Concept> directAncestors = new ArrayList<>();
-    private final List<String> missingAncestors = new ArrayList<>();
     private final boolean _abstract;
 
     ConceptImpl(String name, boolean _abstract)
@@ -137,19 +130,5 @@ class ConceptImpl implements Concept
         assert !directAncestors.contains(concept);
 
         directAncestors.add(concept);
-    }
-
-    @Override
-    public List<String> getMissingAncestors()
-    {
-        return unmodifiableList(missingAncestors);
-    }
-
-    @Override
-    public void addMissingAncestor(String missingAncestor)
-    {
-        assert !missingAncestors.contains(missingAncestor);
-
-        missingAncestors.add(missingAncestor);
     }
 }

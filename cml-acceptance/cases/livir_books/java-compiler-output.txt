@@ -1,11 +1,11 @@
 model files:
 - pom.xml
 
-Product files:
-- src/main/java/livir/books/Product.java
-
 Book files:
 - src/main/java/livir/books/Book.java
 
 BookStore files:
 - src/main/java/livir/books/BookStore.java
+
+Product files:
+- src/main/java/livir/books/Product.java

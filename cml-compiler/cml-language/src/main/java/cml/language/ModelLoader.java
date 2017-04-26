@@ -64,7 +64,7 @@ class ModelLoaderImpl implements ModelLoader
                 console.println("Error: %s", exception.getMessage());
             }
 
-            if (!(exception instanceof ModelSynthesisException))
+            if (!(exception instanceof ModelLoadingException))
             {
                 exception.printStackTrace(System.err);
             }

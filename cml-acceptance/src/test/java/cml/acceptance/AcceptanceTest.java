@@ -49,7 +49,7 @@ public class AcceptanceTest
     private static final int SUCCESS = 0;
     private static final int FAILURE__SOURCE_DIR_NOT_FOUND = 1;
     private static final int FAILURE__SOURCE_FILE_NOT_FOUND = 2;
-    private static final int FAILURE__PARSING_FAILED = 3;
+    private static final int FAILURE__FAILED_LOADING_MODEL = 3;
     private static final int FAILURE__TARGET_TYPE_UNKNOWN = 101;
     private static final int FAILURE__TARGET_TYPE_UNDEFINED = 102;
     private static final int FAILURE__TARGET_NAME_UNDECLARED = 103;
@@ -115,7 +115,7 @@ public class AcceptanceTest
         final String modulePath = Case.CASES_DIR + "/parsing-failed";
 
         cleanTargetDir(modulePath, POJ);
-        compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__PARSING_FAILED);
+        compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
     }
 
     @Test
@@ -181,6 +181,15 @@ public class AcceptanceTest
         compileAndVerifyOutput(modulePath, POJ, SUCCESS);
         assertThat("Book must NOT exist: " + bookFile, bookFile.exists(), is(false));
         assertThat("BookStore must exist: " + bookFile, bookStoreFile.exists(), is(true));
+    }
+
+    @Test
+    public void missing_ancestor() throws Exception
+    {
+        final String modulePath = Case.CASES_DIR + "/missing_ancestor";
+
+        cleanTargetDir(modulePath, POJ);
+        compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
     }
 
     private void compileAndVerifyOutput(

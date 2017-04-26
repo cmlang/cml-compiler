@@ -1,0 +1,8 @@
+
+concept SomeConcept: MissingAncestor, AnotherMissingAncestor;
+
+target poj
+{
+    type = "poj";
+}
+
