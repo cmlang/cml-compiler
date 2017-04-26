@@ -64,10 +64,10 @@ public class AcceptanceTest
 
     @DataPoints("failing-modules")
     public static String[] failingModules = {
-        "failed_invalid_module_name",
-        "failed_missing_ancestor",
-        "failed_missing_concept_in_type",
-        "failed_parsing"
+        "invalid_module_name",
+        "missing_ancestor",
+        "missing_concept_in_type",
+        "parsing_failed"
     };
 
     @BeforeClass
@@ -96,9 +96,9 @@ public class AcceptanceTest
     }
 
     @Theory
-    public void failed_loading_model(@FromDataPoints("failing-modules") final String moduleName) throws Exception
+    public void error_loading_model(@FromDataPoints("failing-modules") final String moduleName) throws Exception
     {
-        final String modulePath = Case.CASES_DIR + File.separator + moduleName;
+        final String modulePath = Case.CASES_DIR + File.separator + "error" + File.separator + moduleName;
 
         cleanTargetDir(modulePath, POJ);
         compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);

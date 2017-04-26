@@ -1,5 +1,5 @@
 
-// Module name should be: failed_invalid_module_name
+// Module name should be: invalid_module_name
 module some_module_name
 {
 }
