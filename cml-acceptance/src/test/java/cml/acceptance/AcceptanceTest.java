@@ -56,8 +56,8 @@ public class AcceptanceTest
 
     @DataPoints("success-cases")
     public static Case[] successCases = {
-        new Case("livir-books", "livir-console", "livir_poj", JAVA),
-        new Case("livir-books", "livir_console", "livir_pop", PYTHON),
+        new Case("livir_books", "livir-console", "livir_poj", JAVA),
+        new Case("livir_books", "livir_console", "livir_pop", PYTHON),
         new Case("mini-cml-language", "mcml-compiler", "mcml_java", JAVA),
         new Case("mini-cml-language", "mcml_compiler", "mcml_py", PYTHON)
     };
