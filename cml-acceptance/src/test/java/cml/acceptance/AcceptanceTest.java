@@ -41,6 +41,8 @@ public class AcceptanceTest
     private static final String CLIENT_BASE_DIR = BASE_DIR + "/" + "cml-clients";
     private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
 
+    private static final String CML_MODULES_BASE_DIR = BASE_DIR + "/" + "cml-modules";
+
     private static final String POJ = "poj"; // plain old Java
 
     private static final String JAVA = "java";
@@ -424,7 +426,7 @@ public class AcceptanceTest
         final String currentDirPath,
         final String jarPath,
         final List<String> args,
-        final ByteArrayOutputStream outputStream) throws CommandLineException
+        final ByteArrayOutputStream outputStream) throws CommandLineException, IOException
     {
         final File jarFile = new File(jarPath);
         assertThat("Jar file must exit: " + jarFile, jarFile.exists(), is(true));
@@ -436,6 +438,7 @@ public class AcceptanceTest
         assertThat("Java exec file must exit: " + javaExecFile, javaExecFile.exists(), is(true));
 
         final Commandline commandLine = new Commandline();
+        commandLine.addEnvironment("CML_MODULES_PATH", new File(CML_MODULES_BASE_DIR).getCanonicalPath());
         commandLine.setWorkingDirectory(currentDirPath);
         commandLine.setExecutable(javaExecFile.getAbsolutePath());
 

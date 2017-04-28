@@ -32,7 +32,7 @@ public interface TemplateRenderer
 
 class TemplateRendererImpl implements TemplateRenderer
 {
-    private static final String LANGUAGE_GROUP = "/lang/%s.stg";
+    private static final String LANGUAGE_GROUP = "cml_base:/lang/%s.stg";
 
     private final Console console;
 

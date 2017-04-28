@@ -1,9 +1,8 @@
-package common;
+package templates.lang.common;
 
 import cml.language.features.Concept;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
-import common.LangTest;
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
 
@@ -19,7 +18,7 @@ public class InterfaceTest extends LangTest
     @Override
     protected String getExpectedOutputPath()
     {
-        return "common/interface";
+        return "interface";
     }
 
     @Test

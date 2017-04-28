@@ -1,6 +1,9 @@
-package common;
+package templates.lang.common;
 
 
+import cml.io.Console;
+import cml.io.FileSystem;
+import cml.io.ModuleManager;
 import cml.templates.NameRenderer;
 import cml.templates.TemplateGroupFile;
 import org.junit.Before;
@@ -26,7 +29,9 @@ public abstract class TemplateTest
         "some-name"
     ));
 
-    private static final String TEMPLATE_GROUP_PATH = "/%s.stg";
+    private static final String TEMPLATE_GROUP_PATH = "%s:/%s.stg";
+    private static final String MODULE_NAME = "cml_base";
+    private static final String CML_MODULES_BASE_DIR = "../../cml-modules";
 
     private STGroupFile groupFile;
 
@@ -67,6 +72,14 @@ public abstract class TemplateTest
 
     static TemplateGroupFile createTemplateGroupFile(String templatePath)
     {
-        return new TemplateGroupFile(format(TEMPLATE_GROUP_PATH, templatePath));
+        final Console console = Console.create();
+        final FileSystem fileSystem = FileSystem.create(console);
+        final ModuleManager moduleManager = ModuleManager.create(console, fileSystem);
+
+        moduleManager.addBaseDir(CML_MODULES_BASE_DIR);
+
+        TemplateGroupFile.setModuleManager(moduleManager);
+
+        return new TemplateGroupFile(format(TEMPLATE_GROUP_PATH, MODULE_NAME, templatePath));
     }
 }

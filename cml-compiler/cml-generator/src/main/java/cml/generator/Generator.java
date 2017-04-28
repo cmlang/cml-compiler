@@ -3,9 +3,11 @@ package cml.generator;
 import cml.io.Console;
 import cml.io.Directory;
 import cml.io.FileSystem;
+import cml.io.ModuleManager;
+import cml.language.Model;
 import cml.language.ModelVisitor;
 import cml.language.features.Target;
-import cml.language.Model;
+import cml.templates.TemplateGroupFile;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
 
@@ -15,13 +17,13 @@ public interface Generator
 {
     int generate(Model model, final String targetName, final String targetDirPath);
 
-    static Generator create(Console console, FileSystem fileSystem)
+    static Generator create(Console console, FileSystem fileSystem, ModuleManager moduleManager)
     {
-        final TemplateRepository templateRepository = TemplateRepository.create();
+        final TemplateRepository templateRepository = TemplateRepository.create(moduleManager);
         final TemplateRenderer templateRenderer = TemplateRenderer.create(console);
         final TargetFileRepository targetFileRepository = TargetFileRepository.create(templateRepository, templateRenderer);
         final TargetFileRenderer targetFileRenderer = TargetFileRenderer.create(console, fileSystem, targetFileRepository, templateRenderer);
-        return new GeneratorImpl(console, fileSystem, targetFileRepository, targetFileRenderer);
+        return new GeneratorImpl(console, fileSystem, moduleManager, targetFileRepository, targetFileRenderer);
     }
 }
 
@@ -34,17 +36,20 @@ class GeneratorImpl implements Generator
 
     private final Console console;
     private final FileSystem fileSystem;
+    private final ModuleManager moduleManager;
     private final TargetFileRepository targetFileRepository;
     private final TargetFileRenderer targetFileRenderer;
 
     GeneratorImpl(
         Console console,
         FileSystem fileSystem,
+        ModuleManager moduleManager,
         TargetFileRepository targetFileRepository,
         TargetFileRenderer targetFileRenderer)
     {
         this.console = console;
         this.fileSystem = fileSystem;
+        this.moduleManager = moduleManager;
         this.targetFileRepository = targetFileRepository;
         this.targetFileRenderer = targetFileRenderer;
     }
@@ -52,6 +57,8 @@ class GeneratorImpl implements Generator
     @Override
     public int generate(Model model, final String targetName, final String targetDirPath)
     {
+        TemplateGroupFile.setModuleManager(moduleManager);
+
         final Optional<Target> target = model.getTarget(targetName);
         if (!target.isPresent())
         {

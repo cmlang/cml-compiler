@@ -1,4 +1,4 @@
-package common;
+package templates.lang.common;
 
 import cml.language.foundation.Type;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class TypeTest extends LangTest
     @Override
     protected String getExpectedOutputPath()
     {
-        return "common/type";
+        return "type";
     }
 
     @Test

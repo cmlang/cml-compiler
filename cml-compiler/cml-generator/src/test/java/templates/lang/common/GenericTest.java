@@ -1,4 +1,4 @@
-package common;
+package templates.lang.common;
 
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;

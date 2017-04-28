@@ -1,9 +1,8 @@
-package common;
+package templates.lang.common;
 
 import cml.language.features.Concept;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
-import common.LangTest;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class ToStringTest  extends LangTest
     @Override
     protected String getExpectedOutputPath()
     {
-        return "common/to_string";
+        return "to_string";
     }
 
     @Test

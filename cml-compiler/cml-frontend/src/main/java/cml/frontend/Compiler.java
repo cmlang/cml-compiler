@@ -2,9 +2,14 @@ package cml.frontend;
 
 import cml.generator.Generator;
 import cml.io.Console;
+import cml.io.Directory;
 import cml.io.FileSystem;
+import cml.io.ModuleManager;
 import cml.language.Model;
 import cml.language.ModelLoader;
+import cml.templates.TemplateGroupFile;
+
+import java.util.Optional;
 
 public interface Compiler
 {
@@ -13,10 +18,12 @@ public interface Compiler
     static Compiler create()
     {
         final Console console = Console.create();
-        final FileSystem fileSystem = FileSystem.create();
+        final FileSystem fileSystem = FileSystem.create(console);
         final ModelLoader modelLoader = ModelLoader.create(console, fileSystem);
-        final Generator generator = Generator.create(console, fileSystem);
-        return new CompilerImpl(modelLoader, generator);
+        final ModuleManager moduleManager = ModuleManager.create(console, fileSystem);
+        final Generator generator = Generator.create(console, fileSystem, moduleManager);
+        
+        return new CompilerImpl(fileSystem, moduleManager, modelLoader, generator);
     }
 }
 
@@ -24,11 +31,15 @@ class CompilerImpl implements Compiler
 {
     private static final String TARGETS_DIR = "/targets";
 
+    private final FileSystem fileSystem;
+    private final ModuleManager moduleManager;
     private final ModelLoader modelLoader;
     private final Generator generator;
 
-    CompilerImpl(ModelLoader modelLoader, Generator generator)
+    CompilerImpl(FileSystem fileSystem, ModuleManager moduleManager, ModelLoader modelLoader, Generator generator)
     {
+        this.fileSystem = fileSystem;
+        this.moduleManager = moduleManager;
         this.modelLoader = modelLoader;
         this.generator = generator;
     }
@@ -36,6 +47,12 @@ class CompilerImpl implements Compiler
     @Override
     public int compile(final String modulePath, final String targetName)
     {
+        final String modulesBaseDir = fileSystem.extractParentPath(modulePath);
+        
+        moduleManager.clearBaseDirs();
+        moduleManager.addBaseDir(modulesBaseDir);
+        moduleManager.addBaseDir(System.getenv("CML_MODULES_PATH"));
+
         final Model model = Model.create();
         final int exitCode = modelLoader.loadModel(model, modulePath);
 

@@ -1,4 +1,4 @@
-package common;
+package templates.lang.common;
 
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
@@ -16,7 +16,7 @@ public class FieldTest extends LangTest
     @Override
     protected String getExpectedOutputPath()
     {
-        return "common/field";
+        return "field";
     }
 
     @Test

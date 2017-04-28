@@ -5,14 +5,19 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Optional;
 
 import static org.apache.commons.io.FileUtils.forceMkdir;
 
 public interface FileSystem
 {
+    Optional<Directory> findDirectory(Directory baseDir, String dirName);
     Optional<Directory> findDirectory(String path);
     Optional<SourceFile> findSourceFile(Directory directory, String name);
+
+    Optional<URL> getURL(Directory directory, String path);
 
     String extractParentPath(String path);
     String extractName(String path);
@@ -20,9 +25,9 @@ public interface FileSystem
     void createFile(String path, String content);
     void cleanDirectory(Directory directory);
 
-    static FileSystem create()
+    static FileSystem create(Console console)
     {
-        return new FileSystemImpl();
+        return new FileSystemImpl(console);
     }
 }
 
@@ -31,12 +36,56 @@ class FileSystemImpl implements FileSystem
     private static final String EXCEPTION_FILE_CREATION_FAILED = "Unexpected exception. File should have been created: ";
     private static final String EXCEPTION_DIRECTORY_DELETION_FAILED = "Unexpected exception. Dir should have been deleted: ";
 
+    private static final String ERROR_BUILDING_FILE_URL = "Error building file URL: %s";
+
+    private static final String FILE_URL_PREFIX = "file://";
+
+    private final Console console;
+
+    FileSystemImpl(Console console)
+    {
+        this.console = console;
+    }
+
+    @Override
+    public Optional<Directory> findDirectory(Directory baseDir, String dirName)
+    {
+        return findDirectory(baseDir.getPath() + File.separator + dirName);
+    }
+
     @Override
     public Optional<Directory> findDirectory(final String path)
     {
         final File file = getCanonicalFile(path);
         final Directory directory = file.isDirectory() ? new Directory(path) : null;
         return Optional.ofNullable(directory);
+    }
+
+    @Override
+    public Optional<URL> getURL(Directory baseDir, String path)
+    {
+        if (!path.startsWith(File.separator))
+        {
+            path = File.separator + path;
+        }
+
+        final File file = getCanonicalFile(baseDir.getPath() + path);
+
+        if (file.exists())
+        {
+            try
+            {
+                final URL url = new URL(FILE_URL_PREFIX + file.getPath());
+
+                return Optional.of(url);
+            }
+            catch (MalformedURLException exception)
+            {
+                console.error(ERROR_BUILDING_FILE_URL, exception.getMessage());
+            }
+        }
+
+        return Optional.empty();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package common;
+package templates.lang.common;
 
 import cml.language.features.Concept;
 import cml.language.foundation.NamedElement;
@@ -25,8 +25,9 @@ import static junit.framework.TestCase.assertNotNull;
 public abstract class LangTest extends TemplateTest
 {
     private static final Charset OUTPUT_FILE_ENCODING = Charset.forName("UTF-8");
-    private static final String EXPECTED_OUTPUT_PATH = "/%s/%s/%s";
+    private static final String EXPECTED_OUTPUT_PATH = "/%s/%s/%s/%s";
     private static final String LANG_GROUP_PATH = "lang/%s";
+    private static final String TEMPLATES_LANG = "templates/lang";
 
     @Parameters
     public static Collection<String> targetLanguageExtension()
@@ -74,7 +75,12 @@ public abstract class LangTest extends TemplateTest
 
     void assertThatOutputMatches(String expectedOutputPath, String actualOutput) throws IOException
     {
-        expectedOutputPath = format(EXPECTED_OUTPUT_PATH, targetLanguageExtension, getExpectedOutputPath(), expectedOutputPath);
+        expectedOutputPath = format(
+            EXPECTED_OUTPUT_PATH,
+            TEMPLATES_LANG,
+            targetLanguageExtension,
+            getExpectedOutputPath(),
+            expectedOutputPath);
 
         final URL expectedOutputResource = getClass().getResource(expectedOutputPath);
         assertNotNull("Expected output resource must exist: " + expectedOutputPath, expectedOutputResource);
