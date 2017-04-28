@@ -45,7 +45,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     @Override
     public boolean templatesFoundFor(Task task)
     {
-        return findTemplatesForTarget(task).isPresent();
+        return findFilesTemplateForTask(task).isPresent();
     }
 
     @Override
@@ -54,7 +54,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
         final String fileType,
         final Map<String, Object> args)
     {
-        final Optional<TemplateFile> fileTemplates = findTemplatesForTarget(task);
+        final Optional<TemplateFile> fileTemplates = findFilesTemplateForTask(task);
 
         if (fileTemplates.isPresent())
         {
@@ -62,7 +62,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
             final String files = templateRenderer.renderTemplate(fileTemplates.get(), templateName, args);
             return stream(files.split("\n"))
                 .map(line -> line.split(FILE_LINE_SEPARATOR))
-                .map(pair -> createTargetFile(pair[1], task.getType().get(), pair[0]))
+                .map(pair -> createTargetFile(pair[1], task.getConstructor().get(), pair[0]))
                 .collect(toList());
         }
         else
@@ -71,9 +71,9 @@ class TargetFileRepositoryImpl implements TargetFileRepository
         }
     }
 
-    private Optional<TemplateFile> findTemplatesForTarget(Task task)
+    private Optional<TemplateFile> findFilesTemplateForTask(Task task)
     {
-        return templateRepository.findTemplate(task.getType().get(), GROUP_FILES);
+        return templateRepository.findTemplate(task.getConstructor().get(), GROUP_FILES);
     }
 
     private TargetFile createTargetFile(String path, String targetType, String templateName)

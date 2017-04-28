@@ -1,8 +1,7 @@
 concept Book;
 
-task poj
+task some_task by poj
 {
-    type = "poj";
     groupId = "books";
     artifactId = "books";
     artifactVersion = "1.0.1-SNAPSHOT";

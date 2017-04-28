@@ -1,7 +1,5 @@
 
-task poj
-{
-}
+task some_task;
 
 // Syntax error - abstract keyword after the concept keyword:
 concept

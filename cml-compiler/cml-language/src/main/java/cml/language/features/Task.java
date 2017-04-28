@@ -1,16 +1,15 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface Task extends NamedElement, PropertyList
 {
-     default Optional<String> getType()
-     {
-         return getProperty("type").flatMap(Property::getValue);
-     }
+    Optional<String> getConstructor();
+    void setConstructor(String constructor);
 
     static Task create(String name)
     {
@@ -23,6 +22,8 @@ class TaskImpl implements Task
     private final ModelElement modelElement;
     private final NamedElement namedElement;
     private final Scope scope;
+
+    private @Nullable String constructor;
 
     TaskImpl(String name)
     {
@@ -53,6 +54,18 @@ class TaskImpl implements Task
     public void addElement(ModelElement element)
     {
         scope.addElement(element);
+    }
+
+    @Override
+    public Optional<String> getConstructor()
+    {
+        return Optional.ofNullable(constructor);
+    }
+
+    @Override
+    public void setConstructor(String constructor)
+    {
+        this.constructor = constructor;
     }
 }
 

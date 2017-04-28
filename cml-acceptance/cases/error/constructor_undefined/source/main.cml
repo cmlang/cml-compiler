@@ -1,7 +1,5 @@
 concept Book;
 
-task some_task
-{
-    // type not defined on purpose
-}
+// Task's constructor not defined on purpose:
+task some_task;
 

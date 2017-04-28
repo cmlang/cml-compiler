@@ -15,9 +15,8 @@ concept BookStore
     customers: Customer*;
 }
 
-task livir_poj
+task livir_poj by poj
 {
-    type = "poj";
     groupId = "livir";
     artifactId = "livir-books";
     artifactVersion = "1.0.1-SNAPSHOT";
@@ -25,9 +24,8 @@ task livir_poj
     packagePath = "livir/books";
 }
 
-task livir_pop
+task livir_pop by pop
 {
-    type = "pop";
     moduleName = "livir_books";
     moduleVersion = "1.0.1";
 }

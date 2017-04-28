@@ -70,8 +70,8 @@ class GeneratorImpl implements Generator
             return FAILURE__TASK_UNDECLARED;
         }
 
-        final Optional<String> targetType = target.get().getType();
-        if (!targetType.isPresent())
+        final Optional<String> constructor = target.get().getConstructor();
+        if (!constructor.isPresent())
         {
             console.println(NO_CONSTRUCTOR_DEFINED_FOR_TASK, target.get().getName());
             return FAILURE__CONSTRUCTOR_UNDEFINED;
@@ -79,7 +79,7 @@ class GeneratorImpl implements Generator
 
         if (!targetFileRepository.templatesFoundFor(target.get()))
         {
-            console.println(NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR, targetType.get());
+            console.println(NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR, constructor.get());
             return FAILURE__CONSTRUCTOR_UNKNOWN;
         }
 

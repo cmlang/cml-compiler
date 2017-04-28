@@ -4,8 +4,5 @@ concept SomeConcept
     someProperty: MissingConcept;
 }
 
-task poj
-{
-    type = "poj";
-}
+task some_task;
 

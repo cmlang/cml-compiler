@@ -1,8 +1,5 @@
 
 concept SomeConcept: MissingAncestor, AnotherMissingAncestor;
 
-task poj
-{
-    type = "poj";
-}
+task some_task;
 

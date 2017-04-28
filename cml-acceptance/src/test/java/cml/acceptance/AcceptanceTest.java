@@ -55,6 +55,7 @@ public class AcceptanceTest
     private static final int FAILURE__CONSTRUCTOR_UNKNOWN = 101;
     private static final int FAILURE__CONSTRUCTOR_UNDEFINED = 102;
     private static final int FAILURE__TASK_UNDECLARED = 103;
+    private static final String SOME_TASK = "some_task";
 
     @DataPoints("success-cases")
     public static Case[] successCases = {
@@ -102,8 +103,8 @@ public class AcceptanceTest
     {
         final String modulePath = getErrorModulePath(moduleName);
 
-        cleanTargetDir(modulePath, POJ);
-        compileWithTaskAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
+        cleanTargetDir(modulePath, SOME_TASK);
+        compileWithTaskAndVerifyOutput(modulePath, SOME_TASK, FAILURE__FAILED_LOADING_MODEL);
     }
 
     @Test
@@ -159,12 +160,12 @@ public class AcceptanceTest
     public void target_dir_created() throws Exception
     {
         final String modulePath = Case.CASES_DIR + "/target-dir-created";
-        final File targetDir = new File(getTargetDirPath(modulePath, POJ));
+        final File targetDir = new File(getTargetDirPath(modulePath, SOME_TASK));
 
         forceDelete(targetDir);
         assertThat("Target dir must NOT exist: " + targetDir, targetDir.exists(), is(false));
 
-        compileAndVerifyOutput(modulePath, POJ, SUCCESS);
+        compileAndVerifyOutput(modulePath, SOME_TASK, SUCCESS);
         assertThat("Target dir must exist: " + targetDir, targetDir.exists(), is(true));
     }
 
@@ -172,23 +173,23 @@ public class AcceptanceTest
     public void target_dir_cleaned() throws Exception
     {
         final String modulePath = Case.CASES_DIR + "/target-dir-cleaned";
-        final File targetDir = new File(getTargetDirPath(modulePath, POJ));
+        final File targetDir = new File(getTargetDirPath(modulePath, SOME_TASK));
 
         final File bookFile = new File(targetDir, "src/main/java/books/Book.java");
         final File bookStoreFile = new File(targetDir, "src/main/java/books/BookStore.java");
 
         // Ensures there is already content in the target dir:
         final String tempModulePath = Case.CASES_DIR + "/target-dir-created";
-        compileAndVerifyOutput(tempModulePath, POJ, SUCCESS);
-        cleanTargetDir(modulePath, POJ);
+        compileAndVerifyOutput(tempModulePath, SOME_TASK, SUCCESS);
+        cleanTargetDir(modulePath, SOME_TASK);
         copyDirectoryStructure(
-            new File(getTargetDirPath(tempModulePath, POJ)),
-            new File(getTargetDirPath(modulePath, POJ)));
+            new File(getTargetDirPath(tempModulePath, SOME_TASK)),
+            new File(getTargetDirPath(modulePath, SOME_TASK)));
         assertThat("Book must exist: " + bookFile, bookFile.exists(), is(true));
         assertThat("BookStore must NOT exist: " + bookFile, bookStoreFile.exists(), is(false));
 
         // Verifies that the previously generated target has been cleaned before generating the new one:
-        compileAndVerifyOutput(modulePath, POJ, SUCCESS);
+        compileAndVerifyOutput(modulePath, SOME_TASK, SUCCESS);
         assertThat("Book must NOT exist: " + bookFile, bookFile.exists(), is(false));
         assertThat("BookStore must exist: " + bookFile, bookStoreFile.exists(), is(true));
     }
@@ -239,9 +240,9 @@ public class AcceptanceTest
         cleanDirectory(targetDirPath);
     }
 
-    private String getTargetDirPath(String currentDirPath, String targetType)
+    private String getTargetDirPath(String currentDirPath, String taskName)
     {
-        return currentDirPath + "/targets/" + targetType;
+        return currentDirPath + "/targets/" + taskName;
     }
 
     private void assertThatOutputMatches(

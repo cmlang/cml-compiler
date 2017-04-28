@@ -1,5 +1,2 @@
-task unknown_constructor_task
-{
-    type = "unknown";
-}
+task unknown_constructor_task by unknown;
 

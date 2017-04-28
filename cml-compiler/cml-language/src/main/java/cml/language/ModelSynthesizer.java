@@ -102,6 +102,13 @@ class ModelSynthesizer extends CMLBaseListener
 
         ctx.task = Task.create(name);
 
+        if (ctx.constructorDeclaration() != null)
+        {
+            final String constructor = ctx.constructorDeclaration().NAME().getText();
+
+            ctx.task.setConstructor(constructor);
+        }
+
         if (ctx.propertyList() != null)
         {
             ctx.propertyList()
