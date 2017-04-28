@@ -52,11 +52,11 @@ public interface Module extends NamedElement, Scope
                                .findFirst();
     }
 
-    default List<Target> getTargets()
+    default List<Task> getTasks()
     {
         return getElements().stream()
-                            .filter(e -> e instanceof Target)
-                            .map(e -> (Target)e)
+                            .filter(e -> e instanceof Task)
+                            .map(e -> (Task)e)
                             .collect(toList());
     }
 

@@ -52,9 +52,9 @@ public class AcceptanceTest
     private static final int FAILURE__SOURCE_DIR_NOT_FOUND = 1;
     private static final int FAILURE__SOURCE_FILE_NOT_FOUND = 2;
     private static final int FAILURE__FAILED_LOADING_MODEL = 3;
-    private static final int FAILURE__TARGET_TYPE_UNKNOWN = 101;
-    private static final int FAILURE__TARGET_TYPE_UNDEFINED = 102;
-    private static final int FAILURE__TARGET_NAME_UNDECLARED = 103;
+    private static final int FAILURE__CONSTRUCTOR_UNKNOWN = 101;
+    private static final int FAILURE__CONSTRUCTOR_UNDEFINED = 102;
+    private static final int FAILURE__TASK_UNDECLARED = 103;
 
     @DataPoints("success-cases")
     public static Case[] successCases = {
@@ -103,7 +103,7 @@ public class AcceptanceTest
         final String modulePath = getErrorModulePath(moduleName);
 
         cleanTargetDir(modulePath, POJ);
-        compileWithTargetTypeAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
+        compileWithTaskAndVerifyOutput(modulePath, POJ, FAILURE__FAILED_LOADING_MODEL);
     }
 
     @Test
@@ -129,30 +129,30 @@ public class AcceptanceTest
     }
 
     @Test
-    public void target_type_unknown() throws Exception
+    public void constructor_unknown() throws Exception
     {
-        final String modulePath = getErrorModulePath("target-type-unknown");
+        final String modulePath = getErrorModulePath("constructor_unknown");
 
-        cleanTargetDir(modulePath, "unknown_target");
-        compileWithTargetTypeAndVerifyOutput(modulePath, "unknown_target", FAILURE__TARGET_TYPE_UNKNOWN);
+        cleanTargetDir(modulePath, "unknown_constructor_task");
+        compileWithTaskAndVerifyOutput(modulePath, "unknown_constructor_task", FAILURE__CONSTRUCTOR_UNKNOWN);
     }
 
     @Test
-    public void target_undeclared() throws Exception
+    public void task_undeclared() throws Exception
     {
-        final String modulePath = getErrorModulePath("target-undeclared");
+        final String modulePath = getErrorModulePath("task_undeclared");
 
-        cleanTargetDir(modulePath, "some_target_name");
-        compileAndVerifyOutput(modulePath, "some_target_name", FAILURE__TARGET_NAME_UNDECLARED);
+        cleanTargetDir(modulePath, "some_task_name");
+        compileAndVerifyOutput(modulePath, "some_task_name", FAILURE__TASK_UNDECLARED);
     }
 
     @Test
-    public void target_type_undefined() throws Exception
+    public void constructor_undefined() throws Exception
     {
-        final String modulePath = getErrorModulePath("target-type-undefined");
+        final String modulePath = getErrorModulePath("constructor_undefined");
 
-        cleanTargetDir(modulePath, "some_target");
-        compileAndVerifyOutput(modulePath, "some_target", FAILURE__TARGET_TYPE_UNDEFINED);
+        cleanTargetDir(modulePath, "some_task");
+        compileAndVerifyOutput(modulePath, "some_task", FAILURE__CONSTRUCTOR_UNDEFINED);
     }
 
     @Test
@@ -195,42 +195,42 @@ public class AcceptanceTest
 
     private void compileAndVerifyOutput(
         final String modulePath,
-        final String targetType,
+        final String taskName,
         final int expectedExitCode) throws CommandLineException, IOException
     {
-        compileWithTargetTypeAndVerifyOutput(modulePath, targetType, expectedExitCode);
+        compileWithTaskAndVerifyOutput(modulePath, taskName, expectedExitCode);
     }
 
-    private void compileWithTargetTypeAndVerifyOutput(
+    private void compileWithTaskAndVerifyOutput(
         final String modulePath,
-        final String targetType,
+        final String taskName,
         final int expectedExitCode) throws CommandLineException, IOException
     {
         compileAndVerifyOutput(
             modulePath,
-            targetType,
+            taskName,
             modulePath + "/" + Case.COMPILER_OUTPUT_FILENAME,
             expectedExitCode);
     }
 
     private void compileAndVerifyOutput(
         final String modulePath,
-        final String targetType,
+        final String taskName,
         final String expectedOutputPath,
         final int expectedExitCode) throws CommandLineException, IOException
     {
         final String actualCompilerOutput = executeJar(
             modulePath,
             COMPILER_JAR,
-            singletonList(targetType),
+            singletonList(taskName),
             expectedExitCode);
 
         assertThatOutputMatches("compiler's output", expectedOutputPath, actualCompilerOutput);
     }
 
-    private void cleanTargetDir(String currentDirPath, String targetType) throws IOException
+    private void cleanTargetDir(String currentDirPath, String taskName) throws IOException
     {
-        final String targetDirPath = getTargetDirPath(currentDirPath, targetType);
+        final String targetDirPath = getTargetDirPath(currentDirPath, taskName);
 
         System.out.println("\n--------------------------");
         System.out.println("Cleaning target dir: " + targetDirPath);

@@ -23,20 +23,20 @@ concept Model: ModelElement
 {
 }
 
-target mcml_java
+task mcml_java
 {
     type = "cmlc_java";
     groupId = "mcml";
     artifactId = "mcml-language";
-    version = "1.0.1-SNAPSHOT";
+    artifactVersion = "1.0.1-SNAPSHOT";
     packageName = "mcml.language";
     packagePath = "mcml/language";
 }
 
-target mcml_py
+task mcml_py
 {
     type = "cmlc_py";
-    version = "1.0.1";
     moduleName = "mini_cml_language";
+    moduleVersion = "1.0.1";
 }
 

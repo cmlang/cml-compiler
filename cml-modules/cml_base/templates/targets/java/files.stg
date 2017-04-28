@@ -1,8 +1,8 @@
 
-model_files(target, model) ::= <<
+model_files(task, model) ::= <<
 java:pom|pom.xml
 >>
 
-concept_files(target, concept) ::= <<
-concept_file|src/main/java/<target.packagePath>/<concept.name>.java
+concept_files(task, concept) ::= <<
+concept_file|src/main/java/<task.packagePath>/<concept.name>.java
 >>

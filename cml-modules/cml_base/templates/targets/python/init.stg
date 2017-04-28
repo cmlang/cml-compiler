@@ -1,7 +1,7 @@
 
 import "/targets/python/imports.stg"
 
-init(target, model) ::= <<
+init(task, model) ::= <<
 __all__ = [
 <indent()><model.concepts:{concept|"<python_file_name(concept.name)>"};separator=",\n", anchor>
 ]

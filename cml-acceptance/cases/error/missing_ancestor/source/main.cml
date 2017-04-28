@@ -1,7 +1,7 @@
 
 concept SomeConcept: MissingAncestor, AnotherMissingAncestor;
 
-target poj
+task poj
 {
     type = "poj";
 }

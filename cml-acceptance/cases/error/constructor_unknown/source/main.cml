@@ -1,0 +1,5 @@
+task unknown_constructor_task
+{
+    type = "unknown";
+}
+

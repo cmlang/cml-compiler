@@ -5,26 +5,26 @@ import cml.language.foundation.*;
 import java.util.List;
 import java.util.Optional;
 
-public interface Target extends NamedElement, PropertyList
+public interface Task extends NamedElement, PropertyList
 {
      default Optional<String> getType()
      {
          return getProperty("type").flatMap(Property::getValue);
      }
 
-    static Target create(String name)
+    static Task create(String name)
     {
-        return new TargetImpl(name);
+        return new TaskImpl(name);
     }
 }
 
-class TargetImpl implements Target
+class TaskImpl implements Task
 {
     private final ModelElement modelElement;
     private final NamedElement namedElement;
     private final Scope scope;
 
-    TargetImpl(String name)
+    TaskImpl(String name)
     {
         this.modelElement = ModelElement.create(this);
         this.namedElement = NamedElement.create(modelElement, name);

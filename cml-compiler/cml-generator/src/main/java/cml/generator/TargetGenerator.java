@@ -3,7 +3,7 @@ package cml.generator;
 import cml.io.Console;
 import cml.language.ModelVisitor;
 import cml.language.features.Concept;
-import cml.language.features.Target;
+import cml.language.features.Task;
 import cml.language.Model;
 
 import java.util.HashMap;
@@ -13,27 +13,27 @@ class TargetGenerator implements ModelVisitor.Delegate
 {
     private static final String MODEL = "model";
     private static final String CONCEPT = "concept";
-    private static final String TARGET = "target";
+    private static final String TASK = "task";
 
     private final Console console;
     private final TargetFileRenderer targetFileRenderer;
-    private final Target target;
+    private final Task task;
     private final String targetDirPath;
     private final Map<String, Object> baseTemplateArgs;
     
     TargetGenerator(
         Console console,
         TargetFileRenderer targetFileRenderer,
-        Target target,
+        Task task,
         String targetDirPath)
     {
         this.console = console;
         this.targetFileRenderer = targetFileRenderer;
-        this.target = target;
+        this.task = task;
         this.targetDirPath = targetDirPath;
         this.baseTemplateArgs = new HashMap<>();
 
-        baseTemplateArgs.put(TARGET, getTargetProperties(target));
+        baseTemplateArgs.put(TASK, getTargetProperties(task));
     }
 
     @Override
@@ -57,17 +57,17 @@ class TargetGenerator implements ModelVisitor.Delegate
         final Map<String, Object> templateArgs = new HashMap<>(baseTemplateArgs);
         templateArgs.put(elementType, modelElement);
 
-        targetFileRenderer.renderTargetFiles(target, targetDirPath, elementType, templateArgs);
+        targetFileRenderer.renderTargetFiles(task, targetDirPath, elementType, templateArgs);
     }
 
-    private static Map<String, Object> getTargetProperties(final Target target)
+    private static Map<String, Object> getTargetProperties(final Task task)
     {
         final Map<String, Object> properties = new HashMap<>();
 
-        target.getProperties()
-              .stream()
-              .filter(property -> property.getValue().isPresent())
-              .forEach(property -> properties.put(property.getName(), property.getValue().get()));
+        task.getProperties()
+            .stream()
+            .filter(property -> property.getValue().isPresent())
+            .forEach(property -> properties.put(property.getName(), property.getValue().get()));
 
         return properties;
     }

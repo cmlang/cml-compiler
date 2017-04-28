@@ -6,7 +6,7 @@ module some_module_name
 
 concept SomeConcept;
 
-target poj
+task poj
 {
     type = "poj";
 }

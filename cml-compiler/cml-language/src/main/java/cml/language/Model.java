@@ -2,7 +2,7 @@ package cml.language;
 
 import cml.language.features.Concept;
 import cml.language.features.Module;
-import cml.language.features.Target;
+import cml.language.features.Task;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 
@@ -33,16 +33,16 @@ public interface Model extends Scope
         return getConcepts().stream().filter(concept -> concept.getName().equals(name)).findFirst();
     }
 
-    default List<Target> getTargets()
+    default List<Task> getTasks()
     {
         return getModules().stream()
-                           .flatMap(m -> m.getTargets().stream())
+                           .flatMap(m -> m.getTasks().stream())
                            .collect(toList());
     }
 
-    default Optional<Target> getTarget(String name)
+    default Optional<Task> getTarget(String name)
     {
-        return getTargets().stream().filter(target -> target.getName().equals(name)).findFirst();
+        return getTasks().stream().filter(target -> target.getName().equals(name)).findFirst();
     }
 
     static Model create()

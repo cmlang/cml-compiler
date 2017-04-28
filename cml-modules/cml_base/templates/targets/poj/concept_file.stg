@@ -1,6 +1,6 @@
 
-concept_file(target, concept) ::= <<
-package <target.packageName>;
+concept_file(task, concept) ::= <<
+package <task.packageName>;
 
 import java.util.*;
 import org.jetbrains.annotations.*;

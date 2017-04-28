@@ -1,11 +1,11 @@
 concept BookStore;
 
-target poj
+task poj
 {
     type = "poj";
     groupId = "books";
     artifactId = "books";
-    version = "1.0.1-SNAPSHOT";
+    artifactVersion = "1.0.1-SNAPSHOT";
     packageName = "books";
     packagePath = "books";
 }

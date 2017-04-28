@@ -1,7 +1,6 @@
-target poj
+
+task poj
 {
-    version = "1.0.1";
-    moduleName = "livir_books";
 }
 
 // Syntax error - abstract keyword after the concept keyword:

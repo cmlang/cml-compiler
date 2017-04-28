@@ -3,7 +3,7 @@ package cml.language;
 import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
-import cml.language.features.Target;
+import cml.language.features.Task;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
@@ -18,7 +18,7 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_NAME_PROVIDED_FOR_CONCEPT = "No name provided for concept.";
     private static final String NO_NAME_PROVIDED_FOR_TYPE = "No name provided for type.";
     private static final String NO_NAME_PROVIDED_FOR_PROPERTY = "No name provided for property.";
-    private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for target.";
+    private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
 
     private final Module module;
 
@@ -39,8 +39,8 @@ class ModelSynthesizer extends CMLBaseListener
 
             ctx.declarations()
                .stream()
-               .filter(node -> node.targetDeclaration() != null)
-               .forEach(node -> module.addElement(node.targetDeclaration().target));
+               .filter(node -> node.taskDeclaration() != null)
+               .forEach(node -> module.addElement(node.taskDeclaration().task));
         }
     }
 
@@ -91,7 +91,7 @@ class ModelSynthesizer extends CMLBaseListener
     }
 
     @Override
-    public void exitTargetDeclaration(TargetDeclarationContext ctx)
+    public void exitTaskDeclaration(TaskDeclarationContext ctx)
     {
         if (ctx.NAME() == null)
         {
@@ -100,13 +100,13 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
 
-        ctx.target = Target.create(name);
+        ctx.task = Task.create(name);
 
         if (ctx.propertyList() != null)
         {
             ctx.propertyList()
                .propertyDeclaration()
-               .forEach(node -> ctx.target.addElement(node.property));
+               .forEach(node -> ctx.task.addElement(node.property));
         }
     }
 

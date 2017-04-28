@@ -6,7 +6,7 @@ import cml.io.FileSystem;
 import cml.io.ModuleManager;
 import cml.language.Model;
 import cml.language.ModelVisitor;
-import cml.language.features.Target;
+import cml.language.features.Task;
 import cml.templates.TemplateGroupFile;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
@@ -30,9 +30,13 @@ public interface Generator
 class GeneratorImpl implements Generator
 {
     private static final int SUCCESS = 0;
-    private static final int FAILURE__TARGET_TYPE_UNKNOWN = 101;
-    private static final int FAILURE__TARGET_TYPE_UNDEFINED = 102;
-    private static final int FAILURE__TARGET_NAME_UNDECLARED = 103;
+    private static final int FAILURE__CONSTRUCTOR_UNKNOWN = 101;
+    private static final int FAILURE__CONSTRUCTOR_UNDEFINED = 102;
+    private static final int FAILURE__TASK_UNDECLARED = 103;
+
+    private static final String NO_SOURCE_FILE_HAS_DECLARED_TASK = "No source file has declared task named: %s";
+    private static final String NO_CONSTRUCTOR_DEFINED_FOR_TASK = "No constructor defined for task: %s";
+    private static final String NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR = "No templates found for constructor: %s";
 
     private final Console console;
     private final FileSystem fileSystem;
@@ -59,29 +63,28 @@ class GeneratorImpl implements Generator
     {
         TemplateGroupFile.setModuleManager(moduleManager);
 
-        final Optional<Target> target = model.getTarget(targetName);
+        final Optional<Task> target = model.getTarget(targetName);
         if (!target.isPresent())
         {
-            console.println("Source files have not declared target name: %s", targetName);
-            return FAILURE__TARGET_NAME_UNDECLARED;
+            console.println(NO_SOURCE_FILE_HAS_DECLARED_TASK, targetName);
+            return FAILURE__TASK_UNDECLARED;
         }
 
         final Optional<String> targetType = target.get().getType();
         if (!targetType.isPresent())
         {
-            console.println("Target type not defined for target: %s", target.get().getName());
-            return FAILURE__TARGET_TYPE_UNDEFINED;
+            console.println(NO_CONSTRUCTOR_DEFINED_FOR_TASK, target.get().getName());
+            return FAILURE__CONSTRUCTOR_UNDEFINED;
         }
 
         if (!targetFileRepository.templatesFoundFor(target.get()))
         {
-            console.println("No templates found for target type: %s", targetType.get());
-            return FAILURE__TARGET_TYPE_UNKNOWN;
+            console.println(NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR, targetType.get());
+            return FAILURE__CONSTRUCTOR_UNKNOWN;
         }
 
         final Optional<Directory> targetDir = fileSystem.findDirectory(targetDirPath);
         targetDir.ifPresent(fileSystem::cleanDirectory);
-
 
         final TargetGenerator targetGenerator = new TargetGenerator(
             console, targetFileRenderer,

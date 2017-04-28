@@ -1,12 +1,12 @@
 
 import "/targets/python/imports.stg"
 
-model_files(target, model) ::= <<
+model_files(task, model) ::= <<
 python:setup|setup.py
-python:init|<python_file_name(target.moduleName)>/__init__.py
+python:init|<python_file_name(task.moduleName)>/__init__.py
 >>
 
-concept_files(target, concept) ::= <<
-concept_file|<python_file_name(target.moduleName)>/<python_file_name(concept.name)>.py
+concept_files(task, concept) ::= <<
+concept_file|<python_file_name(task.moduleName)>/<python_file_name(concept.name)>.py
 >>
 

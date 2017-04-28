@@ -1,6 +1,6 @@
 package cml.generator;
 
-import cml.language.features.Target;
+import cml.language.features.Task;
 import cml.templates.TemplateFile;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
@@ -15,8 +15,8 @@ import static java.util.stream.Collectors.toList;
 
 interface TargetFileRepository
 {
-    boolean templatesFoundFor(Target target);
-    List<TargetFile> findTargetFiles(Target target, String fileType, Map<String, Object> args);
+    boolean templatesFoundFor(Task task);
+    List<TargetFile> findTargetFiles(Task task, String fileType, Map<String, Object> args);
 
     static TargetFileRepository create(TemplateRepository templateRepository, TemplateRenderer templateRenderer)
     {
@@ -43,18 +43,18 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     }
 
     @Override
-    public boolean templatesFoundFor(Target target)
+    public boolean templatesFoundFor(Task task)
     {
-        return findTemplatesForTarget(target).isPresent();
+        return findTemplatesForTarget(task).isPresent();
     }
 
     @Override
     public List<TargetFile> findTargetFiles(
-        final Target target,
+        final Task task,
         final String fileType,
         final Map<String, Object> args)
     {
-        final Optional<TemplateFile> fileTemplates = findTemplatesForTarget(target);
+        final Optional<TemplateFile> fileTemplates = findTemplatesForTarget(task);
 
         if (fileTemplates.isPresent())
         {
@@ -62,7 +62,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
             final String files = templateRenderer.renderTemplate(fileTemplates.get(), templateName, args);
             return stream(files.split("\n"))
                 .map(line -> line.split(FILE_LINE_SEPARATOR))
-                .map(pair -> createTargetFile(pair[1], target.getType().get(), pair[0]))
+                .map(pair -> createTargetFile(pair[1], task.getType().get(), pair[0]))
                 .collect(toList());
         }
         else
@@ -71,9 +71,9 @@ class TargetFileRepositoryImpl implements TargetFileRepository
         }
     }
 
-    private Optional<TemplateFile> findTemplatesForTarget(Target target)
+    private Optional<TemplateFile> findTemplatesForTarget(Task task)
     {
-        return templateRepository.findTemplate(target.getType().get(), GROUP_FILES);
+        return templateRepository.findTemplate(task.getType().get(), GROUP_FILES);
     }
 
     private TargetFile createTargetFile(String path, String targetType, String templateName)

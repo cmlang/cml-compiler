@@ -15,20 +15,20 @@ concept BookStore
     customers: Customer*;
 }
 
-target livir_poj
+task livir_poj
 {
     type = "poj";
     groupId = "livir";
     artifactId = "livir-books";
-    version = "1.0.1-SNAPSHOT";
+    artifactVersion = "1.0.1-SNAPSHOT";
     packageName = "livir.books";
     packagePath = "livir/books";
 }
 
-target livir_pop
+task livir_pop
 {
     type = "pop";
-    version = "1.0.1";
     moduleName = "livir_books";
+    moduleVersion = "1.0.1";
 }
 

@@ -2,7 +2,7 @@ package cml.generator;
 
 import cml.io.Console;
 import cml.io.FileSystem;
-import cml.language.features.Target;
+import cml.language.features.Task;
 import cml.templates.TemplateRenderer;
 
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface TargetFileRenderer
 {
-    void renderTargetFiles(Target target, String targetDirPath, String fileType, Map<String, Object> templateArgs);
+    void renderTargetFiles(Task task, String targetDirPath, String fileType, Map<String, Object> templateArgs);
 
     static TargetFileRenderer create(
         Console console,
@@ -44,12 +44,12 @@ class TargetFileRendererImpl implements TargetFileRenderer
 
     @Override
     public void renderTargetFiles(
-        Target target,
+        Task task,
         String targetDirPath,
         String fileType,
         Map<String, Object> templateArgs)
     {
-        final List<TargetFile> targetFiles = targetFileRepository.findTargetFiles(target, fileType, templateArgs);
+        final List<TargetFile> targetFiles = targetFileRepository.findTargetFiles(task, fileType, templateArgs);
 
         targetFiles.forEach(targetFile -> renderTargetFile(targetFile, targetDirPath, templateArgs));
     }
