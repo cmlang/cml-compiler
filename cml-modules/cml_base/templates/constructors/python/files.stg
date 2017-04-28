@@ -1,5 +1,5 @@
 
-import "/targets/python/imports.stg"
+import "/constructors/python/imports.stg"
 
 model_files(task, model) ::= <<
 python:setup|setup.py

@@ -19,7 +19,7 @@ public interface TemplateRepository
 
 class TemplateRepositoryImpl implements TemplateRepository
 {
-    private static final String TARGET_TYPE_DIR_PATH = "cml_base:/targets/%s/%s";
+    private static final String TARGET_TYPE_DIR_PATH = "cml_base:/constructors/%s/%s";
 
     private final ModuleManager moduleManager;
 

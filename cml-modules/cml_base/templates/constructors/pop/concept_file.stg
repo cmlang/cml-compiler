@@ -1,5 +1,5 @@
 
-import "/targets/python/imports.stg"
+import "/constructors/python/imports.stg"
 
 concept_file(task, concept) ::= <<
 <concept_file_import_list(concept)>
