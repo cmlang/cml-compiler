@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ModelLoaderTest
 {
-    public static final String BASE_PATH = "src/test/resources/cml/language/ModelLoader/";
+    private static final String BASE_PATH = "src/test/resources/cml/language/ModelLoader/";
 
     private FileSystem fileSystem;
     private ModelLoader modelLoader;

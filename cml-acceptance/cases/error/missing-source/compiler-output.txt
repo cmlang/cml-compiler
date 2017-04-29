@@ -1,1 +1,1 @@
-Error: Main source file missing in source dir.
+Error: no main source file in module: missing-source

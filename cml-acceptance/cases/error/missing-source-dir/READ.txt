@@ -1,1 +1,0 @@
-This directory contains the output expected for the acceptance test where the source dir is not found.

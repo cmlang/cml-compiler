@@ -32,11 +32,14 @@ class ModelLoaderImpl implements ModelLoader
 {
     private static final String SOURCE_DIR = "/source";
     private static final String MAIN_SOURCE = "main.cml";
+    private static final String CML_BASE_MODULE = "cml_base";
 
     private static final int SUCCESS = 0;
-    private static final int FAILURE__SOURCE_DIR_NOT_FOUND = 1;
     private static final int FAILURE__SOURCE_FILE_NOT_FOUND = 2;
     private static final int FAILURE__FAILED_LOADING_MODEL = 3;
+
+    private static final String NO_MAIN_SOURCE_FILE_IN_MODULE = "no main source file in module: %s";
+    private static final String NO_SOURCE_DIR_IN_MODULE = "no source dir in module: %s";
 
     private final Console console;
     private final FileSystem fileSystem;
@@ -79,8 +82,15 @@ class ModelLoaderImpl implements ModelLoader
 
     private int loadModule(Model model, String basePath, String moduleName, Import _import) throws IOException
     {
-        final Module module = Module.create(moduleName);
-        model.addElement(module);
+        final Optional<Module> existingModule = model.getModule(moduleName);
+        if (existingModule.isPresent())
+        {
+            _import.setModule(existingModule.get());
+
+            return SUCCESS;
+        }
+
+        final Module module = createModule(model, moduleName, _import);
 
         if (_import != null)
         {
@@ -89,36 +99,56 @@ class ModelLoaderImpl implements ModelLoader
 
         final String sourceDirPath = basePath + File.separator + moduleName + File.separator + SOURCE_DIR;
         final Optional<Directory> sourceDir = fileSystem.findDirectory(sourceDirPath);
-        if (!sourceDir.isPresent())
+        if (sourceDir.isPresent())
         {
-            console.error("Source dir missing.");
-            return FAILURE__SOURCE_DIR_NOT_FOUND;
-        }
-
-        final Optional<SourceFile> sourceFile = fileSystem.findSourceFile(sourceDir.get(), MAIN_SOURCE);
-        if (!sourceFile.isPresent())
-        {
-            console.error("Main source file missing in source dir.");
-            return FAILURE__SOURCE_FILE_NOT_FOUND;
-        }
-
-        final CompilationUnitContext compilationUnitContext = parse(sourceFile.get());
-
-        synthesizeModule(module, compilationUnitContext);
-
-        for (Import i: module.getImports())
-        {
-            int exitCode = loadModule(model, basePath, i.getName(), i);
-
-            if (exitCode != SUCCESS)
+            final Optional<SourceFile> sourceFile = fileSystem.findSourceFile(sourceDir.get(), MAIN_SOURCE);
+            if (!sourceFile.isPresent())
             {
-                return exitCode;
+                console.error(NO_MAIN_SOURCE_FILE_IN_MODULE, moduleName);
+                return FAILURE__SOURCE_FILE_NOT_FOUND;
             }
-        }
 
-        augmentModule(module, compilationUnitContext);
+            final CompilationUnitContext compilationUnitContext = parse(sourceFile.get());
+
+            synthesizeModule(module, compilationUnitContext);
+
+            addBaseModule(module);
+
+            for (Import i: module.getImports())
+            {
+                int exitCode = loadModule(model, basePath, i.getName(), i);
+
+                if (exitCode != SUCCESS)
+                {
+                    return exitCode;
+                }
+            }
+
+            augmentModule(module, compilationUnitContext);
+        }
+        else
+        {
+            console.info(NO_SOURCE_DIR_IN_MODULE, moduleName);
+        }
 
         return SUCCESS;
+    }
+
+    private void addBaseModule(Module module)
+    {
+        if (!module.getName().equals(CML_BASE_MODULE) && !module.getImportedModule(CML_BASE_MODULE).isPresent())
+        {
+            module.addElement(Import.create(CML_BASE_MODULE));
+        }
+    }
+
+    private Module createModule(Model model, String moduleName, Import _import)
+    {
+        final Module module = Module.create(moduleName);
+
+        model.addElement(module);
+
+        return module;
     }
 
     private void synthesizeModule(Module module, CompilationUnitContext compilationUnitContext)

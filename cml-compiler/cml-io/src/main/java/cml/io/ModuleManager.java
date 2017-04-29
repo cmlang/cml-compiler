@@ -27,9 +27,9 @@ public interface ModuleManager
 
 class ModuleManagerImpl implements ModuleManager
 {
-    private static final String MODULE_BASE_DIR_NOT_FOUND = "Module base dir not found: %s";
-    private static final String UNABLE_TO_FIND_TEMPLATES_DIR = "Unable to find templates dir for module: %s";
-    private static final String UNABLE_TO_FIND_MODULE = "Unable to find module: %s";
+    private static final String MODULE_BASE_DIR_NOT_FOUND = "module base dir not found: %s";
+    private static final String UNABLE_TO_FIND_MODULE = "unable to find module: %s";
+    private static final String NO_TEMPLATES_DIR = "no templates dir for module: %s";
 
     private static final String MODULE_NAME_SEPARATOR = ":";
     private static final String TEMPLATES_DIR = "templates";
@@ -97,7 +97,7 @@ class ModuleManagerImpl implements ModuleManager
             }
             else
             {
-                console.error(UNABLE_TO_FIND_TEMPLATES_DIR, getModuleName(path));
+                console.info(NO_TEMPLATES_DIR, getModuleName(path));
             }
         }
         else

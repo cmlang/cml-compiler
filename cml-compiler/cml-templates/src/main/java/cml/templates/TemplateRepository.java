@@ -9,7 +9,7 @@ import static java.lang.String.format;
 
 public interface TemplateRepository
 {
-    Optional<TemplateFile> findTemplate(String targetType, String fileName);
+    Optional<TemplateFile> findTemplate(String moduleName, String constructorName, String fileName);
 
     static TemplateRepository create(ModuleManager moduleManager)
     {
@@ -19,7 +19,7 @@ public interface TemplateRepository
 
 class TemplateRepositoryImpl implements TemplateRepository
 {
-    private static final String TARGET_TYPE_DIR_PATH = "cml_base:/constructors/%s/%s";
+    private static final String CONSTRUCTOR_PATH = "%s:/constructors/%s/%s";
 
     private final ModuleManager moduleManager;
 
@@ -29,12 +29,15 @@ class TemplateRepositoryImpl implements TemplateRepository
     }
 
     @Override
-    public Optional<TemplateFile> findTemplate(final String targetType, final String fileName)
+    public Optional<TemplateFile> findTemplate(
+        final String moduleName,
+        final String constructorName,
+        final String templateFileName)
     {
-        final String path = format(TARGET_TYPE_DIR_PATH, targetType, fileName);
+        final String path = format(CONSTRUCTOR_PATH, moduleName, constructorName, templateFileName);
         final Optional<URL> url = moduleManager.findTemplateFile(path);
 
-        return url.isPresent() ? Optional.of(new TemplateFile(path)) : Optional.empty();
+        return url.isPresent() ? Optional.of(new TemplateFile(moduleName, path)) : Optional.empty();
     }
 
 }

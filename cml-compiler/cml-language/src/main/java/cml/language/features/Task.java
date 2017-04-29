@@ -11,6 +11,11 @@ public interface Task extends NamedElement, PropertyList
     Optional<String> getConstructor();
     void setConstructor(String constructor);
 
+    default Optional<Module> getModule()
+    {
+        return getParentScope().map(scope -> (Module) scope);
+    }
+
     static Task create(String name)
     {
         return new TaskImpl(name);

@@ -1,1 +1,1 @@
-No source file has declared task named: some_task_name
+Error: no source file has declared task named: some_task_name

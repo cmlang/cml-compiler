@@ -20,6 +20,38 @@ public interface Module extends NamedElement, Scope
                             .collect(toList());
     }
 
+    default List<Module> getImportedModules()
+    {
+        return getImports().stream()
+                           .map(Import::getModule)
+                           .filter(Optional::isPresent)
+                           .map(Optional::get)
+                           .collect(toList());
+    }
+
+    default Optional<Module> getImportedModule(final String name)
+    {
+        for (final Module module: getImportedModules())
+        {
+            if (module.getName().equals(name))
+            {
+                return Optional.of(module);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    default Optional<Module> getSelfOrImportedModule(final String name)
+    {
+        if (getName().equals(name))
+        {
+            return Optional.of(this);
+        }
+
+        return getImportedModule(name);
+    }
+
     default List<Concept> getConcepts()
     {
         return getElements().stream()
@@ -31,9 +63,10 @@ public interface Module extends NamedElement, Scope
     default List<Concept> getImportedConcepts()
     {
         return getImports().stream()
-                        .map(i -> i.getModule())
+                        .map(Import::getModule)
                         .filter(Optional::isPresent)
-                        .flatMap(m -> m.get().getConcepts().stream())
+                        .map(Optional::get)
+                        .flatMap(m -> m.getConcepts().stream())
                         .collect(toList());
     }
 

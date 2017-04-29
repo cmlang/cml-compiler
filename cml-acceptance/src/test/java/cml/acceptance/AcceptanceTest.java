@@ -108,19 +108,6 @@ public class AcceptanceTest
     }
 
     @Test
-    public void missing_source_dir() throws Exception
-    {
-        final String modulePath = getErrorModulePath("missing-source-dir");
-
-        cleanTargetDir(modulePath, POJ);
-        compileAndVerifyOutput(
-            modulePath,
-            POJ,
-            modulePath + "/" + Case.COMPILER_OUTPUT_FILENAME,
-            FAILURE__SOURCE_DIR_NOT_FOUND);
-    }
-
-    @Test
     public void missing_source_file() throws Exception
     {
         final String modulePath = getErrorModulePath("missing-source");

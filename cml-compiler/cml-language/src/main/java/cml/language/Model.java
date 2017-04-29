@@ -21,6 +21,19 @@ public interface Model extends Scope
                             .collect(toList());
     }
 
+    default Optional<Module> getModule(final String name)
+    {
+        for (final Module module: getModules())
+        {
+            if (module.getName().equals(name))
+            {
+                return Optional.of(module);
+            }
+        }
+
+        return Optional.empty();
+    }
+
     default List<Concept> getConcepts()
     {
         return getModules().stream()

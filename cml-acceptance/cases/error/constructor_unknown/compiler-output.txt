@@ -1,1 +1,1 @@
-No templates found for constructor: unknown
+Error: unable to find templates for constructor: unknown

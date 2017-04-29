@@ -1,5 +1,6 @@
 package cml.generator;
 
+import cml.language.features.Module;
 import cml.language.features.Task;
 import cml.templates.TemplateFile;
 import cml.templates.TemplateRenderer;
@@ -56,42 +57,91 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     {
         final Optional<TemplateFile> fileTemplates = findFilesTemplateForTask(task);
 
-        if (fileTemplates.isPresent())
+        if (fileTemplates.isPresent() && task.getModule().isPresent())
         {
-            final String templateName = fileType + FILES_SUFFIX;
-            final String files = templateRenderer.renderTemplate(fileTemplates.get(), templateName, args);
-            return stream(files.split("\n"))
-                .map(line -> line.split(FILE_LINE_SEPARATOR))
-                .map(pair -> createTargetFile(pair[1], task.getConstructor().get(), pair[0]))
-                .collect(toList());
+            final String moduleName = fileTemplates.get().getModuleName();
+            final Optional<Module> module = task.getModule().get().getSelfOrImportedModule(moduleName);
+
+            if (module.isPresent() && task.getConstructor().isPresent())
+            {
+                final String templateName = fileType + FILES_SUFFIX;
+                final String files = templateRenderer.renderTemplate(fileTemplates.get(), templateName, args);
+                return stream(files.split("\n"))
+                    .map(line -> line.split(FILE_LINE_SEPARATOR))
+                    .map(pair -> createTargetFile(module.get(), task.getConstructor().get(), pair[1], pair[0]))
+                    .collect(toList());
+            }
         }
-        else
-        {
-            return emptyList();
-        }
+
+        return emptyList();
     }
 
     private Optional<TemplateFile> findFilesTemplateForTask(Task task)
     {
-        return templateRepository.findTemplate(task.getConstructor().get(), GROUP_FILES);
-    }
-
-    private TargetFile createTargetFile(String path, String targetType, String templateName)
-    {
-        final String[] pair = templateName.split(TEMPLATE_NAME_SEPARATOR);
-
-        if (pair.length == 2)
+        if (task.getModule().isPresent())
         {
-            targetType = pair[0];
-            templateName = pair[1];
+            final Module module = task.getModule().get();
+            final String constructorName = task.getConstructor().get();
+
+            return findTemplateFile(module, constructorName, GROUP_FILES);
         }
 
-        final TargetFile targetFile = new TargetFile(path, templateName);
-        final Optional<TemplateFile> templateFile = templateRepository.findTemplate(targetType, templateName + STG_EXT);
+        return Optional.empty();
+    }
+
+    private TargetFile createTargetFile(
+        final Module module,
+        String constructorName,
+        final String targetFilePath,
+        String templateFileName)
+    {
+        final String[] pair = templateFileName.split(TEMPLATE_NAME_SEPARATOR);
+        if (pair.length == 2)
+        {
+            constructorName = pair[0];
+            templateFileName = pair[1];
+        }
+
+        final TargetFile targetFile = new TargetFile(targetFilePath, templateFileName);
+        final Optional<TemplateFile> templateFile = findTemplateFile(
+            module, constructorName, templateFileName + STG_EXT);
 
         templateFile.ifPresent(targetFile::setTemplateFile);
 
         return targetFile;
+    }
+
+    private Optional<TemplateFile> findTemplateFile(
+        final Module module,
+        final String constructorName,
+        final String templateFileName)
+    {
+        final Optional<TemplateFile> templateFile = templateRepository.findTemplate(
+            module.getName(),
+            constructorName,
+            templateFileName);
+
+        if (templateFile.isPresent())
+        {
+            return templateFile;
+        }
+        else
+        {
+            for (final Module importedModule: module.getImportedModules())
+            {
+                final Optional<TemplateFile> importedTemplateFile = templateRepository.findTemplate(
+                    importedModule.getName(),
+                    constructorName,
+                    templateFileName);
+
+                if (importedTemplateFile.isPresent())
+                {
+                    return importedTemplateFile;
+                }
+            }
+        }
+
+        return templateFile;
     }
 
 }

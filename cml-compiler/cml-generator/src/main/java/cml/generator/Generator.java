@@ -34,9 +34,9 @@ class GeneratorImpl implements Generator
     private static final int FAILURE__CONSTRUCTOR_UNDEFINED = 102;
     private static final int FAILURE__TASK_UNDECLARED = 103;
 
-    private static final String NO_SOURCE_FILE_HAS_DECLARED_TASK = "No source file has declared task named: %s";
-    private static final String NO_CONSTRUCTOR_DEFINED_FOR_TASK = "No constructor defined for task: %s";
-    private static final String NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR = "No templates found for constructor: %s";
+    private static final String NO_SOURCE_FILE_HAS_DECLARED_TASK = "no source file has declared task named: %s";
+    private static final String NO_CONSTRUCTOR_DEFINED_FOR_TASK = "no constructor defined for task: %s";
+    private static final String NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR = "unable to find templates for constructor: %s";
 
     private final Console console;
     private final FileSystem fileSystem;
@@ -66,20 +66,20 @@ class GeneratorImpl implements Generator
         final Optional<Task> target = model.getTarget(targetName);
         if (!target.isPresent())
         {
-            console.println(NO_SOURCE_FILE_HAS_DECLARED_TASK, targetName);
+            console.error(NO_SOURCE_FILE_HAS_DECLARED_TASK, targetName);
             return FAILURE__TASK_UNDECLARED;
         }
 
         final Optional<String> constructor = target.get().getConstructor();
         if (!constructor.isPresent())
         {
-            console.println(NO_CONSTRUCTOR_DEFINED_FOR_TASK, target.get().getName());
+            console.error(NO_CONSTRUCTOR_DEFINED_FOR_TASK, target.get().getName());
             return FAILURE__CONSTRUCTOR_UNDEFINED;
         }
 
         if (!targetFileRepository.templatesFoundFor(target.get()))
         {
-            console.println(NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR, constructor.get());
+            console.error(NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR, constructor.get());
             return FAILURE__CONSTRUCTOR_UNKNOWN;
         }
 
