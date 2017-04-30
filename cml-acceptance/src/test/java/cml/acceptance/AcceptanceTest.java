@@ -60,8 +60,8 @@ public class AcceptanceTest
     public static SuccessCase[] successCases = {
         new SuccessCase("livir_books", "livir-console", "livir_poj", JAVA),
         new SuccessCase("livir_books", "livir_console", "livir_pop", PYTHON),
-        new SuccessCase("mini-cml-language", "mcml-compiler", "mcml_java", JAVA),
-        new SuccessCase("mini-cml-language", "mcml_compiler", "mcml_py", PYTHON)
+        new SuccessCase("mini_cml_language", "mcml-compiler", "mcml_java", JAVA),
+        new SuccessCase("mini_cml_language", "mcml_compiler", "mcml_py", PYTHON)
     };
 
     @DataPoints("failing-modules")
