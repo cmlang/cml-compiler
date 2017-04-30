@@ -146,7 +146,7 @@ public class AcceptanceTest
     @Test
     public void target_dir_created() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/target-dir-created";
+        final String modulePath = Case.CASES_DIR + "/targets/target_dir_created";
         final File targetDir = new File(getTargetDirPath(modulePath, SOME_TASK));
 
         forceDelete(targetDir);
@@ -159,14 +159,14 @@ public class AcceptanceTest
     @Test
     public void target_dir_cleaned() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/target-dir-cleaned";
+        final String modulePath = Case.CASES_DIR + "/targets/target_dir_cleaned";
         final File targetDir = new File(getTargetDirPath(modulePath, SOME_TASK));
 
         final File bookFile = new File(targetDir, "src/main/java/books/Book.java");
         final File bookStoreFile = new File(targetDir, "src/main/java/books/BookStore.java");
 
         // Ensures there is already content in the target dir:
-        final String tempModulePath = Case.CASES_DIR + "/target-dir-created";
+        final String tempModulePath = Case.CASES_DIR + "/targets/target_dir_created";
         compileAndVerifyOutput(tempModulePath, SOME_TASK, SUCCESS);
         cleanTargetDir(modulePath, SOME_TASK);
         copyDirectoryStructure(
