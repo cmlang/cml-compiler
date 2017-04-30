@@ -2,7 +2,7 @@ package cml.acceptance;
 
 import static java.lang.String.format;
 
-class Case
+class SuccessCase
 {
     static final String CASES_DIR = "cases";
     static final String COMPILER_OUTPUT_FILENAME = "compiler-output.txt";
@@ -15,7 +15,7 @@ class Case
     private final String targetName;
     private final String targetLanguageExtension;
 
-    Case(String moduleName, String clientName, String targetName, String targetLanguageExtension)
+    SuccessCase(String moduleName, String clientName, String targetName, String targetLanguageExtension)
     {
         this.moduleName = moduleName;
         this.clientName = clientName;
@@ -55,7 +55,7 @@ class Case
 
     String getModulePath()
     {
-        return CASES_DIR + "/" + getModuleName();
+        return CASES_DIR + "/success/" + getModuleName();
     }
 
     String getTargetDirPath()

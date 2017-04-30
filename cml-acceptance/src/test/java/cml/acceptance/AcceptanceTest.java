@@ -49,7 +49,6 @@ public class AcceptanceTest
     private static final String PYTHON = "py";
 
     private static final int SUCCESS = 0;
-    private static final int FAILURE__SOURCE_DIR_NOT_FOUND = 1;
     private static final int FAILURE__SOURCE_FILE_NOT_FOUND = 2;
     private static final int FAILURE__FAILED_LOADING_MODEL = 3;
     private static final int FAILURE__CONSTRUCTOR_UNKNOWN = 101;
@@ -58,11 +57,11 @@ public class AcceptanceTest
     private static final String SOME_TASK = "some_task";
 
     @DataPoints("success-cases")
-    public static Case[] successCases = {
-        new Case("livir_books", "livir-console", "livir_poj", JAVA),
-        new Case("livir_books", "livir_console", "livir_pop", PYTHON),
-        new Case("mini-cml-language", "mcml-compiler", "mcml_java", JAVA),
-        new Case("mini-cml-language", "mcml_compiler", "mcml_py", PYTHON)
+    public static SuccessCase[] successCases = {
+        new SuccessCase("livir_books", "livir-console", "livir_poj", JAVA),
+        new SuccessCase("livir_books", "livir_console", "livir_pop", PYTHON),
+        new SuccessCase("mini-cml-language", "mcml-compiler", "mcml_java", JAVA),
+        new SuccessCase("mini-cml-language", "mcml_compiler", "mcml_py", PYTHON)
     };
 
     @DataPoints("failing-modules")
@@ -83,7 +82,7 @@ public class AcceptanceTest
     }
 
     @Theory
-    public void success(@FromDataPoints("success-cases") final Case successCase) throws Exception
+    public void success(@FromDataPoints("success-cases") final SuccessCase successCase) throws Exception
     {
         cleanTargetDir(successCase.getModulePath(), successCase.getTargetName());
 
@@ -146,7 +145,7 @@ public class AcceptanceTest
     @Test
     public void target_dir_created() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/target_dirs/target_dir_created";
+        final String modulePath = SuccessCase.CASES_DIR + "/target_dirs/target_dir_created";
         final File targetDir = new File(getTargetDirPath(modulePath, SOME_TASK));
 
         forceDelete(targetDir);
@@ -159,14 +158,14 @@ public class AcceptanceTest
     @Test
     public void target_dir_cleaned() throws Exception
     {
-        final String modulePath = Case.CASES_DIR + "/target_dirs/target_dir_cleaned";
+        final String modulePath = SuccessCase.CASES_DIR + "/target_dirs/target_dir_cleaned";
         final File targetDir = new File(getTargetDirPath(modulePath, SOME_TASK));
 
         final File bookFile = new File(targetDir, "src/main/java/books/Book.java");
         final File bookStoreFile = new File(targetDir, "src/main/java/books/BookStore.java");
 
         // Ensures there is already content in the target dir:
-        final String tempModulePath = Case.CASES_DIR + "/target_dirs/target_dir_created";
+        final String tempModulePath = SuccessCase.CASES_DIR + "/target_dirs/target_dir_created";
         compileAndVerifyOutput(tempModulePath, SOME_TASK, SUCCESS);
         cleanTargetDir(modulePath, SOME_TASK);
         copyDirectoryStructure(
@@ -197,7 +196,7 @@ public class AcceptanceTest
         compileAndVerifyOutput(
             modulePath,
             taskName,
-            modulePath + "/" + Case.COMPILER_OUTPUT_FILENAME,
+            modulePath + "/" + SuccessCase.COMPILER_OUTPUT_FILENAME,
             expectedExitCode);
     }
 
@@ -241,7 +240,7 @@ public class AcceptanceTest
         assertEquals(reason, expectedOutput, actualOutput);
     }
 
-    private static void installGeneratedModule(final String baseDir, final Case successCase)
+    private static void installGeneratedModule(final String baseDir, final SuccessCase successCase)
         throws MavenInvocationException, IOException, CommandLineException
     {
         if (successCase.getTargetLanguageExtension().equals(JAVA))
@@ -326,7 +325,7 @@ public class AcceptanceTest
         }
     }
 
-    private static String executeClient(final Case successCase)
+    private static String executeClient(final SuccessCase successCase)
         throws MavenInvocationException, IOException, CommandLineException
     {
         switch (successCase.getTargetLanguageExtension())
@@ -340,7 +339,7 @@ public class AcceptanceTest
         }
     }
 
-    private static String executeJavaClient(Case successCase)
+    private static String executeJavaClient(SuccessCase successCase)
         throws CommandLineException, IOException, MavenInvocationException
     {
         final String clientModuleDir = CLIENT_BASE_DIR + successCase.getClientPath();
@@ -354,7 +353,7 @@ public class AcceptanceTest
         return executeJar(clientTargetDir.getPath(), clientJarPath, emptyList(), SUCCESS);
     }
 
-    private static String executePythonClient(Case successCase) throws CommandLineException, IOException
+    private static String executePythonClient(SuccessCase successCase) throws CommandLineException, IOException
     {
         final String clientPath = CLIENT_BASE_DIR + successCase.getClientPath() + ".py";
         assertThat(
@@ -457,6 +456,6 @@ public class AcceptanceTest
 
     private static String getErrorModulePath(String moduleName)
     {
-        return Case.CASES_DIR + File.separator + "errors" + File.separator + moduleName;
+        return SuccessCase.CASES_DIR + File.separator + "errors" + File.separator + moduleName;
     }
 }
