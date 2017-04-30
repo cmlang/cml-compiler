@@ -457,6 +457,6 @@ public class AcceptanceTest
 
     private static String getErrorModulePath(String moduleName)
     {
-        return Case.CASES_DIR + File.separator + "error" + File.separator + moduleName;
+        return Case.CASES_DIR + File.separator + "errors" + File.separator + moduleName;
     }
 }
