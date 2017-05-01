@@ -5,6 +5,12 @@ model files:
 Book files:
 - livir_books/book.py
 
+Order files:
+- livir_books/order.py
+
+Item files:
+- livir_books/item.py
+
 BookStore files:
 - livir_books/book_store.py
 

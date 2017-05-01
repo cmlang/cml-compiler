@@ -10,6 +10,22 @@ concept Book: Product
     title: String;
 }
 
+concept Order
+{
+    customer: Customer;
+    items: Item*;
+
+//    /total = for item in items | from sum = 0 reduce sum + item.total;
+}
+
+concept Item
+{
+    book: Book;
+    quantity: Integer;
+
+//    /total = book.price * quantity;
+}
+
 concept BookStore
 {
     books: Book*;

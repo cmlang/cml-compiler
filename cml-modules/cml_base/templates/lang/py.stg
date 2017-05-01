@@ -186,7 +186,7 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 
 primitive_type_boolean() ::= "bool"
 primitive_type_integer() ::= "int"
-primitive_type_decimal() ::= "decimal"
+primitive_type_decimal() ::= "Decimal"
 primitive_type_string() ::= "str"
 primitive_type_regex() ::= "Pattern"
 primitive_type_byte() ::= "int"

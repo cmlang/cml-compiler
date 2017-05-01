@@ -1,0 +1,6 @@
+concept Expressions
+{
+    str = "SomeString";
+    int = 123;
+    dec = 123.456;
+}

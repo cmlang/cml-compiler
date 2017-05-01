@@ -6,9 +6,9 @@ import java.util.Optional;
 
 public interface Property extends TypedElement
 {
-    Optional<String> getValue();
+    Optional<Object> getValue();
 
-    static Property create(String name, @Nullable String value, @Nullable Type type)
+    static Property create(String name, @Nullable Object value, @Nullable Type type)
     {
         return new PropertyImpl(name, value, type);
     }
@@ -17,9 +17,9 @@ public interface Property extends TypedElement
 class PropertyImpl implements Property
 {
     private final TypedElement typedElement;
-    private final @Nullable String value;
+    private final @Nullable Object value;
 
-    PropertyImpl(String name, @Nullable String value, @Nullable Type type)
+    PropertyImpl(String name, @Nullable Object value, @Nullable Type type)
     {
         final ModelElement modelElement = ModelElement.create(this);
         final NamedElement namedElement = NamedElement.create(modelElement, name);
@@ -71,7 +71,7 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public Optional<String> getValue()
+    public Optional<Object> getValue()
     {
         return Optional.ofNullable(value);
     }

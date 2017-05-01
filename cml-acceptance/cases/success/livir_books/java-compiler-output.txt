@@ -4,6 +4,12 @@ model files:
 Book files:
 - src/main/java/livir/books/Book.java
 
+Order files:
+- src/main/java/livir/books/Order.java
+
+Item files:
+- src/main/java/livir/books/Item.java
+
 BookStore files:
 - src/main/java/livir/books/BookStore.java
 

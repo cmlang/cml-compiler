@@ -3,6 +3,7 @@ concept_file(task, concept) ::= <<
 package <task.packageName>;
 
 import java.util.*;
+import java.math.*;
 import org.jetbrains.annotations.*;
 
 public <class(concept)>

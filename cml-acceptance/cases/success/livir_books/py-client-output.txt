@@ -1,1 +1,1 @@
-Book: Book(quantity=3, isbn=ISBN-1234, title=Python's Book)
+Book: Book(price=13.00, isbn=ISBN-1234, title=Python's Book)

@@ -5,9 +5,13 @@ import cml.io.FileSystem;
 import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
+import cml.language.foundation.Property;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
+import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -78,6 +82,18 @@ public class ModelLoaderTest
         assertTrue("Concept should be abstract.", concept.isAbstract());
     }
 
+    @Test
+    public void expressions()
+    {
+        final Concept concept = loadConcept("expressions");
+
+        assertThat(concept.getName(), is("Expressions"));
+
+        assertPropertyFound(concept, "str", "SomeString");
+        assertPropertyFound(concept, "int", 123);
+        assertPropertyFound(concept, "dec", new BigDecimal("123.456"));
+    }
+
     private Module loadModule(String sourceFileName)
     {
         return loadModel(sourceFileName).getModules().get(0);
@@ -96,5 +112,12 @@ public class ModelLoaderTest
         modelLoader.loadModel(model, modulePath);
 
         return model;
+    }
+
+    private void assertPropertyFound(Concept concept, String propertyName, Object propertyValue)
+    {
+        final Property str = concept.getProperty(propertyName).orElse(null);
+        assertNotNull(propertyName, str);
+        assertThat(propertyName, str.getValue().orElse(null), is(propertyValue));
     }
 }

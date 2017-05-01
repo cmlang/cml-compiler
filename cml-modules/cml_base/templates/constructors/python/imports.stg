@@ -2,6 +2,7 @@
 concept_file_import_list(concept) ::= <<
 from typing import *
 from abc import *
+from decimal import *
 
 <concept.dependencies:concept_file_import(); separator="\n">
 >>

@@ -4,4 +4,4 @@ Classes:
 - livir.books.BookStore
 - livir.books.Book
 
-Book(quantity="10", isbn="1234", title="Programming Adventures")
+Book(price="10.00", isbn="1234", title="Programming Adventures")

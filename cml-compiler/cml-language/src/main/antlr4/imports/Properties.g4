@@ -1,10 +1,10 @@
 grammar Properties;
 
-import Literals, Names, Types;
+import Names, Types, Expressions;
 
 propertyList:
     '{' (propertyDeclaration ';')* '}';
 
 propertyDeclaration returns [Property property]:
-    NAME (':' typeDeclaration)? ('=' STRING)?;
+    NAME (':' typeDeclaration)? ('=' expression)?;
 
