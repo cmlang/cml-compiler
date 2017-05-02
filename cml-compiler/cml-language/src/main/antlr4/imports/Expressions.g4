@@ -2,7 +2,7 @@ grammar Expressions;
 
 import Literals;
 
-expression returns [Object value]: literal;
+expression returns [Literal literal]: literalExpression;
 
-literal returns [Object value]: STRING | INTEGER | DECIMAL;
+literalExpression returns [Literal literal]: STRING | INTEGER | DECIMAL;
 

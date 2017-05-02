@@ -1,0 +1,5 @@
+Expressions Console
+
+LiteralStringInit = SomeString
+LiteralIntegerInit = 123
+LiteralDecimalInit = 123.456

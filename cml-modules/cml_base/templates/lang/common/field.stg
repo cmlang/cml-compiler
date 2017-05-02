@@ -13,3 +13,10 @@ field_type_required(type) ::= <<
 <type_name(type)>
 >>
 
+field_or_default_value(property) ::= <<
+<if(property.value)><\\>
+<literal_expr(property.value)><\\>
+<else><\\>
+<field_name(property)><\\>
+<endif>
+>>

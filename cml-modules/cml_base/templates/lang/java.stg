@@ -39,6 +39,8 @@ statement_terminator() ::= ";"
 
 super_constructor_name() ::= "super"
 
+this_constructor_name() ::= "this"
+
 // Strings
 
 to_string_name() ::= "toString"
@@ -204,3 +206,16 @@ type_hint_name(name) ::=<<
 <class_type_name(name)>
 >>
 
+// Literal
+
+literal_expr_string(text) ::= <<
+"<text>"
+>>
+
+literal_expr_integer(text) ::= <<
+<text>
+>>
+
+literal_expr_decimal(text) ::= <<
+new BigDecimal("<text>")
+>>

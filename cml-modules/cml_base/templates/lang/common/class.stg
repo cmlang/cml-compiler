@@ -43,6 +43,7 @@ class7(
     base_list=true,
     sections = [
         class_fields(),
+        class_secondary_constructor(concept.nonInitProperties, field_ancestors),
         class_primary_constructor(super_properties, concept.properties, field_ancestors),
         class_getters(),
         class_to_string()
@@ -107,6 +108,17 @@ super_constructor(inherited_properties) ::= <<
 <if(inherited_properties)><\\>
 <super_constructor_call(inherited_properties)>
 <endif>
+>>
+
+class_secondary_constructor(non_init_properties, ancestors) ::= <<
+<if(!ancestors && concept.initProperties)><\\>
+<modifier("public")><\\>
+<class_constructor(non_init_properties, class_secondary_constructor_statements())><\\>
+<endif>
+>>
+
+class_secondary_constructor_statements() ::= <<
+<this_constructor_call(concept.allProperties)>
 >>
 
 class_to_string() ::= <<

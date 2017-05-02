@@ -1,4 +1,5 @@
 
+import "/lang/common/literal.stg"
 import "/lang/common/type.stg"
 import "/lang/common/statement.stg"
 
@@ -12,4 +13,8 @@ new_call(class_name, args) ::= <<
 
 super_constructor_call(args) ::= <<
 <call(super_constructor_name(), args)><statement_terminator()>
+>>
+
+this_constructor_call(property) ::= <<
+<this_constructor_name()>(<property:field_or_default_value(); separator=", ">)<statement_terminator()>
 >>

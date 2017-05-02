@@ -56,6 +56,22 @@ public interface Concept extends NamedElement, PropertyList
     }
 
     @SuppressWarnings("unused")
+    default List<Property> getInitProperties()
+    {
+        return getAllProperties().stream()
+                                 .filter(p -> p.getValue().isPresent())
+                                 .collect(toList());
+    }
+
+    @SuppressWarnings("unused")
+    default List<Property> getNonInitProperties()
+    {
+        return getAllProperties().stream()
+                                 .filter(p -> !p.getValue().isPresent())
+                                 .collect(toList());
+    }
+
+    @SuppressWarnings("unused")
     default List<Property> getAllProperties()
     {
         return concat(getInheritedProperties().stream(), getProperties().stream()).collect(toList());

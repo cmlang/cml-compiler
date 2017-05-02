@@ -66,7 +66,10 @@ operation_header_content(instance, name, params, result_type) ::= <<
 >>
 
 var_decl(typed_element) ::= <<
-<field_name(typed_element)>: '<field_type(typed_element)>'
+<field_name(typed_element)>: '<field_type(typed_element)>'<\\>
+<if(typed_element.value)><\\>
+<\ >=<\ ><literal_expr(typed_element.value)><\\>
+<endif>
 >>
 
 local_var_decl(typed_element) ::= <<
@@ -169,6 +172,8 @@ class_type_name(name) ::= <<
 
 constructor_name(class_name) ::= "__init__"
 
+class_secondary_constructor(non_init_properties, ancestors) ::= ""
+
 // Ancestors
 
 ancestor_list(abstract, ancestors, interfaces) ::= <<
@@ -200,3 +205,16 @@ type_hint_name(name) ::=<<
 '<class_type_name(name)>'
 >>
 
+// Literal
+
+literal_expr_string(text) ::= <<
+"<text>"
+>>
+
+literal_expr_integer(text) ::= <<
+<text>
+>>
+
+literal_expr_decimal(text) ::= <<
+Decimal("<text>")
+>>

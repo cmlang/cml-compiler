@@ -1,0 +1,4 @@
+
+literal_expr(literal) ::= <<
+<({literal_expr_<literal.type.name; format="underscore-case">})(literal.text)>
+>>

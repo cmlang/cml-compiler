@@ -2,14 +2,13 @@ package cml.language;
 
 import cml.io.Console;
 import cml.io.FileSystem;
+import cml.language.expressions.Literal;
 import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.foundation.Property;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.math.BigDecimal;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
@@ -90,8 +89,8 @@ public class ModelLoaderTest
         assertThat(concept.getName(), is("Expressions"));
 
         assertPropertyFound(concept, "str", "SomeString");
-        assertPropertyFound(concept, "int", 123);
-        assertPropertyFound(concept, "dec", new BigDecimal("123.456"));
+        assertPropertyFound(concept, "int", "123");
+        assertPropertyFound(concept, "dec", "123.456");
     }
 
     private Module loadModule(String sourceFileName)
@@ -114,10 +113,14 @@ public class ModelLoaderTest
         return model;
     }
 
-    private void assertPropertyFound(Concept concept, String propertyName, Object propertyValue)
+    private void assertPropertyFound(Concept concept, String propertyName, String propertyValue)
     {
         final Property str = concept.getProperty(propertyName).orElse(null);
         assertNotNull(propertyName, str);
-        assertThat(propertyName, str.getValue().orElse(null), is(propertyValue));
+
+        final Literal literal = (Literal)str.getValue().orElse(null);
+        assertNotNull(propertyName, literal);
+
+        assertThat(propertyName, literal.getText(), is(propertyValue));
     }
 }

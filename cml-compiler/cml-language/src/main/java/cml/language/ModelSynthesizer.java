@@ -1,5 +1,6 @@
 package cml.language;
 
+import cml.language.expressions.Literal;
 import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
@@ -7,10 +8,7 @@ import cml.language.features.Task;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
-import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
-
-import java.math.BigDecimal;
 
 import static java.lang.String.format;
 
@@ -130,7 +128,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-        final Object value = (ctx.expression() == null) ? null : ctx.expression().value;
+        final Object value = (ctx.expression() == null) ? null : ctx.expression().literal;
 
         ctx.property = Property.create(name, value, type);
     }
@@ -152,15 +150,35 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitExpression(ExpressionContext ctx)
     {
-        if (ctx.literal() != null) ctx.value = ctx.literal().value;
+        if (ctx.literalExpression() != null) ctx.literal = ctx.literalExpression().literal;
     }
 
     @Override
-    public void exitLiteral(LiteralContext ctx)
+    public void exitLiteralExpression(LiteralExpressionContext ctx)
     {
-        if (ctx.STRING() != null) ctx.value = unwrap(ctx.STRING().getText());
-        else if (ctx.INTEGER() != null) ctx.value = Integer.valueOf(ctx.INTEGER().getText());
-        else if (ctx.DECIMAL() != null) ctx.value = new BigDecimal(ctx.DECIMAL().getText());
+        final String text = getText(ctx);
+
+        if (text != null)
+        {
+            final Type type = Type.create(getPrimitiveTypeName(ctx), null);
+            ctx.literal = Literal.create(text, type);
+        }
+    }
+
+    private static String getText(LiteralExpressionContext ctx)
+    {
+        if (ctx.STRING() != null) return unwrap(ctx.STRING().getText());
+        else if (ctx.INTEGER() != null) return ctx.INTEGER().getText();
+        else if (ctx.DECIMAL() != null) return ctx.DECIMAL().getText();
+        else return null;
+    }
+
+    private static String getPrimitiveTypeName(LiteralExpressionContext ctx)
+    {
+        if (ctx.STRING() != null) return "String";
+        else if (ctx.INTEGER() != null) return "Integer";
+        else if (ctx.DECIMAL() != null) return "Decimal";
+        else return null;
     }
 
     private static String unwrap(String text)

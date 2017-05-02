@@ -58,6 +58,8 @@ public class AcceptanceTest
 
     @DataPoints("success-cases")
     public static SuccessCase[] successCases = {
+        new SuccessCase("expressions", "expressions-console", "expressions_poj", JAVA),
+        new SuccessCase("expressions", "expressions_console", "expressions_pop", PYTHON),
         new SuccessCase("livir_books", "livir-console", "livir_poj", JAVA),
         new SuccessCase("livir_books", "livir_console", "livir_pop", PYTHON),
         new SuccessCase("mini_cml_language", "mcml-compiler", "mcml_java", JAVA),
@@ -262,7 +264,7 @@ public class AcceptanceTest
 
         final InvocationRequest request = new DefaultInvocationRequest();
         request.setBaseDirectory(new File(baseDir));
-        request.setGoals(asList("-q", "clean", "install"));
+        request.setGoals(asList("-q", "install"));
         request.setInteractive(false);
 
         final Invoker invoker = new DefaultInvoker();

@@ -1,0 +1,23 @@
+
+concept ExpressionCases
+{
+    // Properties initialized with literals:
+    LiteralStringInit: String = "SomeString";
+    LiteralIntegerInit: Integer = 123;
+    LiteralDecimalInit: Decimal = 123.456;
+}
+
+task expressions_poj by poj
+{
+    groupId = "expressions";
+    artifactId = "expressions-cases";
+    artifactVersion = "1.0.1-SNAPSHOT";
+    packageName = "expressions.cases";
+    packagePath = "expressions/cases";
+}
+
+task expressions_pop by pop
+{
+    moduleName = "expressions";
+    moduleVersion = "1.0.1";
+}

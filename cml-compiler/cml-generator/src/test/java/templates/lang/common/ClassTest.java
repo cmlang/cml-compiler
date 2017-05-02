@@ -1,5 +1,6 @@
 package templates.lang.common;
 
+import cml.language.expressions.Literal;
 import cml.language.features.Concept;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
@@ -119,6 +120,17 @@ public class ClassTest extends LangTest
         concept.addElement(Property.create("categories", null, Type.create("Category", "*")));
 
         testClassTemplateWithConcept(concept, "class__concept_property_set.txt");
+    }
+
+    @Test
+    public void class__concept_property_initialized() throws IOException
+    {
+        final Concept concept = Concept.create("Book");
+
+        final Object value = Literal.create("No Title", Type.create("String", null));
+        concept.addElement(Property.create("title", value, Type.create("String", null)));
+
+        testClassTemplateWithConcept(concept, "class__concept_property_initialized.txt");
     }
 
     private void testClassTemplateWithConcept(Concept concept, String expectedOutputFileName) throws IOException

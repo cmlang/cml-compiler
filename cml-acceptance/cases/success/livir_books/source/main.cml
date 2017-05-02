@@ -6,8 +6,8 @@ module livir_books
 
 concept Book: Product
 {
-    isbn: String;
-    title: String;
+    isbn: String = "Not Provided";
+    title: String = "No Title";
 }
 
 concept Order
