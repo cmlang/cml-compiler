@@ -8,5 +8,4 @@ expression returns [Expression expr]
     | <assoc=right> expression operator='^' expression
     | literalExpression;
 
-literalExpression returns [Literal literal]: STRING | INTEGER | DECIMAL;
 

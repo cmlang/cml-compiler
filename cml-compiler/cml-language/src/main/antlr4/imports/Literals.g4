@@ -1,6 +1,8 @@
-lexer grammar Literals;
+grammar Literals;
 
 // import: none
+
+literalExpression returns [Literal literal]: STRING | INTEGER | DECIMAL;
 
 STRING:
     '"' .*? '"';
