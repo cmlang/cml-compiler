@@ -1,5 +1,7 @@
 package cml.language;
 
+import cml.language.expressions.Expression;
+import cml.language.expressions.Infix;
 import cml.language.expressions.Literal;
 import cml.language.features.Concept;
 import cml.language.features.Import;
@@ -128,7 +130,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-        final Object value = (ctx.expression() == null) ? null : ctx.expression().literal;
+        final Object value = (ctx.expression() == null) ? null : ctx.expression().expr;
 
         ctx.property = Property.create(name, value, type);
     }
@@ -142,7 +144,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final String cardinality = (ctx.CARDINALITY() == null) ? null : ctx.CARDINALITY().getText();
+        final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
 
         ctx.type = Type.create(name, cardinality);
     }
@@ -150,7 +152,17 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitExpression(ExpressionContext ctx)
     {
-        if (ctx.literalExpression() != null) ctx.literal = ctx.literalExpression().literal;
+        if (ctx.literalExpression() != null) ctx.expr = ctx.literalExpression().literal;
+        else if (ctx.operator != null) ctx.expr = createInfix(ctx);
+    }
+
+    private Infix createInfix(ExpressionContext ctx)
+    {
+        final String operator = ctx.operator.getText();
+        final Expression left = ctx.expression().get(0).expr;
+        final Expression right = ctx.expression().get(1).expr;
+        
+        return Infix.create(operator, left, right);
     }
 
     @Override

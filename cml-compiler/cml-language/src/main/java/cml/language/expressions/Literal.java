@@ -3,15 +3,15 @@ package cml.language.expressions;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public interface Literal extends ModelElement
+public interface Literal extends Expression
 {
     String getText();
-    Type getType();
 
-    static Literal create(String text, Type type)
+    static Literal create(String text, @Nullable Type type)
     {
         return new LiteralImpl(text, type);
     }
@@ -20,14 +20,14 @@ public interface Literal extends ModelElement
 class LiteralImpl implements Literal
 {
     private final ModelElement modelElement;
+    private final Expression expression;
     private final String text;
-    private final Type type;
 
-    LiteralImpl(String text, Type type)
+    LiteralImpl(String text, @Nullable Type type)
     {
         this.modelElement = ModelElement.create(this);
+        this.expression = Expression.create(modelElement, "literal", type);
         this.text = text;
-        this.type = type;
     }
 
     @Override
@@ -37,9 +37,15 @@ class LiteralImpl implements Literal
     }
 
     @Override
-    public Type getType()
+    public String getKind()
     {
-        return this.type;
+        return expression.getKind();
+    }
+
+    @Override
+    public Optional<Type> getType()
+    {
+        return expression.getType();
     }
 
     @Override

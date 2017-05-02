@@ -1,0 +1,35 @@
+
+concept Expressions
+{
+    // Arithmetic Operators:
+    addition = 1 + 2;
+    subtraction = 2 - 1;
+    multiplication = 2 * 3;
+    division = 6 / 2;
+
+    // Left Associative:
+    addition_left_assoc = 1 + 2 + 3;
+    subtraction_left_assoc = 3 - 2 - 1;
+    multiplication_left_assoc = 2 * 3 * 1;
+    division_left_assoc = 12 / 6 / 2;
+
+    // Precedence of multiplication and division over addition:
+    multiplication_before_addition = 1 + 2 * 3;
+    division_before_addition = 1 + 2 / 3;
+
+    // Precedence of multiplication and division over subtraction:
+    division_before_subtraction = 3 - 1 / 2;
+    multiplication_before_subtraction = 3 - 1 * 2;
+
+    // Same precedence for multiplication and division:
+    multiplication_division_left_assoc = 3 * 4 / 2;
+    division_multiplication_left_assoc = 3 / 4 * 2;
+
+    // Same precedence for addition and subtraction:
+    addition_subtraction_left_assoc = 3 - 4 + 2;
+    subtraction_addition_left_assoc = 3 + 4 - 2;
+
+    // Exponentiation:
+    exponentiation = 2 ^ 3;
+    exponentiation_right_assoc = 2 ^ 3 ^ 4;
+}

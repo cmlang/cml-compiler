@@ -1,6 +1,10 @@
 
 ocl(expr) ::= <<
-<literal_expr(expr)>
+<({<expr.kind>_expr})(expr)>
+>>
+
+infix_expr(infix) ::= <<
+(<ocl(infix.left)> <infix.operator> <ocl(infix.right)>)
 >>
 
 literal_expr(literal) ::= <<

@@ -11,6 +11,6 @@ WS:
 // Ignoring Comments:
 
 COMMENT:
-    ('//' .*? '\n' | '(*' .*? '*)' ) -> skip;
+    ('//' .*? '\n' | '/*' .*? '*/' ) -> skip;
 
     

@@ -41,9 +41,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>ST4</artifactId>
-            <version>4.0.8</version>
+            <groupId>cml</groupId>
+            <artifactId>cml-templates</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

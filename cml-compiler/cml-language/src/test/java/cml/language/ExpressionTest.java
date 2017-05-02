@@ -5,6 +5,7 @@ import cml.io.FileSystem;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.Property;
+import cml.templates.OptionalValueAdaptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -103,8 +104,12 @@ public class ExpressionTest
 
     private static STGroupFile getOclTemplateGroup()
     {
-        return new STGroupFile(
+        final STGroupFile groupFile = new STGroupFile(
             BASE_PATH + File.separator + "ocl.stg",
             ENCODING, START_CHAR, STOP_CHAR);
+
+        groupFile.registerModelAdaptor(Object.class, new OptionalValueAdaptor());
+
+        return groupFile;
     }
 }

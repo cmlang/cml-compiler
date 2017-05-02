@@ -1,7 +1,7 @@
 
 concept Expressions
 {
-    LiteralStringInit: String = "SomeString";
-    LiteralIntegerInit: Integer = 123;
-    LiteralDecimalInit: Decimal = 123.456;
+    LiteralStringInit = "SomeString";
+    LiteralIntegerInit = 123;
+    LiteralDecimalInit = 123.456;
 }
