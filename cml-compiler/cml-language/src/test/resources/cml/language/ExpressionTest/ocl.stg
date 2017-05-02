@@ -1,0 +1,20 @@
+
+ocl(expr) ::= <<
+<literal_expr(expr)>
+>>
+
+literal_expr(literal) ::= <<
+<({literal_expr_<literal.type.name>})(literal.text)>
+>>
+
+literal_expr_String(text) ::= <<
+"<text>"
+>>
+
+literal_expr_Integer(text) ::= <<
+<text>
+>>
+
+literal_expr_Decimal(text) ::= <<
+<text>
+>>
