@@ -1,9 +1,6 @@
 package cml.language;
 
-import cml.language.expressions.Expression;
-import cml.language.expressions.Infix;
-import cml.language.expressions.Literal;
-import cml.language.expressions.Unary;
+import cml.language.expressions.*;
 import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
@@ -12,6 +9,10 @@ import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
+import org.antlr.v4.runtime.tree.ParseTree;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -154,6 +155,7 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitExpression(ExpressionContext ctx)
     {
         if (ctx.literalExpression() != null) ctx.expr = ctx.literalExpression().literal;
+        else if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
     }
@@ -173,6 +175,16 @@ class ModelSynthesizer extends CMLBaseListener
         final Expression right = ctx.expression().get(1).expr;
 
         return Infix.create(operator, left, right);
+    }
+
+    @Override
+    public void exitPathExpression(PathExpressionContext ctx)
+    {
+        final List<String> names = ctx.NAME().stream()
+                                             .map(ParseTree::getText)
+                                             .collect(Collectors.toList());
+
+        ctx.path = Path.create(names);
     }
 
     @Override

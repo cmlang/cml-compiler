@@ -3,6 +3,10 @@ ocl(expr) ::= <<
 <({<expr.kind>_expr})(expr)>
 >>
 
+path_expr(path) ::= <<
+<path.names; separator=".">
+>>
+
 unary_expr(unary) ::= <<
 (<unary.operator> <ocl(unary.expr)>)
 >>

@@ -1,0 +1,8 @@
+
+concept Expressions
+{
+    self_var = self;
+    single_var = someVar;
+    path_var = somePath.someVar;
+    path_var2 = somePath.oneMorePath.someVar;
+}
