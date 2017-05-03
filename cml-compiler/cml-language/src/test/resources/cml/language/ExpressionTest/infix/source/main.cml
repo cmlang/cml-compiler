@@ -6,6 +6,7 @@ concept Expressions
     subtraction = 2 - 1;
     multiplication = 2 * 3;
     division = 6 / 2;
+    modulus = 5 % 2;
 
     // Left Associative:
     addition_left_assoc = 1 + 2 + 3;
