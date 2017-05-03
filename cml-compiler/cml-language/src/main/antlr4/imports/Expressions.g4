@@ -1,6 +1,6 @@
 grammar Expressions;
 
-import Literals;
+import Names, Literals;
 
 expression returns [Expression expr]
     : literalExpression
@@ -9,8 +9,9 @@ expression returns [Expression expr]
     | <assoc=right> expression operator='^' expression
     | expression operator=('*' | '/' | '%') expression
     | expression operator=('+' | '-') expression
-    | expression operator=('==' | '!=' | '<' | '<=' | '>' | '>=') expression;
-
+    | expression operator=('==' | '!=' | '<' | '<=' | '>' | '>=') expression
+    | expression operator=AND expression
+    | expression operator=OR expression;
 
 pathExpression returns [Path path]:
     NAME ('.' NAME)*;

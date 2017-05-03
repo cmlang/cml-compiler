@@ -7,6 +7,10 @@ lexer grammar Names;
 
 BOOLEAN: 'true' | 'false';
 
+AND: 'and';
+
+OR: 'or';
+
 ABSTRACT:
     'abstract';
 
