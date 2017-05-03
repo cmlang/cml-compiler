@@ -1,8 +1,8 @@
 grammar Literals;
 
-// import: none
+import Names;
 
-literalExpression returns [Literal literal]: STRING | INTEGER | DECIMAL;
+literalExpression returns [Literal literal]: BOOLEAN | STRING | INTEGER | DECIMAL;
 
 STRING:
     '"' .*? '"';

@@ -189,7 +189,8 @@ class ModelSynthesizer extends CMLBaseListener
 
     private static String getText(LiteralExpressionContext ctx)
     {
-        if (ctx.STRING() != null) return unwrap(ctx.STRING().getText());
+        if (ctx.BOOLEAN() != null) return ctx.BOOLEAN().getText();
+        else if (ctx.STRING() != null) return unwrap(ctx.STRING().getText());
         else if (ctx.INTEGER() != null) return ctx.INTEGER().getText();
         else if (ctx.DECIMAL() != null) return ctx.DECIMAL().getText();
         else return null;
@@ -197,7 +198,8 @@ class ModelSynthesizer extends CMLBaseListener
 
     private static String getPrimitiveTypeName(LiteralExpressionContext ctx)
     {
-        if (ctx.STRING() != null) return "String";
+        if (ctx.BOOLEAN() != null) return "Boolean";
+        else if (ctx.STRING() != null) return "String";
         else if (ctx.INTEGER() != null) return "Integer";
         else if (ctx.DECIMAL() != null) return "Decimal";
         else return null;

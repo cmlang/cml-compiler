@@ -15,6 +15,10 @@ literal_expr(literal) ::= <<
 <({literal_expr_<literal.type.name>})(literal.text)>
 >>
 
+literal_expr_Boolean(text) ::= <<
+<text>
+>>
+
 literal_expr_String(text) ::= <<
 "<text>"
 >>
