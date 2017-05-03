@@ -158,6 +158,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
+        else if (ctx.cond != null) ctx.expr = createConditional(ctx);
     }
 
     private Unary createUnary(ExpressionContext ctx)
@@ -175,6 +176,11 @@ class ModelSynthesizer extends CMLBaseListener
         final Expression right = ctx.expression().get(1).expr;
 
         return Infix.create(operator, left, right);
+    }
+
+    private Conditional createConditional(ExpressionContext ctx)
+    {
+        return Conditional.create(ctx.cond.expr, ctx.then.expr, ctx.else_.expr);
     }
 
     @Override

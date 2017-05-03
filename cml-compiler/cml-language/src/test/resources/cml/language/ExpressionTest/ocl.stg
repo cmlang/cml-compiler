@@ -15,6 +15,10 @@ infix_expr(infix) ::= <<
 (<ocl(infix.left)> <infix.operator> <ocl(infix.right)>)
 >>
 
+conditional_expr(conditional) ::= <<
+(if <ocl(conditional.cond)> then <ocl(conditional.then)> else <ocl(conditional.else_)> endif)
+>>
+
 literal_expr(literal) ::= <<
 <({literal_expr_<literal.type.name>})(literal.text)>
 >>

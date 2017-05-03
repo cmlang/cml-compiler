@@ -5,6 +5,12 @@ lexer grammar Names;
 // All keywords must be declared before NAME.
 // Otherwise, they are recognized as a NAME instead.
 
+IF: 'if';
+
+THEN: 'then';
+
+ELSE: 'else';
+
 BOOLEAN: 'true' | 'false';
 
 AND: 'and';

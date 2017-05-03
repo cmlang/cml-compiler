@@ -54,5 +54,5 @@ concept Expressions
     precedence__or_before_and = p and q or r;
 
     // Other operators always take precedence over boolean ones:
-    boolean_lower_precedence = a > 1+1 and b >= 4/2 or c <= 3^2 and d == 3*-2 or not e and not f
+    boolean_lower_precedence = a > 1+1 and b >= 4/2 or c <= 3^2 and d == 3*-2 or not e and not f;
 }
