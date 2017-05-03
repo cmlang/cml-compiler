@@ -3,6 +3,7 @@ package cml.language;
 import cml.language.expressions.Expression;
 import cml.language.expressions.Infix;
 import cml.language.expressions.Literal;
+import cml.language.expressions.Unary;
 import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
@@ -153,7 +154,16 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitExpression(ExpressionContext ctx)
     {
         if (ctx.literalExpression() != null) ctx.expr = ctx.literalExpression().literal;
-        else if (ctx.operator != null) ctx.expr = createInfix(ctx);
+        else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
+        else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
+    }
+
+    private Unary createUnary(ExpressionContext ctx)
+    {
+        final String operator = ctx.operator.getText();
+        final Expression expr = ctx.expression().get(0).expr;
+
+        return Unary.create(operator, expr);
     }
 
     private Infix createInfix(ExpressionContext ctx)
@@ -161,7 +171,7 @@ class ModelSynthesizer extends CMLBaseListener
         final String operator = ctx.operator.getText();
         final Expression left = ctx.expression().get(0).expr;
         final Expression right = ctx.expression().get(1).expr;
-        
+
         return Infix.create(operator, left, right);
     }
 
