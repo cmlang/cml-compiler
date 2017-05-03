@@ -15,11 +15,14 @@ import org.stringtemplate.v4.STGroupFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
 import static java.util.Arrays.asList;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -31,12 +34,15 @@ public class ExpressionTest
     private static final char START_CHAR = '<';
     private static final char STOP_CHAR = '>';
 
-    @Parameterized.Parameters
-    public static Collection<File> modulePaths()
+    @Parameterized.Parameters(name = "{0}")
+    public static List<Object[]> modulePaths()
     {
         final File file = new File(BASE_PATH);
+        final File[] files = file.listFiles(File::isDirectory);
         
-        return asList(file.listFiles(File::isDirectory));
+        return stream(files == null ? new File[0] : files)
+                .map(f -> new Object[] { f.getName(), f })
+                .collect(toList());
     }
 
     private final File modulePath;
@@ -44,7 +50,7 @@ public class ExpressionTest
     private final ModelLoader modelLoader;
     private final STGroupFile groupFile;
 
-    public ExpressionTest(File modulePath)
+    public ExpressionTest(@SuppressWarnings("unused") String moduleName, File modulePath)
     {
         this.modulePath = modulePath;
         this.fileSystem = FileSystem.create(Console.create());
