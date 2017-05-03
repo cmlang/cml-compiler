@@ -5,7 +5,7 @@ import Names, Literals;
 expression returns [Expression expr]
     : literalExpression
     | pathExpression
-    | operator=('+' | '-') expression
+    | operator=('+' | '-' | NOT) expression
     | <assoc=right> expression operator='^' expression
     | expression operator=('*' | '/' | '%') expression
     | expression operator=('+' | '-') expression

@@ -11,6 +11,8 @@ AND: 'and';
 
 OR: 'or';
 
+NOT: 'not';
+
 ABSTRACT:
     'abstract';
 
