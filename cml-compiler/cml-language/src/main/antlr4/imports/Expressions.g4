@@ -40,5 +40,5 @@ collectionTransformation:
         | EXISTS
         | REDUCE
         | COUNT)
-    suffix=(FIRST | UNIQUE)
+    suffix=(FIRST | UNIQUE | WHILE)
     expression?;

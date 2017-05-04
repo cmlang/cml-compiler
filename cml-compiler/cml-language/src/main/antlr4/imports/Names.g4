@@ -13,6 +13,8 @@ SELECT: 'select';
 
 REJECT: 'reject';
 
+WHILE: 'while';
+
 YIELD: 'yield';
 
 FLATTEN: 'flatten';
