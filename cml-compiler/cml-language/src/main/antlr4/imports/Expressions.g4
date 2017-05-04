@@ -14,6 +14,7 @@ expression returns [Expression expr]
     | expression operator=AND expression
     | expression operator=OR expression
     | expression operator=XOR expression
+    | expression operator=IMPLIES expression
     | IF cond=expression THEN then=expression ELSE else_=expression
     | FOR enumeratorDeclaration (',' enumeratorDeclaration)*
     | base=expression ('|' transformDeclaration)+;

@@ -57,6 +57,8 @@ OR: 'or';
 
 XOR: 'xor';
 
+IMPLIES: 'implies';
+
 NOT: 'not';
 
 ABSTRACT:

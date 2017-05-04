@@ -49,12 +49,17 @@ concept Expressions
     and_expr = q and p;
     or_expr = q or p;
     xor_expr = q xor p;
+    implies_expr = p implies q;
 
     // "and" always takes precedence over "or", and "or" over "xor":
     precedence__and_before_or = p or q and r;
     precedence__or_before_and = p and q or r;
+
     precedence__or_before_xor = p or q xor r;
     precedence__xor_before_or = p xor q or r;
+    
+    precedence__xor_before_implies = p xor q implies r;
+    precedence__implies_before_xor = p implies q xor r;
 
     // Arithmetic and relational operators always take precedence over boolean ones:
     boolean_lower_precedence = a > 1+1 and b >= 4/2 or c <= 3^2 and d == 3*-2 xor not e and not f;

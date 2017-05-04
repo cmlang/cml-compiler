@@ -52,6 +52,7 @@ class InfixImpl implements Infix
             put("and", "and");
             put("or", "or");
             put("xor", "xor");
+            put("implies", "implies");
         }};
 
     private final ModelElement modelElement;

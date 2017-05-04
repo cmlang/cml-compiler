@@ -52,6 +52,7 @@ operator_lte() ::= "\<="
 operator_and() ::= "and"
 operator_or() ::= "or"
 operator_xor() ::= "xor"
+operator_implies() ::= "implies"
 operator_not() ::= "not"
 
 conditional_expr(conditional) ::= <<
