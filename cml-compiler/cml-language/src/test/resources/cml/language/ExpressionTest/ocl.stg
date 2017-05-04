@@ -28,7 +28,7 @@ yield_expr(base_expr, transform) ::= <<
 >>
 
 recurse_expr(base_expr, transform) ::= <<
-<collection_call("closure", base_expr, transform)>
+<flatten_call(collection_call("closure", base_expr, transform))>
 >>
 
 flatten_call(expr) ::= <<
