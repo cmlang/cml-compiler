@@ -5,23 +5,21 @@ import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public interface Query extends Expression
 {
     Expression getBase();
-    List<Transform> getTransforms();
+    Transform getTransform();
 
-    static Query create(Expression expr, List<Transform> transforms)
+    static Query create(Expression expr, Transform transform)
     {
-        return new QueryImpl(expr, transforms, null);
+        return new QueryImpl(expr, transform, null);
     }
 
-    static Query create(Expression expr, List<Transform> transforms, @Nullable Type type)
+    static Query create(Expression expr, Transform transform, @Nullable Type type)
     {
-        return new QueryImpl(expr, transforms, type);
+        return new QueryImpl(expr, transform, type);
     }
 }
 
@@ -31,14 +29,14 @@ class QueryImpl implements Query
     private final Expression expression;
 
     private final Expression base;
-    private final List<Transform> transforms;
+    private final Transform transform;
 
-    QueryImpl(Expression base, List<Transform> transforms, @Nullable Type type)
+    QueryImpl(Expression base, Transform transform, @Nullable Type type)
     {
         this.modelElement = ModelElement.create(this);
         this.expression = Expression.create(modelElement, "query", type);
         this.base = base;
-        this.transforms = new ArrayList<>(transforms);
+        this.transform = transform;
     }
 
     @Override
@@ -48,9 +46,9 @@ class QueryImpl implements Query
     }
 
     @Override
-    public List<Transform> getTransforms()
+    public Transform getTransform()
     {
-        return new ArrayList<>(transforms);
+        return transform;
     }
 
     @Override

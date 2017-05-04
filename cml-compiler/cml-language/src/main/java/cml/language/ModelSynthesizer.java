@@ -159,7 +159,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.cond != null) ctx.expr = createConditional(ctx);
-        else if (ctx.base != null) ctx.expr = createQuery(ctx);
+        else if (ctx.queryExpression() != null) ctx.expr = ctx.queryExpression().expr;
     }
 
     private Unary createUnary(ExpressionContext ctx)
@@ -184,14 +184,11 @@ class ModelSynthesizer extends CMLBaseListener
         return Conditional.create(ctx.cond.expr, ctx.then.expr, ctx.else_.expr);
     }
 
-    private Query createQuery(ExpressionContext ctx)
+    @Override
+    public void exitQueryExpression(QueryExpressionContext ctx)
     {
-        final List<Transform> transforms = ctx.transformDeclaration()
-                                              .stream()
-                                              .map(t -> t.transform)
-                                              .collect(Collectors.toList());
-
-        return Query.create(ctx.base.expr, transforms);
+        if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
+        else ctx.expr = Query.create(ctx.queryExpression().expr, ctx.transformDeclaration().transform);
     }
 
     @Override

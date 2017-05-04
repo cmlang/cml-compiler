@@ -4,7 +4,7 @@ ocl(expr) ::= <<
 >>
 
 query_expr(query) ::= <<
-<ocl(query.base)>-><query.transforms:transform_decl();separator="->">
+(<ocl(query.base)> -> <transform_decl(query.transform)>)
 >>
 
 transform_decl(transform) ::= <<

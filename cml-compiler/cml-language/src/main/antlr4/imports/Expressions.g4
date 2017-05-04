@@ -16,11 +16,12 @@ expression returns [Expression expr]
     | expression operator=XOR expression
     | expression operator=IMPLIES expression
     | IF cond=expression THEN then=expression ELSE else_=expression
-    | FOR enumeratorDeclaration (',' enumeratorDeclaration)*
-    | base=expression ('|' transformDeclaration)+;
+    | queryExpression;
 
-enumeratorDeclaration:
-    NAME IN pathExpression;
+queryExpression returns [Expression expr]
+    : pathExpression
+    | FOR enumeratorDeclaration (',' enumeratorDeclaration)*
+    | queryExpression '|' transformDeclaration;
 
 transformDeclaration returns [Transform transform]:
     (FROM var=NAME '=' init=expression)?
@@ -40,3 +41,7 @@ transformDeclaration returns [Transform transform]:
         | COUNT)
     suffix=(FIRST | UNIQUE | WHILE)?
     expr=expression?;
+
+enumeratorDeclaration:
+    NAME IN pathExpression;
+
