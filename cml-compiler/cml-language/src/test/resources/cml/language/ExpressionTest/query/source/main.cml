@@ -9,4 +9,7 @@ concept Expressions
 
     yield_transform = orders | yield items;
     yield_transform_unique = orders | yield unique items.product;
+
+    recurse_ancestors = class | recurse ancestors;
+    recurse_children = children | recurse children | select ranking > 10; // equivalent to: self | recurse children | ...
 }
