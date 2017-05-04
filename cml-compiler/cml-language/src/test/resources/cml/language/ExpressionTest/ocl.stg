@@ -3,6 +3,18 @@ ocl(expr) ::= <<
 <({<expr.kind>_expr})(expr)>
 >>
 
+query_expr(query) ::= <<
+<ocl(query.base)>-><query.transforms:transform_decl();separator="->">
+>>
+
+transform_decl(transform) ::= <<
+<({<transform.operation>_operation})(transform.expr)>
+>>
+
+select_operation(expr) ::= <<
+select(<ocl(expr)>)
+>>
+
 path_expr(path) ::= <<
 <path.names; separator=".">
 >>
@@ -12,8 +24,19 @@ unary_expr(unary) ::= <<
 >>
 
 infix_expr(infix) ::= <<
-(<ocl(infix.left)> <infix.operator> <ocl(infix.right)>)
+(<ocl(infix.left)> <infix_operator(infix)> <ocl(infix.right)>)
 >>
+
+infix_operator(infix) ::= <<
+<if(infix.operation)><\\>
+<({<infix.operation>_operator})()><\\>
+<else><\\>
+<infix.operator><\\>
+<endif>
+>>
+
+equality_operator() ::= "="
+inequality_operator() ::= "\<>"
 
 conditional_expr(conditional) ::= <<
 (if <ocl(conditional.cond)> then <ocl(conditional.then)> else <ocl(conditional.else_)> endif)

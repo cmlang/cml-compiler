@@ -5,11 +5,14 @@ import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public interface Infix extends Expression
 {
     String getOperator();
+    Optional<String> getOperation();
     Expression getLeft();
     Expression getRight();
 
@@ -26,6 +29,13 @@ public interface Infix extends Expression
 
 class InfixImpl implements Infix
 {
+    private static Map<String, String> OPERATIONS =
+        new HashMap<String, String>()
+        {{
+            put("==", "equality");
+            put("!=", "inequality");
+        }};
+
     private final ModelElement modelElement;
     private final Expression expression;
 
@@ -46,6 +56,14 @@ class InfixImpl implements Infix
     public String getOperator()
     {
         return operator;
+    }
+
+    @Override
+    public Optional<String> getOperation()
+    {
+        final String operation = OPERATIONS.get(getOperator());
+
+        return Optional.ofNullable(operation);
     }
 
     @Override

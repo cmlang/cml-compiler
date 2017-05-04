@@ -42,17 +42,20 @@ concept Expressions
     less_or_equal_than = 2 <= 3;
     greater_than = 3 > 2;
     greater_or_equal_than = 3 >= 2;
-    relational_left_to_right = 3 == 3 <= 4 < 5 >= 4 > 3 != 3;
-    relational_precedence = 3*5 > 4/6 >= 3-1 < 1+1 <= 3^1 != 1;
+    relational_left_to_right = 3 <= 4 < 5 >= 4 > 3;
+    relational_precedence = 15 == 3*5 > 4/6 >= 3-1 < 1+1 <= 3^1 != 1;
 
     // Boolean Operators:
     and_expr = q and p;
     or_expr = q or p;
+    xor_expr = q xor p;
 
-    // And always takes precedence over or:
+    // "and" always takes precedence over "or", and "or" over "xor":
     precedence__and_before_or = p or q and r;
     precedence__or_before_and = p and q or r;
+    precedence__or_before_xor = p or q xor r;
+    precedence__xor_before_or = p xor q or r;
 
-    // Other operators always take precedence over boolean ones:
-    boolean_lower_precedence = a > 1+1 and b >= 4/2 or c <= 3^2 and d == 3*-2 or not e and not f;
+    // Arithmetic and relational operators always take precedence over boolean ones:
+    boolean_lower_precedence = a > 1+1 and b >= 4/2 or c <= 3^2 and d == 3*-2 xor not e and not f;
 }

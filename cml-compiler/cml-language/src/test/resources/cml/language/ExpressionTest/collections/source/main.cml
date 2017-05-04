@@ -1,0 +1,5 @@
+
+concept Expressions
+{
+    select_transformation = items | select name == "this";
+}

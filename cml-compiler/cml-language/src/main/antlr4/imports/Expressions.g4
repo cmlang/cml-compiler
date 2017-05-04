@@ -9,22 +9,19 @@ expression returns [Expression expr]
     | <assoc=right> expression operator='^' expression
     | expression operator=('*' | '/' | '%') expression
     | expression operator=('+' | '-') expression
-    | expression operator=('==' | '!=' | '<' | '<=' | '>' | '>=') expression
+    | expression operator=('<' | '<=' | '>' | '>=') expression
+    | expression operator=('==' | '!=') expression
     | expression operator=AND expression
     | expression operator=OR expression
+    | expression operator=XOR expression
     | IF cond=expression THEN then=expression ELSE else_=expression
-    | collectionExpression;
+    | FOR enumeratorDeclaration (',' enumeratorDeclaration)*
+    | base=expression ('|' transformDeclaration)+;
 
-collectionExpression:
-    (pathExpression | collectionComprehension) ('|' collectionTransformation)+;
-
-collectionComprehension:
-    FOR collectionEnumerator (',' collectionEnumerator)*;
-
-collectionEnumerator:
+enumeratorDeclaration:
     NAME IN pathExpression;
 
-collectionTransformation:
+transformDeclaration returns [Transform transform]:
     (FROM var=NAME '=' init=expression)?
     operation=
         ( SELECT
@@ -40,5 +37,5 @@ collectionTransformation:
         | EXISTS
         | REDUCE
         | COUNT)
-    suffix=(FIRST | UNIQUE | WHILE)
-    expression?;
+    suffix=(FIRST | UNIQUE | WHILE)?
+    expr=expression?;

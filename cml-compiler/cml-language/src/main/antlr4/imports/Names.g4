@@ -55,6 +55,8 @@ AND: 'and';
 
 OR: 'or';
 
+XOR: 'xor';
+
 NOT: 'not';
 
 ABSTRACT:
