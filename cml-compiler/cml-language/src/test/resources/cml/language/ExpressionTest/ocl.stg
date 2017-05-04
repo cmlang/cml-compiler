@@ -15,6 +15,10 @@ select_operation(expr) ::= <<
 select(<ocl(expr)>)
 >>
 
+reject_operation(expr) ::= <<
+reject(<ocl(expr)>)
+>>
+
 path_expr(path) ::= <<
 <path.names; separator=".">
 >>
