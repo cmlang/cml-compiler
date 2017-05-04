@@ -6,4 +6,7 @@ concept Expressions
     select_transform_nested_nested = items | select name == "this" | select qty > 10 | select number <= 10;
 
     reject_transform = items | reject name == "this";
+
+    yield_transform = items | yield name;
+    yield_transform_unique = items | yield unique name;
 }

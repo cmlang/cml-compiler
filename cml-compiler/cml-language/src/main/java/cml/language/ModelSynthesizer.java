@@ -195,8 +195,9 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitTransformDeclaration(TransformDeclarationContext ctx)
     {
         final String operation = ctx.operation.getText();
+        final String suffix = ctx.suffix == null ? null : ctx.suffix.getText();
 
-        ctx.transform = Transform.create(operation, ctx.expr.expr);
+        ctx.transform = Transform.create(operation, ctx.expr.expr, suffix);
     }
 
     @Override

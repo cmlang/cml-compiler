@@ -4,19 +4,35 @@ ocl(expr) ::= <<
 >>
 
 query_expr(query) ::= <<
+<if(query.transform.suffix)><\\>
+<({<query.transform.operation>_<query.transform.suffix>_suffix})(query_body(query))><\\>
+<else><\\>
+<query_body(query)><\\>
+<endif>
+>>
+
+query_body(query) ::= <<
 (<ocl(query.base)> -> <transform_decl(query.transform)>)
 >>
 
 transform_decl(transform) ::= <<
-<({<transform.operation>_operation})(transform.expr)>
+<({<transform.operation>_operation})(transform)>
 >>
 
-select_operation(expr) ::= <<
-select(<ocl(expr)>)
+select_operation(transform) ::= <<
+select(<ocl(transform.expr)>)
 >>
 
-reject_operation(expr) ::= <<
-reject(<ocl(expr)>)
+reject_operation(transform) ::= <<
+reject(<ocl(transform.expr)>)
+>>
+
+yield_operation(transform) ::= <<
+collect(<ocl(transform.expr)>)
+>>
+
+yield_unique_suffix(body) ::= <<
+(<body>->asSet())
 >>
 
 path_expr(path) ::= <<
