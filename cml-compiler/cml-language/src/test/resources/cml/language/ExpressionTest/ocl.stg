@@ -20,23 +20,39 @@ path_expr(path) ::= <<
 >>
 
 unary_expr(unary) ::= <<
-(<unary.operator> <ocl(unary.expr)>)
+(<expr_operator(unary)> <ocl(unary.expr)>)
 >>
 
 infix_expr(infix) ::= <<
-(<ocl(infix.left)> <infix_operator(infix)> <ocl(infix.right)>)
+(<ocl(infix.left)> <expr_operator(infix)> <ocl(infix.right)>)
 >>
 
-infix_operator(infix) ::= <<
-<if(infix.operation)><\\>
-<({<infix.operation>_operator})()><\\>
+expr_operator(expr) ::= <<
+<if(expr.operation)><\\>
+<({operator_<expr.operation>})()><\\>
 <else><\\>
-<infix.operator><\\>
+<expr.operator><\\>
 <endif>
 >>
 
-equality_operator() ::= "="
-inequality_operator() ::= "\<>"
+operator_add() ::= "+"
+operator_sub() ::= "-"
+operator_mul() ::= "*"
+operator_div() ::= "/"
+operator_mod() ::= "%"
+operator_exp() ::= "^"
+
+operator_eq() ::= "="
+operator_ineq() ::= "\<>"
+operator_gt() ::= ">"
+operator_gte() ::= ">="
+operator_lt() ::= "\<"
+operator_lte() ::= "\<="
+
+operator_and() ::= "and"
+operator_or() ::= "or"
+operator_xor() ::= "xor"
+operator_not() ::= "not"
 
 conditional_expr(conditional) ::= <<
 (if <ocl(conditional.cond)> then <ocl(conditional.then)> else <ocl(conditional.else_)> endif)

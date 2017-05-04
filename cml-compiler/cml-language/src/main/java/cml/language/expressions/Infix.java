@@ -32,8 +32,26 @@ class InfixImpl implements Infix
     private static Map<String, String> OPERATIONS =
         new HashMap<String, String>()
         {{
-            put("==", "equality");
-            put("!=", "inequality");
+            // Arithmetic Operators:
+            put("+", "add");
+            put("-", "sub");
+            put("*", "mul");
+            put("/", "div");
+            put("%", "mod");
+            put("^", "exp");
+
+            // Relational Operators:
+            put("==", "eq");
+            put("!=", "ineq");
+            put(">", "gt");
+            put(">=", "gte");
+            put("<", "lt");
+            put("<=", "lte");
+
+            // Boolean Operators:
+            put("and", "and");
+            put("or", "or");
+            put("xor", "xor");
         }};
 
     private final ModelElement modelElement;
