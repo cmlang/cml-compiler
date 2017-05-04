@@ -29,7 +29,6 @@ transformDeclaration returns [Transform transform]:
         ( SELECT
         | REJECT
         | YIELD
-        | FLATTEN
         | RECURSE
         | TAKE
         | DROP

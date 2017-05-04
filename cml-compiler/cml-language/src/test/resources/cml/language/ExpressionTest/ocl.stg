@@ -5,34 +5,38 @@ ocl(expr) ::= <<
 
 query_expr(query) ::= <<
 <if(query.transform.suffix)><\\>
-<({<query.transform.operation>_<query.transform.suffix>_suffix})(query_body(query))><\\>
+<({<query.transform.suffix>_suffix})(transform_expr(query))><\\>
 <else><\\>
-<query_body(query)><\\>
+<transform_expr(query)><\\>
 <endif>
 >>
 
-query_body(query) ::= <<
-(<ocl(query.base)> -> <transform_decl(query.transform)>)
+transform_expr(query) ::= <<
+<({<query.transform.operation>_expr})(ocl(query.base), query.transform)>
 >>
 
-transform_decl(transform) ::= <<
-<({<transform.operation>_operation})(transform)>
+select_expr(base_expr, transform) ::= <<
+<collection_call("select", base_expr, transform)>
 >>
 
-select_operation(transform) ::= <<
-select(<ocl(transform.expr)>)
+reject_expr(base_expr, transform) ::= <<
+<collection_call("reject", base_expr, transform)>
 >>
 
-reject_operation(transform) ::= <<
-reject(<ocl(transform.expr)>)
+yield_expr(base_expr, transform) ::= <<
+<flatten_call(collection_call("collect", base_expr, transform))>
 >>
 
-yield_operation(transform) ::= <<
-collect(<ocl(transform.expr)>)
+flatten_call(expr) ::= <<
+(<expr> -> flatten())
 >>
 
-yield_unique_suffix(body) ::= <<
-(<body>->asSet())
+collection_call(name, base_expr, transform) ::= <<
+(<base_expr> -> <name>(<ocl(transform.expr)>))
+>>
+
+unique_suffix(body) ::= <<
+(<body> -> asSet())
 >>
 
 path_expr(path) ::= <<

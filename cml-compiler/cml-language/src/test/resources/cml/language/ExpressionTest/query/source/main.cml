@@ -7,6 +7,6 @@ concept Expressions
 
     reject_transform = items | reject name == "this";
 
-    yield_transform = items | yield name;
-    yield_transform_unique = items | yield unique name;
+    yield_transform = orders | yield items;
+    yield_transform_unique = orders | yield unique items.product;
 }
