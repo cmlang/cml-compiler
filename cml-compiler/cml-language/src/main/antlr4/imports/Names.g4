@@ -5,6 +5,42 @@ lexer grammar Names;
 // All keywords must be declared before NAME.
 // Otherwise, they are recognized as a NAME instead.
 
+FOR: 'for';
+
+IN: 'in';
+
+SELECT: 'select';
+
+REJECT: 'reject';
+
+YIELD: 'yield';
+
+FLATTEN: 'flatten';
+
+RECURSE: 'recurse';
+
+INCLUDES: 'includes';
+
+EXCLUDES: 'excludes';
+
+COUNT: 'count';
+
+EVERY: 'every';
+
+EXISTS: 'exists';
+
+REDUCE: 'reduce';
+
+TAKE: 'take';
+
+DROP: 'drop';
+
+FROM: 'from';
+
+FIRST: 'first';
+
+UNIQUE: 'unique';
+
 IF: 'if';
 
 THEN: 'then';

@@ -15,7 +15,7 @@ concept Order
     customer: Customer;
     items: Item*;
 
-//    /total = for item in items | from sum = 0 reduce sum + item.total;
+//    /total = (for item in items | from sum = 0 reduce sum + item.total);
 }
 
 concept Item
