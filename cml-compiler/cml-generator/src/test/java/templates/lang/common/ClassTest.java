@@ -35,7 +35,7 @@ public class ClassTest extends LangTest
     @Test
     public void class2__concept_concrete_ancestor_empty() throws IOException
     {
-        final Concept productConcept = Concept.create("Product");
+        final Concept productConcept = Concept.create("Join");
         productConcept.addElement(Property.create("description", null, Type.create("String", null)));
 
         final Concept intermediateConcept = Concept.create("Intermediate");

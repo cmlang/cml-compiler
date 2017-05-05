@@ -20,8 +20,14 @@ expression returns [Expression expr]
 
 queryExpression returns [Expression expr]
     : pathExpression
-    | FOR enumeratorDeclaration (',' enumeratorDeclaration)*
+    | joinExpression
     | queryExpression '|' transformDeclaration;
+
+joinExpression returns [Join join]:
+    FOR enumeratorDeclaration (',' enumeratorDeclaration)*;
+
+enumeratorDeclaration:
+    var=NAME IN pathExpression;
 
 transformDeclaration returns [Transform transform]:
     (FROM var=NAME '=' init=expression)?
@@ -47,7 +53,4 @@ transformDeclaration returns [Transform transform]:
         | REVERSE)
     suffix=(UNIQUE | WHILE)?
     expr=expression?;
-
-enumeratorDeclaration:
-    NAME IN pathExpression;
 

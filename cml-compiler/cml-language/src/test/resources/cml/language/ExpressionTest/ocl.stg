@@ -15,6 +15,10 @@ transform_expr(query) ::= <<
 <({<query.transform.operation>_expr})(ocl(query.base), query.transform)>
 >>
 
+join_expr(join) ::= <<
+join(<join.paths:ocl(); separator=", ">)
+>>
+
 select_expr(base_expr, transform) ::= <<
 <collection_call("select", base_expr, transform)>
 >>
@@ -36,7 +40,11 @@ flatten_call(expr) ::= <<
 >>
 
 collection_call(name, base_expr, transform) ::= <<
-(<base_expr> -> <name>(<ocl(transform.expr)>))
+(<base_expr> -> <name>(<\\>
+<if(transform.variables)><\\>
+<transform.variables; separator="; "><\ >|<\ ><\\>
+<endif><\\>
+<ocl(transform.expr)>))
 >>
 
 unique_suffix(body) ::= <<

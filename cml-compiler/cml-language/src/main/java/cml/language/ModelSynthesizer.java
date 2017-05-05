@@ -187,8 +187,76 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitQueryExpression(QueryExpressionContext ctx)
     {
-        if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
-        else ctx.expr = Query.create(ctx.queryExpression().expr, ctx.transformDeclaration().transform);
+        if (ctx.pathExpression() != null)
+        {
+            ctx.expr = ctx.pathExpression().path;
+        }
+        else if (ctx.queryExpression() != null)
+        {
+            final QueryExpressionContext baseCtx = ctx.queryExpression();
+
+            if (baseCtx.joinExpression() != null)
+            {
+                final Join join = baseCtx.joinExpression().join;
+                final Transform transform = createTransformWithVariables(
+                    join.getVariables(),
+                    ctx.transformDeclaration().transform);
+
+                if (join.isComplete())
+                {
+                    ctx.expr = Query.create(join, transform);
+                }
+                else
+                {
+                    ctx.expr = Query.create(join.getFirstPath(), transform);
+                }
+            }
+            else if (isSelectionTransform(baseCtx))
+            {
+                final Query baseQuery = (Query) baseCtx.expr;
+                final Transform transform = createTransformWithVariables(
+                    baseQuery.getTransform().getVariables(),
+                    ctx.transformDeclaration().transform);
+
+                ctx.expr = Query.create(baseCtx.expr, transform);
+            }
+            else
+            {
+                ctx.expr = Query.create(baseCtx.expr, ctx.transformDeclaration().transform);
+            }
+        }
+    }
+
+    private boolean isSelectionTransform(QueryExpressionContext ctx)
+    {
+        final TransformDeclarationContext transformCtx = ctx.transformDeclaration();
+
+        return transformCtx != null && (transformCtx.SELECT() != null || transformCtx.REJECT() != null);
+    }
+
+    private Transform createTransformWithVariables(List<String> variables, Transform originalTransform)
+    {
+        return Transform.create(
+            originalTransform.getOperation(),
+            variables,
+            originalTransform.getExpr().orElseGet(null)
+        );
+    }
+
+    @Override
+    public void exitJoinExpression(JoinExpressionContext ctx)
+    {
+        final List<String> variables = ctx.enumeratorDeclaration()
+                                          .stream()
+                                          .map(e -> e.NAME().getText())
+                                          .collect(Collectors.toList());
+
+        final List<Path> paths = ctx.enumeratorDeclaration()
+                                          .stream()
+                                          .map(e -> e.pathExpression().path)
+                                          .collect(Collectors.toList());
+
+        ctx.join = Join.create(variables, paths);
     }
 
     @Override
@@ -197,17 +265,20 @@ class ModelSynthesizer extends CMLBaseListener
         final String operation = ctx.operation.getText();
         final String suffix = ctx.suffix == null ? null : ctx.suffix.getText();
 
-        ctx.transform = Transform.create(operation, ctx.expr.expr, suffix);
+        ctx.transform = Transform.create(operation, suffix, ctx.expr.expr);
     }
 
     @Override
     public void exitPathExpression(PathExpressionContext ctx)
     {
-        final List<String> names = ctx.NAME().stream()
-                                             .map(ParseTree::getText)
-                                             .collect(Collectors.toList());
+        ctx.path = Path.create(pathNames(ctx));
+    }
 
-        ctx.path = Path.create(names);
+    private List<String> pathNames(PathExpressionContext ctx)
+    {
+        return ctx.NAME().stream()
+                         .map(ParseTree::getText)
+                         .collect(Collectors.toList());
     }
 
     @Override
