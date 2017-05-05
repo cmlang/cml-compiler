@@ -6,42 +6,39 @@ lexer grammar Names;
 // Otherwise, they are recognized as a NAME instead.
 
 FOR: 'for';
-
 IN: 'in';
 
 SELECT: 'select';
-
 REJECT: 'reject';
 
-WHILE: 'while';
-
 YIELD: 'yield';
-
-FLATTEN: 'flatten';
-
 RECURSE: 'recurse';
 
 INCLUDES: 'includes';
-
 EXCLUDES: 'excludes';
 
-COUNT: 'count';
-
 EVERY: 'every';
-
 EXISTS: 'exists';
 
+FROM: 'from';
 REDUCE: 'reduce';
 
 TAKE: 'take';
-
 DROP: 'drop';
 
-FROM: 'from';
-
 FIRST: 'first';
+LAST: 'last';
+
+COUNT: 'count';
+SUM: 'sum';
+AVERAGE: 'average';
+MAX: 'max';
+MIN: 'min';
+REVERSE: 'reverse';
 
 UNIQUE: 'unique';
+WHILE: 'while';
+
 
 IF: 'if';
 

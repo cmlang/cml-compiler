@@ -30,15 +30,22 @@ transformDeclaration returns [Transform transform]:
         | REJECT
         | YIELD
         | RECURSE
-        | TAKE
-        | DROP
         | INCLUDES
         | EXCLUDES
         | EVERY
         | EXISTS
         | REDUCE
-        | COUNT)
-    suffix=(FIRST | UNIQUE | WHILE)?
+        | TAKE
+        | DROP
+        | FIRST
+        | LAST
+        | COUNT
+        | SUM
+        | AVERAGE
+        | MAX
+        | MIN
+        | REVERSE)
+    suffix=(UNIQUE | WHILE)?
     expr=expression?;
 
 enumeratorDeclaration:
