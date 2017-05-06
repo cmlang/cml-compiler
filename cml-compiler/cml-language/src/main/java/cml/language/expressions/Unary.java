@@ -3,11 +3,12 @@ package cml.language.expressions;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.*;
+import static java.util.Collections.unmodifiableCollection;
 
 public interface Unary extends Expression
 {
@@ -17,17 +18,16 @@ public interface Unary extends Expression
 
     static Unary create(String operator, Expression expr)
     {
-        return new UnaryImpl(operator, expr, null);
-    }
-
-    static Unary create(String operator, Expression expr, @Nullable Type type)
-    {
-        return new UnaryImpl(operator, expr, type);
+        return new UnaryImpl(operator, expr);
     }
 }
 
 class UnaryImpl implements Unary
 {
+    private final Collection<String> LOGIC_OPERATORS = unmodifiableCollection(singletonList(
+        "not" // boolean operators
+    ));
+
     private static Map<String, String> OPERATIONS =
         new HashMap<String, String>()
         {{
@@ -37,14 +37,16 @@ class UnaryImpl implements Unary
         }};
 
     private final ModelElement modelElement;
-    private final Expression expression;
+    private final Scope scope;
+
     private final String operator;
     private final Expression expr;
 
-    UnaryImpl(String operator, Expression expr, @Nullable Type type)
+    UnaryImpl(String operator, Expression expr)
     {
-        this.modelElement = ModelElement.create(this);
-        this.expression = Expression.create(modelElement, "unary", type);
+        modelElement = ModelElement.create(this);
+        scope = Scope.create(this, modelElement);
+
         this.operator = operator;
         this.expr = expr;
     }
@@ -72,13 +74,25 @@ class UnaryImpl implements Unary
     @Override
     public String getKind()
     {
-        return expression.getKind();
+        return "unary";
     }
 
     @Override
-    public Optional<Type> getType()
+    public Type getType()
     {
-        return expression.getType();
+        return LOGIC_OPERATORS.contains(getOperator()) ? Type.BOOLEAN : expr.getType();
+    }
+
+    @Override
+    public void addElement(ModelElement element)
+    {
+        scope.addElement(element);
+    }
+
+    @Override
+    public List<ModelElement> getElements()
+    {
+        return scope.getElements();
     }
 
     @Override

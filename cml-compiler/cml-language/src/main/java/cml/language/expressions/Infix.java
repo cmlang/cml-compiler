@@ -3,11 +3,11 @@ package cml.language.expressions;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableCollection;
 
 public interface Infix extends Expression
 {
@@ -18,17 +18,21 @@ public interface Infix extends Expression
 
     static Infix create(String operator, Expression left, Expression right)
     {
-        return new InfixImpl(operator, left, right, null);
-    }
-
-    static Infix create(String operator, Expression left, Expression right, @Nullable Type type)
-    {
-        return new InfixImpl(operator, left, right, type);
+        return new InfixImpl(operator, left, right);
     }
 }
 
 class InfixImpl implements Infix
 {
+    private final Collection<String> MATH_OPERATORS = unmodifiableCollection(asList(
+        "+", "-", "*", "/", "%", "^" // arithmetic operators
+    ));
+
+    private final Collection<String> LOGIC_OPERATORS = unmodifiableCollection(asList(
+        "==", "!=", ">", ">=", "<", "<=", // relational operators
+        "and", "or", "xor", "implies" // boolean operators
+    ));
+
     private static Map<String, String> OPERATIONS =
         new HashMap<String, String>()
         {{
@@ -56,16 +60,17 @@ class InfixImpl implements Infix
         }};
 
     private final ModelElement modelElement;
-    private final Expression expression;
+    private final Scope scope;
 
     private final String operator;
     private final Expression left;
     private final Expression right;
 
-    InfixImpl(String operator, Expression left, Expression right, @Nullable Type type)
+    InfixImpl(String operator, Expression left, Expression right)
     {
-        this.modelElement = ModelElement.create(this);
-        this.expression = Expression.create(modelElement, "infix", type);
+        modelElement = ModelElement.create(this);
+        scope = Scope.create(this, modelElement);
+        
         this.operator = operator;
         this.left = left;
         this.right = right;
@@ -100,13 +105,46 @@ class InfixImpl implements Infix
     @Override
     public String getKind()
     {
-        return expression.getKind();
+        return "infix";
     }
 
     @Override
-    public Optional<Type> getType()
+    public Type getType()
     {
-        return expression.getType();
+        final Type leftType = left.getType();
+        final Type rightType = right.getType();
+
+        assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + left.getKind();
+        assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + right.getKind();
+
+        if (LOGIC_OPERATORS.contains(operator))
+        {
+            return Type.BOOLEAN;
+        }
+        if (MATH_OPERATORS.contains(operator) && leftType.isOrdinal() && rightType.isOrdinal())
+        {
+            return leftType.isGreaterThan(rightType) ? leftType : rightType;
+        }
+        else if (leftType.equals(rightType))
+        {
+            return leftType;
+        }
+        else
+        {
+            return Type.UNDEFINED;
+        }
+    }
+
+    @Override
+    public void addElement(ModelElement element)
+    {
+        scope.addElement(element);
+    }
+
+    @Override
+    public List<ModelElement> getElements()
+    {
+        return scope.getElements();
     }
 
     @Override

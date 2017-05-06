@@ -3,9 +3,11 @@ package cml.language.expressions;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public interface Join extends Expression
 {
@@ -16,27 +18,22 @@ public interface Join extends Expression
 
     static Join create(List<String> variables, List<Path> paths)
     {
-        return new JoinImpl(variables, paths, null);
-    }
-
-    static Join create(List<String> variables, List<Path> paths, @Nullable Type type)
-    {
-        return new JoinImpl(variables, paths, type);
+        return new JoinImpl(variables, paths);
     }
 }
 
 class JoinImpl implements Join
 {
     private final ModelElement modelElement;
-    private final Expression expression;
+    private final Scope scope;
 
     private final List<String> variables;
     private final List<Path> paths;
 
-    JoinImpl(List<String> variables, List<Path> paths, @Nullable Type type)
+    JoinImpl(List<String> variables, List<Path> paths)
     {
-        this.modelElement = ModelElement.create(this);
-        this.expression = Expression.create(modelElement, "join", type);
+        modelElement = ModelElement.create(this);
+        scope = Scope.create(this, modelElement);
 
         this.variables = new ArrayList<>(variables);
         this.paths = new ArrayList<>(paths);
@@ -71,13 +68,28 @@ class JoinImpl implements Join
     @Override
     public String getKind()
     {
-        return expression.getKind();
+        return "join";
     }
 
     @Override
-    public Optional<Type> getType()
+    public Type getType()
     {
-        return expression.getType();
+        final String typeList = getPaths().stream()
+                                          .map(p -> p.getType().getName())
+                                          .collect(Collectors.joining(","));
+        return Type.create("Tuple[" + typeList + "]");
+    }
+
+    @Override
+    public void addElement(ModelElement element)
+    {
+        scope.addElement(element);
+    }
+
+    @Override
+    public List<ModelElement> getElements()
+    {
+        return scope.getElements();
     }
 
     @Override

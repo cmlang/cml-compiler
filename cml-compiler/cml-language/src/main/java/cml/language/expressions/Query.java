@@ -3,8 +3,8 @@ package cml.language.expressions;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface Query extends Expression
@@ -14,27 +14,23 @@ public interface Query extends Expression
 
     static Query create(Expression expr, Transform transform)
     {
-        return new QueryImpl(expr, transform, null);
-    }
-
-    static Query create(Expression expr, Transform transform, @Nullable Type type)
-    {
-        return new QueryImpl(expr, transform, type);
+        return new QueryImpl(expr, transform);
     }
 }
 
 class QueryImpl implements Query
 {
     private final ModelElement modelElement;
-    private final Expression expression;
+    private final Scope scope;
 
     private final Expression base;
     private final Transform transform;
 
-    QueryImpl(Expression base, Transform transform, @Nullable Type type)
+    QueryImpl(Expression base, Transform transform)
     {
-        this.modelElement = ModelElement.create(this);
-        this.expression = Expression.create(modelElement, "query", type);
+        modelElement = ModelElement.create(this);
+        scope = Scope.create(this, modelElement);
+
         this.base = base;
         this.transform = transform;
     }
@@ -54,13 +50,36 @@ class QueryImpl implements Query
     @Override
     public String getKind()
     {
-        return expression.getKind();
+        return "query";
     }
 
     @Override
-    public Optional<Type> getType()
+    public Type getType()
     {
-        return expression.getType();
+        if (getTransform().isSelection())
+        {
+            return getBase().getType();
+        }
+        else if (getTransform().isProjection() && getTransform().getExpr().isPresent())
+        {
+            return getTransform().getExpr().get().getType();
+        }
+        else
+        {
+            return Type.UNDEFINED;
+        }
+    }
+
+    @Override
+    public void addElement(ModelElement element)
+    {
+        scope.addElement(element);
+    }
+
+    @Override
+    public List<ModelElement> getElements()
+    {
+        return scope.getElements();
     }
 
     @Override

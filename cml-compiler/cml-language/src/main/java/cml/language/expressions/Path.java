@@ -3,7 +3,8 @@ package cml.language.expressions;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
-import org.jetbrains.annotations.Nullable;
+import cml.language.foundation.TypedElement;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,27 +16,22 @@ public interface Path extends Expression
 
     static Path create(List<String> names)
     {
-        return new PathImpl(names, null);
+        return new PathImpl(names);
     }
-
-    static Path create(List<String> names, @Nullable Type type)
-    {
-        return new PathImpl(names, type);
-    }
-
 }
 
 class PathImpl implements Path
 {
     private final ModelElement modelElement;
-    private final Expression expression;
+    private final Scope scope;
 
     private final List<String> names;
 
-    PathImpl(List<String> names, @Nullable Type type)
+    PathImpl(List<String> names)
     {
-        this.modelElement = ModelElement.create(this);
-        this.expression = Expression.create(modelElement, "path", type);
+        modelElement = ModelElement.create(this);
+        scope = Scope.create(this, modelElement);
+
         this.names = new ArrayList<>(names);
     }
 
@@ -48,13 +44,92 @@ class PathImpl implements Path
     @Override
     public String getKind()
     {
-        return expression.getKind();
+        return "path";
     }
 
     @Override
-    public Optional<Type> getType()
+    public Type getType()
     {
-        return expression.getType();
+        assert getParentScope().isPresent(): "Path must be bound to a scope in order to determine its type: " + getNames();
+
+        Scope scope = getParentScope().get();
+
+        if (isSelf()) return scope.getSelfType();
+
+        Type type = Type.UNDEFINED;
+
+        for (String propertyName: getNames())
+        {
+            scope = getNextScope(scope, type.getName());
+
+            final Optional<TypedElement> property = scope.getElementNamed(propertyName, TypedElement.class);
+            if (property.isPresent())
+            {
+                final Optional<Type> optionalType = property.get().getType();
+
+                assert optionalType.isPresent(): "Undefined type of element: " + property.get().getName();
+
+                if (type.getCardinality().isPresent())
+                {
+                    // New type with the previous type's cardinality:
+                    type = Type.create(
+                                optionalType.get().getName(),
+                                type.getCardinality().get());
+                }
+                else
+                {
+                    type = optionalType.get();
+                }
+            }
+        }
+        
+        return type;
+    }
+
+    private boolean isSelf()
+    {
+        return getNames().size() == 1 && getNames().get(0).equals("self");
+    }
+
+    @NotNull
+    private Scope getNextScope(Scope scope, String typeName)
+    {
+        if (typeName.equals(Type.UNDEFINED.getName()))
+        {
+            final Optional<Path> optionalPath = getParentScope(Path.class);
+
+            if (optionalPath.isPresent())
+            {
+                scope = getScope(scope, optionalPath.get().getType().getName());
+            }
+        }
+        else
+        {
+            scope = getScope(scope, typeName);
+        }
+
+        return scope;
+    }
+
+    private Scope getScope(Scope scope, String typeName)
+    {
+        final Optional<Scope> optionalScope = scope.getElementNamed(typeName, Scope.class);
+
+        assert optionalScope.isPresent(): "Undefined scope: " + typeName;
+
+        return optionalScope.get();
+    }
+
+    @Override
+    public void addElement(ModelElement element)
+    {
+        scope.addElement(element);
+    }
+
+    @Override
+    public List<ModelElement> getElements()
+    {
+        return scope.getElements();
     }
 
     @Override

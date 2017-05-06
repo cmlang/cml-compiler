@@ -1,5 +1,6 @@
 package templates.lang.common;
 
+import cml.language.expressions.Expression;
 import cml.language.expressions.Literal;
 import cml.language.features.Concept;
 import cml.language.foundation.Property;
@@ -35,7 +36,7 @@ public class ClassTest extends LangTest
     @Test
     public void class2__concept_concrete_ancestor_empty() throws IOException
     {
-        final Concept productConcept = Concept.create("Join");
+        final Concept productConcept = Concept.create("Product");
         productConcept.addElement(Property.create("description", null, Type.create("String", null)));
 
         final Concept intermediateConcept = Concept.create("Intermediate");
@@ -127,7 +128,7 @@ public class ClassTest extends LangTest
     {
         final Concept concept = Concept.create("Book");
 
-        final Object value = Literal.create("No Title", Type.create("String", null));
+        final Expression value = Literal.create("No Title", Type.create("String", null));
         concept.addElement(Property.create("title", value, Type.create("String", null)));
 
         testClassTemplateWithConcept(concept, "class__concept_property_initialized.txt");

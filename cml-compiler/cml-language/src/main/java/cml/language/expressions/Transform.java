@@ -5,18 +5,39 @@ import cml.language.foundation.Scope;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableCollection;
 
 public interface Transform extends ModelElement
 {
+    Collection<String> SELECTION_OPERATIONS = unmodifiableCollection(asList(
+        "select", "reject"
+    ));
+
+    Collection<String> PROJECTION_OPERATIONS = unmodifiableCollection(asList(
+        "yield", "recurse"
+    ));
+
     String getOperation();
     Optional<String> getSuffix();
     List<String> getVariables();
     Optional<Expression> getInit();
     Optional<Expression> getExpr();
+
+    default boolean isSelection()
+    {
+        return SELECTION_OPERATIONS.contains(getOperation());
+    }
+
+    default boolean isProjection()
+    {
+        return PROJECTION_OPERATIONS.contains(getOperation());
+    }
 
     static Transform create(String operation)
     {

@@ -1,8 +1,23 @@
 
 concept Expressions
 {
+    foo: String;
+    somePath: SomeConcept;
+
     self_var = self;
-    single_var = someVar;
-    path_var = somePath.someVar;
-    path_var2 = somePath.oneMorePath.someVar;
+    single_var = foo;
+    path_var = somePath.bar;
+    path_var2 = somePath.oneMorePath.etc;
 }
+
+concept SomeConcept
+{
+    bar: Integer;
+    oneMorePath: AnotherConcept;
+}
+
+concept AnotherConcept
+{
+    etc: Decimal;
+}
+

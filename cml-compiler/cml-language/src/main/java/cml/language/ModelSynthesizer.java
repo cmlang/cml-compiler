@@ -132,9 +132,12 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-        final Object value = (ctx.expression() == null) ? null : ctx.expression().expr;
+        final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
+        final Property property = Property.create(name, value, type);
 
-        ctx.property = Property.create(name, value, type);
+        property.addElement(value);
+
+        ctx.property = property;
     }
 
     @Override
@@ -166,8 +169,11 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final String operator = ctx.operator.getText();
         final Expression expr = ctx.expression().get(0).expr;
+        final Unary unary = Unary.create(operator, expr);
 
-        return Unary.create(operator, expr);
+        unary.addElement(expr);
+        
+        return unary;
     }
 
     private Infix createInfix(ExpressionContext ctx)
@@ -175,13 +181,26 @@ class ModelSynthesizer extends CMLBaseListener
         final String operator = ctx.operator.getText();
         final Expression left = ctx.expression().get(0).expr;
         final Expression right = ctx.expression().get(1).expr;
+        final Infix infix = Infix.create(operator, left, right);
 
-        return Infix.create(operator, left, right);
+        infix.addElement(left);
+        infix.addElement(right);
+
+        return infix;
     }
 
     private Conditional createConditional(ExpressionContext ctx)
     {
-        return Conditional.create(ctx.cond.expr, ctx.then.expr, ctx.else_.expr);
+        final Expression cond = ctx.cond.expr;
+        final Expression then = ctx.then.expr;
+        final Expression else_ = ctx.else_.expr;
+        final Conditional conditional = Conditional.create(cond, then, else_);
+
+        conditional.addElement(cond);
+        conditional.addElement(then);
+        conditional.addElement(else_);
+
+        return conditional;
     }
 
     @Override
@@ -204,11 +223,11 @@ class ModelSynthesizer extends CMLBaseListener
 
                 if (join.isComplete())
                 {
-                    ctx.expr = Query.create(join, transform);
+                    ctx.expr = createQuery(join, transform);
                 }
                 else
                 {
-                    ctx.expr = Query.create(join.getFirstPath(), transform);
+                    ctx.expr = createQuery(join.getFirstPath(), transform);
                 }
             }
             else if (isSelectionTransform(baseCtx))
@@ -218,13 +237,32 @@ class ModelSynthesizer extends CMLBaseListener
                     baseQuery.getTransform().getVariables(),
                     ctx.transformDeclaration().transform);
 
-                ctx.expr = Query.create(baseCtx.expr, transform);
+                ctx.expr = createQuery(baseCtx.expr, transform);
             }
             else
             {
-                ctx.expr = Query.create(baseCtx.expr, ctx.transformDeclaration().transform);
+                ctx.expr = createQuery(baseCtx.expr, ctx.transformDeclaration().transform);
             }
         }
+    }
+
+    private Query createQuery(Expression baseExpr, Transform transform)
+    {
+        final Query query = Query.create(baseExpr, transform);
+
+        query.addElement(baseExpr);
+
+        if (transform.getExpr().isPresent())
+        {
+            baseExpr.addElement(transform.getExpr().get());
+        }
+
+        if (transform.getInit().isPresent())
+        {
+            baseExpr.addElement(transform.getInit().get());
+        }
+
+        return query;
     }
 
     private boolean isSelectionTransform(QueryExpressionContext ctx)

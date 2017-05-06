@@ -14,6 +14,12 @@ public interface Concept extends NamedElement, PropertyList
 {
     boolean isAbstract();
 
+    @Override
+    default Type getSelfType()
+    {
+        return Type.create(getName(), null);
+    }
+
     default List<String> getDependencies()
     {
         return concat(

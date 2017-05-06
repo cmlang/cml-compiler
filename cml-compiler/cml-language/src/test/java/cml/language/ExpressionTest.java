@@ -2,9 +2,11 @@ package cml.language;
 
 import cml.io.Console;
 import cml.io.FileSystem;
+import cml.language.expressions.Expression;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.Property;
+import cml.language.foundation.Type;
 import cml.templates.OptionalValueAdaptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,16 +17,13 @@ import org.stringtemplate.v4.STGroupFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class ExpressionTest
@@ -59,24 +58,26 @@ public class ExpressionTest
     }
 
     @Test
-    public void shouldMatchOCL() throws Exception
+    public void expressionOCL() throws Exception
     {
         final Concept concept = loadExpressions();
-        final Properties expectedOCL = loadExpectedOCL();
+        final Properties expectedOCL = loadProperties("expected_ocl.properties");
 
         for (final Property property: concept.getProperties())
         {
-            final String expectedOCLExpression = expectedOCL.getProperty(property.getName());
+            assertExpectedOCL(expectedOCL, property);
+        }
+    }
 
-            assertTrue("Expected value for property: " + property.getName(), property.getValue().isPresent());
+    @Test
+    public void expectedType() throws Exception
+    {
+        final Concept concept = loadExpressions();
+        final Properties expectedType = loadProperties("expected_type.properties");
 
-            final ST oclTemplate = groupFile.getInstanceOf("ocl");
-            oclTemplate.add("expr", property.getValue().get());
-
-            assertEquals(
-                "Property should match OCL: " + property.getName(),
-                expectedOCLExpression,
-                oclTemplate.render());
+        for (final Property property: concept.getProperties())
+        {
+            assertExpectedType(expectedType, property);
         }
     }
 
@@ -95,12 +96,12 @@ public class ExpressionTest
         return concept.get();
     }
 
-    private Properties loadExpectedOCL() throws IOException
+    private Properties loadProperties(String fileName) throws IOException
     {
         final Properties properties = new Properties();
-        final File expectedOCLFile = new File(modulePath, "expected_ocl.properties");
-        
-        try (final FileInputStream fileInputStream = new FileInputStream(expectedOCLFile))
+        final File propertiesFile = new File(modulePath, fileName);
+
+        try (final FileInputStream fileInputStream = new FileInputStream(propertiesFile))
         {
             properties.load(fileInputStream);
         }
@@ -117,5 +118,56 @@ public class ExpressionTest
         groupFile.registerModelAdaptor(Object.class, new OptionalValueAdaptor());
 
         return groupFile;
+    }
+
+    private void assertExpectedOCL(Properties expectedOCL, Property property)
+    {
+        final String expectedOCLExpression = expectedOCL.getProperty(property.getName());
+
+        if (expectedOCLExpression == null)
+        {
+            assertFalse(
+                "Expected non-init property or missing property in expected_ocl.properties file: " + property.getName(),
+                property.getValue().isPresent());
+        }
+        else
+        {
+            assertTrue("Expected value for property: " + property.getName(), property.getValue().isPresent());
+
+            final ST oclTemplate = groupFile.getInstanceOf("ocl");
+            oclTemplate.add("expr", property.getValue().get());
+
+            assertEquals(
+                "Property should match OCL: " + property.getName(),
+                expectedOCLExpression,
+                oclTemplate.render());
+        }
+    }
+
+    private void assertExpectedType(Properties expectedTypes, Property property)
+    {
+        final String expectedType = expectedTypes.getProperty(property.getName());
+
+        if (expectedType == null)
+        {
+            assertFalse(
+                "Expected non-init property or missing property in expected_type.properties file: " + property.getName(),
+                property.getValue().isPresent());
+        }
+        else 
+        {
+            assertTrue("Expected type for property: " + property.getName(), property.getValue().isPresent());
+
+            final Expression value = property.getValue().orElse(null);
+            assertNotNull("Should have init for property: " + property.getName(), value);
+
+            final Type type = value.getType();
+            assertNotNull("Should have computed type for property: " + property.getName(), type);
+            
+            assertEquals(
+                "Property should match expected type: " + property.getName(),
+                expectedType,
+                type.toString());
+        }
     }
 }

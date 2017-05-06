@@ -1,14 +1,16 @@
 package cml.language.foundation;
 
+import cml.language.expressions.Expression;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface Property extends TypedElement
+public interface Property extends TypedElement, Scope
 {
-    Optional<Object> getValue();
+    Optional<Expression> getValue();
 
-    static Property create(String name, @Nullable Object value, @Nullable Type type)
+    static Property create(String name, @Nullable Expression value, @Nullable Type type)
     {
         return new PropertyImpl(name, value, type);
     }
@@ -16,28 +18,26 @@ public interface Property extends TypedElement
 
 class PropertyImpl implements Property
 {
+    private final ModelElement modelElement;
+    private final NamedElement namedElement;
     private final TypedElement typedElement;
-    private final @Nullable Object value;
+    private final Scope scope;
+    private final @Nullable Expression value;
 
-    PropertyImpl(String name, @Nullable Object value, @Nullable Type type)
+    PropertyImpl(String name, @Nullable Expression value, @Nullable Type type)
     {
-        final ModelElement modelElement = ModelElement.create(this);
-        final NamedElement namedElement = NamedElement.create(modelElement, name);
+        modelElement = ModelElement.create(this);
+        namedElement = NamedElement.create(modelElement, name);
+        typedElement = TypedElement.create(namedElement, type);
+        scope = Scope.create(this, modelElement);
 
-        this.typedElement = TypedElement.create(namedElement, type);
         this.value = value;
     }
 
     @Override
-    public Optional<Scope> getParentScope()
+    public Optional<Expression> getValue()
     {
-        return typedElement.getParentScope();
-    }
-
-    @Override
-    public Optional<Type> getType()
-    {
-        return typedElement.getType();
+        return Optional.ofNullable(value);
     }
 
     @Override
@@ -65,15 +65,33 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public String getName()
+    public Optional<Type> getType()
     {
-        return typedElement.getName();
+        return typedElement.getType();
     }
 
     @Override
-    public Optional<Object> getValue()
+    public List<ModelElement> getElements()
     {
-        return Optional.ofNullable(value);
+        return scope.getElements();
+    }
+
+    @Override
+    public void addElement(ModelElement element)
+    {
+        scope.addElement(element);
+    }
+
+    @Override
+    public String getName()
+    {
+        return namedElement.getName();
+    }
+
+    @Override
+    public Optional<Scope> getParentScope()
+    {
+        return modelElement.getParentScope();
     }
 }
 

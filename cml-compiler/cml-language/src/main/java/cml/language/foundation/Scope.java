@@ -7,41 +7,65 @@ import static java.util.stream.Collectors.toList;
 
 public interface Scope extends ModelElement
 {
-    List<ModelElement> getElements();
     void addElement(ModelElement element);
+
+    List<ModelElement> getElements();
+
+    default <T> Optional<T> getParentScope(Class<T> clazz)
+    {
+        if (getParentScope().isPresent())
+        {
+            final Scope scope = getParentScope().get();
+            
+            if (clazz.isAssignableFrom(scope.getClass()))
+            {
+                //noinspection unchecked
+                return (Optional<T>) getParentScope();
+            }
+            else
+            {
+                return scope.getParentScope(clazz);
+            }
+        }
+
+        return Optional.empty();
+    }
 
     default List<NamedElement> getNamedElements()
     {
         return getElements().stream()
-                            .filter(e -> e instanceof NamedElementImpl)
+                            .filter(e -> e instanceof NamedElement)
                             .map(e -> (NamedElement)e)
                             .collect(toList());
     }
 
-    @SuppressWarnings("unused")
-    default Optional<NamedElement> findElement(String name)
+    default <T> Optional<T> getElementNamed(String name, Class<T> clazz)
     {
-        assert !name.matches("\\s*") : "require not name = /\\s*/";
-
         final Optional<NamedElement> element = getNamedElements().stream()
                                                                  .filter(e -> name.equals(e.getName()))
                                                                  .findFirst();
 
-        if (!element.isPresent() && getParentScope().isPresent())
+        if (element.isPresent())
         {
-            return getParentScope().get().findElement(name);
+            if (clazz.isAssignableFrom(element.get().getClass()))
+            {
+                //noinspection unchecked
+                return (Optional<T>) element;
+            }
+        }
+        else if (getParentScope().isPresent())
+        {
+            return getParentScope().get().getElementNamed(name, clazz);
         }
 
-        return element;
+        return Optional.empty();
     }
 
-    @SuppressWarnings("unused")
-    default List<NamedElement> findLocalConflicts(NamedElement element)
+    default Type getSelfType()
     {
-        return getNamedElements().stream()
-                                 .filter(e -> !element.equals(e))
-                                 .filter(e -> e.getName().equals(element.getName()))
-                                 .collect(toList());
+        assert getParentScope().isPresent(): "Parent scope required in order to determine self's type.";
+        
+        return getParentScope().get().getSelfType();
     }
 
     static Scope create(Scope self, ModelElement modelElement)
