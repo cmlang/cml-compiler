@@ -50,15 +50,15 @@ class TaskImpl implements Task
     }
 
     @Override
-    public List<ModelElement> getElements()
+    public List<ModelElement> getMembers()
     {
-        return scope.getElements();
+        return scope.getMembers();
     }
 
     @Override
-    public void addElement(ModelElement element)
+    public void addMember(ModelElement member)
     {
-        scope.addElement(element);
+        scope.addMember(member);
     }
 
     @Override
@@ -68,7 +68,7 @@ class TaskImpl implements Task
     }
 
     @Override
-    public void setConstructor(String constructor)
+    public void setConstructor(@Nullable String constructor)
     {
         this.constructor = constructor;
     }

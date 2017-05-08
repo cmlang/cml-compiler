@@ -6,7 +6,6 @@ import cml.language.foundation.Type;
 
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static java.util.Collections.unmodifiableCollection;
 
@@ -84,15 +83,15 @@ class UnaryImpl implements Unary
     }
 
     @Override
-    public void addElement(ModelElement element)
+    public void addMember(ModelElement member)
     {
-        scope.addElement(element);
+        scope.addMember(member);
     }
 
     @Override
-    public List<ModelElement> getElements()
+    public List<ModelElement> getMembers()
     {
-        return scope.getElements();
+        return scope.getMembers();
     }
 
     @Override

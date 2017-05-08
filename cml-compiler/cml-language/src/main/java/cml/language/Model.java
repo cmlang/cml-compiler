@@ -15,10 +15,10 @@ public interface Model extends Scope
 {
     default List<Module> getModules()
     {
-        return getElements().stream()
-                            .filter(e -> e instanceof Module)
-                            .map(e -> (Module)e)
-                            .collect(toList());
+        return getMembers().stream()
+                           .filter(e -> e instanceof Module)
+                           .map(e -> (Module)e)
+                           .collect(toList());
     }
 
     default Optional<Module> getModule(final String name)
@@ -82,15 +82,15 @@ class ModelImpl implements Model
     }
 
     @Override
-    public List<ModelElement> getElements()
+    public List<ModelElement> getMembers()
     {
-        return scope.getElements();
+        return scope.getMembers();
     }
 
     @Override
-    public void addElement(ModelElement element)
+    public void addMember(ModelElement member)
     {
-        scope.addElement(element);
+        scope.addMember(member);
     }
 }
 

@@ -14,10 +14,10 @@ public interface Module extends NamedElement, Scope
 {
     default List<Import> getImports()
     {
-        return getElements().stream()
-                            .filter(e -> e instanceof Import)
-                            .map(e -> (Import)e)
-                            .collect(toList());
+        return getMembers().stream()
+                           .filter(e -> e instanceof Import)
+                           .map(e -> (Import)e)
+                           .collect(toList());
     }
 
     default List<Module> getImportedModules()
@@ -54,10 +54,10 @@ public interface Module extends NamedElement, Scope
 
     default List<Concept> getConcepts()
     {
-        return getElements().stream()
-                            .filter(e -> e instanceof Concept)
-                            .map(e -> (Concept)e)
-                            .collect(toList());
+        return getMembers().stream()
+                           .filter(e -> e instanceof Concept)
+                           .map(e -> (Concept)e)
+                           .collect(toList());
     }
 
     default List<Concept> getImportedConcepts()
@@ -87,10 +87,10 @@ public interface Module extends NamedElement, Scope
 
     default List<Task> getTasks()
     {
-        return getElements().stream()
-                            .filter(e -> e instanceof Task)
-                            .map(e -> (Task)e)
-                            .collect(toList());
+        return getMembers().stream()
+                           .filter(e -> e instanceof Task)
+                           .map(e -> (Task)e)
+                           .collect(toList());
     }
 
     static Module create(String name)
@@ -125,14 +125,14 @@ class ModuleImpl implements Module
     }
 
     @Override
-    public List<ModelElement> getElements()
+    public List<ModelElement> getMembers()
     {
-        return scope.getElements();
+        return scope.getMembers();
     }
 
     @Override
-    public void addElement(ModelElement element)
+    public void addMember(ModelElement member)
     {
-        scope.addElement(element);
+        scope.addMember(member);
     }
 }

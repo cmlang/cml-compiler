@@ -7,9 +7,9 @@ import static java.util.stream.Collectors.toList;
 
 public interface Scope extends ModelElement
 {
-    void addElement(ModelElement element);
+    void addMember(ModelElement member);
 
-    List<ModelElement> getElements();
+    List<ModelElement> getMembers();
 
     default <T> Optional<T> getParentScope(Class<T> clazz)
     {
@@ -31,19 +31,19 @@ public interface Scope extends ModelElement
         return Optional.empty();
     }
 
-    default List<NamedElement> getNamedElements()
+    default List<NamedElement> getNamedMembers()
     {
-        return getElements().stream()
-                            .filter(e -> e instanceof NamedElement)
-                            .map(e -> (NamedElement)e)
-                            .collect(toList());
+        return getMembers().stream()
+                           .filter(e -> e instanceof NamedElement)
+                           .map(e -> (NamedElement)e)
+                           .collect(toList());
     }
 
     default <T> Optional<T> getElementNamed(String name, Class<T> clazz)
     {
-        final Optional<NamedElement> element = getNamedElements().stream()
-                                                                 .filter(e -> name.equals(e.getName()))
-                                                                 .findFirst();
+        final Optional<NamedElement> element = getNamedMembers().stream()
+                                                                .filter(e -> name.equals(e.getName()))
+                                                                .findFirst();
 
         if (element.isPresent())
         {
@@ -92,15 +92,15 @@ class ScopeImpl implements Scope
     }
 
     @Override
-    public List<ModelElement> getElements()
+    public List<ModelElement> getMembers()
     {
         return scopeElement.getElements(self);
     }
 
     @Override
-    public void addElement(ModelElement element)
+    public void addMember(ModelElement member)
     {
-        scopeElement.link(self, element);
+        scopeElement.link(self, member);
     }
 
     private static ScopeElement scopeElement;

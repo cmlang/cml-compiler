@@ -40,12 +40,12 @@ class ModelSynthesizer extends CMLBaseListener
             ctx.declarations()
                .stream()
                .filter(node -> node.conceptDeclaration() != null)
-               .forEach(node -> module.addElement(node.conceptDeclaration().concept));
+               .forEach(node -> module.addMember(node.conceptDeclaration().concept));
 
             ctx.declarations()
                .stream()
                .filter(node -> node.taskDeclaration() != null)
-               .forEach(node -> module.addElement(node.taskDeclaration().task));
+               .forEach(node -> module.addMember(node.taskDeclaration().task));
         }
     }
 
@@ -62,7 +62,7 @@ class ModelSynthesizer extends CMLBaseListener
         if (ctx.importDeclaration() != null)
         {
             ctx.importDeclaration()
-               .forEach(node -> module.addElement(node._import));
+               .forEach(node -> module.addMember(node._import));
         }
     }
 
@@ -91,7 +91,7 @@ class ModelSynthesizer extends CMLBaseListener
         {
             ctx.propertyList()
                .propertyDeclaration()
-               .forEach(node -> ctx.concept.addElement(node.property));
+               .forEach(node -> ctx.concept.addMember(node.property));
         }
     }
 
@@ -118,7 +118,7 @@ class ModelSynthesizer extends CMLBaseListener
         {
             ctx.propertyList()
                .propertyDeclaration()
-               .forEach(node -> ctx.task.addElement(node.property));
+               .forEach(node -> ctx.task.addMember(node.property));
         }
     }
 
@@ -135,7 +135,7 @@ class ModelSynthesizer extends CMLBaseListener
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
         final Property property = Property.create(name, value, type);
 
-        property.addElement(value);
+        property.addMember(value);
 
         ctx.property = property;
     }
@@ -171,7 +171,7 @@ class ModelSynthesizer extends CMLBaseListener
         final Expression expr = ctx.expression().get(0).expr;
         final Unary unary = Unary.create(operator, expr);
 
-        unary.addElement(expr);
+        unary.addMember(expr);
         
         return unary;
     }
@@ -183,8 +183,8 @@ class ModelSynthesizer extends CMLBaseListener
         final Expression right = ctx.expression().get(1).expr;
         final Infix infix = Infix.create(operator, left, right);
 
-        infix.addElement(left);
-        infix.addElement(right);
+        infix.addMember(left);
+        infix.addMember(right);
 
         return infix;
     }
@@ -196,9 +196,9 @@ class ModelSynthesizer extends CMLBaseListener
         final Expression else_ = ctx.else_.expr;
         final Conditional conditional = Conditional.create(cond, then, else_);
 
-        conditional.addElement(cond);
-        conditional.addElement(then);
-        conditional.addElement(else_);
+        conditional.addMember(cond);
+        conditional.addMember(then);
+        conditional.addMember(else_);
 
         return conditional;
     }
@@ -250,16 +250,16 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final Query query = Query.create(baseExpr, transform);
 
-        query.addElement(baseExpr);
+        query.addMember(baseExpr);
 
         if (transform.getExpr().isPresent())
         {
-            baseExpr.addElement(transform.getExpr().get());
+            baseExpr.addMember(transform.getExpr().get());
         }
 
         if (transform.getInit().isPresent())
         {
-            baseExpr.addElement(transform.getInit().get());
+            baseExpr.addMember(transform.getInit().get());
         }
 
         return query;

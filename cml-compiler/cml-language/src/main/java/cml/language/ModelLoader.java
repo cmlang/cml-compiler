@@ -138,7 +138,7 @@ class ModelLoaderImpl implements ModelLoader
     {
         if (!module.getName().equals(CML_BASE_MODULE) && !module.getImportedModule(CML_BASE_MODULE).isPresent())
         {
-            module.addElement(Import.create(CML_BASE_MODULE));
+            module.addMember(Import.create(CML_BASE_MODULE));
         }
     }
 
@@ -146,7 +146,7 @@ class ModelLoaderImpl implements ModelLoader
     {
         final Module module = Module.create(moduleName);
 
-        model.addElement(module);
+        model.addMember(module);
 
         return module;
     }
