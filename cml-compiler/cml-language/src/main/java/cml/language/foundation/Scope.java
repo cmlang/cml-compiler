@@ -31,23 +31,6 @@ public interface Scope extends ModelElement
                     .findFirst();
     }
 
-    default Type getTypeOfMemberNamed(String name)
-    {
-        final Optional<TypedElement> typedElement = getMemberNamed(name, TypedElement.class);
-
-        if (typedElement.isPresent())
-        {
-            final Optional<Type> type = typedElement.get().getType();
-
-            if (type.isPresent())
-            {
-                return type.get();
-            }
-        }
-
-        return Type.UNDEFINED;
-    }
-
     default <T> Optional<T> getElementNamed(String name, Class<T> clazz)
     {
         final Optional<T> member = getMemberNamed(name, clazz);
@@ -64,21 +47,18 @@ public interface Scope extends ModelElement
         return Optional.empty();
     }
 
-    default Type getTypeOfElementNamed(String name)
+    default Optional<Type> getTypeOfMemberNamed(String name)
+    {
+        final Optional<TypedElement> typedElement = getMemberNamed(name, TypedElement.class);
+
+        return typedElement.flatMap(TypedElement::getType);
+    }
+
+    default Optional<Type> getTypeOfElementNamed(String name)
     {
         final Optional<TypedElement> typedElement = getElementNamed(name, TypedElement.class);
 
-        if (typedElement.isPresent())
-        {
-            final Optional<Type> type = typedElement.get().getType();
-
-            if (type.isPresent())
-            {
-                return type.get();
-            }
-        }
-
-        return Type.UNDEFINED;
+        return typedElement.flatMap(TypedElement::getType);
     }
 
     default Optional<Scope> getScopeOfType(Type type)

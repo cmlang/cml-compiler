@@ -3,16 +3,23 @@ package cml.language.expressions;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
-import cml.language.foundation.TypedElement;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 public interface Path extends Expression
 {
     List<String> getNames();
+
+    default List<String> getMemberNames()
+    {
+        assert getNames().size() >= 1: "Path must have at least one name in order to determine its member names.";
+
+        return getNames().stream().skip(1).collect(toList());
+    }
 
     static Path create(List<String> names)
     {
@@ -47,77 +54,62 @@ class PathImpl implements Path
         return "path";
     }
 
-    @Override
     public Type getType()
     {
+        assert getNames().size() >= 1: "Path must have at least one name in order to determine its type.";
         assert getParentScope().isPresent(): "Path must be bound to a scope in order to determine its type: " + getNames();
 
         Scope scope = getParentScope().get();
 
         if (isSelf()) return scope.getSelfType();
 
-        Type type = Type.UNDEFINED;
+        final String variableName = getNames().get(0);
+        final Optional<Type> variableType = scope.getTypeOfElementNamed(variableName);
 
-        for (String propertyName: getNames())
+        StringBuilder intermediatePath = new StringBuilder(variableName);
+
+        if (variableType.isPresent())
         {
-            scope = getNextScope(scope, type.getName());
-
-            final Optional<TypedElement> property = scope.getElementNamed(propertyName, TypedElement.class);
-            if (property.isPresent())
+            Type type = variableType.get();
+            
+            for (final String memberName: getMemberNames())
             {
-                final Optional<Type> optionalType = property.get().getType();
+                intermediatePath.append(".").append(memberName);
 
-                assert optionalType.isPresent(): "Undefined type of element: " + property.get().getName();
+                final Optional<Scope> optionalScope = scope.getScopeOfType(type);
 
-                if (type.getCardinality().isPresent())
+                if (optionalScope.isPresent())
                 {
-                    // New type with the previous type's cardinality:
-                    type = Type.create(
-                                optionalType.get().getName(),
-                                type.getCardinality().get());
+                    scope = optionalScope.get();
+
+                    final Optional<Type> memberType = scope.getTypeOfMemberNamed(memberName);
+
+                    if (memberType.isPresent())
+                    {
+                        type = memberType.get();
+                    }
+                    else
+                    {
+                        return Type.createUndefined("Unable to find type of member: " + intermediatePath);
+                    }
                 }
                 else
                 {
-                    type = optionalType.get();
+                    return Type.createUndefined("Unable to find type: " + type.getName());
                 }
             }
+
+            return type;
         }
-        
-        return type;
+        else
+        {
+            return Type.createUndefined("Unable to find type of variable: " + intermediatePath);
+        }
     }
 
     private boolean isSelf()
     {
         return getNames().size() == 1 && getNames().get(0).equals("self");
-    }
-
-    @NotNull
-    private Scope getNextScope(Scope scope, String typeName)
-    {
-        if (typeName.equals(Type.UNDEFINED.getName()))
-        {
-            final Optional<Path> optionalPath = getParentScope(Path.class);
-
-            if (optionalPath.isPresent())
-            {
-                scope = getScope(scope, optionalPath.get().getType().getName());
-            }
-        }
-        else
-        {
-            scope = getScope(scope, typeName);
-        }
-
-        return scope;
-    }
-
-    private Scope getScope(Scope scope, String typeName)
-    {
-        final Optional<Scope> optionalScope = scope.getElementNamed(typeName, Scope.class);
-
-        assert optionalScope.isPresent(): "Undefined scope: " + typeName;
-
-        return optionalScope.get();
     }
 
     @Override

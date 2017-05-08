@@ -14,8 +14,8 @@ import static java.util.Collections.unmodifiableList;
 
 public interface Type extends NamedElement
 {
-    Type UNDEFINED = Type.create("Undefined", null);
-    Type BOOLEAN = Type.create("Boolean", null);
+    Type UNDEFINED = Type.create("Undefined");
+    Type BOOLEAN = Type.create("Boolean");
 
     Collection<String> PRIMITIVE_TYPE_NAMES = unmodifiableCollection(asList(
         "Boolean", "Integer", "Decimal", "String", "Regex", // main primitive types
@@ -50,6 +50,8 @@ public interface Type extends NamedElement
 
     Optional<String> getCardinality();
 
+    Optional<String> getErrorMessage();
+
     Optional<Concept> getConcept();
     void setConcept(Concept module);
 
@@ -74,12 +76,17 @@ public interface Type extends NamedElement
 
     static Type create(String name)
     {
-        return new TypeImpl(name, null);
+        return new TypeImpl(name, null, null);
     }
 
-    static Type create(String name, @Nullable String cardinality)
+    static Type create(String name, String cardinality)
     {
-        return new TypeImpl(name, cardinality);
+        return new TypeImpl(name, cardinality, null);
+    }
+
+    static Type createUndefined(String errorMessage)
+    {
+        return new TypeImpl(Type.UNDEFINED.getName(), null, errorMessage);
     }
 }
 
@@ -87,13 +94,15 @@ class TypeImpl implements Type
 {
     private final NamedElement namedElement;
     private final @Nullable String cardinality;
+    private final @Nullable String errorMessage;
 
     private @Nullable Concept concept;
 
-    TypeImpl(String name, @Nullable String cardinality)
+    TypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
     {
         this.namedElement = NamedElement.create(this, name);
         this.cardinality = cardinality;
+        this.errorMessage = errorMessage;
     }
 
     @Override
@@ -112,6 +121,11 @@ class TypeImpl implements Type
     public Optional<String> getCardinality()
     {
         return Optional.ofNullable(cardinality);
+    }
+
+    public Optional<String> getErrorMessage()
+    {
+        return Optional.ofNullable(errorMessage);
     }
 
     @Override
