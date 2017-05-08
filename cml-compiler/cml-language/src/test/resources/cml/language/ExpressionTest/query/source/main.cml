@@ -4,7 +4,7 @@ concept Expressions
     top_items: Item*;
     class: Class;
     children: Class*;
-    orders: Order*;
+    top_orders: Order*;
 
     path_ancestors = class.ancestors;
 
@@ -14,15 +14,16 @@ concept Expressions
 
     reject_transform = top_items | reject name == "this";
 
-    yield_transform = orders | yield items;
-    yield_transform_unique = orders | yield unique items.product;
+    yield_transform = top_orders | yield items;
+    yield_transform_unique = top_orders | yield unique items.product;
 
-//    recurse_ancestors = class | recurse ancestors;
-//    recurse_unique = class | recurse unique ancestors;
-//    recurse_children = children | recurse children | select ranking > 10; // equivalent to: self | recurse children | ...
+    recurse_ancestors = class | recurse ancestors;
+    recurse_unique = class | recurse unique ancestors;
+    recurse_children = children | recurse children | select ranking > 10; // equivalent to: self | recurse children | ...
 
-//    enumeration = for order in orders | select order.total > 100;
-//    enumeration_nested = for order in orders, goldCustomer in goldCustomers
+    enumeration = for order in top_orders | select order.total > 100;
+//    enumeration_yield = for order in top_orders | yield order.items;
+//    enumeration_nested = for order in top_orders, goldCustomer in goldCustomers
 //                            | select order.customer == goldCustomer and order.total > 1000
 //                            | yield order.customer.name;
 }
