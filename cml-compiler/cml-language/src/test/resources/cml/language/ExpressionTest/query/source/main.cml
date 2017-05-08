@@ -14,8 +14,8 @@ concept Expressions
 
     reject_transform = top_items | reject name == "this";
 
-//    yield_transform = orders | yield items;
-//    yield_transform_unique = orders | yield unique items.product;
+    yield_transform = orders | yield items;
+    yield_transform_unique = orders | yield unique items.product;
 
 //    recurse_ancestors = class | recurse ancestors;
 //    recurse_unique = class | recurse unique ancestors;

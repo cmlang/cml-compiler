@@ -163,7 +163,12 @@ public class ExpressionTest
 
             final Type type = value.getType();
             assertNotNull("Should have computed type for property: " + property.getName(), type);
-            
+
+            if (type.getErrorMessage().isPresent())
+            {
+                fail("Type Error of property '" + property.getName() + "': " + type.getErrorMessage().get());
+            }
+
             assertEquals(
                 "Property should match expected type: " + property.getName(),
                 expectedType,

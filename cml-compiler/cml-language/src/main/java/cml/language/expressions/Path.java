@@ -21,40 +21,16 @@ public interface Path extends Expression
         return getNames().stream().skip(1).collect(toList());
     }
 
-    static Path create(List<String> names)
+    default Scope getContext()
     {
-        return new PathImpl(names);
-    }
-}
+        final Type type = getType();
+        if (type.equals(Type.UNDEFINED)) return this;
 
-class PathImpl implements Path
-{
-    private final ModelElement modelElement;
-    private final Scope scope;
-
-    private final List<String> names;
-
-    PathImpl(List<String> names)
-    {
-        modelElement = ModelElement.create(this);
-        scope = Scope.create(this, modelElement);
-
-        this.names = new ArrayList<>(names);
+        final Optional<Scope> typeScope = getScopeOfType(type);
+        return typeScope.orElse(this);
     }
 
-    @Override
-    public List<String> getNames()
-    {
-        return new ArrayList<>(names);
-    }
-
-    @Override
-    public String getKind()
-    {
-        return "path";
-    }
-
-    public Type getType()
+    default Type getType()
     {
         assert getNames().size() >= 1: "Path must have at least one name in order to determine its type.";
         assert getParentScope().isPresent(): "Path must be bound to a scope in order to determine its type: " + getNames();
@@ -71,7 +47,7 @@ class PathImpl implements Path
         if (variableType.isPresent())
         {
             Type type = variableType.get();
-            
+
             for (final String memberName: getMemberNames())
             {
                 intermediatePath.append(".").append(memberName);
@@ -107,9 +83,42 @@ class PathImpl implements Path
         }
     }
 
-    private boolean isSelf()
+    default boolean isSelf()
     {
         return getNames().size() == 1 && getNames().get(0).equals("self");
+    }
+
+    static Path create(List<String> names)
+    {
+        return new PathImpl(names);
+    }
+}
+
+class PathImpl implements Path
+{
+    private final ModelElement modelElement;
+    private final Scope scope;
+
+    private final List<String> names;
+
+    PathImpl(List<String> names)
+    {
+        modelElement = ModelElement.create(this);
+        scope = Scope.create(this, modelElement);
+
+        this.names = new ArrayList<>(names);
+    }
+
+    @Override
+    public List<String> getNames()
+    {
+        return new ArrayList<>(names);
+    }
+
+    @Override
+    public String getKind()
+    {
+        return "path";
     }
 
     @Override

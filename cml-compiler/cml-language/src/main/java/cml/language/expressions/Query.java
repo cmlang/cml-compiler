@@ -12,6 +12,31 @@ public interface Query extends Expression
     Expression getBase();
     Transform getTransform();
 
+    default Type getType()
+    {
+        if (getTransform().isSelection())
+        {
+            return getBase().getType();
+        }
+        else if (getTransform().isProjection() && getTransform().getExpr().isPresent())
+        {
+            final Type exprType = getTransform().getExpr().get().getType();
+
+            if (exprType.equals(Type.UNDEFINED))
+            {
+                return exprType;
+            }
+            else
+            {
+                return Type.create(exprType.getName(), "*");
+            }
+        }
+        else
+        {
+            return Type.UNDEFINED;
+        }
+    }
+
     static Query create(Expression expr, Transform transform)
     {
         return new QueryImpl(expr, transform);
@@ -51,23 +76,6 @@ class QueryImpl implements Query
     public String getKind()
     {
         return "query";
-    }
-
-    @Override
-    public Type getType()
-    {
-        if (getTransform().isSelection())
-        {
-            return getBase().getType();
-        }
-        else if (getTransform().isProjection() && getTransform().getExpr().isPresent())
-        {
-            return getTransform().getExpr().get().getType();
-        }
-        else
-        {
-            return Type.UNDEFINED;
-        }
     }
 
     @Override

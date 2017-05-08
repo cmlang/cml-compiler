@@ -56,9 +56,17 @@ public interface Scope extends ModelElement
 
     default Optional<Type> getTypeOfElementNamed(String name)
     {
+        final Optional<Type> memberType = getContext().getTypeOfMemberNamed(name);
+        if (memberType.isPresent()) return memberType;
+
         final Optional<TypedElement> typedElement = getElementNamed(name, TypedElement.class);
 
         return typedElement.flatMap(TypedElement::getType);
+    }
+
+    default Scope getContext()
+    {
+        return this;
     }
 
     default Optional<Scope> getScopeOfType(Type type)
