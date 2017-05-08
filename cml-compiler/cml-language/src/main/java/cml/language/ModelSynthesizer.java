@@ -133,7 +133,7 @@ class ModelSynthesizer extends CMLBaseListener
         final String name = ctx.NAME().getText();
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
-        final Property property = Property.create(name, value, type);
+        final Property property = Property.create(name, type, value);
 
         property.addMember(value);
 
@@ -218,12 +218,18 @@ class ModelSynthesizer extends CMLBaseListener
             {
                 final Join join = baseCtx.joinExpression().join;
                 final Transform transform = createTransformWithVariables(
-                    join.getVariables(),
+                    join.getVarNames(),
                     ctx.transformDeclaration().transform);
 
                 if (join.isComplete())
                 {
                     ctx.expr = createQuery(join, transform);
+
+                    for (JoinVar joinVar: join.getVariables())
+                    {
+                        ctx.expr.addMember(joinVar);
+                        ctx.expr.addMember(joinVar.getPath());
+                    }
                 }
                 else
                 {
@@ -284,17 +290,12 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitJoinExpression(JoinExpressionContext ctx)
     {
-        final List<String> variables = ctx.enumeratorDeclaration()
+        final List<JoinVar> variables = ctx.enumeratorDeclaration()
                                           .stream()
-                                          .map(e -> e.NAME().getText())
+                                          .map(e -> JoinVar.create(e.NAME().getText(), e.pathExpression().path))
                                           .collect(Collectors.toList());
 
-        final List<Path> paths = ctx.enumeratorDeclaration()
-                                          .stream()
-                                          .map(e -> e.pathExpression().path)
-                                          .collect(Collectors.toList());
-
-        ctx.join = Join.create(variables, paths);
+        ctx.join = Join.create(variables);
     }
 
     @Override

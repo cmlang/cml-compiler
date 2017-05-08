@@ -47,7 +47,7 @@ public class FieldTest extends LangTest
     {
         for (String name : commonNameFormats)
         {
-            final Property property = Property.create(name, null, Type.create(name, cardinality));
+            final Property property = Property.create(name, Type.create(name, cardinality));
 
             testTemplateWithNamedElement("field_type", property, expectedOutputPath);
         }

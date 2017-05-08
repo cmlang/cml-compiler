@@ -10,9 +10,25 @@ public interface Property extends TypedElement, Scope
 {
     Optional<Expression> getValue();
 
-    static Property create(String name, @Nullable Expression value, @Nullable Type type)
+    boolean isTypeRequired();
+    void setTypeRequired(boolean typeRequired);
+
+    boolean isTypeAllowed();
+    void setTypeAllowed(boolean typeAllowed);
+
+    static Property create(String name, @Nullable Type type)
     {
-        return new PropertyImpl(name, value, type);
+        return new PropertyImpl(name, type, null);
+    }
+
+    static Property create(String name, @Nullable Expression value)
+    {
+        return new PropertyImpl(name, null, value);
+    }
+
+    static Property create(String name, @Nullable Type type, @Nullable Expression value)
+    {
+        return new PropertyImpl(name, type, value);
     }
 }
 
@@ -20,17 +36,21 @@ class PropertyImpl implements Property
 {
     private final ModelElement modelElement;
     private final NamedElement namedElement;
-    private final TypedElement typedElement;
     private final Scope scope;
+
+    private boolean typeRequired;
+    private boolean typeAllowed;
+
+    private final @Nullable Type type;
     private final @Nullable Expression value;
 
-    PropertyImpl(String name, @Nullable Expression value, @Nullable Type type)
+    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value)
     {
         modelElement = ModelElement.create(this);
         namedElement = NamedElement.create(modelElement, name);
-        typedElement = TypedElement.create(namedElement, type);
         scope = Scope.create(this, modelElement);
 
+        this.type = type;
         this.value = value;
     }
 
@@ -43,31 +63,45 @@ class PropertyImpl implements Property
     @Override
     public boolean isTypeRequired()
     {
-        return typedElement.isTypeRequired();
+        return typeRequired;
     }
 
     @Override
     public void setTypeRequired(boolean typeRequired)
     {
-        typedElement.setTypeRequired(typeRequired);
+        this.typeRequired = typeRequired;
     }
 
     @Override
     public boolean isTypeAllowed()
     {
-        return typedElement.isTypeAllowed();
+        return typeAllowed;
     }
 
     @Override
     public void setTypeAllowed(boolean typeAllowed)
     {
-        typedElement.setTypeAllowed(true);
+        this.typeAllowed = typeAllowed;
     }
 
     @Override
-    public Optional<Type> getType()
+    public Type getType()
     {
-        return typedElement.getType();
+        if (type == null)
+        {
+            if (value == null)
+            {
+                return Type.createUndefined("No type defined for property: " + getName());
+            }
+            else
+            {
+                return value.getType();
+            }
+        }
+        else
+        {
+            return type;
+        }
     }
 
     @Override

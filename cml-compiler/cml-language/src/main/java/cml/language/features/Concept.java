@@ -34,8 +34,6 @@ public interface Concept extends NamedElement, PropertyList
     {
         return getAllProperties().stream()
             .map(Property::getType)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
             .filter(type -> !type.isPrimitive())
             .collect(toList());
     }

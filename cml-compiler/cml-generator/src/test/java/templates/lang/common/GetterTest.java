@@ -24,7 +24,7 @@ public class GetterTest extends LangTest
     {
         final String cardinality = "?"; // optional
 
-        getter_call(cardinality, "expected.txt");
+        getter_call(cardinality);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class GetterTest extends LangTest
     {
         final String cardinality = null; // required
 
-        getter_call(cardinality, "expected.txt");
+        getter_call(cardinality);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class GetterTest extends LangTest
     {
         final String cardinality = "*"; // set
 
-        getter_call(cardinality, "expected.txt");
+        getter_call(cardinality);
     }
 
     @Test
@@ -123,9 +123,9 @@ public class GetterTest extends LangTest
         }
     }
 
-    private void getter_call(String cardinality, String expectedOutput) throws IOException
+    private void getter_call(String cardinality) throws IOException
     {
-        testTemplateWithProperty("getter_call", createProperty(cardinality), expectedOutput);
+        testTemplateWithProperty("getter_call", createProperty(cardinality), "expected.txt");
     }
 
     private void interface_getter(String cardinality, String expectedOutput) throws IOException
@@ -140,6 +140,6 @@ public class GetterTest extends LangTest
 
     private static Property createProperty(String cardinality)
     {
-        return Property.create("SomeProperty", null, Type.create("someType", cardinality));
+        return Property.create("SomeProperty", Type.create("someType", cardinality));
     }
 }

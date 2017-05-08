@@ -11,14 +11,27 @@ import java.util.stream.Collectors;
 
 public interface Join extends Expression
 {
-    List<String> getVariables();
-    List<Path> getPaths();
+    List<JoinVar> getVariables();
     boolean isComplete();
     Path getFirstPath();
 
-    static Join create(List<String> variables, List<Path> paths)
+    default List<String> getVarNames()
     {
-        return new JoinImpl(variables, paths);
+        return getVariables().stream()
+                             .map(JoinVar::getName)
+                             .collect(Collectors.toList());
+    }
+
+    default List<Path> getPaths()
+    {
+        return getVariables().stream()
+                             .map(JoinVar::getPath)
+                             .collect(Collectors.toList());
+    }
+
+    static Join create(List<JoinVar> variables)
+    {
+        return new JoinImpl(variables);
     }
 }
 
@@ -27,42 +40,34 @@ class JoinImpl implements Join
     private final ModelElement modelElement;
     private final Scope scope;
 
-    private final List<String> variables;
-    private final List<Path> paths;
+    private final List<JoinVar> variables;
 
-    JoinImpl(List<String> variables, List<Path> paths)
+    JoinImpl(List<JoinVar> variables)
     {
         modelElement = ModelElement.create(this);
         scope = Scope.create(this, modelElement);
 
         this.variables = new ArrayList<>(variables);
-        this.paths = new ArrayList<>(paths);
     }
 
     @Override
-    public List<String> getVariables()
+    public List<JoinVar> getVariables()
     {
         return new ArrayList<>(variables);
     }
 
     @Override
-    public List<Path> getPaths()
-    {
-        return new ArrayList<>(paths);
-    }
-
-    @Override
     public boolean isComplete()
     {
-        return getPaths().size() > 1;
+        return getVariables().size() > 1;
     }
 
     @Override
     public Path getFirstPath()
     {
-        assert getPaths().size() > 0;
+        assert getVariables().size() > 0;
 
-        return getPaths().get(0);
+        return getVariables().get(0).getPath();
     }
 
     @Override
@@ -74,9 +79,8 @@ class JoinImpl implements Join
     @Override
     public Type getType()
     {
-        final String typeList = getPaths().stream()
-                                          .map(p -> p.getType().getName())
-                                          .collect(Collectors.joining(","));
+        final String typeList = getVarNames().stream()
+                                             .collect(Collectors.joining(","));
         return Type.create("Tuple[" + typeList + "]");
     }
 

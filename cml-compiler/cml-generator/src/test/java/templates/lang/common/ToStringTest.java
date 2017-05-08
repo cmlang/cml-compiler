@@ -33,7 +33,7 @@ public class ToStringTest  extends LangTest
     {
         final Concept concept = Concept.create("SomeConcept");
 
-        concept.addMember(Property.create("someProperty", null, Type.create("SomeType", null)));
+        concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
 
         to_string(concept, "required.txt");
     }
@@ -43,8 +43,8 @@ public class ToStringTest  extends LangTest
     {
         final Concept concept = Concept.create("SomeConcept");
 
-        concept.addMember(Property.create("someProperty", null, Type.create("SomeType", null)));
-        concept.addMember(Property.create("optionalProperty", null, Type.create("AnotherType", "?")));
+        concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
+        concept.addMember(Property.create("optionalProperty", Type.create("AnotherType", "?")));
 
         to_string(concept, "optional.txt");
     }
@@ -54,9 +54,9 @@ public class ToStringTest  extends LangTest
     {
         final Concept concept = Concept.create("SomeConcept");
 
-        concept.addMember(Property.create("someProperty", null, Type.create("SomeType", null)));
-        concept.addMember(Property.create("optionalProperty", null, Type.create("AnotherType", "?")));
-        concept.addMember(Property.create("setProperty", null, Type.create("YetAnotherType", "*")));
+        concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
+        concept.addMember(Property.create("optionalProperty", Type.create("AnotherType", "?")));
+        concept.addMember(Property.create("setProperty", Type.create("YetAnotherType", "*")));
 
         to_string(concept, "set.txt");
     }
