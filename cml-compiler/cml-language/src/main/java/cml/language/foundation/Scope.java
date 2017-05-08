@@ -11,12 +11,87 @@ public interface Scope extends ModelElement
 
     List<ModelElement> getMembers();
 
+    default <T> List<T> getMembers(Class<T> clazz)
+    {
+        //noinspection unchecked
+        return getMembers().stream()
+                           .filter(e -> clazz.isAssignableFrom(e.getClass()))
+                           .map(e -> (T)e)
+                           .collect(toList());
+    }
+
+    default <T> Optional<T> getMemberNamed(String name, Class<T> clazz)
+    {
+        //noinspection unchecked
+        return getMembers(NamedElement.class)
+                    .stream()
+                    .filter(e -> name.equals(e.getName()))
+                    .filter(e -> clazz.isAssignableFrom(e.getClass()))
+                    .map(e -> (T)e)
+                    .findFirst();
+    }
+
+    default Type getTypeOfMemberNamed(String name)
+    {
+        final Optional<TypedElement> typedElement = getMemberNamed(name, TypedElement.class);
+
+        if (typedElement.isPresent())
+        {
+            final Optional<Type> type = typedElement.get().getType();
+
+            if (type.isPresent())
+            {
+                return type.get();
+            }
+        }
+
+        return Type.UNDEFINED;
+    }
+
+    default <T> Optional<T> getElementNamed(String name, Class<T> clazz)
+    {
+        final Optional<T> member = getMemberNamed(name, clazz);
+
+        if (member.isPresent())
+        {
+            return member;
+        }
+        else if (getParentScope().isPresent())
+        {
+            return getParentScope().get().getElementNamed(name, clazz);
+        }
+
+        return Optional.empty();
+    }
+
+    default Type getTypeOfElementNamed(String name)
+    {
+        final Optional<TypedElement> typedElement = getElementNamed(name, TypedElement.class);
+
+        if (typedElement.isPresent())
+        {
+            final Optional<Type> type = typedElement.get().getType();
+
+            if (type.isPresent())
+            {
+                return type.get();
+            }
+        }
+
+        return Type.UNDEFINED;
+    }
+
+    default Optional<Scope> getScopeOfType(Type type)
+    {
+        return getElementNamed(type.getName(), Scope.class);
+    }
+
     default <T> Optional<T> getParentScope(Class<T> clazz)
     {
         if (getParentScope().isPresent())
         {
             final Scope scope = getParentScope().get();
-            
+
             if (clazz.isAssignableFrom(scope.getClass()))
             {
                 //noinspection unchecked
@@ -26,36 +101,6 @@ public interface Scope extends ModelElement
             {
                 return scope.getParentScope(clazz);
             }
-        }
-
-        return Optional.empty();
-    }
-
-    default List<NamedElement> getNamedMembers()
-    {
-        return getMembers().stream()
-                           .filter(e -> e instanceof NamedElement)
-                           .map(e -> (NamedElement)e)
-                           .collect(toList());
-    }
-
-    default <T> Optional<T> getElementNamed(String name, Class<T> clazz)
-    {
-        final Optional<NamedElement> element = getNamedMembers().stream()
-                                                                .filter(e -> name.equals(e.getName()))
-                                                                .findFirst();
-
-        if (element.isPresent())
-        {
-            if (clazz.isAssignableFrom(element.get().getClass()))
-            {
-                //noinspection unchecked
-                return (Optional<T>) element;
-            }
-        }
-        else if (getParentScope().isPresent())
-        {
-            return getParentScope().get().getElementNamed(name, clazz);
         }
 
         return Optional.empty();
