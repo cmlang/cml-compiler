@@ -224,16 +224,16 @@ class ModelSynthesizer extends CMLBaseListener
                 if (join.isComplete())
                 {
                     ctx.expr = createQuery(join, transform);
-
-                    for (JoinVar joinVar: join.getVariables())
-                    {
-                        ctx.expr.addMember(joinVar);
-                        ctx.expr.addMember(joinVar.getPath());
-                    }
                 }
                 else
                 {
                     ctx.expr = createQuery(join.getFirstPath(), transform);
+                }
+
+                for (JoinVar joinVar: join.getVariables())
+                {
+                    ctx.expr.addMember(joinVar);
+                    ctx.expr.addMember(joinVar.getPath());
                 }
             }
             else if (isSelectionTransform(baseCtx))
