@@ -18,7 +18,8 @@ expression returns [Expression expr]
     | IF cond=expression
       THEN then=expression
       ELSE else_=expression
-    | queryExpression;
+    | queryExpression
+    | '(' inner=expression ')';
 
 queryExpression returns [Expression expr]
     : pathExpression
