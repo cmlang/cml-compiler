@@ -6,4 +6,5 @@ concept Expressions
     LiteralStringInit = "\tSome \"String\"\n";
     LiteralIntegerInit = 123;
     LiteralDecimalInit = 123.456;
+    LiteralDecimalInit2 = .456;
 }
