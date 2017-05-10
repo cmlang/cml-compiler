@@ -3,7 +3,7 @@ concept Expressions
 {
     LiteralTrueBoolean = true;
     LiteralFalseBoolean = false;
-    LiteralStringInit = "SomeString";
+    LiteralStringInit = "\tSome \"String\"\n";
     LiteralIntegerInit = 123;
     LiteralDecimalInit = 123.456;
 }
