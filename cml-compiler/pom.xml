@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>cml-package</module>
         <module>cml-frontend</module>
         <module>cml-generator</module>
         <module>cml-language</module>

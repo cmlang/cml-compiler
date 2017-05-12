@@ -40,9 +40,11 @@
     </dependencies>
 
     <build>
+        <finalName>${cml.jar.name}</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -52,7 +54,6 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <finalName>${cml.jar.name}</finalName>
                 </configuration>
                 <executions>
                     <execution>

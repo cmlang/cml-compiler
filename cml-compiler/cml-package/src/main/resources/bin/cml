@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -z "$CML_BASE_DIR" ]; then
+    export CML_BASE_DIR="##PREFIX##"
+fi
+
+export CML_MODULES_PATH="$CML_BASE_DIR/cml-modules"
+
+java -jar "$CML_BASE_DIR/lib/cml-compiler.jar" "$@"
