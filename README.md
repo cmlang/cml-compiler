@@ -26,7 +26,9 @@ Please report an issue if you cannot get the CML compiler installed using Homebr
 
 The only pre-requisite to run the CML compiler is Java 8.
 
-The `cml` command should just work after installation if Java 8 is available on the environment. Please report an issue, otherwise.
+The `cml` command should just work after installation if Java 8 is available on the environment.
+
+Please report an issue, otherwise.
 
 ## Quick, Two-Step Install with Homebrew / Linuxbrew
 
@@ -45,10 +47,10 @@ Look for the files ending with '.zip.notes.md'. For example: cml-compiler-1.0.zi
 
 The releases of the CML compiler follow Semantic Versioning: http://semver.org
 
-Version format is MAJOR.MINOR.PATCH, where each number is incremented as follows:
+The version format is MAJOR.MINOR.PATCH, where each number is incremented as follows:
 - MAJOR: when we make an incompatible language change, or incompatible base library change.
 - MINOR: when we add functionality in a backwards-compatible manner.
-- PATCH: when we make backwards-compatible fixes.
+- PATCH: when we only make backwards-compatible fixes; and no new functionality is added.
 
 ## Specific Version Installation with Homebrew / Linuxbrew
 
