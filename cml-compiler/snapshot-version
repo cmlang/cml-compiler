@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+    echo Please specify the snapshot version as the only argument.
+    exit 1
+fi
+
+mvn versions:set -DnewVersion=$1-SNAPSHOT

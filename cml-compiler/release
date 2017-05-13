@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+    echo Please specify the release version as the only argument.
+    exit 1
+fi
+
+mvn versions:set -DnewVersion=$1
+if [ $? -ne 0 ]; then exit; fi
+
+mvn clean install
+if [ $? -ne 0 ]; then exit; fi
+
+cd cml-package
+if [ $? -ne 0 ]; then exit; fi
+
+mvn clean assembly:single
+if [ $? -ne 0 ]; then exit; fi
+
+cd target
+if [ $? -ne 0 ]; then exit; fi
+
+CML_PKG_SOURCE_NAME="cml-package-$1-distribution.zip"
+CML_PKG_SHA=$(shasum -a 256 ${CML_PKG_SOURCE_NAME} | awk '{print $1}')
+if [ $? -ne 0 ]; then exit; fi
+
+CML_PKG_NAME="cml-compiler-$1.zip"
+CML_RELEASES_DIR="../../../../cml-releases/cml-compiler"
+cp "${CML_PKG_SOURCE_NAME}" "${CML_RELEASES_DIR}/${CML_PKG_NAME}"
+if [ $? -ne 0 ]; then exit; fi
+
+cd ${CML_RELEASES_DIR}
+if [ $? -ne 0 ]; then exit; fi
+
+CML_PKG_SHA_TXT="${CML_PKG_NAME}.sha256.txt"
+echo "${CML_PKG_SHA}" >> "${CML_PKG_SHA_TXT}"
+if [ $? -ne 0 ]; then exit; fi
+
+git add "${CML_PKG_NAME}"
+if [ $? -ne 0 ]; then exit; fi
+
+git add "${CML_PKG_SHA_TXT}"
+if [ $? -ne 0 ]; then exit; fi
+
+git commit -m "Committing version $1 of CML Compiler."
+if [ $? -ne 0 ]; then exit; fi
+
+git tag -m "CML Compiler %1" -a $1
+if [ $? -ne 0 ]; then exit; fi
+
+git push --tags origin master
+if [ $? -ne 0 ]; then exit; fi
+
+cd "../../homebrew-cml"
+if [ $? -ne 0 ]; then exit; fi
+
+CML_TAP_URL="https://raw.githubusercontent.com/cmlang/cml-releases/master/cml-compiler"
+cat <<EOF > cml-compiler.rb
+require "formula"
+
+class CmlCompiler < Formula
+  VERSION = "$1"
+
+  desc "The CML Compiler"
+  homepage "http://github.com/cmlang"
+  url "${CML_TAP_URL}/cml-compiler-#{VERSION}.zip"
+  sha256 "${CML_PKG_SHA}"
+
+  def install
+    inreplace "bin/cml", "##PREFIX##", "#{prefix}/libexec"
+    libexec.install Dir["*"]
+    bin.install_symlink libexec/"bin/cml"
+  end
+
+  test do
+    assert_equal "Version: #{VERSION}", \`cml --version\`.strip
+  end
+end
+EOF
+if [ $? -ne 0 ]; then exit; fi
+
+git add cml-compiler.rb
+if [ $? -ne 0 ]; then exit; fi
+
+git commit -m "Committing version $1 of CML Compiler."
+if [ $? -ne 0 ]; then exit; fi
+
+git tag -m "CML Compiler %1" -a $1
+if [ $? -ne 0 ]; then exit; fi
+
+git push --tags origin master
+if [ $? -ne 0 ]; then exit; fi
+
+echo
+echo Version $1 released to Homebrew.
+echo
+echo Check release with:
+echo \$ brew tap cmlang\/cml
+echo \$ brew upgrade cml-compiler
+echo \$ cd \<module\/path\>
+echo \$ cml \<task_name\>
+echo
+echo If successfull, run: snapshot-version
+echo In order to update the snapshot version on the master\'s branch.
+echo
