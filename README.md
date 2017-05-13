@@ -8,9 +8,24 @@ Master
 
 ![Build Status](https://travis-ci.org/cmlang/cml-compiler.svg?branch=master)
 
+## Semantic Versioning
+
+The releases of the CML compiler follow Semantic Versioning: http://semver.org
+
+Version format is MAJOR.MINOR.PATCH, where each number is incremented as follows:
+- MAJOR: when we make an incompatible language change, or incompatible base library change.
+- MINOR: when we add functionality in a backwards-compatible manner.
+- PATCH: when we make backwards-compatible fixes.
+
 ## Installation with Homebrew
 
-The CML compiler releases follow Semantic Versioning: http://semver.org
+- Before you can install the CML compiler, please run:
+
+```
+brew tap cmlang/cml
+```
+
+After that, the CML compiler packages will be available to be installed.
 
 - If you'd like to always have the latest version of the CML compiler:
 
@@ -32,13 +47,13 @@ You may also get a new minor version, or a patch.
 - If you'd like to pin your environment to a specific major version:
 
 ```
-$ brew install cml-compiler@MAJOR_VERSION
+$ brew install cml-compiler@MAJOR
 ```
 
 Later on, to get the latest of the specific major version:
 
 ```
-$ brew upgrade cml-compiler@MAJOR_VERSION
+$ brew upgrade cml-compiler@MAJOR
 ```
 
 You may get a new minor version,
@@ -50,13 +65,13 @@ You may also get a new patch under the major version.
 - If you'd like to pin your environment to a specific minor version:
 
 ```
-$ brew install cml-compiler@MAJOR_VERSION.MINOR_VERSION
+$ brew install cml-compiler@MAJOR.MINOR
 ```
 
 Later on, to get the latest of the specific minor version:
 
 ```
-$ brew upgrade cml-compiler@MAJOR_VERSION.MINOR_VERSION
+$ brew upgrade cml-compiler@MAJOR.MINOR
 ```
 
 You only get patches for the specific minor version.
