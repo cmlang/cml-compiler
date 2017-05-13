@@ -45,7 +45,7 @@ You may get a new minor version,
 which will have new features,
 but it supposed to always be backward-compatible.
 (Please report an issue, otherwise.)
-You may also get a new patch.
+You may also get a new patch under the major version.
 
 - If you'd like to pin your environment to a specific minor version:
 
