@@ -10,11 +10,25 @@ Master
 
 ## Pre-requisites
 
+### Homebrew / Linuxbrew
+
+One of the following is required to install the CML compiler:
+- Homebrew (on macOS - at https://brew.sh)
+- or Linuxbrew (on Linux - at http://linuxbrew.sh)
+
+NOTE for Linux users: We have not yet tested the installation on Linux,
+but we expect you should be able to use Linuxbrew on Linux
+when following the installation instructions below.
+
+Please report an issue if you cannot get the CML compiler installed using Homebrew or Linuxbrew.
+
+### Java 8
+
 The only pre-requisite to run the CML compiler is Java 8.
 
 The `cml` command should just work after installation if Java 8 is available on the environment. Please report an issue, otherwise.
 
-## Quick, Two-Step Install with Homebrew
+## Quick, Two-Step Install with Homebrew / Linuxbrew
 
 ```
 $ brew tap cmlang/cml
@@ -36,7 +50,7 @@ Version format is MAJOR.MINOR.PATCH, where each number is incremented as follows
 - MINOR: when we add functionality in a backwards-compatible manner.
 - PATCH: when we make backwards-compatible fixes.
 
-## Specific Version Installation with Homebrew
+## Specific Version Installation with Homebrew / Linuxbrew
 
 - Before you can install the CML compiler, please run:
 
