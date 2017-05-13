@@ -35,7 +35,7 @@ You may also get a new minor version, or a patch.
 $ brew install cml-compiler@MAJOR_VERSION
 ```
 
-Later on, to get the latest of the specific minor version:
+Later on, to get the latest of the specific major version:
 
 ```
 $ brew upgrade cml-compiler@MAJOR_VERSION
@@ -53,7 +53,7 @@ You may also get a new patch.
 $ brew install cml-compiler@MAJOR_VERSION.MINOR_VERSION
 ```
 
-Later on, to get the latest of the specific major version:
+Later on, to get the latest of the specific minor version:
 
 ```
 $ brew upgrade cml-compiler@MAJOR_VERSION.MINOR_VERSION
