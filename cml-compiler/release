@@ -109,17 +109,28 @@ EOF
 if [ $? -ne 0 ]; then exit; fi
 
 CML_MAJOR=$(echo "${CML_VERSION}" | cut -d'.' -f 1)
+if [ $? -ne 0 ]; then exit; fi
+
 CML_MINOR=$(echo "${CML_VERSION}" | cut -d'.' -f 2)
-CML_PATCH=$(echo "${CML_VERSION}" | cut -d'.' -f 3)
-CML_JOINED_VERSION="${CML_MAJOR}${CML_MINOR}${CML_PATCH}"
-CML_FORMULA_VERSIONED="cml-compiler@${CML_VERSION}.rb"
-sed "s/CmlCompiler/CmlCompilerAT${CML_JOINED_VERSION}/g" < ${CML_FORMULA} > "${CML_FORMULA_VERSIONED}"
+if [ $? -ne 0 ]; then exit; fi
+
+CML_MINOR_VERSION="${CML_MAJOR}.${CML_MINOR}"
+CML_MINOR_VERSION_JOINED="${CML_MAJOR}${CML_MINOR}"
+CML_MINOR_FORMULA="cml-compiler@${CML_MINOR_VERSION}.rb"
+sed "s/CmlCompiler/CmlCompilerAT${CML_MINOR_VERSION_JOINED}/g" < ${CML_FORMULA} > "${CML_MINOR_FORMULA}"
+if [ $? -ne 0 ]; then exit; fi
+
+CML_MAJOR_FORMULA="cml-compiler@${CML_MAJOR}.rb"
+sed "s/CmlCompiler/CmlCompilerAT${CML_MAJOR}/g" < ${CML_FORMULA} > "${CML_MAJOR_FORMULA}"
 if [ $? -ne 0 ]; then exit; fi
 
 git add ${CML_FORMULA}
 if [ $? -ne 0 ]; then exit; fi
 
-git add ${CML_FORMULA_VERSIONED}
+git add ${CML_MAJOR_FORMULA}
+if [ $? -ne 0 ]; then exit; fi
+
+git add ${CML_MINOR_FORMULA}
 if [ $? -ne 0 ]; then exit; fi
 
 git commit -m "Committing version ${CML_VERSION} of CML Compiler."
