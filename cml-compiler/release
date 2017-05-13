@@ -72,7 +72,7 @@ if [ $? -ne 0 ]; then exit; fi
 git commit -m "Committing version ${CML_VERSION} of CML Compiler."
 if [ $? -ne 0 ]; then exit; fi
 
-git tag -m "CML Compiler %1" -a ${CML_VERSION}
+git tag -m "CML Compiler ${CML_VERSION}" -a ${CML_VERSION}
 if [ $? -ne 0 ]; then exit; fi
 
 git push --tags origin master
