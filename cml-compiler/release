@@ -5,7 +5,32 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-mvn versions:set -DnewVersion=$1
+CML_VERSION="$1"
+CML_PKG_NAME="cml-compiler-${CML_VERSION}.zip"
+CML_RELEASE_DIR="cml-releases/cml-compiler"
+CML_ROOT="../.."
+
+if [ -f "${CML_ROOT}/${CML_RELEASE_DIR}/${CML_PKG_NAME}"  ]; then
+    echo
+    echo WARNING: Version ${CML_VERSION} already released at: https://github.com/cmlang/${CML_RELEASE_DIR}
+    echo
+    exit 1
+fi
+
+CML_RELEASE_NOTES="${CML_PKG_NAME}.notes.txt"
+
+if [ ! -f "${CML_ROOT}/${CML_RELEASE_DIR}/${CML_RELEASE_NOTES}"  ]; then
+    echo
+    echo REMINDER: Release notes required before releasing version ${CML_VERSION}:
+    echo - Please write the release notes in: ${CML_RELEASE_NOTES}
+    echo - Once written, please commit the .zip.notes.txt file to the cml-releases repository under the cml-compiler dir.
+    echo
+    echo After that, you should be able to run the release command again.
+    echo
+    exit 1
+fi
+
+mvn versions:set -DnewVersion=${CML_VERSION}
 if [ $? -ne 0 ]; then exit; fi
 
 mvn clean install
@@ -20,16 +45,15 @@ if [ $? -ne 0 ]; then exit; fi
 cd target
 if [ $? -ne 0 ]; then exit; fi
 
-CML_PKG_SOURCE_NAME="cml-package-$1-distribution.zip"
+CML_PKG_SOURCE_NAME="cml-package-${CML_VERSION}-distribution.zip"
 CML_PKG_SHA=$(shasum -a 256 ${CML_PKG_SOURCE_NAME} | awk '{print $1}')
 if [ $? -ne 0 ]; then exit; fi
 
-CML_PKG_NAME="cml-compiler-$1.zip"
-CML_RELEASES_DIR="../../../../cml-releases/cml-compiler"
-cp "${CML_PKG_SOURCE_NAME}" "${CML_RELEASES_DIR}/${CML_PKG_NAME}"
+CML_ROOT="../../../.."
+cp "${CML_PKG_SOURCE_NAME}" "${CML_ROOT}/${CML_RELEASE_DIR}/${CML_PKG_NAME}"
 if [ $? -ne 0 ]; then exit; fi
 
-cd ${CML_RELEASES_DIR}
+cd "${CML_ROOT}/${CML_RELEASE_DIR}"
 if [ $? -ne 0 ]; then exit; fi
 
 CML_PKG_SHA_TXT="${CML_PKG_NAME}.sha256.txt"
@@ -42,24 +66,29 @@ if [ $? -ne 0 ]; then exit; fi
 git add "${CML_PKG_SHA_TXT}"
 if [ $? -ne 0 ]; then exit; fi
 
-git commit -m "Committing version $1 of CML Compiler."
+git add "${CML_RELEASE_NOTES}"
 if [ $? -ne 0 ]; then exit; fi
 
-git tag -m "CML Compiler %1" -a $1
+git commit -m "Committing version ${CML_VERSION} of CML Compiler."
+if [ $? -ne 0 ]; then exit; fi
+
+git tag -m "CML Compiler %1" -a ${CML_VERSION}
 if [ $? -ne 0 ]; then exit; fi
 
 git push --tags origin master
 if [ $? -ne 0 ]; then exit; fi
 
-cd "../../homebrew-cml"
+CML_ROOT="../.."
+cd "${CML_ROOT}/homebrew-cml"
 if [ $? -ne 0 ]; then exit; fi
 
+CML_FORMULA="cml-compiler.rb"
 CML_TAP_URL="https://raw.githubusercontent.com/cmlang/cml-releases/master/cml-compiler"
-cat <<EOF > cml-compiler.rb
+cat <<EOF > ${CML_FORMULA}
 require "formula"
 
 class CmlCompiler < Formula
-  VERSION = "$1"
+  VERSION = "${CML_VERSION}"
 
   desc "The CML Compiler"
   homepage "http://github.com/cmlang"
@@ -79,20 +108,31 @@ end
 EOF
 if [ $? -ne 0 ]; then exit; fi
 
-git add cml-compiler.rb
+CML_MAJOR=$(echo "${CML_VERSION}" | cut -d'.' -f 1)
+CML_MINOR=$(echo "${CML_VERSION}" | cut -d'.' -f 2)
+CML_PATCH=$(echo "${CML_VERSION}" | cut -d'.' -f 3)
+CML_JOINED_VERSION="${CML_MAJOR}${CML_MINOR}${CML_PATCH}"
+CML_FORMULA_VERSIONED="cml-compiler@${CML_VERSION}.rb"
+sed "s/CmlCompiler/CmlCompilerAT${CML_JOINED_VERSION}/g" < ${CML_FORMULA} > "${CML_FORMULA_VERSIONED}"
 if [ $? -ne 0 ]; then exit; fi
 
-git commit -m "Committing version $1 of CML Compiler."
+git add ${CML_FORMULA}
 if [ $? -ne 0 ]; then exit; fi
 
-git tag -m "CML Compiler %1" -a $1
+git add ${CML_FORMULA_VERSIONED}
+if [ $? -ne 0 ]; then exit; fi
+
+git commit -m "Committing version ${CML_VERSION} of CML Compiler."
+if [ $? -ne 0 ]; then exit; fi
+
+git tag -m "CML Compiler ${CML_VERSION}" -a ${CML_VERSION}
 if [ $? -ne 0 ]; then exit; fi
 
 git push --tags origin master
 if [ $? -ne 0 ]; then exit; fi
 
 echo
-echo Version $1 released to Homebrew.
+echo Version ${CML_VERSION} released.
 echo
 echo Check release with:
 echo \$ brew tap cmlang\/cml
