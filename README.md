@@ -54,7 +54,9 @@ The version format is MAJOR.MINOR.PATCH, where each number is incremented as fol
 
 ## Specific Version Installation with Homebrew / Linuxbrew
 
-- Before you can install the CML compiler, please run:
+### Finding Packages
+
+Before you can install the CML compiler, please run:
 
 ```
 $ brew tap cmlang/cml
@@ -62,15 +64,19 @@ $ brew tap cmlang/cml
 
 After that, the CML compiler packages will be available to be installed.
 
-- To find the versions of the CML compiler available to install:
+### Finding Versions
+
+To find the versions of the CML compiler available to install:
 
 ```
 $ brew search cml-compiler
 ```
 
-- To read the release notes of a specific version, please go to (look for the '.zip.notes.md' files): https://github.com/cmlang/cml-releases/tree/master/cml-compiler
+To read the release notes of a specific version, please go to (look for the '.zip.notes.md' files): https://github.com/cmlang/cml-releases/tree/master/cml-compiler
 
-- If you'd like to always have the latest version of the CML compiler:
+### The Very Latest
+
+If you'd like to always have the latest version of the CML compiler:
 
 ```
 $ brew install cml-compiler
@@ -87,7 +93,9 @@ and thus backward-incompatible version,
 of the CML language and compiler.
 You may also get a new minor version, or a patch.
 
-- If you'd like to pin your environment to a specific major version:
+### Specific Major Version
+
+If you'd like to pin your environment to a specific major version:
 
 ```
 $ brew install cml-compiler@MAJOR
@@ -105,7 +113,9 @@ but it is supposed to always be backward-compatible.
 (Please report an issue, otherwise.)
 You may also get a new patch under the major version.
 
-- If you'd like to pin your environment to a specific minor version:
+### Specific Minor Version
+
+If you'd like to pin your environment to a specific minor version:
 
 ```
 $ brew install cml-compiler@MAJOR.MINOR
