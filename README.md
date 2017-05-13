@@ -25,7 +25,7 @@ $ brew install cml-compiler
 
 To read the release notes of a specific version, please go to: https://github.com/cmlang/cml-releases/tree/master/cml-compiler
 
-Look for the files ending with '.zip.notes.txt'. For example: cml-compiler-1.0.zip.notes.txt
+Look for the files ending with '.zip.notes.md'. For example: cml-compiler-1.0.zip.notes.md
 
 ## Semantic Versioning
 
@@ -52,7 +52,7 @@ After that, the CML compiler packages will be available to be installed.
 $ brew search cml-compiler
 ```
 
-- To read the release notes of a specific version, please go to (look for the '.zip.notes.txt' files): https://github.com/cmlang/cml-releases/tree/master/cml-compiler
+- To read the release notes of a specific version, please go to (look for the '.zip.notes.md' files): https://github.com/cmlang/cml-releases/tree/master/cml-compiler
 
 - If you'd like to always have the latest version of the CML compiler:
 
@@ -85,7 +85,7 @@ $ brew upgrade cml-compiler@MAJOR
 
 You may get a new minor version,
 which will have new features,
-but it supposed to always be backward-compatible.
+but it is supposed to always be backward-compatible.
 (Please report an issue, otherwise.)
 You may also get a new patch under the major version.
 

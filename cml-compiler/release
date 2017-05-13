@@ -17,13 +17,13 @@ if [ -f "${CML_ROOT}/${CML_RELEASE_DIR}/${CML_PKG_NAME}"  ]; then
     exit 1
 fi
 
-CML_RELEASE_NOTES="${CML_PKG_NAME}.notes.txt"
+CML_RELEASE_NOTES="${CML_PKG_NAME}.notes.md"
 
 if [ ! -f "${CML_ROOT}/${CML_RELEASE_DIR}/${CML_RELEASE_NOTES}"  ]; then
     echo
     echo REMINDER: Release notes required before releasing version ${CML_VERSION}:
     echo - Please write the release notes in: ${CML_RELEASE_NOTES}
-    echo - Once written, please commit the .zip.notes.txt file to the cml-releases repository under the cml-compiler dir.
+    echo - Once written, please commit the .zip.notes.md file to the cml-releases repository under the cml-compiler dir.
     echo
     echo After that, you should be able to run the release command again.
     echo
