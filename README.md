@@ -8,6 +8,25 @@ Master
 
 ![Build Status](https://travis-ci.org/cmlang/cml-compiler.svg?branch=master)
 
+## Pre-requisites
+
+The only pre-requisite to run the CML compiler is Java 8.
+
+The `cml` command should just work after installation if Java 8 is available on the environment. Please report an issue, otherwise.
+
+## Quick, Two-Step Install with Homebrew
+
+```
+$ brew tap cmlang/cml
+$ brew install cml-compiler
+```
+
+## Release Notes
+
+To read the release notes of a specific version, please go to: https://github.com/cmlang/cml-releases/tree/master/cml-compiler
+
+Look for the files ending with '.zip.notes.txt'. For example: cml-compiler-1.0.zip.notes.txt
+
 ## Semantic Versioning
 
 The releases of the CML compiler follow Semantic Versioning: http://semver.org
@@ -17,15 +36,23 @@ Version format is MAJOR.MINOR.PATCH, where each number is incremented as follows
 - MINOR: when we add functionality in a backwards-compatible manner.
 - PATCH: when we make backwards-compatible fixes.
 
-## Installation with Homebrew
+## Specific Version Installation with Homebrew
 
 - Before you can install the CML compiler, please run:
 
 ```
-brew tap cmlang/cml
+$ brew tap cmlang/cml
 ```
 
 After that, the CML compiler packages will be available to be installed.
+
+- To find the versions of the CML compiler available to install:
+
+```
+$ brew search cml-compiler
+```
+
+- To read the release notes of a specific version, please go to (look for the '.zip.notes.txt' files): https://github.com/cmlang/cml-releases/tree/master/cml-compiler
 
 - If you'd like to always have the latest version of the CML compiler:
 
