@@ -14,7 +14,7 @@ Master
 
 One of the following is required to install the CML compiler:
 - Homebrew (on macOS - at https://brew.sh)
-- or Linuxbrew (on Linux - at http://linuxbrew.sh)
+- Linuxbrew (on Linux - at http://linuxbrew.sh)
 
 NOTE for Linux users: We have not yet tested the installation on Linux,
 but we expect you should be able to use Linuxbrew on Linux
