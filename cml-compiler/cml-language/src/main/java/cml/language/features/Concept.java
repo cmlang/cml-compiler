@@ -50,33 +50,14 @@ public interface Concept extends NamedElement, PropertyList
             .collect(toList());
     }
 
-    default List<Concept> getAllGeneralizations()
-    {
-        final List<Concept> generalizations = new ArrayList<>();
-
-        getDirectAncestors().forEach(c -> c.appendToGeneralizations(generalizations));
-
-        return generalizations;
-    }
-
-    default void appendToGeneralizations(List<Concept> generalizations)
-    {
-        if (!generalizations.contains(this))
-        {
-            generalizations.add(this);
-
-            getDirectAncestors().forEach(c -> c.appendToGeneralizations(generalizations));
-        }
-    }
-
     List<Concept> getDirectAncestors();
     void addDirectAncestor(Concept concept);
 
     default List<Property> getInheritedProperties()
     {
-        return getAllAncestors().stream()
-                                .flatMap(concept -> concept.getProperties().stream())
-                                .collect(toList());
+        return getAllGeneralizations().stream()
+                                      .flatMap(concept -> concept.getProperties().stream())
+                                      .collect(toList());
     }
 
     @SuppressWarnings("unused")
@@ -101,6 +82,48 @@ public interface Concept extends NamedElement, PropertyList
         return concat(getInheritedProperties().stream(), getProperties().stream()).collect(toList());
     }
 
+    default List<Concept> getAllGeneralizations()
+    {
+        final List<Concept> generalizations = new ArrayList<>();
+
+        getDirectAncestors().forEach(c -> c.appendToGeneralizations(generalizations));
+
+        return generalizations;
+    }
+
+    default void appendToGeneralizations(List<Concept> generalizations)
+    {
+        if (!generalizations.contains(this))
+        {
+            generalizations.add(this);
+
+            getDirectAncestors().forEach(c -> c.appendToGeneralizations(generalizations));
+        }
+    }
+
+    default List<Pair<Concept>> getGeneralizationPairs()
+    {
+        return getDirectAncestors().stream().flatMap(
+            c1 -> getDirectAncestors().stream()
+                                      .filter(c2 -> c1 != c2)
+                                      .map(c2 -> new Pair<>(c1, c2))
+        ).collect(toList());
+    }
+
+    default List<Pair<Property>> getGeneralizationPropertyPairs()
+    {
+        return getGeneralizationPairs().stream().flatMap(pair ->
+            pair.getLeft().getAllProperties().stream().flatMap(p1 ->
+                pair.getRight()
+                    .getAllProperties()
+                    .stream()
+                    .filter(p2 -> p1 != p2)
+                    .filter(p2 -> p1.getName().equals(p2.getName()))
+                    .map(p2 -> new Pair<>(p1, p2))
+            )
+        ).collect(toList());
+    }
+
     static Concept create(String name)
     {
         return create(name, false);
@@ -113,7 +136,7 @@ public interface Concept extends NamedElement, PropertyList
 
     static InvariantValidator<Concept> invariantValidator()
     {
-        return () -> asList(new NotOwnGeneralization());
+        return () -> asList(new NotOwnGeneralization(), new CompatibleGeneralizations());
     }
 }
 
@@ -196,5 +219,22 @@ class NotOwnGeneralization implements Invariant<Concept>
     public Diagnostic createDiagnostic(Concept self)
     {
         return new Diagnostic("not_own_generalization", self);
+    }
+}
+
+class CompatibleGeneralizations implements Invariant<Concept>
+{
+    @Override
+    public boolean evaluate(Concept self)
+    {
+        return self.getGeneralizationPropertyPairs()
+                   .stream()
+                   .allMatch(pair -> pair.getLeft().matchesTypeOf(pair.getRight()));
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Concept self)
+    {
+        return new Diagnostic("compatible_generalizations", self);
     }
 }

@@ -11,22 +11,22 @@ class BookImpl(Book):
         return self.__title
 
     @property
-    def base_property(self) -> 'str':
-        return self.__base.base_property
-
-    @property
     def description(self) -> 'str':
         return self.__product.description
+
+    @property
+    def base_property(self) -> 'str':
+        return self.__base.base_property
 
     @property
     def quantity(self) -> 'int':
         return self.__stock_item.quantity
 
     def __str__(self) -> 'str':
-        return "%s(base_property=%s, description=%s, quantity=%s, title=%s)" % (
+        return "%s(description=%s, base_property=%s, quantity=%s, title=%s)" % (
             type(self).__name__,
-            self.base_property,
             self.description,
+            self.base_property,
             self.quantity,
             self.title
         )

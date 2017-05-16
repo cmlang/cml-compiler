@@ -1,0 +1,15 @@
+
+concept A
+{
+    number: Integer;
+}
+
+concept B
+{
+    number: Decimal;
+}
+
+// The "number" property has incompatible types in A and B:
+concept C: A, B;
+
+task some_task;
