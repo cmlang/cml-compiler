@@ -27,9 +27,9 @@ class ModelAugmenter extends CMLBaseListener
     @Override
     public void enterConceptDeclaration(ConceptDeclarationContext ctx)
     {
-        if (ctx.ancestorList() != null)
+        if (ctx.generalizations() != null)
         {
-            final List<String> ancestorNames = ctx.ancestorList().NAME()
+            final List<String> ancestorNames = ctx.generalizations().NAME()
                                                   .stream()
                                                   .map(ParseTree::getText)
                                                   .collect(Collectors.toList());

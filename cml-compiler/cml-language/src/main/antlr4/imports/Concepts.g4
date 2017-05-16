@@ -4,10 +4,10 @@ import Names, Properties;
 
 conceptDeclaration returns [Concept concept]:
     ABSTRACT? 'concept' NAME
-    (':' ancestorList)?
+    (':' generalizations)?
     (';' | propertyList);
 
-ancestorList:
+generalizations:
     NAME (',' NAME)*;
 
 
