@@ -51,6 +51,7 @@ public class AcceptanceTest
     private static final int SUCCESS = 0;
     private static final int FAILURE__SOURCE_FILE_NOT_FOUND = 2;
     private static final int FAILURE__FAILED_LOADING_MODEL = 3;
+    private static final int FAILURE__MODEL_VALIDATION = 4;
     private static final int FAILURE__CONSTRUCTOR_UNKNOWN = 101;
     private static final int FAILURE__CONSTRUCTOR_UNDEFINED = 102;
     private static final int FAILURE__TASK_UNDECLARED = 103;
@@ -64,6 +65,11 @@ public class AcceptanceTest
         new SuccessCase("livir_books", "livir_console", "livir_pop", PYTHON),
         new SuccessCase("mini_cml_language", "mcml-compiler", "mcml_java", JAVA),
         new SuccessCase("mini_cml_language", "mcml_compiler", "mcml_py", PYTHON)
+    };
+
+    @DataPoints("validation-modules")
+    public static String[] validationModules = {
+        "not_own_generalization"
     };
 
     @DataPoints("failing-modules")
@@ -97,6 +103,15 @@ public class AcceptanceTest
 
         final String actualClientOutput = executeClient(successCase);
         assertThatOutputMatches("client's output", successCase.getExpectedClientOutputPath(), actualClientOutput);
+    }
+
+    @Theory
+    public void model_validation(@FromDataPoints("validation-modules") final String moduleName) throws Exception
+    {
+        final String modulePath = getValidationModulePath(moduleName);
+
+        cleanTargetDir(modulePath, SOME_TASK);
+        compileWithTaskAndVerifyOutput(modulePath, SOME_TASK, FAILURE__MODEL_VALIDATION);
     }
 
     @Theory
@@ -459,5 +474,10 @@ public class AcceptanceTest
     private static String getErrorModulePath(String moduleName)
     {
         return SuccessCase.CASES_DIR + File.separator + "errors" + File.separator + moduleName;
+    }
+
+    private static String getValidationModulePath(String moduleName)
+    {
+        return SuccessCase.CASES_DIR + File.separator + "validations" + File.separator + moduleName;
     }
 }

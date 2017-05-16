@@ -1,0 +1,6 @@
+Failed validation: not_own_generalization: A
+Failed validation: not_own_generalization: A1
+Failed validation: not_own_generalization: A2
+Failed validation: not_own_generalization: B1
+Failed validation: not_own_generalization: B2
+Failed validation: not_own_generalization: B3

@@ -1,0 +1,16 @@
+
+// Direct cycle:
+concept A: A;
+
+// Indirect cycle:
+concept A1: A2;
+concept A2: A1;
+
+// Third-level cycle:
+concept B1: B2, C;
+concept B2: B3, C;
+concept B3: B1, C;
+concept C: D;
+concept D;
+
+task some_task;

@@ -50,6 +50,25 @@ public interface Concept extends NamedElement, PropertyList
             .collect(toList());
     }
 
+    default List<Concept> getAllGeneralizations()
+    {
+        final List<Concept> generalizations = new ArrayList<>();
+
+        getDirectAncestors().forEach(c -> c.appendToGeneralizations(generalizations));
+
+        return generalizations;
+    }
+
+    default void appendToGeneralizations(List<Concept> generalizations)
+    {
+        if (!generalizations.contains(this))
+        {
+            generalizations.add(this);
+
+            getDirectAncestors().forEach(c -> c.appendToGeneralizations(generalizations));
+        }
+    }
+
     List<Concept> getDirectAncestors();
     void addDirectAncestor(Concept concept);
 
@@ -157,6 +176,12 @@ class ConceptImpl implements Concept
 
         directAncestors.add(concept);
     }
+
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
 }
 
 class NotOwnGeneralization implements Invariant<Concept>
@@ -164,7 +189,7 @@ class NotOwnGeneralization implements Invariant<Concept>
     @Override
     public boolean evaluate(Concept self)
     {
-        return !self.getAllAncestors().contains(self);
+        return !self.getAllGeneralizations().contains(self);
     }
 
     @Override

@@ -191,7 +191,10 @@ class ModelLoaderImpl implements ModelLoader
         {
             for (Diagnostic diagnostic: modelValidator.getDiagnostics())
             {
-                console.error("%s: %s", diagnostic.getCode(), diagnostic.getElement().toString());
+                console.println(
+                    "Failed validation: %s: %s",
+                    diagnostic.getCode(),
+                    diagnostic.getElement().toString());
             }
 
             return FAILURE__MODEL_VALIDATION;
