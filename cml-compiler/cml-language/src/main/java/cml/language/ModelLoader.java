@@ -6,6 +6,7 @@ import cml.io.FileSystem;
 import cml.io.SourceFile;
 import cml.language.features.Import;
 import cml.language.features.Module;
+import cml.language.foundation.Diagnostic;
 import cml.language.grammar.CMLLexer;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.CompilationUnitContext;
@@ -37,6 +38,7 @@ class ModelLoaderImpl implements ModelLoader
     private static final int SUCCESS = 0;
     private static final int FAILURE__SOURCE_FILE_NOT_FOUND = 2;
     private static final int FAILURE__FAILED_LOADING_MODEL = 3;
+    private static final int FAILURE__MODEL_VALIDATION = 4;
 
     private static final String NO_MAIN_SOURCE_FILE_IN_MODULE = "no main source file in module: %s";
     private static final String NO_SOURCE_DIR_IN_MODULE = "no source dir in module: %s";
@@ -58,7 +60,14 @@ class ModelLoaderImpl implements ModelLoader
             final String basePath = fileSystem.extractParentPath(modulePath);
             final String moduleName = fileSystem.extractName(modulePath);
 
-            return loadModule(model, basePath, moduleName, null);
+            final int exitCode = loadModule(model, basePath, moduleName, null);
+
+            if (exitCode == SUCCESS)
+            {
+                return validateModel(model);
+            }
+            
+            return exitCode;
         }
         catch (final Throwable exception)
         {
@@ -90,7 +99,7 @@ class ModelLoaderImpl implements ModelLoader
             return SUCCESS;
         }
 
-        final Module module = createModule(model, moduleName, _import);
+        final Module module = createModule(model, moduleName);
 
         if (_import != null)
         {
@@ -142,7 +151,7 @@ class ModelLoaderImpl implements ModelLoader
         }
     }
 
-    private Module createModule(Model model, String moduleName, Import _import)
+    private Module createModule(Model model, String moduleName)
     {
         final Module module = Module.create(moduleName);
 
@@ -165,6 +174,28 @@ class ModelLoaderImpl implements ModelLoader
         final ModelAugmenter modelAugmenter = new ModelAugmenter(module);
 
         walker.walk(modelAugmenter, compilationUnitContext);
+    }
+
+    private int validateModel(Model model)
+    {
+        final ModelValidator modelValidator = new ModelValidator();
+        final ModelVisitor modelVisitor = new ModelVisitor(modelValidator);
+
+        modelVisitor.visit(model);
+
+        if (modelValidator.getDiagnostics().size() == 0)
+        {
+            return SUCCESS;
+        }
+        else
+        {
+            for (Diagnostic diagnostic: modelValidator.getDiagnostics())
+            {
+                console.error("%s: %s", diagnostic.getCode(), diagnostic.getElement().toString());
+            }
+
+            return FAILURE__MODEL_VALIDATION;
+        }
     }
 
     private CompilationUnitContext parse(SourceFile sourceFile) throws IOException

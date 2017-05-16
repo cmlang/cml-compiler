@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
@@ -90,6 +91,11 @@ public interface Concept extends NamedElement, PropertyList
     {
         return new ConceptImpl(name, _abstract);
     }
+
+    static InvariantValidator<Concept> invariantValidator()
+    {
+        return () -> asList(new NotOwnGeneralization());
+    }
 }
 
 class ConceptImpl implements Concept
@@ -150,5 +156,20 @@ class ConceptImpl implements Concept
         assert !directAncestors.contains(concept);
 
         directAncestors.add(concept);
+    }
+}
+
+class NotOwnGeneralization implements Invariant<Concept>
+{
+    @Override
+    public boolean evaluate(Concept self)
+    {
+        return !self.getAllAncestors().contains(self);
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Concept self)
+    {
+        return new Diagnostic("not_own_generalization", self);
     }
 }
