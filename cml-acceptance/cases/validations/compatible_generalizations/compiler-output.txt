@@ -1,1 +1,2 @@
 Failed validation: compatible_generalizations: C
+Failed validation: compatible_generalizations: F

@@ -12,4 +12,9 @@ concept B
 // The "number" property has incompatible types in A and B:
 concept C: A, B;
 
+// Indirectly inheriting conflicting definitions of "number":
+concept D: A;
+concept E: B;
+concept F: D, E;
+
 task some_task;
