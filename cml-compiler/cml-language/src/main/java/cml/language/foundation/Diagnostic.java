@@ -1,7 +1,8 @@
 package cml.language.foundation;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.Collections.emptyList;
 
 public class Diagnostic
 {
@@ -12,12 +13,18 @@ public class Diagnostic
 
     private final String code;
     private final ModelElement element;
-    private final Set<ModelElement> participants = new HashSet<>();
+    private final List<? extends ModelElement> participants;
 
     public Diagnostic(String code, ModelElement element)
     {
+        this(code, element, emptyList());
+    }
+
+    public Diagnostic(String code, ModelElement element, List<? extends ModelElement> participants)
+    {
         this.code = code;
         this.element = element;
+        this.participants = new ArrayList<>(participants);
     }
 
     public String getCode()
@@ -30,13 +37,8 @@ public class Diagnostic
         return element;
     }
 
-    public Set<ModelElement> getParticipants()
+    public List<? extends ModelElement> getParticipants()
     {
         return participants;
-    }
-
-    boolean addParticipants(Set<? extends ModelElement> participants)
-    {
-        return this.participants.addAll(participants);
     }
 }

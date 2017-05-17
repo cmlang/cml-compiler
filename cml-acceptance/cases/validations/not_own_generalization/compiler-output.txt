@@ -1,6 +1,12 @@
-Failed validation: not_own_generalization: A
-Failed validation: not_own_generalization: A1
-Failed validation: not_own_generalization: A2
-Failed validation: not_own_generalization: B1
-Failed validation: not_own_generalization: B2
-Failed validation: not_own_generalization: B3
+
+Failed validation: required not_own_generalization: in concept A
+
+Failed validation: required not_own_generalization: in concept A1
+
+Failed validation: required not_own_generalization: in concept A2
+
+Failed validation: required not_own_generalization: in concept B1
+
+Failed validation: required not_own_generalization: in concept B2
+
+Failed validation: required not_own_generalization: in concept B3

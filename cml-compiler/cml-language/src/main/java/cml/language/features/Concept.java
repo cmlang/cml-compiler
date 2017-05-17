@@ -5,6 +5,7 @@ import cml.language.foundation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
@@ -107,7 +108,9 @@ public interface Concept extends NamedElement, PropertyList
             c1 -> getDirectAncestors().stream()
                                       .filter(c2 -> c1 != c2)
                                       .map(c2 -> new Pair<>(c1, c2))
-        ).collect(toList());
+        )
+        .distinct()
+        .collect(toList());
     }
 
     default List<Pair<Property>> getGeneralizationPropertyPairs()
@@ -121,7 +124,9 @@ public interface Concept extends NamedElement, PropertyList
                     .filter(p2 -> p1.getName().equals(p2.getName()))
                     .map(p2 -> new Pair<>(p1, p2))
             )
-        ).collect(toList());
+        )
+        .distinct()
+        .collect(toList());
     }
 
     static Concept create(String name)
@@ -203,7 +208,7 @@ class ConceptImpl implements Concept
     @Override
     public String toString()
     {
-        return getName();
+        return "concept " + getName();
     }
 }
 
@@ -235,6 +240,11 @@ class CompatibleGeneralizations implements Invariant<Concept>
     @Override
     public Diagnostic createDiagnostic(Concept self)
     {
-        return new Diagnostic("compatible_generalizations", self);
+        final List<Property> conflictingProperties = self.getGeneralizationPropertyPairs().stream()
+            .filter(pair -> !pair.getLeft().matchesTypeOf(pair.getRight()))
+            .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
+            .collect(toList());
+
+        return new Diagnostic("compatible_generalizations", self, conflictingProperties);
     }
 }

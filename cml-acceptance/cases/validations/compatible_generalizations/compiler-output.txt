@@ -1,2 +1,8 @@
-Failed validation: compatible_generalizations: C
-Failed validation: compatible_generalizations: F
+
+Failed validation: required compatible_generalizations: in concept C
+- property A.number: Integer
+- property B.number: Decimal
+
+Failed validation: required compatible_generalizations: in concept F
+- property A.number: Integer
+- property B.number: Decimal

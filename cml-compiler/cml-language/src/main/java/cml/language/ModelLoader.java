@@ -7,6 +7,7 @@ import cml.io.SourceFile;
 import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.foundation.Diagnostic;
+import cml.language.foundation.ModelElement;
 import cml.language.grammar.CMLLexer;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.CompilationUnitContext;
@@ -192,9 +193,14 @@ class ModelLoaderImpl implements ModelLoader
             for (Diagnostic diagnostic: modelValidator.getDiagnostics())
             {
                 console.println(
-                    "Failed validation: %s: %s",
+                    "\nFailed validation: required %s: in %s",
                     diagnostic.getCode(),
                     diagnostic.getElement().toString());
+
+                for(ModelElement element: diagnostic.getParticipants())
+                {
+                    console.println("- %s", element.toString());
+                }
             }
 
             return FAILURE__MODEL_VALIDATION;

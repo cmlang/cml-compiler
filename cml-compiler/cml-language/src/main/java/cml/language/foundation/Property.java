@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.String.format;
+
 public interface Property extends TypedElement, Scope
 {
     Optional<Expression> getValue();
@@ -126,6 +128,21 @@ class PropertyImpl implements Property
     public Optional<Scope> getParentScope()
     {
         return modelElement.getParentScope();
+    }
+
+    @Override
+    public String toString()
+    {
+        if (getParentScope().isPresent() && getParentScope().get() instanceof NamedElement)
+        {
+            final NamedElement namedElement = (NamedElement)getParentScope().get();
+
+            return format("property %s.%s: %s",  namedElement.getName(), getName(), getType());
+        }
+        else
+        {
+            return format("property %s: %s",  getName(), getType());
+        }
     }
 }
 
