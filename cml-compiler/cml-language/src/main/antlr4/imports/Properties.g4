@@ -6,5 +6,6 @@ propertyList:
     '{' (propertyDeclaration ';')* '}';
 
 propertyDeclaration returns [Property property]:
-    NAME (':' typeDeclaration)? ('=' expression)?;
+   DERIVED? NAME (':' typeDeclaration)? ('=' expression)?;
 
+DERIVED: '/';

@@ -15,6 +15,7 @@ import static java.util.Arrays.asList;
 public interface Property extends TypedElement, Scope
 {
     Optional<Expression> getValue();
+    boolean isDerived();
 
     boolean isTypeRequired();
     void setTypeRequired(boolean typeRequired);
@@ -24,17 +25,22 @@ public interface Property extends TypedElement, Scope
 
     static Property create(String name, @Nullable Type type)
     {
-        return new PropertyImpl(name, type, null);
+        return new PropertyImpl(name, type, null, false);
     }
 
     static Property create(String name, @Nullable Expression value)
     {
-        return new PropertyImpl(name, null, value);
+        return new PropertyImpl(name, null, value, false);
     }
 
     static Property create(String name, @Nullable Type type, @Nullable Expression value)
     {
-        return new PropertyImpl(name, type, value);
+        return new PropertyImpl(name, type, value, false);
+    }
+
+    static Property create(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
+    {
+        return new PropertyImpl(name, type, value, derived);
     }
 
     static InvariantValidator<Property> invariantValidator()
@@ -54,8 +60,9 @@ class PropertyImpl implements Property
 
     private final @Nullable Type type;
     private final @Nullable Expression value;
+    private boolean derived;
 
-    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value)
+    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
     {
         modelElement = ModelElement.create(this);
         namedElement = NamedElement.create(modelElement, name);
@@ -63,6 +70,13 @@ class PropertyImpl implements Property
 
         this.type = type;
         this.value = value;
+        this.derived = derived;
+    }
+
+    @Override
+    public boolean isDerived()
+    {
+        return derived;
     }
 
     @Override

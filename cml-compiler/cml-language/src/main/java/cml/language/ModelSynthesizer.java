@@ -133,7 +133,7 @@ class ModelSynthesizer extends CMLBaseListener
         final String name = ctx.NAME().getText();
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
-        final Property property = Property.create(name, type, value);
+        final Property property = Property.create(name, type, value, ctx.DERIVED() != null);
 
         property.addMember(value);
 

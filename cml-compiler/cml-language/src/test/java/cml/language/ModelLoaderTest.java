@@ -73,6 +73,16 @@ public class ModelLoaderTest
     }
 
     @Test
+    public void derived_property()
+    {
+        final Concept concept = loadConcept("derived_property");
+
+        assertThat(concept.getName(), is("SomeConcept"));
+        assertTrue("derivedProperty should be derived.", concept.getProperty("derivedProperty").get().isDerived());
+        assertFalse("nonDerivedProperty should not be derived.", concept.getProperty("nonDerivedProperty").get().isDerived());
+    }
+
+    @Test
     public void abstract_concept()
     {
         final Concept concept = loadConcept("abstract_concept");
