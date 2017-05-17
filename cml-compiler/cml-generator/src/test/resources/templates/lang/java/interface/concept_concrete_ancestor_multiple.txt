@@ -2,7 +2,7 @@ interface Book extends Product, StockItem
 {
     String getTitle();
 
-    static Book createBook(String baseProperty, String title)
+    static Book createBook(String title, String baseProperty)
     {
         Base base = Base.createBaseImpl(baseProperty);
         Product product = Product.createProductImpl(base);

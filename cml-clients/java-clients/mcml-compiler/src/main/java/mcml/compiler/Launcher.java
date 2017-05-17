@@ -10,7 +10,7 @@ public class Launcher
     public static void main(final String[] args)
     {
         final Model model = Model.createModel(null, emptySet());
-        final Concept concept = Concept.createConcept("SomeConcept", null, emptySet(), true);
+        final Concept concept = Concept.createConcept(true, "SomeConcept", null, emptySet());
 
         System.out.println("Mini-CML Compiler");
         System.out.println();

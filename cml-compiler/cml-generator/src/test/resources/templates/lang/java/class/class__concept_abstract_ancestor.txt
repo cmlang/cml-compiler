@@ -3,7 +3,7 @@ abstract class Book extends Product
     private final String title;
     private final String name;
 
-    public Book(String description, String title, String name)
+    public Book(String title, String name, String description)
     {
         super(name, description);
         this.title = title;
@@ -24,9 +24,9 @@ abstract class Book extends Product
     {
         return new StringBuilder(Book.class.getSimpleName())
                    .append('(')
-                   .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
                    .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
-                   .append("name=").append(String.format("\"%s\"", getName()))
+                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
+                   .append("description=").append(String.format("\"%s\"", getDescription()))
                    .append(')')
                    .toString();
     }

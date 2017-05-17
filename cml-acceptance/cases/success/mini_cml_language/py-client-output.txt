@@ -1,4 +1,4 @@
 Mini-CML Compiler
 
 ModelImpl(parent=None, elements=[])
-ConceptImpl(name=SomeConcept, parent=None, elements=[], abstracted=True)
+ConceptImpl(abstracted=True, name=SomeConcept, parent=None, elements=[])

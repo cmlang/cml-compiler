@@ -23,10 +23,10 @@ class BookImpl(Book):
         return self.__stock_item.quantity
 
     def __str__(self) -> 'str':
-        return "%s(description=%s, base_property=%s, quantity=%s, title=%s)" % (
+        return "%s(title=%s, description=%s, base_property=%s, quantity=%s)" % (
             type(self).__name__,
+            self.title,
             self.description,
             self.base_property,
-            self.quantity,
-            self.title
+            self.quantity
         )

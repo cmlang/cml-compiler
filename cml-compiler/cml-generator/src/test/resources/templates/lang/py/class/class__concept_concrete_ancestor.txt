@@ -1,6 +1,6 @@
 class Book(Product):
 
-    def __init__(self, description: 'str', title: 'str') -> 'None':
+    def __init__(self, title: 'str', description: 'str') -> 'None':
         super().__init__(description)
         self.__title = title
 
@@ -9,8 +9,8 @@ class Book(Product):
         return self.__title
 
     def __str__(self) -> 'str':
-        return "%s(description=%s, title=%s)" % (
+        return "%s(title=%s, description=%s)" % (
             type(self).__name__,
-            self.description,
-            self.title
+            self.title,
+            self.description
         )

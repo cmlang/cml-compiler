@@ -5,7 +5,7 @@ class Book(Product, StockItem, ABC):
         pass
 
     @staticmethod
-    def create_book(base_property: 'str', title: 'str') -> 'Book':
+    def create_book(title: 'str', base_property: 'str') -> 'Book':
         base = Base.create_base_impl(base_property)
         product = Product.create_product_impl(base)
         stock_item = StockItem.create_stock_item_impl(base)

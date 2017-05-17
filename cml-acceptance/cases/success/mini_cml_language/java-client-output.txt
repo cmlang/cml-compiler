@@ -1,4 +1,4 @@
 Mini-CML Compiler
 
 Model(parent=not present, elements=[])
-Concept(name="SomeConcept", parent=not present, elements=[], abstracted="true")
+Concept(abstracted="true", name="SomeConcept", parent=not present, elements=[])

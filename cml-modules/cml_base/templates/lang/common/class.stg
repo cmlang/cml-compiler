@@ -93,7 +93,7 @@ delegated_getters(properties) ::= <<
 class_primary_constructor(inherited_properties, super_properties, properties, ancestors) ::= <<
 <if(ancestors || properties)><\\>
 <modifier("public")><\\>
-<class_constructor([ancestors, super_properties, properties], class_primary_constructor_statements())><\\>
+<class_constructor([ancestors, properties, super_properties], class_primary_constructor_statements())><\\>
 <endif>
 >>
 

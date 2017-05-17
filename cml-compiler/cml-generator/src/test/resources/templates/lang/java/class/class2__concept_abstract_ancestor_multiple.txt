@@ -38,10 +38,10 @@ class BookImpl implements Book
     {
         return new StringBuilder(Book.class.getSimpleName())
                    .append('(')
+                   .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
                    .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
                    .append("baseProperty=").append(String.format("\"%s\"", getBaseProperty())).append(", ")
-                   .append("quantity=").append(String.format("\"%s\"", getQuantity())).append(", ")
-                   .append("title=").append(String.format("\"%s\"", getTitle()))
+                   .append("quantity=").append(String.format("\"%s\"", getQuantity()))
                    .append(')')
                    .toString();
     }

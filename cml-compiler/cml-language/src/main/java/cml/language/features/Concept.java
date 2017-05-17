@@ -5,6 +5,7 @@ import cml.language.foundation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
@@ -57,20 +58,38 @@ public interface Concept extends NamedElement, PropertyList
 
     default List<Property> getInheritedProperties()
     {
-        return getAllGeneralizations().stream()
-                                      .flatMap(concept -> concept.getProperties().stream())
-                                      .collect(toList());
+        if (getAllGeneralizations().contains(this))
+        {
+            throw new IllegalStateException("Concept should not be its own generalization: " + getName());
+        }
+
+        return getDirectAncestors().stream()
+                                   .flatMap(concept -> concept.getAllProperties().stream())
+                                   .distinct()
+                                   .collect(toList());
     }
 
     default List<Property> getSuperProperties()
     {
-        final List<Property> properties = getProperties();
         return getInheritedProperties()
             .stream()
-            .filter(p1 -> properties.stream()
-                                    .filter(p2 -> p1.getName().equals(p2.getName()))
-                                    .collect(counting()) == 0)
+            .filter(nonRedefinedProperties())
             .collect(toList());
+    }
+
+    default Predicate<Property> nonRedefinedProperties()
+    {
+        return p1 -> getProperties().stream()
+                                    .filter(p2 -> p1.getName().equals(p2.getName()))
+                                    .collect(counting()) == 0;
+    }
+
+    default List<Property> getAllProperties()
+    {
+        return concat(
+            getProperties().stream(),
+            getSuperProperties().stream()
+        ).collect(toList());
     }
 
     @SuppressWarnings("unused")
@@ -87,12 +106,6 @@ public interface Concept extends NamedElement, PropertyList
         return getAllProperties().stream()
                                  .filter(p -> !p.getValue().isPresent())
                                  .collect(toList());
-    }
-
-    @SuppressWarnings("unused")
-    default List<Property> getAllProperties()
-    {
-        return concat(getSuperProperties().stream(), getProperties().stream()).collect(toList());
     }
 
     default List<Concept> getAllGeneralizations()
@@ -236,6 +249,12 @@ class NotOwnGeneralization implements Invariant<Concept>
     public Diagnostic createDiagnostic(Concept self)
     {
         return new Diagnostic("not_own_generalization", self);
+    }
+
+    @Override
+    public boolean isCritical()
+    {
+        return true;
     }
 }
 

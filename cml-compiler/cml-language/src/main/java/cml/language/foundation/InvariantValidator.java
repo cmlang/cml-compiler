@@ -13,6 +13,8 @@ public interface InvariantValidator<T extends ModelElement>
             if (!invariant.evaluate(self))
             {
                 diagnostics.add(invariant.createDiagnostic(self));
+
+                if (invariant.isCritical()) break;
             }
         }
     }

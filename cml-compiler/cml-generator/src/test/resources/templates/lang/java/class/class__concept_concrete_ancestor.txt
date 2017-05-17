@@ -2,7 +2,7 @@ class Book extends Product
 {
     private final String title;
 
-    public Book(String description, String title)
+    public Book(String title, String description)
     {
         super(description);
         this.title = title;
@@ -17,8 +17,8 @@ class Book extends Product
     {
         return new StringBuilder(Book.class.getSimpleName())
                    .append('(')
-                   .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
-                   .append("title=").append(String.format("\"%s\"", getTitle()))
+                   .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
+                   .append("description=").append(String.format("\"%s\"", getDescription()))
                    .append(')')
                    .toString();
     }
