@@ -1,0 +1,14 @@
+
+Failed validation: required conflict_redefinition: in concept C
+- property A.p1: Integer
+- property B.p1: Integer
+
+Failed validation: required conflict_redefinition: in concept E
+- property A.p1: Integer
+- property D.p1: Integer
+- property A.r1: Decimal
+- property D.r1: Decimal
+
+Failed validation: required conflict_redefinition: in concept F
+- property A.t1: String
+- property D.t1: String

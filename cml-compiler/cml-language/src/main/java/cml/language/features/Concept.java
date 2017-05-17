@@ -166,7 +166,11 @@ public interface Concept extends NamedElement, PropertyList
 
     static InvariantValidator<Concept> invariantValidator()
     {
-        return () -> asList(new NotOwnGeneralization(), new CompatibleGeneralizations());
+        return () -> asList(
+            new NotOwnGeneralization(),
+            new CompatibleGeneralizations(),
+            new ConflictRedefinition()
+        );
     }
 }
 
@@ -277,5 +281,41 @@ class CompatibleGeneralizations implements Invariant<Concept>
             .collect(toList());
 
         return new Diagnostic("compatible_generalizations", self, conflictingProperties);
+    }
+}
+
+class ConflictRedefinition implements Invariant<Concept>
+{
+    @Override
+    public boolean evaluate(Concept self)
+    {
+        return getConflictingPropertyPairs(self)
+                   .map(pair -> pair.getLeft())
+                   .allMatch(propertyRedefinedIn(self));
+    }
+
+    private Stream<Pair<Property>> getConflictingPropertyPairs(Concept self)
+    {
+        return self.getGeneralizationPropertyPairs().stream()
+                   .filter(pair -> pair.getLeft().matchesTypeOf(pair.getRight()))
+                   .filter(pair -> pair.getLeft().getValue().isPresent() || pair.getRight().getValue().isPresent());
+    }
+
+    Predicate<Property> propertyRedefinedIn(Concept self)
+    {
+        return p1 -> self.getProperties()
+                         .stream()
+                         .anyMatch(p2 -> p1.getName().equals(p2.getName()));
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Concept self)
+    {
+        final List<Property> conflictingProperties = getConflictingPropertyPairs(self)
+                                                         .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
+                                                         .filter(propertyRedefinedIn(self).negate())
+                                                         .collect(toList());
+
+        return new Diagnostic("conflict_redefinition", self, conflictingProperties);
     }
 }

@@ -1,0 +1,51 @@
+concept Base
+{
+    a: String;
+}
+
+concept A: Base
+{
+    p1: Integer = 0;
+    q1: String;
+    r1: Decimal = 1.0;
+    s1: Decimal;
+    t1: String = "A";
+}
+
+concept B: Base
+{
+    p1: Integer = 1;
+    q2: String;
+}
+
+// Property "p1" should have been redefined
+// in order to resolve definition conflict between A and B:
+concept C: A, B;
+
+// Redefinition as expected:
+concept D: A, B
+{
+    p1: Integer = 2;
+    q3: String;
+    r1: Decimal = 2.0;
+    s1: Decimal;
+    t1: String = "D";
+}
+
+// Missing redefinition of "p1" and "r1":
+concept E: A, D
+{
+    t1: String = "E";
+}
+
+// Redefinitions as expected (except for "t1"):
+concept F: A, D, Base
+{
+    p1: Integer = 3;
+    q4: String;
+    r1: Decimal;
+
+    // No need to redefine "s1" because no expression has been defined for it in A and D.
+}
+
+task some_task;
