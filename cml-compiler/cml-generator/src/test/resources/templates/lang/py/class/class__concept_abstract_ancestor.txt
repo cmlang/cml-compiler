@@ -1,16 +1,22 @@
 class Book(Product, ABC):
 
-    def __init__(self, description: 'str', title: 'str') -> 'None':
-        super().__init__(description)
+    def __init__(self, description: 'str', title: 'str', name: 'str') -> 'None':
+        super().__init__(name, description)
         self.__title = title
+        self.__name = name
 
     @property
     def title(self) -> 'str':
         return self.__title
 
+    @property
+    def name(self) -> 'str':
+        return self.__name
+
     def __str__(self) -> 'str':
-        return "%s(description=%s, title=%s)" % (
+        return "%s(description=%s, title=%s, name=%s)" % (
             type(self).__name__,
             self.description,
-            self.title
+            self.title,
+            self.name
         )

@@ -60,10 +60,12 @@ public class ClassTest extends LangTest
     public void class__concept_abstract_ancestor() throws IOException
     {
         final Concept productConcept = Concept.create("Product");
+        productConcept.addMember(Property.create("name", Type.create("String", null)));
         productConcept.addMember(Property.create("description", Type.create("String", null)));
 
         final Concept bookConcept = Concept.create("Book", true);
         bookConcept.addMember(Property.create("title", Type.create("String", null)));
+        bookConcept.addMember(Property.create("name", Type.create("String", null)));
         bookConcept.addDirectAncestor(productConcept);
 
         testClassTemplateWithConcept(bookConcept, "class__concept_abstract_ancestor.txt");

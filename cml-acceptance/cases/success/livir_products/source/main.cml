@@ -1,6 +1,7 @@
 
 concept Product
 {
+    name: String;
     price: Decimal = 0.00;
 }
 

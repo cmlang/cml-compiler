@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
@@ -61,6 +62,17 @@ public interface Concept extends NamedElement, PropertyList
                                       .collect(toList());
     }
 
+    default List<Property> getSuperProperties()
+    {
+        final List<Property> properties = getProperties();
+        return getInheritedProperties()
+            .stream()
+            .filter(p1 -> properties.stream()
+                                    .filter(p2 -> p1.getName().equals(p2.getName()))
+                                    .collect(counting()) == 0)
+            .collect(toList());
+    }
+
     @SuppressWarnings("unused")
     default List<Property> getInitProperties()
     {
@@ -80,7 +92,7 @@ public interface Concept extends NamedElement, PropertyList
     @SuppressWarnings("unused")
     default List<Property> getAllProperties()
     {
-        return concat(getInheritedProperties().stream(), getProperties().stream()).collect(toList());
+        return concat(getSuperProperties().stream(), getProperties().stream()).collect(toList());
     }
 
     default List<Concept> getAllGeneralizations()

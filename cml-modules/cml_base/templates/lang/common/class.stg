@@ -12,7 +12,8 @@ class(concept) ::= <<
     interfaces=[],
     field_ancestors=[],
     delegated_properties=[],
-    super_properties=concept.inheritedProperties
+    super_properties=concept.superProperties,
+    inherited_properties=concept.inheritedProperties
 )>
 >>
 
@@ -25,7 +26,8 @@ class2(concept, class_name_suffix) ::= <<
     interfaces=[concept],
     field_ancestors=concept.allAncestors,
     delegated_properties=concept.inheritedProperties,
-    super_properties=[]
+    super_properties=[],
+    inherited_properties=[]
 )>
 >>
 
@@ -34,7 +36,7 @@ class7(
     abstract,
     ancestors, interfaces,
     field_ancestors,
-    delegated_properties, super_properties
+    delegated_properties, super_properties, inherited_properties
 ) ::= <<
 <class_abstract()><\\>
 <structure(
@@ -44,7 +46,7 @@ class7(
     sections = [
         class_fields(),
         class_secondary_constructor(concept.nonInitProperties, field_ancestors),
-        class_primary_constructor(super_properties, concept.properties, field_ancestors),
+        class_primary_constructor(inherited_properties, super_properties, concept.properties, field_ancestors),
         class_getters(),
         class_to_string()
     ]
@@ -88,7 +90,7 @@ delegated_getters(properties) ::= <<
 <properties:delegate_getter();separator="\n\n">
 >>
 
-class_primary_constructor(super_properties, properties, ancestors) ::= <<
+class_primary_constructor(inherited_properties, super_properties, properties, ancestors) ::= <<
 <if(ancestors || properties)><\\>
 <modifier("public")><\\>
 <class_constructor([ancestors, super_properties, properties], class_primary_constructor_statements())><\\>
@@ -96,7 +98,7 @@ class_primary_constructor(super_properties, properties, ancestors) ::= <<
 >>
 
 class_primary_constructor_statements() ::= <<
-<super_constructor(super_properties)><\\>
+<super_constructor(inherited_properties)><\\>
 <if(super_properties)><\\>
 <properties:field_init();separator="\n"><\\>
 <else><\\>

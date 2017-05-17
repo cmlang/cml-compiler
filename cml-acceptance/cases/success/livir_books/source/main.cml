@@ -8,6 +8,7 @@ concept Book: Product
 {
     isbn: String = "Not Provided";
     title: String = "No Title";
+    name = title;
 }
 
 concept Order
