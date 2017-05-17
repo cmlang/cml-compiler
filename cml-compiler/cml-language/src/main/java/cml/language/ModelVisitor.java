@@ -1,6 +1,7 @@
 package cml.language;
 
 import cml.language.features.Concept;
+import cml.language.foundation.Property;
 
 public class ModelVisitor
 {
@@ -8,6 +9,7 @@ public class ModelVisitor
     {
         void visit(Model model);
         void visit(Concept concept);
+        void visit(Property property);
     }
 
     private Delegate delegate;
@@ -23,6 +25,11 @@ public class ModelVisitor
         for (final Concept concept: model.getConcepts())
         {
             delegate.visit(concept);
+
+            for(final Property property: concept.getProperties())
+            {
+                delegate.visit(property);
+            }
         }
     }
 }

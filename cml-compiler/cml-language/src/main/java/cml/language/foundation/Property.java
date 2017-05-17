@@ -1,12 +1,16 @@
 package cml.language.foundation;
 
 import cml.language.expressions.Expression;
+import cml.language.features.Concept;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 
 public interface Property extends TypedElement, Scope
 {
@@ -31,6 +35,11 @@ public interface Property extends TypedElement, Scope
     static Property create(String name, @Nullable Type type, @Nullable Expression value)
     {
         return new PropertyImpl(name, type, value);
+    }
+
+    static InvariantValidator<Property> invariantValidator()
+    {
+        return () -> asList(new GeneralizationCompatibleRedefinition());
     }
 }
 
@@ -142,6 +151,40 @@ class PropertyImpl implements Property
         else
         {
             return format("property %s: %s",  getName(), getType());
+        }
+    }
+}
+
+class GeneralizationCompatibleRedefinition implements Invariant<Property>
+{
+    @Override
+    public boolean evaluate(Property self)
+    {
+        return getRedefinedProperties(self).allMatch(p -> p.matchesTypeOf(self));
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Property self)
+    {
+        final List<Property> conflictingProperties = getRedefinedProperties(self)
+                                                        .filter(p -> !p.matchesTypeOf(self))
+                                                        .collect(Collectors.toList());
+
+        return new Diagnostic("generalization_compatible_redefinition", self, conflictingProperties);
+    }
+
+    private Stream<Property> getRedefinedProperties(Property self)
+    {
+        if (self.getParentScope().isPresent() && self.getParentScope().get() instanceof Concept)
+        {
+            final Concept concept = (Concept) self.getParentScope().get();
+
+            return concept.getInheritedProperties().stream()
+                          .filter(p -> p.getName().equals(self.getName()));
+        }
+        else
+        {
+            return Stream.empty();
         }
     }
 }

@@ -71,7 +71,8 @@ public class AcceptanceTest
     public static String[] validationModules = {
         "not_own_generalization",
         "compatible_generalizations",
-        "conflict_redefinition"
+        "conflict_redefinition",
+        "generalization_compatible_redefinition"
     };
 
     @DataPoints("failing-modules")

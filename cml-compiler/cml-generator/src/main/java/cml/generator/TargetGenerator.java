@@ -5,6 +5,7 @@ import cml.language.ModelVisitor;
 import cml.language.features.Concept;
 import cml.language.features.Task;
 import cml.language.Model;
+import cml.language.foundation.Property;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +52,9 @@ class TargetGenerator implements ModelVisitor.Delegate
 
         generateTargetFiles(CONCEPT, concept);
     }
+
+    @Override
+    public void visit(Property property) {}
 
     private void generateTargetFiles(String elementType, Object modelElement)
     {

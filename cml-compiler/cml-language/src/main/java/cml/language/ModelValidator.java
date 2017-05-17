@@ -3,6 +3,7 @@ package cml.language;
 import cml.language.features.Concept;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.InvariantValidator;
+import cml.language.foundation.Property;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 public class ModelValidator implements ModelVisitor.Delegate
 {
     private final InvariantValidator<Concept> conceptInvariantValidator = Concept.invariantValidator();
+    private final InvariantValidator<Property> propertyInvariantValidator = Property.invariantValidator();
     private final List<Diagnostic> diagnostics = new ArrayList<>();
 
     public List<Diagnostic> getDiagnostics()
@@ -24,5 +26,11 @@ public class ModelValidator implements ModelVisitor.Delegate
     public void visit(Concept concept)
     {
         conceptInvariantValidator.validate(concept, diagnostics);
+    }
+
+    @Override
+    public void visit(Property property)
+    {
+        propertyInvariantValidator.validate(property, diagnostics);
     }
 }

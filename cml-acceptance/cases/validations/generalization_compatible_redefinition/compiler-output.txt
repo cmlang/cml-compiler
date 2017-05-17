@@ -1,0 +1,31 @@
+
+Failed validation: required generalization_compatible_redefinition: in property C.p1: String
+- property A.p1: Integer
+- property B.p1: Integer
+
+Failed validation: required generalization_compatible_redefinition: in property D.p2: Integer
+- property A.p2: String
+
+Failed validation: required compatible_generalizations: in concept E
+- property A.p2: String
+- property D.p2: Integer
+
+Failed validation: required generalization_compatible_redefinition: in property E.p1: String
+- property A.p1: Integer
+- property D.p1: Integer
+
+Failed validation: required generalization_compatible_redefinition: in property E.r1: String
+- property A.r1: Decimal
+- property D.r1: Decimal
+
+Failed validation: required compatible_generalizations: in concept F
+- property A.p2: String
+- property D.p2: Integer
+
+Failed validation: required conflict_redefinition: in concept F
+- property A.t2: String
+- property D.t2: String
+
+Failed validation: required generalization_compatible_redefinition: in property F.t1: Boolean
+- property A.t1: String
+- property D.t1: String

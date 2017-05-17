@@ -1,0 +1,67 @@
+concept Base
+{
+    a: String;
+}
+
+concept A: Base
+{
+    p1: Integer = 0;
+    p2: String;
+    q1: String;
+    r1: Decimal = 1.0;
+    s1: Decimal;
+    t1: String = "A";
+    t2: String = "A";
+}
+
+concept B: Base
+{
+    p1: Integer = 1;
+    q2: String;
+}
+
+// Property "p1" should have been redefined as Integer
+// in order to resolve definition conflict between A and B:
+concept C: A, B
+{
+    p1: String;
+    q3: String;
+    r1: Decimal = 2.0;
+    s1: Decimal;
+    t1: String = "D";
+}
+
+// Redefinition as expected:
+concept D: A, B
+{
+    p1: Integer = 2;
+    p2: Integer; // Incompatible with A
+    q3: String;
+    r1: Decimal = 2.0;
+    s1: Decimal;
+    t1: String = "D";
+    t2: String = "D";
+}
+
+// Incorrect type in redefinition of "p1" and "r1":
+concept E: A, D
+{
+    p1: String;
+    q4: String;
+    r1: String;
+    t1: String = "E";
+    t2: String = "E";
+}
+
+// Redefinitions as expected (except for "t1", which should be "String"):
+concept F: A, D, Base
+{
+    p1: Integer = 3;
+    q4: String;
+    r1: Decimal;
+    t1: Boolean;
+
+    // Also missing "t2" redefinition.
+}
+
+task some_task;
