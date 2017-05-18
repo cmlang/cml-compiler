@@ -9,6 +9,7 @@ concept A: Base
     q1: String;
     r1: Decimal = 1.0;
     s1: Decimal;
+    s2: Decimal;
     t1: String = "A";
 }
 
@@ -29,6 +30,7 @@ concept D: A, B
     q3: String;
     r1: Decimal = 2.0;
     s1: Decimal;
+    /s2: Decimal;
     t1: String = "D";
 }
 
@@ -46,6 +48,9 @@ concept F: A, D, Base
     r1: Decimal;
 
     // No need to redefine "s1" because no expression has been defined for it in A and D.
+
+    // However, we do need to redefine "s2" because it is a derived property in D, but not in A:
+    s2 = 4.0;
 }
 
 task some_task;

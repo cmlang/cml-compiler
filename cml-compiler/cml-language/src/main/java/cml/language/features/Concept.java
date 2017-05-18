@@ -326,7 +326,10 @@ class ConflictRedefinition implements Invariant<Concept>
     {
         return self.getGeneralizationPropertyPairs().stream()
                    .filter(pair -> pair.getLeft().matchesTypeOf(pair.getRight()))
-                   .filter(pair -> pair.getLeft().getValue().isPresent() || pair.getRight().getValue().isPresent());
+                   .filter(pair -> pair.getLeft().isDerived() ||
+                                   pair.getLeft().getValue().isPresent() ||
+                                   pair.getRight().isDerived() ||
+                                   pair.getRight().getValue().isPresent());
     }
 
     Predicate<Property> propertyRedefinedIn(Concept self)
