@@ -64,3 +64,9 @@ task shapes_cmlc_py by cmlc_py
     moduleName = "shapes_cmlc";
     moduleVersion = "1.0.1";
 }
+
+task shapes_pop_py by pop
+{
+    moduleName = "shapes_pop";
+    moduleVersion = "1.0.1";
+}

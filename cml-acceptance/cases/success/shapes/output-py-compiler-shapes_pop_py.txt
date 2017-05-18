@@ -1,0 +1,15 @@
+model files:
+- setup.py
+- shapes_pop/__init__.py
+
+Shape files:
+- shapes_pop/shape.py
+
+Rectangle files:
+- shapes_pop/rectangle.py
+
+Rhombus files:
+- shapes_pop/rhombus.py
+
+Square files:
+- shapes_pop/square.py

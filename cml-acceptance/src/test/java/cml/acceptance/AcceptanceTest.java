@@ -66,7 +66,8 @@ public class AcceptanceTest
         new SuccessCase("mini_cml_language", "mcml-compiler", "mcml_java", JAVA),
         new SuccessCase("mini_cml_language", "mcml_compiler", "mcml_py", PYTHON),
         new SuccessCase("shapes", "shapes-console", "shapes_java", JAVA),
-        new SuccessCase("shapes", "shapes_cmlc_console", "shapes_cmlc_py", PYTHON, "shapes_cmlc")
+        new SuccessCase("shapes", "shapes_cmlc_console", "shapes_cmlc_py", PYTHON, "shapes_cmlc"),
+//        new SuccessCase("shapes", "shapes_pop_console", "shapes_pop_py", PYTHON, "shapes_pop")
     };
 
     @DataPoints("validation-modules")
@@ -97,11 +98,11 @@ public class AcceptanceTest
     @Theory
     public void success(@FromDataPoints("success-cases") final SuccessCase successCase) throws Exception
     {
-        cleanTargetDir(successCase.getModulePath(), successCase.getTargetName());
+        cleanTargetDir(successCase.getModulePath(), successCase.getTaskName());
 
         compileAndVerifyOutput(
             successCase.getModulePath(),
-            successCase.getTargetName(),
+            successCase.getTaskName(),
             successCase.getExpectedCompilerOutputPath(),
             SUCCESS);
         installGeneratedModule(successCase.getTargetDirPath(), successCase);
@@ -218,7 +219,7 @@ public class AcceptanceTest
         compileAndVerifyOutput(
             modulePath,
             taskName,
-            modulePath + "/" + SuccessCase.COMPILER_OUTPUT_FILENAME,
+            modulePath + File.separator + "compiler-output.txt",
             expectedExitCode);
     }
 

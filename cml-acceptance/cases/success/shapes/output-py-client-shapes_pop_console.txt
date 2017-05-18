@@ -1,0 +1,5 @@
+Shapes Console
+
+Rectangle(width=10, height=20, area=200, color=red)
+Rhombus(p=14.1421356237, q=14.1421356237, area=99.99999999956229, color=green)
+Square(side_length=10, width=10, height=10, p=14.1421356237, q=14.1421356237, area=100, color=blue)
