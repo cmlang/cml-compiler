@@ -143,6 +143,6 @@ class PathImpl implements Path
     @Override
     public String toString()
     {
-        return getNames().stream().collect(joining(", "));
+        return getNames().stream().collect(joining("."));
     }
 }
