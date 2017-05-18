@@ -339,7 +339,17 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.STRING() != null) return unwrap(ctx.STRING().getText());
         else if (ctx.INTEGER() != null) return ctx.INTEGER().getText();
         else if (ctx.DECIMAL() != null) return ctx.DECIMAL().getText();
+        else if (ctx.LONG() != null) return extractSuffix(ctx.LONG().getText());
+        else if (ctx.SHORT() != null) return extractSuffix(ctx.SHORT().getText());
+        else if (ctx.BYTE() != null) return extractSuffix(ctx.BYTE().getText());
+        else if (ctx.FLOAT() != null) return extractSuffix(ctx.FLOAT().getText());
+        else if (ctx.DOUBLE() != null) return extractSuffix(ctx.DOUBLE().getText());
         else return null;
+    }
+
+    private static String extractSuffix(String text)
+    {
+        return text.substring(0, text.length() - 1);
     }
 
     private static String getPrimitiveTypeName(LiteralExpressionContext ctx)
@@ -347,7 +357,12 @@ class ModelSynthesizer extends CMLBaseListener
         if (ctx.BOOLEAN() != null) return "Boolean";
         else if (ctx.STRING() != null) return "String";
         else if (ctx.INTEGER() != null) return "Integer";
+        else if (ctx.LONG() != null) return "Long";
+        else if (ctx.SHORT() != null) return "Short";
+        else if (ctx.BYTE() != null) return "Byte";
         else if (ctx.DECIMAL() != null) return "Decimal";
+        else if (ctx.FLOAT() != null) return "Float";
+        else if (ctx.DOUBLE() != null) return "Double";
         else return null;
     }
 

@@ -8,4 +8,9 @@ interface Book
     {
         return new BookImpl(title, sequel, categories);
     }
+
+    static Book extendBook(String title, @Nullable Book sequel, Set<Category> categories)
+    {
+        return new BookImpl(title, sequel, categories);
+    }
 }

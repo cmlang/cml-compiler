@@ -14,6 +14,7 @@ import "/lang/common/interface.stg"
 import "/lang/common/class.stg"
 import "/lang/common/statement.stg"
 import "/lang/common/call.stg"
+import "/lang/common/expression.stg"
 
 
 

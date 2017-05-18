@@ -2,10 +2,10 @@ class Book(Intermediate, ABC):
 
     @staticmethod
     def create_book(description: 'str') -> 'Book':
-        product = Product.create_product_impl(description)
-        intermediate = Intermediate.create_intermediate_impl(product)
+        product = Product.extend_product(description)
+        intermediate = Intermediate.extend_intermediate(product)
         return BookImpl(product, intermediate)
 
     @staticmethod
-    def create_book_impl(product: 'Product', intermediate: 'Intermediate') -> 'Book':
+    def extend_book(product: 'Product', intermediate: 'Intermediate') -> 'Book':
         return BookImpl(product, intermediate)

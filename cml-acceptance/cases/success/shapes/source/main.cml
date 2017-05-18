@@ -1,0 +1,66 @@
+
+// Generalization of Circle and Rectangle:
+concept Shape
+{
+    // Specializations below share the color attribute as-is:
+    color: String;
+
+    // Specializations below redefine the area attribute:
+    area: Double;
+}
+
+// Specialization of Shape:
+concept Rectangle: Shape
+{
+    // New attributes that characterize a rectangle:
+    width: Double;
+    height: Double;
+
+    // Redefinition of the area attribute:
+    /area = width * height;
+}
+
+// Another specialization of Shape:
+concept Rhombus: Shape
+{
+    // Diagonal attributes that characterize a rhombus:
+    p: Double;
+    q: Double;
+
+    // Another redefinition of the area attribute:
+    /area = (p * q) / 2;
+}
+
+// Specialization of both Rectangle and Rhombus:
+concept Square: Rectangle, Rhombus
+{
+    // Only attribute needed to characterize a square:
+    side_length: Double;
+
+    // Redefinitions of Rectangle's attributes:
+    /width = side_length;
+    /height = side_length;
+
+    // Redefinitions of Rhombus' attributes:
+    /p = side_length * 1.41421356237f; // square root of 2
+    /q = p;
+
+    // Required to redefine area in order to resolve conflict
+    // between Rectangle's area and Rhombus' area:
+    /area = side_length ^ 2;
+}
+
+task shapes_java by cmlc_java
+{
+    groupId = "shapes";
+    artifactId = "shapes";
+    artifactVersion = "1.0.1-SNAPSHOT";
+    packageName = "shapes";
+    packagePath = "shapes";
+}
+
+task shapes_cmlc_py by cmlc_py
+{
+    moduleName = "shapes";
+    moduleVersion = "1.0.1";
+}

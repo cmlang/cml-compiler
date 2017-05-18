@@ -165,6 +165,11 @@ getter_call(property) ::= <<
 get<property.name; format="pascal-case">()
 >>
 
+path_getter_call(name) ::= <<
+get<name; format="pascal-case">()
+>>
+
+
 // Interfaces
 
 interface_keyword() ::= "interface "
@@ -216,6 +221,50 @@ literal_expr_integer(text) ::= <<
 <text>
 >>
 
+literal_expr_long(text) ::= <<
+<text>
+>>
+
+literal_expr_short(text) ::= <<
+<text>
+>>
+
+literal_expr_byte(text) ::= <<
+<text>
+>>
+
 literal_expr_decimal(text) ::= <<
 new BigDecimal("<text>")
 >>
+
+literal_expr_float(text) ::= <<
+<text>
+>>
+
+literal_expr_double(text) ::= <<
+<text>
+>>
+
+// Constants
+
+null_value() ::= "null"
+
+// Operations
+
+operation_add(left, right) ::= "<left> + <right>"
+operation_sub(left, right) ::= "<left> - <right>"
+operation_mul(left, right) ::= "<left> * <right>"
+operation_div(left, right) ::= "<left> / <right>"
+operation_mod(left, right) ::= "<left> % <right>"
+operation_exp(left, right) ::= "Math.pow(<left>, <right>)"
+
+operation_eq(left, right) ::= "<left> == <right>"
+operation_ineq(left, right) ::= "<left> != <right>"
+operation_gt(left, right) ::= "<left> > <right>"
+operation_gte(left, right) ::= "<left> >= <right>"
+operation_lt(left, right) ::= "<left> \< <right>"
+operation_lte(left, right) ::= "<left> \<= <right>"
+
+operation_and(left, right) ::= "<left> && <right>"
+operation_or(left, right) ::= "<left> || <right>"
+operation_not(expr) ::= "!<expr>"

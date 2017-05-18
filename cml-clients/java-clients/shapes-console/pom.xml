@@ -10,19 +10,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>livir</groupId>
-    <artifactId>livir-console</artifactId>
+    <groupId>shapes</groupId>
+    <artifactId>shapes-console</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
-        <jar.name>livir-console</jar.name>
+        <jar.name>shapes-console</jar.name>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>livir</groupId>
-            <artifactId>livir-books</artifactId>
+            <groupId>shapes</groupId>
+            <artifactId>shapes</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -41,7 +41,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>livir.console.Launcher</mainClass>
+                            <mainClass>shapes.console.Launcher</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -50,7 +50,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>livir-console-jar-with-dependencies</id>
+                        <id>shapes-console-jar-with-dependencies</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>

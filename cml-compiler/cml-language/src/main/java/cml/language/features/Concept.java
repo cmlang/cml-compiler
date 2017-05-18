@@ -5,6 +5,7 @@ import cml.language.foundation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -21,7 +22,7 @@ public interface Concept extends NamedElement, PropertyList
     @Override
     default Type getSelfType()
     {
-        return Type.create(getName(), null);
+        return Type.create(getName());
     }
 
     default List<String> getDependencies()
@@ -40,6 +41,25 @@ public interface Concept extends NamedElement, PropertyList
             .map(Property::getType)
             .filter(type -> !type.isPrimitive())
             .collect(toList());
+    }
+
+    default List<ConceptRedefined> getRedefinedAncestors()
+    {
+        return getAllAncestors().stream()
+                                .map(conceptRedefined())
+                                .collect(toList());
+    }
+
+    default Function<Concept, ConceptRedefined> conceptRedefined()
+    {
+        return c -> {
+            final List<Property> redefinedProperties = c.getNonDerivedProperties()
+                                                        .stream()
+                                                        .map(p -> getProperty(p.getName()).orElse(p))
+                                                        .collect(toList());
+
+            return ConceptRedefined.create(c, redefinedProperties);
+        };
     }
 
     default List<Concept> getAllAncestors()
@@ -69,6 +89,14 @@ public interface Concept extends NamedElement, PropertyList
                                    .collect(toList());
     }
 
+    default List<Property> getRedefinedInheritedProperties()
+    {
+        return getInheritedProperties()
+            .stream()
+            .map(p -> getProperty(p.getName()).orElse(p))
+            .collect(toList());
+    }
+
     default List<Property> getSuperProperties()
     {
         return getInheritedProperties()
@@ -96,7 +124,7 @@ public interface Concept extends NamedElement, PropertyList
     default List<Property> getInitProperties()
     {
         return getAllProperties().stream()
-                                 .filter(p -> p.getValue().isPresent())
+                                 .filter(p -> p.getValue().isPresent() && !p.isDerived())
                                  .collect(toList());
     }
 

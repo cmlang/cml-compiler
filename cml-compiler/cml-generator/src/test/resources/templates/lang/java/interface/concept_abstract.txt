@@ -2,7 +2,7 @@ interface Book
 {
     String getTitle();
 
-    static Book createBookImpl(String title)
+    static Book extendBook(String title)
     {
         return new BookImpl(title);
     }

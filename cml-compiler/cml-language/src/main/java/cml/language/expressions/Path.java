@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public interface Path extends Expression
@@ -32,8 +33,8 @@ public interface Path extends Expression
 
     default Type getType()
     {
-        assert getNames().size() >= 1: "Path must have at least one name in order to determine its type.";
-        assert getParentScope().isPresent(): "Path must be bound to a scope in order to determine its type: " + getNames();
+        assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
+        assert getParentScope().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames();
 
         Scope scope = getParentScope().get();
 
@@ -137,5 +138,11 @@ class PathImpl implements Path
     public Optional<Scope> getParentScope()
     {
         return modelElement.getParentScope();
+    }
+
+    @Override
+    public String toString()
+    {
+        return getNames().stream().collect(joining(", "));
     }
 }

@@ -4,13 +4,13 @@ interface Book extends Product, StockItem
 
     static Book createBook(String title, String baseProperty)
     {
-        Base base = Base.createBaseImpl(baseProperty);
-        Product product = Product.createProductImpl(base);
-        StockItem stockItem = StockItem.createStockItemImpl(base);
+        Base base = Base.extendBase(baseProperty);
+        Product product = Product.extendProduct(base);
+        StockItem stockItem = StockItem.extendStockItem(base);
         return new BookImpl(base, product, stockItem, title);
     }
 
-    static Book createBookImpl(Base base, Product product, StockItem stockItem, String title)
+    static Book extendBook(Base base, Product product, StockItem stockItem, String title)
     {
         return new BookImpl(base, product, stockItem, title);
     }

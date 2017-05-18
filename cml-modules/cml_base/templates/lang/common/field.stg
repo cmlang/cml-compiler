@@ -14,7 +14,17 @@ field_type_required(type) ::= <<
 >>
 
 field_or_default_value(property) ::= <<
-<if(property.value)><\\>
+<if(property.derived)><\\>
+<if(property.type.ordinal)>0<else><null_value()><endif><\\>
+<else><\\>
+<field_name(property)><\\>
+<endif>
+>>
+
+field_or_init_value(property) ::= <<
+<if(property.derived)><\\>
+<if(property.type.ordinal)>0<else><null_value()><endif><\\>
+<elseif(property.value)><\\>
 <literal_expr(property.value)><\\>
 <else><\\>
 <field_name(property)><\\>

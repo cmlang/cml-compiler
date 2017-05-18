@@ -64,7 +64,9 @@ public class AcceptanceTest
         new SuccessCase("livir_books", "livir-console", "livir_poj", JAVA),
         new SuccessCase("livir_books", "livir_console", "livir_pop", PYTHON),
         new SuccessCase("mini_cml_language", "mcml-compiler", "mcml_java", JAVA),
-        new SuccessCase("mini_cml_language", "mcml_compiler", "mcml_py", PYTHON)
+        new SuccessCase("mini_cml_language", "mcml_compiler", "mcml_py", PYTHON),
+        new SuccessCase("shapes", "shapes-console", "shapes_java", JAVA),
+        new SuccessCase("shapes", "shapes_cmlc_console", "shapes_cmlc_py", PYTHON)
     };
 
     @DataPoints("validation-modules")

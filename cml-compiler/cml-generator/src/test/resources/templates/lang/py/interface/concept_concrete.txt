@@ -13,3 +13,7 @@ class Book(ABC):
     @staticmethod
     def create_book(title: 'str', sequel: 'Book', categories: 'Set[Category]') -> 'Book':
         return BookImpl(title, sequel, categories)
+
+    @staticmethod
+    def extend_book(title: 'str', sequel: 'Book', categories: 'Set[Category]') -> 'Book':
+        return BookImpl(title, sequel, categories)

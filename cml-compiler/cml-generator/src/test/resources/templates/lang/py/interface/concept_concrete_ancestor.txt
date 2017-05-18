@@ -6,9 +6,9 @@ class Book(Product, ABC):
 
     @staticmethod
     def create_book(title: 'str') -> 'Book':
-        product = Product.create_product_impl()
+        product = Product.extend_product()
         return BookImpl(product, title)
 
     @staticmethod
-    def create_book_impl(product: 'Product', title: 'str') -> 'Book':
+    def extend_book(product: 'Product', title: 'str') -> 'Book':
         return BookImpl(product, title)

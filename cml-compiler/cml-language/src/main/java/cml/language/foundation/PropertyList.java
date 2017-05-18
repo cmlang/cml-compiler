@@ -7,6 +7,20 @@ import static java.util.stream.Collectors.toList;
 
 public interface PropertyList extends Scope
 {
+    default List<Property> getDerivedProperties()
+    {
+        return getProperties().stream()
+                              .filter(p -> p.isDerived())
+                              .collect(toList());
+    }
+
+    default List<Property> getNonDerivedProperties()
+    {
+        return getProperties().stream()
+                              .filter(p -> !p.isDerived())
+                              .collect(toList());
+    }
+
     default List<Property> getProperties()
     {
         return getMembers().stream()

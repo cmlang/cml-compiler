@@ -13,7 +13,7 @@ class(concept) ::= <<
     field_ancestors=[],
     delegated_properties=[],
     super_properties=concept.superProperties,
-    inherited_properties=concept.inheritedProperties
+    inherited_properties=concept.redefinedInheritedProperties
 )>
 >>
 
@@ -25,7 +25,7 @@ class2(concept, class_name_suffix) ::= <<
     ancestors=[],
     interfaces=[concept],
     field_ancestors=concept.allAncestors,
-    delegated_properties=concept.inheritedProperties,
+    delegated_properties=concept.superProperties,
     super_properties=[],
     inherited_properties=[]
 )>
@@ -44,9 +44,9 @@ class7(
     header=class_header(),
     base_list=true,
     sections = [
-        class_fields(),
+        class_fields(concept.nonDerivedProperties),
         class_secondary_constructor(concept.nonInitProperties, field_ancestors),
-        class_primary_constructor(inherited_properties, super_properties, concept.properties, field_ancestors),
+        class_primary_constructor(inherited_properties, super_properties, concept.nonDerivedProperties, field_ancestors),
         class_getters(),
         class_to_string()
     ]
@@ -61,15 +61,16 @@ class_header() ::= <<
 <type_name(concept)><class_name_suffix><ancestor_list(abstract, ancestors, interfaces)>
 >>
 
-class_fields() ::= <<
+class_fields(properties) ::= <<
 <ancestor_fields(field_ancestors)><\\>
-<emptyLineIf2(field_ancestors, concept.properties)><\\>
-<property_fields(concept.properties)>
+<emptyLineIf2(field_ancestors, properties)><\\>
+<property_fields(properties)>
 >>
 
 class_getters() ::= <<
 <line_list([
-    field_getters(concept.properties),
+    field_getters(concept.nonDerivedProperties),
+    derived_getters(concept.derivedProperties),
     delegated_getters(delegated_properties)
 ])>
 >>
@@ -83,7 +84,11 @@ property_fields(properties) ::= <<
 >>
 
 field_getters(properties) ::= <<
-<properties:class_getter();separator="\n\n">
+<properties:field_getter();separator="\n\n">
+>>
+
+derived_getters(properties) ::= <<
+<properties:derived_getter();separator="\n\n">
 >>
 
 delegated_getters(properties) ::= <<
@@ -136,7 +141,7 @@ class_constructor(params, statements) ::= <<
 )>
 >>
 
-class_getter(property) ::= <<
+field_getter(property) ::= <<
 <class_getter_annotations(property)><\\>
 <modifier("public")><\\>
 <instance_operation(
@@ -144,6 +149,17 @@ class_getter(property) ::= <<
     params=[],
     result_type=getter_type(property.type),
     statements=return(getter_field_value(property))
+)>
+>>
+
+derived_getter(property) ::= <<
+<class_getter_annotations(property)><\\>
+<modifier("public")><\\>
+<instance_operation(
+    name=getter_name(property),
+    params=[],
+    result_type=getter_type(property.type),
+    statements=return(expression(property.value))
 )>
 >>
 

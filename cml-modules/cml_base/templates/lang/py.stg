@@ -146,6 +146,10 @@ getter_call(property) ::= <<
 <property.name; format="underscore-case">
 >>
 
+path_getter_call(name) ::= <<
+self.<name; format="underscore-case">
+>>
+
 // Structure
 
 structure_preamble() ::= "<\n>"
@@ -215,6 +219,50 @@ literal_expr_integer(text) ::= <<
 <text>
 >>
 
+literal_expr_long(text) ::= <<
+<text>
+>>
+
+literal_expr_short(text) ::= <<
+<text>
+>>
+
+literal_expr_byte(text) ::= <<
+<text>
+>>
+
 literal_expr_decimal(text) ::= <<
 Decimal("<text>")
 >>
+
+literal_expr_float(text) ::= <<
+<text>
+>>
+
+literal_expr_double(text) ::= <<
+<text>
+>>
+
+// Constants
+
+null_value() ::= "None"
+
+// Operations
+
+operation_add(left, right) ::= "<left> + <right>"
+operation_sub(left, right) ::= "<left> - <right>"
+operation_mul(left, right) ::= "<left> * <right>"
+operation_div(left, right) ::= "<left> / <right>"
+operation_mod(left, right) ::= "<left> % <right>"
+operation_exp(left, right) ::= "<left> ** <right>"
+
+operation_eq(left, right) ::= "<left> == <right>"
+operation_ineq(left, right) ::= "<left> != <right>"
+operation_gt(left, right) ::= "<left> > <right>"
+operation_gte(left, right) ::= "<left> >= <right>"
+operation_lt(left, right) ::= "<left> \< <right>"
+operation_lte(left, right) ::= "<left> \<= <right>"
+
+operation_and(left, right) ::= "<left> and <right>"
+operation_or(left, right) ::= "<left> or <right>"
+operation_not(expr) ::= "not <expr>"

@@ -4,11 +4,11 @@ interface Book extends Product
 
     static Book createBook(String title)
     {
-        Product product = Product.createProductImpl();
+        Product product = Product.extendProduct();
         return new BookImpl(product, title);
     }
 
-    static Book createBookImpl(Product product, String title)
+    static Book extendBook(Product product, String title)
     {
         return new BookImpl(product, title);
     }

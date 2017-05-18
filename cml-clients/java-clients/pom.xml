@@ -14,6 +14,7 @@
         <module>expressions-console</module>
         <module>livir-console</module>
         <module>mcml-compiler</module>
+        <module>shapes-console</module>
     </modules>
 
     <build>

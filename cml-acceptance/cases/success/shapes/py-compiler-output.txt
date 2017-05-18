@@ -1,0 +1,15 @@
+model files:
+- setup.py
+- shapes/__init__.py
+
+Shape files:
+- shapes/shape.py
+
+Rectangle files:
+- shapes/rectangle.py
+
+Rhombus files:
+- shapes/rhombus.py
+
+Square files:
+- shapes/square.py

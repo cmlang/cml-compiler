@@ -1,0 +1,23 @@
+
+expression(expr) ::= <<
+<({expression_<expr.kind>})(expr)>
+>>
+
+expression_path(path) ::= <<
+<path.names:path_getter_call(); separator=".">
+>>
+
+expression_infix(infix) ::= <<
+<if(expr.operation)><\\>
+(<({operation_<expr.operation>})(expression(infix.left), expression(infix.right))>)<\\>
+<else><\\>
+(<expression(infix.left)> <expr.operator> <expression(infix.right)>)<\\>
+<endif>
+>>
+
+expression_operator(expr) ::= <<
+>>
+
+expression_literal(literal) ::= <<
+<({literal_expr_<literal.type.name; format="lower-case">})(literal.text)>
+>>

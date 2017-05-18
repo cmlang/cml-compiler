@@ -2,12 +2,12 @@ interface Book extends Intermediate
 {
     static Book createBook(String description)
     {
-        Product product = Product.createProductImpl(description);
-        Intermediate intermediate = Intermediate.createIntermediateImpl(product);
+        Product product = Product.extendProduct(description);
+        Intermediate intermediate = Intermediate.extendIntermediate(product);
         return new BookImpl(product, intermediate);
     }
 
-    static Book createBookImpl(Product product, Intermediate intermediate)
+    static Book extendBook(Product product, Intermediate intermediate)
     {
         return new BookImpl(product, intermediate);
     }

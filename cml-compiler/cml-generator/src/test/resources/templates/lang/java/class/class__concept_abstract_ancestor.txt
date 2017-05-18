@@ -1,13 +1,11 @@
 abstract class Book extends Product
 {
     private final String title;
-    private final String name;
 
-    public Book(String title, String name, String description)
+    public Book(String title, String description)
     {
-        super(name, description);
+        super(null, description);
         this.title = title;
-        this.name = name;
     }
 
     public String getTitle()
@@ -17,7 +15,7 @@ abstract class Book extends Product
 
     public String getName()
     {
-        return this.name;
+        return getTitle();
     }
 
     public String toString()

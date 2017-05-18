@@ -2,6 +2,7 @@ package templates.lang.common;
 
 import cml.language.expressions.Expression;
 import cml.language.expressions.Literal;
+import cml.language.expressions.Path;
 import cml.language.features.Concept;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
@@ -10,6 +11,7 @@ import org.stringtemplate.v4.ST;
 
 import java.io.IOException;
 
+import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertNotNull;
 
 public class ClassTest extends LangTest
@@ -65,7 +67,12 @@ public class ClassTest extends LangTest
 
         final Concept bookConcept = Concept.create("Book", true);
         bookConcept.addMember(Property.create("title", Type.create("String", null)));
-        bookConcept.addMember(Property.create("name", Type.create("String", null)));
+        bookConcept.addMember(
+            Property.create(
+                "name",
+                Type.create("String"),
+                Path.create(asList("title")),
+                true));
         bookConcept.addDirectAncestor(productConcept);
 
         testClassTemplateWithConcept(bookConcept, "class__concept_abstract_ancestor.txt");

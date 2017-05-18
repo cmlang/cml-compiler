@@ -5,5 +5,5 @@ class Book(ABC):
         pass
 
     @staticmethod
-    def create_book_impl(title: 'str') -> 'Book':
+    def extend_book(title: 'str') -> 'Book':
         return BookImpl(title)

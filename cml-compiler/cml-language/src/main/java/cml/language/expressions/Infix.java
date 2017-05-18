@@ -6,6 +6,7 @@ import cml.language.foundation.Type;
 
 import java.util.*;
 
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 
@@ -131,6 +132,10 @@ class InfixImpl implements Infix
         }
         else
         {
+            System.out.println("Undefined type for: " + toString());
+            System.out.println(">>> Left Type: " + leftType);
+            System.out.println(">>> Right Type: " + rightType);
+
             return Type.UNDEFINED;
         }
     }
@@ -151,5 +156,11 @@ class InfixImpl implements Infix
     public Optional<Scope> getParentScope()
     {
         return modelElement.getParentScope();
+    }
+
+    @Override
+    public String toString()
+    {
+        return format("%s %s %s", getLeft(), getOperator(), getRight());
     }
 }

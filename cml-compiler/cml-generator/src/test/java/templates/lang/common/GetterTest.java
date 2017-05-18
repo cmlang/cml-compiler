@@ -135,7 +135,7 @@ public class GetterTest extends LangTest
 
     private void class_getter(String cardinality, String expectedOutputFileName) throws IOException
     {
-        testTemplateWithProperty("class_getter", createProperty(cardinality), expectedOutputFileName);
+        testTemplateWithProperty("field_getter", createProperty(cardinality), expectedOutputFileName);
     }
 
     private static Property createProperty(String cardinality)

@@ -14,6 +14,8 @@ public class NameRenderer extends StringRenderer
     private static final String PASCAL_CASE = "pascal-case";
     private static final String CAMEL_CASE = "camel-case";
     private static final String UNDERSCORE_CASE = "underscore-case";
+    private static final String LOWER_CASE = "lower-case";
+    private static final String UPPER_CASE = "upper-case";
 
     private static final String UNDERSCORE = "_";
     private static final String DASH = "-";
@@ -37,6 +39,14 @@ public class NameRenderer extends StringRenderer
         else if (UNDERSCORE_CASE.equals(formatString))
         {
             return underscoreCase(locale, o.toString());
+        }
+        else if (LOWER_CASE.equals(formatString))
+        {
+            return o.toString().toLowerCase(locale);
+        }
+        else if (UPPER_CASE.equals(formatString))
+        {
+            return o.toString().toUpperCase(locale);
         }
         else
         {

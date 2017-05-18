@@ -11,10 +11,10 @@ new_call(class_name, args) ::= <<
 <call({<new_keyword()><type_name(class_name)>}, args)>
 >>
 
-super_constructor_call(args) ::= <<
-<call(super_constructor_name(), args)><statement_terminator()>
+super_constructor_call(properties) ::= <<
+<super_constructor_name()>(<properties:field_or_default_value(); separator=", ">)<statement_terminator()>
 >>
 
-this_constructor_call(property) ::= <<
-<this_constructor_name()>(<property:field_or_default_value(); separator=", ">)<statement_terminator()>
+this_constructor_call(properties) ::= <<
+<this_constructor_name()>(<properties:field_or_init_value(); separator=", ">)<statement_terminator()>
 >>

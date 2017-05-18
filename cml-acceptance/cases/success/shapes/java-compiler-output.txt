@@ -1,0 +1,14 @@
+model files:
+- pom.xml
+
+Shape files:
+- src/main/java/shapes/Shape.java
+
+Rectangle files:
+- src/main/java/shapes/Rectangle.java
+
+Rhombus files:
+- src/main/java/shapes/Rhombus.java
+
+Square files:
+- src/main/java/shapes/Square.java
