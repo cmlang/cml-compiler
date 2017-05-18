@@ -1,6 +1,6 @@
 package cml.acceptance;
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -14,7 +14,6 @@ class SuccessCase
 
     private static final String COMPILER_OUTPUT_FILENAME = "output-%s-compiler-%s.txt";
     private static final String CLIENT_OUTPUT_FILENAME = "output-%s-client-%s.txt";
-    private static final String TXT_EXT = ".txt";
 
     private final String moduleName;
     private final String clientName;
