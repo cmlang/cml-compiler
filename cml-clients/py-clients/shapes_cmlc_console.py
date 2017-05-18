@@ -1,5 +1,5 @@
 
-from shapes import Rectangle, Rhombus, Square
+from shapes_cmlc import Rectangle, Rhombus, Square
 
 print("Shapes Console\n");
 print(Rectangle.create_rectangle(10, 20, "red"))

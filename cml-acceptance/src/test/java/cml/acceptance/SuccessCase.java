@@ -1,5 +1,9 @@
 package cml.acceptance;
 
+import com.sun.istack.internal.Nullable;
+
+import java.io.File;
+
 import static java.lang.String.format;
 
 class SuccessCase
@@ -14,13 +18,20 @@ class SuccessCase
     private final String clientName;
     private final String targetName;
     private final String targetLanguageExtension;
+    private final @Nullable String pythonModuleName;
 
     SuccessCase(String moduleName, String clientName, String targetName, String targetLanguageExtension)
+    {
+        this(moduleName, clientName, targetName, targetLanguageExtension, moduleName.replace("-", "_"));
+    }
+
+    SuccessCase(String moduleName, String clientName, String targetName, String targetLanguageExtension, String pythonModuleName)
     {
         this.moduleName = moduleName;
         this.clientName = clientName;
         this.targetName = targetName;
         this.targetLanguageExtension = targetLanguageExtension;
+        this.pythonModuleName = pythonModuleName;
     }
 
     String getModuleName()
@@ -28,9 +39,9 @@ class SuccessCase
         return moduleName;
     }
 
-    String getModuleDir()
+    String getPythonModuleDir(String baseDir)
     {
-        return moduleName.replace("-", "_");
+        return baseDir + File.separator + pythonModuleName;
     }
 
     String getTargetName()

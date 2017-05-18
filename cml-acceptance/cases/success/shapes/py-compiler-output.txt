@@ -1,15 +1,15 @@
 model files:
 - setup.py
-- shapes/__init__.py
+- shapes_cmlc/__init__.py
 
 Shape files:
-- shapes/shape.py
+- shapes_cmlc/shape.py
 
 Rectangle files:
-- shapes/rectangle.py
+- shapes_cmlc/rectangle.py
 
 Rhombus files:
-- shapes/rhombus.py
+- shapes_cmlc/rhombus.py
 
 Square files:
-- shapes/square.py
+- shapes_cmlc/square.py

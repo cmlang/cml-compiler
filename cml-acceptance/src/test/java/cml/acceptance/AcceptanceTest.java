@@ -66,7 +66,7 @@ public class AcceptanceTest
         new SuccessCase("mini_cml_language", "mcml-compiler", "mcml_java", JAVA),
         new SuccessCase("mini_cml_language", "mcml_compiler", "mcml_py", PYTHON),
         new SuccessCase("shapes", "shapes-console", "shapes_java", JAVA),
-        new SuccessCase("shapes", "shapes_cmlc_console", "shapes_cmlc_py", PYTHON)
+        new SuccessCase("shapes", "shapes_cmlc_console", "shapes_cmlc_py", PYTHON, "shapes_cmlc")
     };
 
     @DataPoints("validation-modules")
@@ -271,7 +271,7 @@ public class AcceptanceTest
         }
         else if (successCase.getTargetLanguageExtension().equals(PYTHON))
         {
-            checkPythonTypes(baseDir + "/" + successCase.getModuleDir());
+            checkPythonTypes(successCase.getPythonModuleDir(baseDir));
             installPythonPackage(baseDir);
         }
     }

@@ -61,6 +61,6 @@ task shapes_java by cmlc_java
 
 task shapes_cmlc_py by cmlc_py
 {
-    moduleName = "shapes";
+    moduleName = "shapes_cmlc";
     moduleVersion = "1.0.1";
 }
