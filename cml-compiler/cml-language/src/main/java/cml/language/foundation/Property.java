@@ -14,6 +14,16 @@ import static java.util.Arrays.asList;
 
 public interface Property extends TypedElement, Scope
 {
+    default boolean isConcrete()
+    {
+        return !isAbstract();
+    }
+
+    default boolean isAbstract()
+    {
+        return isDerived() && !getValue().isPresent();
+    }
+
     Optional<Expression> getValue();
     boolean isDerived();
 

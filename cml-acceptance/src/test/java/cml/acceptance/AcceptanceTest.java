@@ -75,7 +75,8 @@ public class AcceptanceTest
         "not_own_generalization",
         "compatible_generalizations",
         "conflict_redefinition",
-        "generalization_compatible_redefinition"
+        "generalization_compatible_redefinition",
+        "abstract_property_redefinition"
     };
 
     @DataPoints("failing-modules")

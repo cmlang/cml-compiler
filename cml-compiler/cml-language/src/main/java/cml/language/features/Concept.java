@@ -197,7 +197,8 @@ public interface Concept extends NamedElement, PropertyList
         return () -> asList(
             new NotOwnGeneralization(),
             new CompatibleGeneralizations(),
-            new ConflictRedefinition()
+            new ConflictRedefinition(),
+            new AbstractPropertyRedefinition()
         );
     }
 }
@@ -348,5 +349,41 @@ class ConflictRedefinition implements Invariant<Concept>
                                                          .collect(toList());
 
         return new Diagnostic("conflict_redefinition", self, conflictingProperties);
+    }
+}
+
+class AbstractPropertyRedefinition implements Invariant<Concept>
+{
+    @Override
+    public boolean evaluate(Concept self)
+    {
+        return self.isAbstract() || getInheritedAbstractProperties(self).allMatch(abstractPropertyRedefinedIn(self));
+    }
+
+    private Predicate<Property> abstractPropertyRedefinedIn(Concept self)
+    {
+        return p1 -> self.getProperties()
+                         .stream()
+                         .filter(p2 -> p1.getName().equals(p2.getName()))
+                         .filter(Property::isConcrete)
+                         .count() > 0;
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Concept self)
+    {
+        final List<Property> abstractProperties = getInheritedAbstractProperties(self)
+                                                      .filter(abstractPropertyRedefinedIn(self).negate())
+                                                      .collect(toList());
+
+        return new Diagnostic("abstract_property_redefinition", self, abstractProperties);
+    }
+
+    private Stream<Property> getInheritedAbstractProperties(Concept self)
+    {
+        return self.getDirectAncestors()
+                   .stream()
+                   .flatMap(c -> c.getAllProperties().stream())
+                   .filter(Property::isAbstract);
     }
 }

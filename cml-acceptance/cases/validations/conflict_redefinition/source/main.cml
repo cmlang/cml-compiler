@@ -30,7 +30,7 @@ concept D: A, B
     q3: String;
     r1: Decimal = 2.0;
     s1: Decimal;
-    /s2: Decimal;
+    /s2 = 3.0;
     t1: String = "D";
 }
 
