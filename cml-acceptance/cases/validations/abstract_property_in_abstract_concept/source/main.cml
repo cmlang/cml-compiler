@@ -1,0 +1,25 @@
+-- Shape should be tagged abstract since it has an abstract property:
+concept Shape
+{
+    -- A derived property without an expression is considered abstract:
+    /area: Double;
+}
+
+-- In order to be considered concrete, Circle should have redefined "area".
+concept CircleA: Shape;
+
+-- Properly redefined "area" as a concrete property:
+concept CircleB: Shape
+{
+    area = 4.0d;
+}
+
+-- OK to miss redefinition in this specialization because it is an abstract concept:
+abstract concept CircleC: Shape;
+
+-- Properly redefined "area" as a derived property:
+concept UnitCircle: CircleA
+{
+    /area = 1.0d;
+}
+

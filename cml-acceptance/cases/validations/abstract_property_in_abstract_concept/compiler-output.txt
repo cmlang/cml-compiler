@@ -1,0 +1,5 @@
+
+Failed validation: required abstract_property_in_abstract_concept: in property Shape.area: Double
+
+Failed validation: required abstract_property_redefinition: in concept CircleA
+- property Shape.area: Double

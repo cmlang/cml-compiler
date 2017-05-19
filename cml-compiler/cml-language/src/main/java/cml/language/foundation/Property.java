@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 public interface Property extends TypedElement, Scope
 {
@@ -55,7 +56,10 @@ public interface Property extends TypedElement, Scope
 
     static InvariantValidator<Property> invariantValidator()
     {
-        return () -> asList(new GeneralizationCompatibleRedefinition());
+        return () -> asList(
+            new GeneralizationCompatibleRedefinition(),
+            new AbstractPropertyInAbstractConcept()
+        );
     }
 }
 
@@ -213,3 +217,26 @@ class GeneralizationCompatibleRedefinition implements Invariant<Property>
     }
 }
 
+class AbstractPropertyInAbstractConcept implements Invariant<Property>
+{
+    @Override
+    public boolean evaluate(Property self)
+    {
+        if (self.getParentScope().isPresent() && self.getParentScope().get() instanceof Concept)
+        {
+            final Concept concept = (Concept) self.getParentScope().get();
+
+            return self.isConcrete() || concept.isAbstract();
+        }
+        else
+        {
+            return self.isConcrete();
+        }
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Property self)
+    {
+        return new Diagnostic("abstract_property_in_abstract_concept", self, emptyList());
+    }
+}
