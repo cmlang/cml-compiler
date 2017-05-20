@@ -43,11 +43,18 @@ public interface Concept extends NamedElement, PropertyList
             .collect(toList());
     }
 
+    @SuppressWarnings("unused")
     default List<ConceptRedefined> getRedefinedAncestors()
     {
-        return getAllAncestors().stream()
-                                .map(conceptRedefined())
-                                .collect(toList());
+        final Stream<ConceptRedefined> inheritedAncestors = getDirectAncestors().stream()
+                                                                                .flatMap(concept -> concept.getRedefinedAncestors().stream());
+
+        final Stream<ConceptRedefined> directAncestors = getDirectAncestors().stream()
+                                                                             .map(conceptRedefined());
+
+        return concat(inheritedAncestors, directAncestors)
+            .distinct()
+            .collect(toList());
     }
 
     default Function<Concept, ConceptRedefined> conceptRedefined()
@@ -99,7 +106,16 @@ public interface Concept extends NamedElement, PropertyList
             .collect(toList());
     }
 
+    @SuppressWarnings("unused")
     default List<Property> getSuperProperties()
+    {
+        return getDelegatedProperties()
+            .stream()
+            .filter(p -> !p.isDerived())
+            .collect(toList());
+    }
+
+    default List<Property> getDelegatedProperties()
     {
         return getInheritedProperties()
             .stream()
@@ -111,14 +127,14 @@ public interface Concept extends NamedElement, PropertyList
     {
         return p1 -> getProperties().stream()
                                     .filter(p2 -> p1.getName().equals(p2.getName()))
-                                    .collect(counting()) == 0;
+                                    .count() == 0;
     }
 
     default List<Property> getAllProperties()
     {
         return concat(
             getProperties().stream(),
-            getSuperProperties().stream()
+            getDelegatedProperties().stream()
         ).collect(toList());
     }
 
@@ -126,7 +142,7 @@ public interface Concept extends NamedElement, PropertyList
     default List<Property> getInitProperties()
     {
         return getAllProperties().stream()
-                                 .filter(p -> p.getValue().isPresent() && !p.isDerived())
+                                 .filter(Property::isInit)
                                  .collect(toList());
     }
 

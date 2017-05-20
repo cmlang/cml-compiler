@@ -1,7 +1,9 @@
 interface Book
 {
     String getTitle();
+
     Optional<Book> getSequel();
+
     Set<Category> getCategories();
 
     static Book createBook(String title, @Nullable Book sequel, Set<Category> categories)

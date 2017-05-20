@@ -166,6 +166,8 @@ interface_operation_body() ::= <<
 <block_empty()>
 >>
 
+interface_secondary_create_method() ::= ""
+
 // Classes
 
 class_keyword() ::= "class "
@@ -176,7 +178,7 @@ class_type_name(name) ::= <<
 
 constructor_name(class_name) ::= "__init__"
 
-class_secondary_constructor(non_init_properties, ancestors) ::= ""
+class_secondary_constructor(non_init_properties) ::= ""
 
 // Ancestors
 

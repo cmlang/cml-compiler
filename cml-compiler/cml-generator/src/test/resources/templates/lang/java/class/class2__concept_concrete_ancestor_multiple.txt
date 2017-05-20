@@ -5,18 +5,25 @@ class BookImpl implements Book
     private final StockItem stockItem;
 
     private final String title;
+    private final String initProperty;
 
-    public BookImpl(Base base, Product product, StockItem stockItem, String title)
+    public BookImpl(Base base, Product product, StockItem stockItem, String title, String initProperty)
     {
         this.base = base;
         this.product = product;
         this.stockItem = stockItem;
         this.title = title;
+        this.initProperty = initProperty;
     }
 
     public String getTitle()
     {
         return this.title;
+    }
+
+    public String getInitProperty()
+    {
+        return this.initProperty;
     }
 
     public String getBaseAbstractProperty()
@@ -34,6 +41,11 @@ class BookImpl implements Book
         return this.base.getBaseConcreteProperty();
     }
 
+    public String getDerivedBaseProperty()
+    {
+        return this.base.getDerivedBaseProperty();
+    }
+
     public int getQuantity()
     {
         return this.stockItem.getQuantity();
@@ -45,8 +57,10 @@ class BookImpl implements Book
                    .append('(')
                    .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
                    .append("baseAbstractProperty=").append(String.format("\"%s\"", getBaseAbstractProperty())).append(", ")
+                   .append("initProperty=").append(String.format("\"%s\"", getInitProperty())).append(", ")
                    .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
                    .append("baseConcreteProperty=").append(String.format("\"%s\"", getBaseConcreteProperty())).append(", ")
+                   .append("derivedBaseProperty=").append(String.format("\"%s\"", getDerivedBaseProperty())).append(", ")
                    .append("quantity=").append(String.format("\"%s\"", getQuantity()))
                    .append(')')
                    .toString();

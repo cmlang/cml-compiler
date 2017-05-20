@@ -1,14 +1,19 @@
 class BookImpl(Book):
 
-    def __init__(self, base: 'Base', product: 'Product', stock_item: 'StockItem', title: 'str') -> 'None':
+    def __init__(self, base: 'Base', product: 'Product', stock_item: 'StockItem', title: 'str', init_property: 'str' = "initialValue") -> 'None':
         self.__base = base
         self.__product = product
         self.__stock_item = stock_item
         self.__title = title
+        self.__init_property = init_property
 
     @property
     def title(self) -> 'str':
         return self.__title
+
+    @property
+    def init_property(self) -> 'str':
+        return self.__init_property
 
     @property
     def base_abstract_property(self) -> 'str':
@@ -23,15 +28,21 @@ class BookImpl(Book):
         return self.__base.base_concrete_property
 
     @property
+    def derived_base_property(self) -> 'str':
+        return self.__base.derived_base_property
+
+    @property
     def quantity(self) -> 'int':
         return self.__stock_item.quantity
 
     def __str__(self) -> 'str':
-        return "%s(title=%s, base_abstract_property=%s, description=%s, base_concrete_property=%s, quantity=%s)" % (
+        return "%s(title=%s, base_abstract_property=%s, init_property=%s, description=%s, base_concrete_property=%s, derived_base_property=%s, quantity=%s)" % (
             type(self).__name__,
             self.title,
             self.base_abstract_property,
+            self.init_property,
             self.description,
             self.base_concrete_property,
+            self.derived_base_property,
             self.quantity
         )

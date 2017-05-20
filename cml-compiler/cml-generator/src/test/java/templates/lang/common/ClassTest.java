@@ -55,6 +55,8 @@ public class ClassTest extends LangTest
     {
         final Concept concept = createConceptWithMultipleAncestors(false);
 
+        concept.addMember(Property.create("initProperty", null, Literal.create("initialValue", Type.create("String"))));
+
         testClassTemplateWithSuffix(concept, "class2__concept_concrete_ancestor_multiple.txt");
     }
 
@@ -170,6 +172,7 @@ public class ClassTest extends LangTest
         final Concept baseConcept = Concept.create("Base", true);
         baseConcept.addMember(Property.create("baseConcreteProperty", Type.create("String")));
         baseConcept.addMember(Property.create("baseAbstractProperty", Type.create("String"), null, true));
+        baseConcept.addMember(Property.create("derivedBaseProperty", null, Literal.create("initValue", Type.create("String")), true));
 
         final Concept productConcept = Concept.create("Product");
         productConcept.addMember(Property.create("description", Type.create("String", null)));
@@ -186,6 +189,11 @@ public class ClassTest extends LangTest
         concept.addMember(Property.create("baseAbstractProperty", null, Literal.create("3", Type.create("String")), true));
         concept.addDirectAncestor(productConcept);
         concept.addDirectAncestor(stockItemConcept);
+
+        if (_abstract)
+        {
+            concept.addMember(Property.create("abstractProperty", Type.create("String"), null, true));
+        }
 
         return concept;
     }

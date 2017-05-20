@@ -2,6 +2,7 @@
 import "/lang/common/generic.stg"
 import "/lang/common/getter.stg"
 import "/lang/common/to_string.stg"
+import "/lang/common/interface.stg"
 
 class(concept) ::= <<
 <class7(
@@ -25,7 +26,7 @@ class2(concept, class_name_suffix) ::= <<
     ancestors=[],
     interfaces=[concept],
     field_ancestors=concept.allAncestors,
-    delegated_properties=concept.superProperties,
+    delegated_properties=concept.delegatedProperties,
     super_properties=[],
     inherited_properties=[]
 )>
@@ -45,7 +46,7 @@ class7(
     base_list=true,
     sections = [
         class_fields(concept.nonDerivedProperties),
-        class_secondary_constructor(concept.nonInitProperties, field_ancestors),
+        class_secondary_constructor(concept.nonInitProperties),
         class_primary_constructor(inherited_properties, super_properties, concept.nonDerivedProperties, field_ancestors),
         class_getters(),
         class_to_string()
@@ -117,8 +118,8 @@ super_constructor(inherited_properties) ::= <<
 <endif>
 >>
 
-class_secondary_constructor(non_init_properties, ancestors) ::= <<
-<if(!ancestors && concept.initProperties)><\\>
+class_secondary_constructor(non_init_properties) ::= <<
+<if(!interfaces && concept.initProperties)><\\>
 <modifier("public")><\\>
 <class_constructor(non_init_properties, class_secondary_constructor_statements())><\\>
 <endif>
@@ -153,20 +154,30 @@ field_getter(property) ::= <<
 >>
 
 derived_getter(property) ::= <<
-<if(property.value || !abstract)><\\>
+<if(property.value)><\\>
+<derived_concrete_getter(property, expression(property.value))><\\>
+<elseif(abstract)><\\>
+<derived_abstract_getter(property)><\\>
+<else><\\>
+<derived_concrete_getter(property, field_or_default_value(property))><\\>
+<endif>
+>>
+
+derived_concrete_getter(property, expression) ::= <<
 <class_getter_annotations(property)><\\>
 <modifier("public")><\\>
 <instance_operation(
     name=getter_name(property),
     params=[],
     result_type=getter_type(property.type),
-    statements=return(expression(property.value))
-)><\\>
-<else><\\>
+    statements=return(expression)
+)>
+>>
+
+derived_abstract_getter(property) ::= <<
 <modifier("public")><\\>
 <abstract_keyword()><\\>
-<interface_getter(property)><\\>
-<endif>
+<interface_getter(property)>
 >>
 
 delegate_getter(property) ::= <<

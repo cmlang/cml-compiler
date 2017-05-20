@@ -4,6 +4,7 @@ import cml.language.foundation.Property;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public interface ConceptRedefined
 {
@@ -37,6 +38,21 @@ class ConceptRedefinedImpl implements ConceptRedefined
     public List<Property> getProperties()
     {
         return new ArrayList<>(properties);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConceptRedefinedImpl that = (ConceptRedefinedImpl) o;
+        return Objects.equals(concept, that.concept);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(concept);
     }
 }
 

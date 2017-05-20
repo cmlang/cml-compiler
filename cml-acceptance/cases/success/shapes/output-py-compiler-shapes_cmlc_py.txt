@@ -13,3 +13,12 @@ Rhombus files:
 
 Square files:
 - shapes_cmlc/square.py
+
+Circle files:
+- shapes_cmlc/circle.py
+
+UnitCircle files:
+- shapes_cmlc/unit_circle.py
+
+RedUnitCircle files:
+- shapes_cmlc/red_unit_circle.py

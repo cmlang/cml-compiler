@@ -1,5 +1,6 @@
 package templates.lang.common;
 
+import cml.language.expressions.Literal;
 import cml.language.features.Concept;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
@@ -83,8 +84,9 @@ public class InterfaceTest extends LangTest
     @Test
     public void concept_concrete_ancestor_multiple() throws IOException
     {
-        final Concept baseConcept = Concept.create("Base");
-        baseConcept.addMember(Property.create("baseProperty", Type.create("String", null)));
+        final Concept baseConcept = Concept.create("Base", true);
+        baseConcept.addMember(Property.create("baseProperty", Type.create("String")));
+        baseConcept.addMember(Property.create("derivedBaseProperty", null, Literal.create("initValue", Type.create("String")), true));
 
         final Concept productConcept = Concept.create("Product");
         productConcept.addDirectAncestor(baseConcept);
@@ -94,6 +96,7 @@ public class InterfaceTest extends LangTest
 
         final Concept concept = Concept.create("Book");
         concept.addMember(Property.create("title", Type.create("String", null)));
+        concept.addMember(Property.create("value", null, Literal.create("10.0", Type.create("Decimal"))));
         concept.addDirectAncestor(productConcept);
         concept.addDirectAncestor(stockItemConcept);
 

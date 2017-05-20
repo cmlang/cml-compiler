@@ -3,3 +3,6 @@ Shapes Console
 Rectangle(width="10.0", height="20.0", area="200.0", color="red")
 Rhombus(p="14.1421356237", q="14.1421356237", area="99.99999999956229", color="green")
 Square(sideLength="10.0", width="10.0", height="10.0", p="14.1421356237", q="14.1421356237", area="100.0", color="blue")
+Circle(radius="10.0", area="314.159", color="red")
+UnitCircle(area="3.14159", radius="1.0", color="Blue")
+RedUnitCircle(color="Red", area="3.14159", radius="1.0")

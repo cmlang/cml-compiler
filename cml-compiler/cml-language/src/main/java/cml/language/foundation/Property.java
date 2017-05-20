@@ -25,6 +25,11 @@ public interface Property extends TypedElement, Scope
         return isDerived() && !getValue().isPresent();
     }
 
+    default boolean isInit()
+    {
+        return getValue().isPresent() && !isDerived();
+    }
+
     Optional<Expression> getValue();
     boolean isDerived();
 

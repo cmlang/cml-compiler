@@ -12,3 +12,12 @@ Rhombus files:
 
 Square files:
 - src/main/java/shapes/Square.java
+
+Circle files:
+- src/main/java/shapes/Circle.java
+
+UnitCircle files:
+- src/main/java/shapes/UnitCircle.java
+
+RedUnitCircle files:
+- src/main/java/shapes/RedUnitCircle.java

@@ -2,6 +2,7 @@
 import "/lang/common/generic.stg"
 import "/lang/common/operation.stg"
 import "/lang/common/getter.stg"
+import "/lang/common/call.stg"
 
 interface(concept, class_name_suffix) ::= <<
 <structure(
@@ -10,7 +11,8 @@ interface(concept, class_name_suffix) ::= <<
     base_list=concept.allProperties,
     sections = [
         interface_getters(),
-        interface_create_method(),
+        interface_secondary_create_method(),
+        interface_primary_create_method(),
         interface_extend_method([concept.allAncestors, concept.nonDerivedProperties])
     ]
 )>
@@ -21,10 +23,21 @@ interface_header() ::= <<
 >>
 
 interface_getters() ::= <<
-<concept.properties:interface_getter();separator="\n">
+<concept.properties:interface_getter();separator="\n\n">
 >>
 
-interface_create_method() ::= <<
+interface_secondary_create_method() ::= <<
+<if(concept.initProperties && class_name_suffix)><\\>
+<static_operation(
+    name=interface_create_name(interface_name()),
+    params=[concept.nonInitProperties],
+    result_type=interface_name(),
+    statements=return(init_call(interface_create_name(interface_name()), [concept.nonDerivedProperties, concept.superProperties]))
+)><\\>
+<endif>
+>>
+
+interface_primary_create_method() ::= <<
 <if(!concept.abstract && class_name_suffix)><\\>
 <static_operation(
     name=interface_create_name(interface_name()),
