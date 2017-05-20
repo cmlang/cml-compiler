@@ -1,4 +1,4 @@
-abstract class Book extends Product
+class Book extends Product
 {
     private final String title;
 

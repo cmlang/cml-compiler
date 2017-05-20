@@ -1,4 +1,4 @@
-class Book(Product):
+class Book(Product, ABC):
 
     def __init__(self, title: 'str', description: 'str') -> 'None':
         super().__init__(description)

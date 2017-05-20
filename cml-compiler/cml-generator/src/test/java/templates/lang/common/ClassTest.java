@@ -59,14 +59,27 @@ public class ClassTest extends LangTest
     }
 
     @Test
-    public void class__concept_abstract_ancestor() throws IOException
+    public void class__concept_abstract() throws IOException
+    {
+        final Concept productConcept = Concept.create("Product");
+        productConcept.addMember(Property.create("description", Type.create("String")));
+
+        final Concept bookConcept = Concept.create("Book", true);
+        bookConcept.addMember(Property.create("title", Type.create("String")));
+        bookConcept.addDirectAncestor(productConcept);
+
+        testClassTemplateWithConcept(bookConcept, "class__concept_abstract.txt");
+    }
+
+    @Test
+    public void class__concept_concrete() throws IOException
     {
         final Concept productConcept = Concept.create("Product", true);
         productConcept.addMember(Property.create("name", Type.create("String"), null, true));
         productConcept.addMember(Property.create("description", Type.create("String")));
         productConcept.addMember(Property.create("value", Type.create("Decimal")));
 
-        final Concept bookConcept = Concept.create("Book", true);
+        final Concept bookConcept = Concept.create("Book");
         bookConcept.addMember(Property.create("title", Type.create("String")));
         bookConcept.addMember(
             Property.create(
@@ -77,21 +90,8 @@ public class ClassTest extends LangTest
         bookConcept.addMember(Property.create("value", null, Literal.create("3", Type.create("Decimal")), true));
         bookConcept.addDirectAncestor(productConcept);
 
-        testClassTemplateWithConcept(productConcept, "class__concept_abstract_ancestor__product.txt");
-        testClassTemplateWithConcept(bookConcept, "class__concept_abstract_ancestor__book.txt");
-    }
-
-    @Test
-    public void class__concept_concrete_ancestor() throws IOException
-    {
-        final Concept productConcept = Concept.create("Product");
-        productConcept.addMember(Property.create("description", Type.create("String", null)));
-
-        final Concept bookConcept = Concept.create("Book");
-        bookConcept.addMember(Property.create("title", Type.create("String", null)));
-        bookConcept.addDirectAncestor(productConcept);
-
-        testClassTemplateWithConcept(bookConcept, "class__concept_concrete_ancestor.txt");
+        testClassTemplateWithConcept(productConcept, "class__concept_concrete__product.txt");
+        testClassTemplateWithConcept(bookConcept, "class__concept_concrete__book.txt");
     }
 
     @Test
