@@ -13,7 +13,7 @@ class(concept) ::= <<
     field_ancestors=[],
     delegated_properties=[],
     super_properties=concept.superProperties,
-    inherited_properties=concept.redefinedInheritedProperties
+    inherited_properties=concept.redefinedInheritedConcreteProperties
 )>
 >>
 
@@ -54,7 +54,7 @@ class7(
 >>
 
 class_abstract() ::= <<
-<if(concept.abstract && super_properties)><abstract_keyword()><endif>
+<if(abstract)><abstract_keyword()><endif>
 >>
 
 class_header() ::= <<
@@ -153,6 +153,7 @@ field_getter(property) ::= <<
 >>
 
 derived_getter(property) ::= <<
+<if(property.value || !abstract)><\\>
 <class_getter_annotations(property)><\\>
 <modifier("public")><\\>
 <instance_operation(
@@ -160,7 +161,12 @@ derived_getter(property) ::= <<
     params=[],
     result_type=getter_type(property.type),
     statements=return(expression(property.value))
-)>
+)><\\>
+<else><\\>
+<modifier("public")><\\>
+<abstract_keyword()><\\>
+<interface_getter(property)><\\>
+<endif>
 >>
 
 delegate_getter(property) ::= <<

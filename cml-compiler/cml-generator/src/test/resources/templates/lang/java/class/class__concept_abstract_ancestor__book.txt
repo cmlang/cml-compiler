@@ -4,7 +4,7 @@ abstract class Book extends Product
 
     public Book(String title, String description)
     {
-        super(null, description);
+        super(description, 0);
         this.title = title;
     }
 
@@ -18,12 +18,18 @@ abstract class Book extends Product
         return getTitle();
     }
 
+    public BigDecimal getValue()
+    {
+        return new BigDecimal("3");
+    }
+
     public String toString()
     {
         return new StringBuilder(Book.class.getSimpleName())
                    .append('(')
                    .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
                    .append("name=").append(String.format("\"%s\"", getName())).append(", ")
+                   .append("value=").append(String.format("\"%s\"", getValue())).append(", ")
                    .append("description=").append(String.format("\"%s\"", getDescription()))
                    .append(')')
                    .toString();

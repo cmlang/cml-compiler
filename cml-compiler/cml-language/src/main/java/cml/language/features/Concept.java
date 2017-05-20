@@ -89,10 +89,12 @@ public interface Concept extends NamedElement, PropertyList
                                    .collect(toList());
     }
 
-    default List<Property> getRedefinedInheritedProperties()
+    @SuppressWarnings("unused")
+    default List<Property> getRedefinedInheritedConcreteProperties()
     {
         return getInheritedProperties()
             .stream()
+            .filter(p -> p.isConcrete())
             .map(p -> getProperty(p.getName()).orElse(p))
             .collect(toList());
     }
