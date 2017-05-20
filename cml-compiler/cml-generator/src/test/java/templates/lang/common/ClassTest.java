@@ -164,19 +164,23 @@ public class ClassTest extends LangTest
 
     private static Concept createConceptWithMultipleAncestors(boolean _abstract)
     {
-        final Concept baseConcept = Concept.create("Base");
-        baseConcept.addMember(Property.create("baseProperty", Type.create("String", null)));
+        final Concept baseConcept = Concept.create("Base", true);
+        baseConcept.addMember(Property.create("baseConcreteProperty", Type.create("String")));
+        baseConcept.addMember(Property.create("baseAbstractProperty", Type.create("String"), null, true));
 
         final Concept productConcept = Concept.create("Product");
         productConcept.addMember(Property.create("description", Type.create("String", null)));
+        productConcept.addMember(Property.create("baseAbstractProperty", null, Literal.create("1", Type.create("String")), true));
         productConcept.addDirectAncestor(baseConcept);
 
         final Concept stockItemConcept = Concept.create("StockItem");
         stockItemConcept.addMember(Property.create("quantity", Type.create("Integer", null)));
+        stockItemConcept.addMember(Property.create("baseAbstractProperty", null, Literal.create("2", Type.create("String")), true));
         stockItemConcept.addDirectAncestor(baseConcept);
 
         final Concept concept = Concept.create("Book", _abstract);
         concept.addMember(Property.create("title", Type.create("String", null)));
+        concept.addMember(Property.create("baseAbstractProperty", null, Literal.create("3", Type.create("String")), true));
         concept.addDirectAncestor(productConcept);
         concept.addDirectAncestor(stockItemConcept);
 

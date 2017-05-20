@@ -19,14 +19,19 @@ class BookImpl implements Book
         return this.title;
     }
 
+    public String getBaseAbstractProperty()
+    {
+        return "3";
+    }
+
     public String getDescription()
     {
         return this.product.getDescription();
     }
 
-    public String getBaseProperty()
+    public String getBaseConcreteProperty()
     {
-        return this.base.getBaseProperty();
+        return this.base.getBaseConcreteProperty();
     }
 
     public int getQuantity()
@@ -39,8 +44,9 @@ class BookImpl implements Book
         return new StringBuilder(Book.class.getSimpleName())
                    .append('(')
                    .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
+                   .append("baseAbstractProperty=").append(String.format("\"%s\"", getBaseAbstractProperty())).append(", ")
                    .append("description=").append(String.format("\"%s\"", getDescription())).append(", ")
-                   .append("baseProperty=").append(String.format("\"%s\"", getBaseProperty())).append(", ")
+                   .append("baseConcreteProperty=").append(String.format("\"%s\"", getBaseConcreteProperty())).append(", ")
                    .append("quantity=").append(String.format("\"%s\"", getQuantity()))
                    .append(')')
                    .toString();
