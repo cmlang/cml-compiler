@@ -1,5 +1,7 @@
 package cml.language.foundation;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 import static java.util.Collections.emptyList;
@@ -116,6 +118,18 @@ class ScopeImpl implements Scope
     {
         this.self = self;
         this.modelElement = modelElement;
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
     }
 
     @Override

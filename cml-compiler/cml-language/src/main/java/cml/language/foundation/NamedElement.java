@@ -1,5 +1,7 @@
 package cml.language.foundation;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Optional;
 
 public interface NamedElement extends ModelElement
@@ -21,6 +23,18 @@ class NamedElementImpl implements NamedElement
     {
         this.modelElement = modelElement;
         this.name = name;
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
     }
 
     @Override

@@ -5,10 +5,13 @@ import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.features.Task;
+import cml.language.foundation.Location;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
@@ -93,6 +96,8 @@ class ModelSynthesizer extends CMLBaseListener
                .propertyDeclaration()
                .forEach(node -> ctx.concept.addMember(node.property));
         }
+
+        ctx.concept.setLocation(locationOf(ctx));
     }
 
     @Override
@@ -136,6 +141,8 @@ class ModelSynthesizer extends CMLBaseListener
         final Property property = Property.create(name, type, value, ctx.DERIVED() != null);
 
         property.addMember(value);
+
+        property.setLocation(locationOf(ctx));
 
         ctx.property = property;
     }
@@ -379,5 +386,12 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         return text;
+    }
+
+    private Location locationOf(ParserRuleContext ctx)
+    {
+        final Token token = ctx.getStart();
+
+        return Location.createLocation(token.getLine(), token.getCharPositionInLine() + 1);
     }
 }

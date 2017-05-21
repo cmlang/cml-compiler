@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import org.jetbrains.annotations.Nullable;
@@ -83,6 +84,18 @@ class TransformImpl implements Transform
         this.variables = new ArrayList<>(variables);
         this.init = init;
         this.expr = expr;
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
     }
 
     @Override

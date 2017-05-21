@@ -1,6 +1,7 @@
 package cml.language.expressions;
 
 import cml.language.foundation.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -32,6 +33,18 @@ class JoinVarImpl implements JoinVar
         namedElement = NamedElement.create(modelElement, name);
 
         this.path = path;
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
     }
 
     @Override

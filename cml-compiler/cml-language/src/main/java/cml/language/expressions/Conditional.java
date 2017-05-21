@@ -1,8 +1,10 @@
 package cml.language.expressions;
 
+import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +38,18 @@ class ConditionalImpl implements Conditional
         this.cond = cond;
         this.then = then;
         this.else_ = else_;
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
     }
 
     @Override

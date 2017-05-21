@@ -192,18 +192,34 @@ class ModelLoaderImpl implements ModelLoader
         {
             for (Diagnostic diagnostic: modelValidator.getDiagnostics())
             {
-                console.println(
+                console.print(
                     "\nFailed validation: required %s: in %s",
                     diagnostic.getCode(),
                     diagnostic.getElement().toString());
 
+                printLocation(diagnostic.getElement());
+
                 for(ModelElement element: diagnostic.getParticipants())
                 {
-                    console.println("- %s", element.toString());
+                    console.print("- %s", element.toString());
+
+                    printLocation(element);
                 }
             }
 
             return FAILURE__MODEL_VALIDATION;
+        }
+    }
+
+    private void printLocation(ModelElement element)
+    {
+        if (element.getLocation().isPresent())
+        {
+            console.println(" %s", element.getLocation().get());
+        }
+        else
+        {
+            console.println("");
         }
     }
 

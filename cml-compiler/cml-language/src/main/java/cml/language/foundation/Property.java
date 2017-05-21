@@ -168,6 +168,18 @@ class PropertyImpl implements Property
     }
 
     @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
+    }
+
+    @Override
     public Optional<Scope> getParentScope()
     {
         return modelElement.getParentScope();

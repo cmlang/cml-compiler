@@ -1,6 +1,6 @@
 
-Failed validation: required abstract_property_redefinition: in concept Circle
-- property Shape.area: Double
+Failed validation: required abstract_property_redefinition: in concept Circle (8:1)
+- property Shape.area: Double (4:5)
 
-Failed validation: required abstract_property_redefinition: in concept UnitCircleA
-- property Shape.area: Double
+Failed validation: required abstract_property_redefinition: in concept UnitCircleA (11:1)
+- property Shape.area: Double (4:5)

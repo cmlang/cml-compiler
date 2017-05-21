@@ -1,5 +1,6 @@
 package cml.language.features;
 
+import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
 import cml.language.foundation.Scope;
@@ -29,6 +30,18 @@ class ImportImpl implements Import
     {
         this.modelElement = ModelElement.create(this);
         this.namedElement = NamedElement.create(modelElement, name);
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package cml.language.expressions;
 
+import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -75,6 +77,18 @@ class InfixImpl implements Infix
         this.operator = operator;
         this.left = left;
         this.right = right;
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
     }
 
     @Override

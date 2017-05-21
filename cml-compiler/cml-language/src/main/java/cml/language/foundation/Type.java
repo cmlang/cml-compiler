@@ -106,6 +106,18 @@ class TypeImpl implements Type
     }
 
     @Override
+    public Optional<Location> getLocation()
+    {
+        return namedElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        namedElement.setLocation(location);
+    }
+
+    @Override
     public Optional<Scope> getParentScope()
     {
         return namedElement.getParentScope();

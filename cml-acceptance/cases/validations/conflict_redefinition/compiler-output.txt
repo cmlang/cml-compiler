@@ -1,16 +1,16 @@
 
-Failed validation: required conflict_redefinition: in concept C
-- property A.p1: Integer
-- property B.p1: Integer
+Failed validation: required conflict_redefinition: in concept C (24:1)
+- property A.p1: Integer (8:5)
+- property B.p1: Integer (18:5)
 
-Failed validation: required conflict_redefinition: in concept E
-- property A.p1: Integer
-- property D.p1: Integer
-- property A.r1: Decimal
-- property D.r1: Decimal
-- property A.s2: Decimal
-- property D.s2: Decimal
+Failed validation: required conflict_redefinition: in concept E (38:1)
+- property A.p1: Integer (8:5)
+- property D.p1: Integer (29:5)
+- property A.r1: Decimal (10:5)
+- property D.r1: Decimal (31:5)
+- property A.s2: Decimal (12:5)
+- property D.s2: Decimal (33:5)
 
-Failed validation: required conflict_redefinition: in concept F
-- property A.t1: String
-- property D.t1: String
+Failed validation: required conflict_redefinition: in concept F (44:1)
+- property A.t1: String (13:5)
+- property D.t1: String (34:5)

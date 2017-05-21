@@ -3,8 +3,10 @@ package cml.language;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.features.Task;
+import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -73,6 +75,18 @@ class ModelImpl implements Model
     {
         this.modelElement = ModelElement.create(this);
         this.scope = Scope.create(this, modelElement);
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return modelElement.getLocation();
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
     }
 
     @Override

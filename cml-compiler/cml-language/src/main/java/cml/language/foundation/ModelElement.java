@@ -1,9 +1,14 @@
 package cml.language.foundation;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Optional;
 
 public interface ModelElement
 {
+    Optional<Location> getLocation();
+    void setLocation(@Nullable Location location);
+    
     Optional<Scope> getParentScope();
 
     static ModelElement create(ModelElement self)
@@ -16,9 +21,23 @@ class ModelElementImpl implements ModelElement
 {
     private final ModelElement self;
 
+    private @Nullable Location location;
+
     ModelElementImpl(ModelElement self)
     {
         this.self = self;
+    }
+
+    @Override
+    public Optional<Location> getLocation()
+    {
+        return Optional.ofNullable(location);
+    }
+
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        this.location = location;
     }
 
     @Override
