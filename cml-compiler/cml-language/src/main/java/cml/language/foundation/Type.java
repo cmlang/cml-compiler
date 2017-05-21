@@ -40,6 +40,16 @@ public interface Type extends NamedElement
         return ORDINAL_TYPE_NAMES.contains(getName());
     }
 
+    default boolean isDefined()
+    {
+        return !isUndefined();
+    }
+
+    default boolean isUndefined()
+    {
+        return getName().equals(UNDEFINED.getName());
+    }
+
     default boolean isGreaterThan(Type other)
     {
         assert this.isOrdinal() && other.isOrdinal()

@@ -63,6 +63,7 @@ public interface Property extends TypedElement, Scope
     {
         return () -> asList(
             new UniquePropertyName(),
+            new PropertyTypeSpecifiedOrInferred(),
             new GeneralizationCompatibleRedefinition(),
             new AbstractPropertyInAbstractConcept()
         );
@@ -136,7 +137,7 @@ class PropertyImpl implements Property
         {
             if (value == null)
             {
-                return Type.createUndefined("No type defined for property: " + getName());
+                return Type.createUndefined("No type or expression defined for property: " + getName());
             }
             else
             {
@@ -290,4 +291,20 @@ class UniquePropertyName implements Invariant<Property>
             return Stream.empty();
         }
     }
+}
+
+class PropertyTypeSpecifiedOrInferred implements Invariant<Property>
+{
+    @Override
+    public boolean evaluate(Property self)
+    {
+        return self.getType().isDefined();
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Property self)
+    {
+        return new Diagnostic("property_type_specified_or_inferred", self, self.getType().getErrorMessage().orElse(null));
+    }
+
 }

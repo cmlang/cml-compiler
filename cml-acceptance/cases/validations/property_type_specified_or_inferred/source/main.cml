@@ -1,0 +1,12 @@
+abstract concept Attributes
+{
+    // Missing type and expression:
+    bad_prop1;
+    /bad_prop2;
+
+    // All valid cases:
+    prop1: String; // type specified
+    prop2 = 0; // init expression specified
+    /prop3 = 1.0; // derived expression specified
+    /prop4: Boolean; // type specified for abstract property
+}

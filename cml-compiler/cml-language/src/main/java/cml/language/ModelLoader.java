@@ -199,6 +199,11 @@ class ModelLoaderImpl implements ModelLoader
 
                 printLocation(diagnostic.getElement());
 
+                if (diagnostic.getMessage().isPresent())
+                {
+                    console.println(diagnostic.getMessage().get());
+                }
+
                 for(ModelElement element: diagnostic.getParticipants())
                 {
                     console.print("- %s", element.toString());
