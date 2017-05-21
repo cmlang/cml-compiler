@@ -72,6 +72,7 @@ public class AcceptanceTest
 
     @DataPoints("validation-modules")
     public static String[] validationModules = {
+        "unique_property_name",
         "not_own_generalization",
         "compatible_generalizations",
         "conflict_redefinition",

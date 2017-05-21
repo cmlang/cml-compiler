@@ -62,6 +62,7 @@ public interface Property extends TypedElement, Scope
     static InvariantValidator<Property> invariantValidator()
     {
         return () -> asList(
+            new UniquePropertyName(),
             new GeneralizationCompatibleRedefinition(),
             new AbstractPropertyInAbstractConcept()
         );
@@ -243,5 +244,38 @@ class AbstractPropertyInAbstractConcept implements Invariant<Property>
     public Diagnostic createDiagnostic(Property self)
     {
         return new Diagnostic("abstract_property_in_abstract_concept", self, emptyList());
+    }
+}
+
+class UniquePropertyName implements Invariant<Property>
+{
+    @Override
+    public boolean evaluate(Property self)
+    {
+        return getConflictingProperties(self).count() == 0;
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Property self)
+    {
+        final List<Property> participants = getConflictingProperties(self).collect(Collectors.toList());
+
+        return new Diagnostic("unique_property_name", self, participants);
+    }
+
+    private Stream<Property> getConflictingProperties(Property self)
+    {
+        if (self.getParentScope().isPresent() && self.getParentScope().get() instanceof Concept)
+        {
+            final Concept concept = (Concept) self.getParentScope().get();
+
+            return concept.getProperties()
+                          .stream()
+                          .filter(p -> p != self && p.getName().equals(self.getName()));
+        }
+        else
+        {
+            return Stream.empty();
+        }
     }
 }

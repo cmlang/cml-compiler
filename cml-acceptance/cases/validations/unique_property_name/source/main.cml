@@ -1,0 +1,7 @@
+abstract concept Attributes
+{
+    prop_name: String;
+    prop_name = 0;
+    /prop_name = 1.0;
+    /prop_name: Boolean;
+}

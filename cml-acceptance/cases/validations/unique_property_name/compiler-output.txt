@@ -1,0 +1,20 @@
+
+Failed validation: required unique_property_name: in property Attributes.prop_name: String
+- property Attributes.prop_name: Integer
+- property Attributes.prop_name: Decimal
+- property Attributes.prop_name: Boolean
+
+Failed validation: required unique_property_name: in property Attributes.prop_name: Integer
+- property Attributes.prop_name: String
+- property Attributes.prop_name: Decimal
+- property Attributes.prop_name: Boolean
+
+Failed validation: required unique_property_name: in property Attributes.prop_name: Decimal
+- property Attributes.prop_name: String
+- property Attributes.prop_name: Integer
+- property Attributes.prop_name: Boolean
+
+Failed validation: required unique_property_name: in property Attributes.prop_name: Boolean
+- property Attributes.prop_name: String
+- property Attributes.prop_name: Integer
+- property Attributes.prop_name: Decimal
