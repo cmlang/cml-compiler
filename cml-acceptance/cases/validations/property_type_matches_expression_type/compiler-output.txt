@@ -1,0 +1,9 @@
+
+Failed validation: required property_type_matches_expression_type: in property Attributes.bad_prop1: Integer (4:5)
+Declared type is Integer but type inferred from expression is String.
+
+Failed validation: required property_type_matches_expression_type: in property Attributes.bad_prop2: String (5:5)
+Declared type is String but type inferred from expression is Integer.
+
+Failed validation: required property_type_matches_expression_type: in property Attributes.bad_prop3: Double (6:5)
+Declared type is Double but type inferred from expression is Decimal.

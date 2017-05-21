@@ -102,6 +102,7 @@ public interface Type extends NamedElement
 
 class TypeImpl implements Type
 {
+    private final ModelElement modelElement;
     private final NamedElement namedElement;
     private final @Nullable String cardinality;
     private final @Nullable String errorMessage;
@@ -110,7 +111,8 @@ class TypeImpl implements Type
 
     TypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
     {
-        this.namedElement = NamedElement.create(this, name);
+        this.modelElement = ModelElement.create(this);
+        this.namedElement = NamedElement.create(modelElement, name);
         this.cardinality = cardinality;
         this.errorMessage = errorMessage;
     }
@@ -118,19 +120,19 @@ class TypeImpl implements Type
     @Override
     public Optional<Location> getLocation()
     {
-        return namedElement.getLocation();
+        return modelElement.getLocation();
     }
 
     @Override
     public void setLocation(@Nullable Location location)
     {
-        namedElement.setLocation(location);
+        modelElement.setLocation(location);
     }
 
     @Override
     public Optional<Scope> getParentScope()
     {
-        return namedElement.getParentScope();
+        return modelElement.getParentScope();
     }
 
     @Override

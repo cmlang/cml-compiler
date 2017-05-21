@@ -1,0 +1,13 @@
+abstract concept Attributes
+{
+    // Type and expression mismatch:
+    bad_prop1: Integer = "String"; // type is Integer but expression is String
+    /bad_prop2: String = 0; // type is String but expression is Integer
+    /bad_prop3: Double = 2.0; // type is Double but expression is Decimal
+
+    // All valid cases:
+    prop1: String; // type specified
+    prop2 = 0; // init expression specified - type inferred
+    /prop3 = 1.0; // derived expression specified - type inferred
+    /prop4: Boolean; // type specified for abstract property
+}

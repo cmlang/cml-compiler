@@ -74,6 +74,7 @@ public class AcceptanceTest
     public static String[] validationModules = {
         "unique_property_name",
         "property_type_specified_or_inferred",
+        "property_type_matches_expression_type",
         "not_own_generalization",
         "compatible_generalizations",
         "conflict_redefinition",

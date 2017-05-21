@@ -30,6 +30,8 @@ public interface Property extends TypedElement, Scope
         return getValue().isPresent() && !isDerived();
     }
 
+    Optional<Type> getDeclaredType();
+
     Optional<Expression> getValue();
     boolean isDerived();
 
@@ -64,6 +66,7 @@ public interface Property extends TypedElement, Scope
         return () -> asList(
             new UniquePropertyName(),
             new PropertyTypeSpecifiedOrInferred(),
+            new PropertyTypeMatchesExpressionType(),
             new GeneralizationCompatibleRedefinition(),
             new AbstractPropertyInAbstractConcept()
         );
@@ -98,6 +101,12 @@ class PropertyImpl implements Property
     public boolean isDerived()
     {
         return derived;
+    }
+
+    @Override
+    public Optional<Type> getDeclaredType()
+    {
+        return Optional.ofNullable(type);
     }
 
     @Override
@@ -304,7 +313,36 @@ class PropertyTypeSpecifiedOrInferred implements Invariant<Property>
     @Override
     public Diagnostic createDiagnostic(Property self)
     {
-        return new Diagnostic("property_type_specified_or_inferred", self, self.getType().getErrorMessage().orElse(null));
+        return new Diagnostic(
+            "property_type_specified_or_inferred",
+            self,
+            self.getType().getErrorMessage().orElse(null));
+    }
+
+}
+
+class PropertyTypeMatchesExpressionType implements Invariant<Property>
+{
+    @Override
+    public boolean evaluate(Property self)
+    {
+        return !(self.getDeclaredType().isPresent() && self.getValue().isPresent()) ||
+               self.getDeclaredType().get().equals(self.getValue().get().getType());
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Property self)
+    {
+        assert self.getDeclaredType().isPresent();
+        assert self.getValue().isPresent();
+
+        return new Diagnostic(
+            "property_type_matches_expression_type",
+            self,
+            format(
+                "Declared type is %s but type inferred from expression is %s.",
+                self.getDeclaredType().get(),
+                self.getValue().get().getType()));
     }
 
 }
