@@ -15,7 +15,7 @@ field_type_required(type) ::= <<
 
 field_or_default_value(property) ::= <<
 <if(property.derived)><\\>
-<if(property.type.ordinal)>0<else><null_value()><endif><\\>
+<field_default_value(property.type)><\\>
 <else><\\>
 <field_name(property)><\\>
 <endif>
@@ -23,10 +23,16 @@ field_or_default_value(property) ::= <<
 
 field_or_init_value(property) ::= <<
 <if(property.derived)><\\>
-<if(property.type.ordinal)>0<else><null_value()><endif><\\>
+<field_default_value(property.type)><\\>
 <elseif(property.value)><\\>
 <literal_expr(property.value)><\\>
 <else><\\>
 <field_name(property)><\\>
 <endif>
+>>
+
+field_default_value(type) ::= <<
+<if(type.numeric)><integral_zero()><\\>
+<elseif(type.binaryFloatingPoint)><float_zero()><\\>
+<else><null_value()><endif>
 >>

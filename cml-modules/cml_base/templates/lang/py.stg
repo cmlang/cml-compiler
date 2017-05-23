@@ -98,7 +98,7 @@ field_type_optional(type) ::= <<
 <type_name(type)>
 >>
 
-field_type_set(type) ::= <<
+field_type_sequence(type) ::= <<
 Set[<type_name(type)>]
 >>
 
@@ -126,7 +126,7 @@ getter_type_optional(type) ::= <<
 <type_name(type)>
 >>
 
-getter_type_set(type) ::= <<
+getter_type_sequence(type) ::= <<
 Set[<type_name(type)>]
 >>
 
@@ -138,7 +138,7 @@ getter_field_value_optional(property) ::= <<
 <field_access(property)>
 >>
 
-getter_field_value_set(property) ::= <<
+getter_field_value_sequence(property) ::= <<
 <field_access(property)>
 >>
 
@@ -248,6 +248,10 @@ literal_expr_double(text) ::= <<
 // Constants
 
 null_value() ::= "None"
+
+integral_zero() ::= "0"
+
+float_zero() ::= "0"
 
 // Operations
 

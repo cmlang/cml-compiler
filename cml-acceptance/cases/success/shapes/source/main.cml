@@ -32,7 +32,7 @@ concept Rhombus: Shape
     q: Double;
 
     // Another redefinition of the area attribute:
-    /area = (p * q) / 2;
+    /area = (p * q) / 2.0d;
 }
 
 // Specialization of both Rectangle and Rhombus:
@@ -51,7 +51,7 @@ concept Square: Rectangle, Rhombus
 
     // Required to redefine area in order to resolve conflict
     // between Rectangle's area and Rhombus' area:
-    /area = side_length ^ 2;
+    /area = side_length ^ 2.0f;
 }
 
 -- All instances of Circle are in turn instances of Shape.
@@ -62,7 +62,7 @@ concept Circle: Shape
     -- In order to be considered a concrete concept,
     -- Circle must redefine the abstract properties
     -- inherited from Shape.
-    /area = 3.14159d * radius ^ 2;
+    /area = 3.14159d * radius ^ 2.0f;
 
     -- Circle may also redefine concrete properties of Shape.
     -- However, the redefinition is not required in this case.

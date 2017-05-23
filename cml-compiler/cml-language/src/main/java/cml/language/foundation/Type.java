@@ -22,22 +22,31 @@ public interface Type extends NamedElement
         "Byte", "Short", "Long", "Float", "Double", "Char" // remaining primitive types
     ));
 
-    List<String> ORDINAL_TYPE_NAMES = unmodifiableList(asList(
-        "Byte", "Short", "Integer", "Long", "Float", "Double", "Decimal" // from smaller to largest
+    List<String> NUMERIC_TYPE_NAMES = unmodifiableList(asList(
+        "Byte", "Short", "Integer", "Long", "Decimal" // from narrower to wider
+    ));
+
+    List<String> BINARY_FLOATING_POINT_TYPE_NAMES = unmodifiableList(asList(
+        "Float", "Double" // from narrower to wider
     ));
 
     String REQUIRED = "required";
     String OPTIONAL = "optional";
-    String SET = "set";
+    String SEQUENCE = "sequence";
 
     default boolean isPrimitive()
     {
         return PRIMITIVE_TYPE_NAMES.contains(getName());
     }
 
-    default boolean isOrdinal()
+    default boolean isNumeric()
     {
-        return ORDINAL_TYPE_NAMES.contains(getName());
+        return NUMERIC_TYPE_NAMES.contains(getName());
+    }
+
+    default boolean isBinaryFloatingPoint()
+    {
+        return BINARY_FLOATING_POINT_TYPE_NAMES.contains(getName());
     }
 
     default boolean isDefined()
@@ -50,12 +59,35 @@ public interface Type extends NamedElement
         return getName().equals(UNDEFINED.getName());
     }
 
-    default boolean isGreaterThan(Type other)
+    default boolean isOptional()
     {
-        assert this.isOrdinal() && other.isOrdinal()
-            : "Both types must be ordinal in order to be compared: " + this.getName() + " & " + other.getName();
+        return getKind().equals(OPTIONAL);
+    }
 
-        return ORDINAL_TYPE_NAMES.indexOf(this.getName()) > ORDINAL_TYPE_NAMES.indexOf(other.getName());
+    default boolean isRequired()
+    {
+        return getKind().equals(REQUIRED);
+    }
+
+    default boolean isSequence()
+    {
+        return getKind().equals(SEQUENCE);
+    }
+
+    default boolean isNumericWiderThan(Type other)
+    {
+        assert this.isNumeric() && other.isNumeric()
+            : "Both types must be numeric in order to be compared: " + this.getName() + " & " + other.getName();
+
+        return NUMERIC_TYPE_NAMES.indexOf(this.getName()) > NUMERIC_TYPE_NAMES.indexOf(other.getName());
+    }
+
+    default boolean isBinaryFloatingPointWiderThan(Type other)
+    {
+        assert this.isBinaryFloatingPoint() && other.isBinaryFloatingPoint()
+            : "Both types must be binary floating-point in order to be compared: " + this.getName() + " & " + other.getName();
+
+        return BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(this.getName()) > BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(other.getName());
     }
 
     Optional<String> getCardinality();
@@ -77,11 +109,51 @@ public interface Type extends NamedElement
             }
             else if (cardinality.matches("([*+])"))
             {
-                return SET;
+                return SEQUENCE;
             }
         }
 
         return REQUIRED;
+    }
+
+    default boolean isTypeAssignableFrom(Type other)
+    {
+        if (this.getName().equals(other.getName()))
+        {
+            return true;
+        }
+        else if (this.isNumeric() && other.isNumeric())
+        {
+            return this.isNumericWiderThan(other);
+        }
+        else if (this.isBinaryFloatingPoint() && other.isBinaryFloatingPoint())
+        {
+            return this.isBinaryFloatingPointWiderThan(other);
+        }
+        else if (this.getConcept().isPresent() && other.getConcept().isPresent())
+        {
+            return other.getConcept()
+                        .get()
+                        .getAllGeneralizations()
+                        .stream()
+                        .anyMatch(c -> c.getName().equals(this.getName()));
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    default boolean isCardinalityAssignableFrom(Type other)
+    {
+        return Objects.equals(this.getCardinality(), other.getCardinality()) ||
+               (this.isOptional() && other.isRequired()) ||
+               (this.isSequence());
+    }
+
+    default boolean isAssignableFrom(Type other)
+    {
+        return this.isTypeAssignableFrom(other) && this.isCardinalityAssignableFrom(other);
     }
 
     static Type create(String name)

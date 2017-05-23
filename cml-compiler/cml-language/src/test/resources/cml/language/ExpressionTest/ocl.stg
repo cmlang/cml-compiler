@@ -114,3 +114,11 @@ literal_expr_Integer(text) ::= <<
 literal_expr_Decimal(text) ::= <<
 <text>
 >>
+
+literal_expr_Float(text) ::= <<
+<text>f
+>>
+
+literal_expr_Double(text) ::= <<
+<text>d
+>>

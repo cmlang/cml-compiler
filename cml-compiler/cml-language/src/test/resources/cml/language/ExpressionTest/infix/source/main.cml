@@ -63,4 +63,10 @@ concept Expressions
 
     // Arithmetic and relational operators always take precedence over boolean ones:
     boolean_lower_precedence = a > 1+1 and b >= 4/2 or c <= 3^2 and d == 3*-2 xor not e and not f;
+
+    // Numeric Types:
+    numeric = 2.0 * 3;
+
+    // Binary Floating-Point:
+    floating_point = 2.0f * 3.0d;
 }

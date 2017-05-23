@@ -136,9 +136,13 @@ class InfixImpl implements Infix
         {
             return Type.BOOLEAN;
         }
-        if (MATH_OPERATORS.contains(operator) && leftType.isOrdinal() && rightType.isOrdinal())
+        else if (MATH_OPERATORS.contains(operator) && leftType.isNumeric() && rightType.isNumeric())
         {
-            return leftType.isGreaterThan(rightType) ? leftType : rightType;
+            return leftType.isNumericWiderThan(rightType) ? leftType : rightType;
+        }
+        else if (MATH_OPERATORS.contains(operator) && leftType.isBinaryFloatingPoint() && rightType.isBinaryFloatingPoint())
+        {
+            return leftType.isBinaryFloatingPointWiderThan(rightType) ? leftType : rightType;
         }
         else if (leftType.equals(rightType))
         {
@@ -150,7 +154,7 @@ class InfixImpl implements Infix
             System.out.println(">>> Left Type: " + leftType);
             System.out.println(">>> Right Type: " + rightType);
 
-            return Type.UNDEFINED;
+            return Type.createUndefined(format("Unsupported operands for operator '%s'.", getOperator()));
         }
     }
 
