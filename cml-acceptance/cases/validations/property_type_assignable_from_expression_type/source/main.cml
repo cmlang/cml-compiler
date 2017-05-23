@@ -5,6 +5,8 @@ abstract concept Attributes
 {
     a: A;
     b: B;
+    b2: B?;
+    b3: B*;
 
     // Type and expression mismatch:
     bad_prop1: Integer = "String"; // type is Integer but expression is String
@@ -30,4 +32,29 @@ abstract concept Attributes
     prop2 = 0; // init expression specified - type inferred
     /prop3 = 1.0; // derived expression specified - type inferred
     /prop4: Boolean; // type specified for abstract property
+
+    // Cardinality - Assignable:
+    a2: A = a;
+    a3: A? = a;
+    a4: A* = a2;
+    a5: A* = a3;
+    ab2: A = b;
+    ab3: A? = b;
+    ab4: A* = b;
+    ab5: A* = b2;
+    ab6: A* = b3;
+    d1: Decimal? = long_to_decimal;
+    d2: Decimal* = long_to_decimal;
+    d3: Decimal* = d1;
+
+    // Cardinality - Non-Assignable:
+    a6: A = a4;
+    a7: A? = a5;
+    a8: A = a3;
+    ab7: A = ab4;
+    ab8: A? = ab5;
+    ab9: A = ab3;
+    d4: Decimal = d2;
+    d5: Decimal? = d3;
+    d6: Decimal = d1;
 }
