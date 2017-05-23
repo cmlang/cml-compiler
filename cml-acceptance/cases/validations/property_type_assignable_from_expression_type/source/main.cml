@@ -1,11 +1,31 @@
+concept A;
+concept B: A;
+
 abstract concept Attributes
 {
+    a: A;
+    b: B;
+
     // Type and expression mismatch:
     bad_prop1: Integer = "String"; // type is Integer but expression is String
     /bad_prop2: String = 0; // type is String but expression is Integer
     /bad_prop3: Double = 2.0; // type is Double but expression is Decimal
 
-    // All valid cases:
+    // Assignable Types:
+    byte_to_short: Short = 1b;
+    short_to_int: Integer = 1s;
+    int_to_long: Long = 1;
+    long_to_decimal: Decimal = 1l;
+    float_to_double: Double = 1.0f;
+    b_to_a: A = b;
+
+    // Non-Assignable Types:
+    decimal_to_double: Double = 1.0;
+    double_to_decimal: Decimal = 1.0d;
+    decimal_to_byte: Byte = 1.0;
+    a_to_b: B = a;
+
+    // Valid cases where either the type is specified or an expression is provided:
     prop1: String; // type specified
     prop2 = 0; // init expression specified - type inferred
     /prop3 = 1.0; // derived expression specified - type inferred

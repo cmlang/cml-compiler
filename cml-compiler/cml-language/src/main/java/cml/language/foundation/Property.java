@@ -66,7 +66,7 @@ public interface Property extends TypedElement, Scope
         return () -> asList(
             new UniquePropertyName(),
             new PropertyTypeSpecifiedOrInferred(),
-            new PropertyTypeMatchesExpressionType(),
+            new PropertyTypeAssignableFromExpressionType(),
             new GeneralizationCompatibleRedefinition(),
             new AbstractPropertyInAbstractConcept()
         );
@@ -321,13 +321,13 @@ class PropertyTypeSpecifiedOrInferred implements Invariant<Property>
 
 }
 
-class PropertyTypeMatchesExpressionType implements Invariant<Property>
+class PropertyTypeAssignableFromExpressionType implements Invariant<Property>
 {
     @Override
     public boolean evaluate(Property self)
     {
         return !(self.getDeclaredType().isPresent() && self.getValue().isPresent()) ||
-               self.getDeclaredType().get().equals(self.getValue().get().getType());
+               self.getDeclaredType().get().isAssignableFrom(self.getValue().get().getType());
     }
 
     @Override
@@ -337,7 +337,7 @@ class PropertyTypeMatchesExpressionType implements Invariant<Property>
         assert self.getValue().isPresent();
 
         return new Diagnostic(
-            "property_type_matches_expression_type",
+            "property_type_assignable_from_expression_type",
             self,
             format(
                 "Declared type is %s but type inferred from expression is %s.",
