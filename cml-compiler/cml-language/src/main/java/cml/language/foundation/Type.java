@@ -95,7 +95,7 @@ public interface Type extends NamedElement
     Optional<String> getErrorMessage();
 
     Optional<Concept> getConcept();
-    void setConcept(Concept module);
+    void setConcept(@Nullable Concept concept);
 
     default String getKind()
     {

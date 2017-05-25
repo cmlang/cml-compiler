@@ -1,5 +1,6 @@
 package cml.language;
 
+import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.NamedElement;
@@ -57,6 +58,24 @@ class ModelAugmenter extends CMLBaseListener
                     "Unable to find ancestors: %s",
                     missingAncestors.substring(1, missingAncestors.length() - 1));
             }
+        }
+    }
+
+    @Override
+    public void enterAssociationEndDeclaration(CMLParser.AssociationEndDeclarationContext ctx)
+    {
+        final AssociationEnd associationEnd = ctx.associationEnd;
+
+        module.getConcept(associationEnd.getConceptName())
+              .ifPresent(associationEnd::setConcept);
+
+        if (associationEnd.getConcept().isPresent())
+        {
+            associationEnd.getConcept().get().getAllProperties()
+                                             .stream()
+                                             .filter(property -> property.getName().equals(associationEnd.getPropertyName()))
+                                             .findFirst()
+                                             .ifPresent(associationEnd::setProperty);
         }
     }
 

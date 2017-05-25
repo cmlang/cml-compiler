@@ -1,10 +1,7 @@
 package cml.language;
 
 import cml.language.expressions.*;
-import cml.language.features.Concept;
-import cml.language.features.Import;
-import cml.language.features.Module;
-import cml.language.features.Task;
+import cml.language.features.*;
 import cml.language.foundation.Location;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
@@ -13,6 +10,7 @@ import cml.language.grammar.CMLParser.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,9 +22,12 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String QUOTE = "\"";
     private static final String INVALID_MODULE_NAME = "Module declaration name (%s) should match the module's directory name: %s";
     private static final String NO_NAME_PROVIDED_FOR_CONCEPT = "No name provided for concept.";
+    private static final String NO_NAME_PROVIDED_FOR_ASSOCIATION = "No name provided for association.";
     private static final String NO_NAME_PROVIDED_FOR_TYPE = "No name provided for type.";
     private static final String NO_NAME_PROVIDED_FOR_PROPERTY = "No name provided for property.";
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
+    private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
+    private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
 
     private final Module module;
 
@@ -44,6 +45,11 @@ class ModelSynthesizer extends CMLBaseListener
                .stream()
                .filter(node -> node.conceptDeclaration() != null)
                .forEach(node -> module.addMember(node.conceptDeclaration().concept));
+
+            ctx.declarations()
+               .stream()
+               .filter(node -> node.associationDeclaration() != null)
+               .forEach(node -> module.addMember(node.associationDeclaration().association));
 
             ctx.declarations()
                .stream()
@@ -98,6 +104,50 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         ctx.concept.setLocation(locationOf(ctx));
+    }
+
+    @Override
+    public void exitAssociationDeclaration(AssociationDeclarationContext ctx)
+    {
+        if (ctx.NAME() == null)
+        {
+            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_ASSOCIATION);
+        }
+
+        final String name = ctx.NAME().getText();
+
+        ctx.association = Association.create(name);
+
+        if (ctx.associationEndDeclaration() != null)
+        {
+            ctx.associationEndDeclaration()
+               .forEach(node -> ctx.association.addMember(node.associationEnd));
+        }
+
+        ctx.association.setLocation(locationOf(ctx));
+    }
+
+    @Override
+    public void exitAssociationEndDeclaration(AssociationEndDeclarationContext ctx)
+    {
+        if (ctx.conceptName == null)
+        {
+            throw new ModelSynthesisException(NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END);
+        }
+
+        if (ctx.propertyName == null)
+        {
+            throw new ModelSynthesisException(NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END);
+        }
+
+        final String conceptName = ctx.conceptName.getText();
+        final String propertyName = ctx.propertyName.getText();
+        final @Nullable Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final AssociationEnd associationEnd = AssociationEnd.create(conceptName, propertyName, type);
+
+        associationEnd.setLocation(locationOf(ctx));
+
+        ctx.associationEnd = associationEnd;
     }
 
     @Override

@@ -1,10 +1,10 @@
 grammar CompilationUnits;
 
-import Modules, Concepts, Tasks;
+import Modules, Concepts, Associations, Tasks;
 
 compilationUnit:
     declarations*;
 
 declarations:
-    moduleDeclaration | conceptDeclaration | taskDeclaration;
+    moduleDeclaration | conceptDeclaration | associationDeclaration | taskDeclaration;
 

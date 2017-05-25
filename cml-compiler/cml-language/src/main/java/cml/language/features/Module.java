@@ -87,6 +87,14 @@ public interface Module extends NamedElement, Scope
                                .findFirst();
     }
 
+    default List<Association> getAssociations()
+    {
+        return getMembers().stream()
+                           .filter(e -> e instanceof Association)
+                           .map(e -> (Association)e)
+                           .collect(toList());
+    }
+
     default List<Task> getTasks()
     {
         return getMembers().stream()

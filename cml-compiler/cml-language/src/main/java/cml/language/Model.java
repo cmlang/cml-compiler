@@ -1,5 +1,6 @@
 package cml.language;
 
+import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.features.Task;
@@ -45,7 +46,23 @@ public interface Model extends Scope
 
     default Optional<Concept> getConcept(String name)
     {
-        return getConcepts().stream().filter(concept -> concept.getName().equals(name)).findFirst();
+        return getConcepts().stream()
+                            .filter(concept -> concept.getName().equals(name))
+                            .findFirst();
+    }
+
+    default List<Association> getAssociations()
+    {
+        return getModules().stream()
+                           .flatMap(m -> m.getAssociations().stream())
+                           .collect(toList());
+    }
+
+    default Optional<Association> getAssociation(String name)
+    {
+        return getAssociations().stream()
+                                .filter(association -> association.getName().equals(name))
+                                .findFirst();
     }
 
     default List<Task> getTasks()
@@ -57,7 +74,9 @@ public interface Model extends Scope
 
     default Optional<Task> getTarget(String name)
     {
-        return getTasks().stream().filter(target -> target.getName().equals(name)).findFirst();
+        return getTasks().stream()
+                         .filter(target -> target.getName().equals(name))
+                         .findFirst();
     }
 
     static Model create()
