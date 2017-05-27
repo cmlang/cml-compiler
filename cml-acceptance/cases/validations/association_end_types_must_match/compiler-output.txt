@@ -1,0 +1,8 @@
+
+Failed validation: required association_end_types_must_match: in association Employment (18:1)
+- association end Employee.employer (20:5)
+- association end Employee.employer (21:5)
+
+Failed validation: required association_end_types_must_match: in association VehicleOwnership (24:1)
+- association end Vehicle.owner: Organization (26:5)
+- association end Organization.employees: Employee* (27:5)

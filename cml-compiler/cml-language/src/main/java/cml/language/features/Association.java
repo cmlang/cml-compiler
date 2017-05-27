@@ -35,7 +35,8 @@ public interface Association extends NamedElement, Scope
     static InvariantValidator<Association> invariantValidator()
     {
         return () -> asList(
-            new AssociationMustHaveTwoAssociationEnds()
+            new AssociationMustHaveTwoAssociationEnds(),
+            new AssociationEndTypesMustMatch()
         );
     }
 
@@ -109,5 +110,52 @@ class AssociationMustHaveTwoAssociationEnds implements Invariant<Association>
     public Diagnostic createDiagnostic(Association self)
     {
         return new Diagnostic("association_must_have_two_association_ends", self, self.getAssociationEnds());
+    }
+}
+
+class AssociationEndTypesMustMatch implements Invariant<Association>
+{
+    @Override
+    public boolean evaluate(Association self)
+    {
+        if (self.getAssociationEnds().size() != 2)
+        {
+            return true;
+        }
+
+        final Optional<AssociationEnd> first = self.getAssociationEnds().stream().findFirst();
+        final Optional<AssociationEnd> last = self.getAssociationEnds().stream().reduce((previous, next) -> next);
+
+        if (!first.isPresent() || !last.isPresent())
+        {
+            return true;
+        }
+
+        final AssociationEnd end1 = first.get();
+        final AssociationEnd end2 = last.get();
+
+        if (!end1.getConcept().isPresent() || !end1.getProperty().isPresent() ||
+            !end2.getConcept().isPresent() || !end2.getProperty().isPresent())
+        {
+            return true;
+        }
+
+        final Concept firstConcept = end1.getConcept().get();
+        final Concept secondConcept = end2.getConcept().get();
+        final Property firstProperty = end1.getProperty().get();
+        final Property secondProperty = end2.getProperty().get();
+
+        return typesMatch(firstConcept, secondProperty) && typesMatch(secondConcept, firstProperty);
+    }
+
+    private static boolean typesMatch(Concept concept, Property property)
+    {
+        return concept.getName().equals(property.getType().getName());
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Association self)
+    {
+        return new Diagnostic("association_end_types_must_match", self, self.getAssociationEnds());
     }
 }
