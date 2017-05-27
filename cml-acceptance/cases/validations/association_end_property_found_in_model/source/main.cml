@@ -1,0 +1,18 @@
+
+concept Employee
+{
+    name: String;
+}
+
+concept Organization
+{
+    name: String;
+    employees: Employee*;
+}
+
+association Employment
+{
+    Employee.employer;
+    Organiza.employees;
+}
+

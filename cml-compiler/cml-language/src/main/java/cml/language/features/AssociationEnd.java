@@ -3,7 +3,14 @@ package cml.language.features;
 import cml.language.foundation.*;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
+
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
+import static java.util.stream.Stream.of;
 
 public interface AssociationEnd extends ModelElement
 {
@@ -20,6 +27,13 @@ public interface AssociationEnd extends ModelElement
     static AssociationEnd create(String conceptName, String propertyName, @Nullable Type propertyType)
     {
         return new AssociationEndImpl(conceptName, propertyName, propertyType);
+    }
+
+    static InvariantValidator<AssociationEnd> invariantValidator()
+    {
+        return () -> asList(
+            new AssociationEndPropertyFoundInModel()
+        );
     }
 }
 
@@ -99,5 +113,32 @@ class AssociationEndImpl implements AssociationEnd
     public Optional<Scope> getParentScope()
     {
         return modelElement.getParentScope();
+    }
+
+    @Override
+    public String toString()
+    {
+        return format("%s.%s", getConceptName(), getPropertyName());
+    }
+}
+
+class AssociationEndPropertyFoundInModel implements Invariant<AssociationEnd>
+{
+    @Override
+    public boolean evaluate(AssociationEnd self)
+    {
+        return self.getConcept().isPresent() && self.getProperty().isPresent();
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(AssociationEnd self)
+    {
+        @SuppressWarnings("ConstantConditions")
+        final List<ModelElement> participants = concat(of(self.getConcept()), of(self.getProperty()))
+            .filter(Optional::isPresent)
+            .map(e -> (ModelElement)e.get())
+            .collect(toList());
+
+        return new Diagnostic("association_end_property_found_in_model", self, participants);
     }
 }

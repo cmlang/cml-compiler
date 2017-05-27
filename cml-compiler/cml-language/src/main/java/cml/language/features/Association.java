@@ -1,9 +1,6 @@
 package cml.language.features;
 
-import cml.language.foundation.Location;
-import cml.language.foundation.ModelElement;
-import cml.language.foundation.NamedElement;
-import cml.language.foundation.Scope;
+import cml.language.foundation.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -82,5 +79,11 @@ class AssociationImpl implements Association
     public void addMember(ModelElement member)
     {
         scope.addMember(member);
+    }
+
+    @Override
+    public String toString()
+    {
+        return getName();
     }
 }
