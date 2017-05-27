@@ -1,0 +1,10 @@
+
+Failed validation: required association_must_have_two_association_ends: in association Employment (18:1)
+- association end Employee.employer (20:5)
+- association end Organization.employees (21:5)
+- association end Vehicle.owner: Organization (22:5)
+
+Failed validation: required association_must_have_two_association_ends: in association VehicleOwnership (25:1)
+- association end Organization.fleet: Vehicle* (27:5)
+
+Failed validation: required association_must_have_two_association_ends: in association Empty (30:1)

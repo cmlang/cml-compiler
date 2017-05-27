@@ -1,5 +1,6 @@
 package cml.language;
 
+import cml.language.features.Association;
 import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
 import cml.language.foundation.Diagnostic;
@@ -13,6 +14,7 @@ public class ModelValidator implements ModelVisitor.Delegate
 {
     private final InvariantValidator<Concept> conceptInvariantValidator = Concept.invariantValidator();
     private final InvariantValidator<Property> propertyInvariantValidator = Property.invariantValidator();
+    private final InvariantValidator<Association> associationInvariantValidator = Association.invariantValidator();
     private final InvariantValidator<AssociationEnd> associationEndInvariantValidator = AssociationEnd.invariantValidator();
     private final List<Diagnostic> diagnostics = new ArrayList<>();
 
@@ -34,6 +36,12 @@ public class ModelValidator implements ModelVisitor.Delegate
     public void visit(Property property)
     {
         propertyInvariantValidator.validate(property, diagnostics);
+    }
+
+    @Override
+    public void visit(Association association)
+    {
+        associationInvariantValidator.validate(association, diagnostics);
     }
 
     @Override

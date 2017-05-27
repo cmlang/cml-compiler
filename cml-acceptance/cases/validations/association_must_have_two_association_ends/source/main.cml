@@ -1,0 +1,30 @@
+concept Vehicle
+{
+    driver: Employee?;
+    owner: Organization;
+}
+
+concept Employee
+{
+    employer: Organization;
+}
+
+concept Organization
+{
+    employees: Employee*;
+    fleet: Vehicle*;
+}
+
+association Employment
+{
+    Employee.employer;
+    Organization.employees;
+    Vehicle.owner: Organization;
+}
+
+association VehicleOwnership
+{
+    Organization.fleet: Vehicle*;
+}
+
+association Empty {}

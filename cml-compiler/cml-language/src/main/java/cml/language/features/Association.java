@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 public interface Association extends NamedElement, Scope
@@ -30,6 +31,14 @@ public interface Association extends NamedElement, Scope
     {
         return new AssociationImpl(name);
     }
+
+    static InvariantValidator<Association> invariantValidator()
+    {
+        return () -> asList(
+            new AssociationMustHaveTwoAssociationEnds()
+        );
+    }
+
 }
 
 class AssociationImpl implements Association
@@ -84,6 +93,21 @@ class AssociationImpl implements Association
     @Override
     public String toString()
     {
-        return getName();
+        return "association " + getName();
+    }
+}
+
+class AssociationMustHaveTwoAssociationEnds implements Invariant<Association>
+{
+    @Override
+    public boolean evaluate(Association self)
+    {
+        return self.getAssociationEnds().size() == 2;
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(Association self)
+    {
+        return new Diagnostic("association_must_have_two_association_ends", self, self.getAssociationEnds());
     }
 }
