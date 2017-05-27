@@ -75,6 +75,7 @@ public class AcceptanceTest
         "abstract_property_in_abstract_concept",
         "abstract_property_redefinition",
         "association_end_property_found_in_model",
+        "association_end_type_matches_property_type",
         "compatible_generalizations",
         "conflict_redefinition",
         "generalization_compatible_redefinition",

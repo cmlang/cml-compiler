@@ -1,0 +1,17 @@
+concept Vehicle
+{
+    plate: String;
+    owner: Organization;
+}
+
+concept Organization
+{
+    name: String;
+    fleet: Vehicle*;
+}
+
+association VehicleOwnership
+{
+    Vehicle.owner: Organization*;
+    Organization.fleet: Vehicle;
+}

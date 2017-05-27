@@ -1,0 +1,6 @@
+
+Failed validation: required association_end_type_matches_property_type: in association end Vehicle.owner: Organization* (15:5)
+- property Vehicle.owner: Organization (4:5)
+
+Failed validation: required association_end_type_matches_property_type: in association end Organization.fleet: Vehicle (16:5)
+- property Organization.fleet: Vehicle* (10:5)

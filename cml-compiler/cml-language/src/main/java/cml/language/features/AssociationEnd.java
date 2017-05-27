@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
@@ -32,7 +33,8 @@ public interface AssociationEnd extends ModelElement
     static InvariantValidator<AssociationEnd> invariantValidator()
     {
         return () -> asList(
-            new AssociationEndPropertyFoundInModel()
+            new AssociationEndPropertyFoundInModel(),
+            new AssociationEndTypeMatchesPropertyType()
         );
     }
 }
@@ -118,7 +120,14 @@ class AssociationEndImpl implements AssociationEnd
     @Override
     public String toString()
     {
-        return format("%s.%s", getConceptName(), getPropertyName());
+        if (getPropertyType().isPresent())
+        {
+            return format("association end %s.%s: %s", getConceptName(), getPropertyName(), getPropertyType().get());
+        }
+        else
+        {
+            return format("association end %s.%s", getConceptName(), getPropertyName());
+        }
     }
 }
 
@@ -140,5 +149,27 @@ class AssociationEndPropertyFoundInModel implements Invariant<AssociationEnd>
             .collect(toList());
 
         return new Diagnostic("association_end_property_found_in_model", self, participants);
+    }
+}
+
+class AssociationEndTypeMatchesPropertyType implements Invariant<AssociationEnd>
+{
+    @Override
+    public boolean evaluate(AssociationEnd self)
+    {
+        return !self.getPropertyType().isPresent() ||
+               !self.getProperty().isPresent() ||
+               self.getPropertyType().get().equals(self.getProperty().get().getType());
+    }
+
+    @Override
+    public Diagnostic createDiagnostic(AssociationEnd self)
+    {
+        assert self.getProperty().isPresent();
+
+        return new Diagnostic(
+            "association_end_type_matches_property_type",
+            self,
+            singletonList(self.getProperty().get()));
     }
 }
