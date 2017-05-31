@@ -4,14 +4,14 @@ interface Book
 
     Optional<Book> getSequel();
 
-    Set<Category> getCategories();
+    List<Category> getCategories();
 
-    static Book createBook(String title, @Nullable Book sequel, Set<Category> categories)
+    static Book createBook(String title, @Nullable Book sequel, List<Category> categories)
     {
         return new BookImpl(title, sequel, categories);
     }
 
-    static Book extendBook(String title, @Nullable Book sequel, Set<Category> categories)
+    static Book extendBook(String title, @Nullable Book sequel, List<Category> categories)
     {
         return new BookImpl(title, sequel, categories);
     }

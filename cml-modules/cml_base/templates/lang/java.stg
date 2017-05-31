@@ -120,7 +120,7 @@ field_type_optional(type) ::= <<
 >>
 
 field_type_sequence(type) ::= <<
-Set\<<type_name(type)>\>
+List\<<type_name(type)>\>
 >>
 
 field_decl(typed_element) ::= <<
@@ -146,7 +146,7 @@ Optional\<<type_name(type)>\>
 >>
 
 getter_type_sequence(type) ::= <<
-Set\<<type_name(type)>\>
+List\<<type_name(type)>\>
 >>
 
 getter_field_value_required(property) ::= <<
@@ -158,7 +158,7 @@ Optional.ofNullable(<field_access(property)>)
 >>
 
 getter_field_value_sequence(property) ::= <<
-Collections.unmodifiableSet(<field_access(property)>)
+Collections.unmodifiableList(<field_access(property)>)
 >>
 
 getter_call(property) ::= <<

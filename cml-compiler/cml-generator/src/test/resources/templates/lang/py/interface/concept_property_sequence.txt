@@ -9,5 +9,5 @@ class Book(ABC):
         pass
 
     @abstractproperty
-    def categories(self) -> 'Set[Category]':
+    def categories(self) -> 'List[Category]':
         pass

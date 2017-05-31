@@ -99,7 +99,7 @@ field_type_optional(type) ::= <<
 >>
 
 field_type_sequence(type) ::= <<
-Set[<type_name(type)>]
+List[<type_name(type)>]
 >>
 
 field_decl(typed_element) ::= ""
@@ -127,7 +127,7 @@ getter_type_optional(type) ::= <<
 >>
 
 getter_type_sequence(type) ::= <<
-Set[<type_name(type)>]
+List[<type_name(type)>]
 >>
 
 getter_field_value_required(property) ::= <<

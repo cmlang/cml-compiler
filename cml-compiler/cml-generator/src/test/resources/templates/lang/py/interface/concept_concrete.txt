@@ -9,13 +9,13 @@ class Book(ABC):
         pass
 
     @abstractproperty
-    def categories(self) -> 'Set[Category]':
+    def categories(self) -> 'List[Category]':
         pass
 
     @staticmethod
-    def create_book(title: 'str', sequel: 'Book', categories: 'Set[Category]') -> 'Book':
+    def create_book(title: 'str', sequel: 'Book', categories: 'List[Category]') -> 'Book':
         return BookImpl(title, sequel, categories)
 
     @staticmethod
-    def extend_book(title: 'str', sequel: 'Book', categories: 'Set[Category]') -> 'Book':
+    def extend_book(title: 'str', sequel: 'Book', categories: 'List[Category]') -> 'Book':
         return BookImpl(title, sequel, categories)

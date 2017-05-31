@@ -126,7 +126,7 @@ public class ClassTest extends LangTest
     }
 
     @Test
-    public void class__concept_property_set() throws IOException
+    public void class__concept_property_sequence() throws IOException
     {
         final Concept concept = Concept.create("Book");
 
@@ -134,7 +134,7 @@ public class ClassTest extends LangTest
         concept.addMember(Property.create("sequel", Type.create("Book", "?")));
         concept.addMember(Property.create("categories", Type.create("Category", "*")));
 
-        testClassTemplateWithConcept(concept, "class__concept_property_set.txt");
+        testClassTemplateWithConcept(concept, "class__concept_property_sequence.txt");
     }
 
     @Test

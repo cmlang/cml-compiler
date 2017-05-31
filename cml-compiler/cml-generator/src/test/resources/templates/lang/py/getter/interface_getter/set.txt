@@ -1,3 +1,0 @@
-@abstractproperty
-def some_property(self) -> 'Set[SomeType]':
-    pass

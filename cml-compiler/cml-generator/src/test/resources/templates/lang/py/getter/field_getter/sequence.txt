@@ -1,0 +1,3 @@
+@property
+def some_property(self) -> 'List[SomeType]':
+    return self.__some_property

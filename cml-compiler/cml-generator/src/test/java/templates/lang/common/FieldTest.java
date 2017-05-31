@@ -36,11 +36,11 @@ public class FieldTest extends LangTest
     }
 
     @Test
-    public void field_type__set() throws IOException
+    public void field_type__sequence() throws IOException
     {
-        final String cardinality = "*"; // set
+        final String cardinality = "*"; // sequence
 
-        field_type(cardinality, "set.txt");
+        field_type(cardinality, "sequence.txt");
     }
 
     private void field_type(String cardinality, String expectedOutputPath) throws IOException

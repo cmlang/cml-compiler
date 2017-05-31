@@ -36,9 +36,9 @@ public class GetterTest extends LangTest
     }
 
     @Test
-    public void getter_call__set() throws IOException
+    public void getter_call__sequence() throws IOException
     {
-        final String cardinality = "*"; // set
+        final String cardinality = "*"; // sequence
 
         getter_call(cardinality);
     }
@@ -60,11 +60,11 @@ public class GetterTest extends LangTest
     }
 
     @Test
-    public void getter_type__set() throws IOException
+    public void getter_type__sequence() throws IOException
     {
-        final String cardinality = "*"; // set
+        final String cardinality = "*"; // sequence
 
-        getter_type(cardinality, "set.txt");
+        getter_type(cardinality, "sequence.txt");
     }
 
     @Test
@@ -84,11 +84,11 @@ public class GetterTest extends LangTest
     }
 
     @Test
-    public void interface_getter__set() throws IOException
+    public void interface_getter__sequence() throws IOException
     {
-        final String cardinality = "*"; // set
+        final String cardinality = "*"; // sequence
 
-        interface_getter(cardinality, "set.txt");
+        interface_getter(cardinality, "sequence.txt");
     }
 
     @Test
@@ -108,11 +108,11 @@ public class GetterTest extends LangTest
     }
 
     @Test
-    public void class_getter__set() throws IOException
+    public void class_getter__sequence() throws IOException
     {
-        final String cardinality = "*"; // set
+        final String cardinality = "*"; // sequence
 
-        class_getter(cardinality, "set.txt");
+        class_getter(cardinality, "sequence.txt");
     }
 
     private void getter_type(String cardinality, String expectedOutput) throws IOException

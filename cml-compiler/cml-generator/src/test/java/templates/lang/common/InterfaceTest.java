@@ -133,7 +133,7 @@ public class InterfaceTest extends LangTest
     }
 
     @Test
-    public void concept_property_set() throws IOException
+    public void concept_property_sequence() throws IOException
     {
         final Concept concept = Concept.create("Book");
 
@@ -141,7 +141,7 @@ public class InterfaceTest extends LangTest
         concept.addMember(Property.create("sequel", Type.create("Book", "?")));
         concept.addMember(Property.create("categories", Type.create("Category", "*")));
 
-        testInterfaceTemplateWithConcept(concept, "concept_property_set.txt");
+        testInterfaceTemplateWithConcept(concept, "concept_property_sequence.txt");
     }
 
     private void testInterfaceTemplateWithConcept(Concept concept, String expectedOutputFileName) throws IOException
