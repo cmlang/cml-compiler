@@ -15,6 +15,7 @@
         <module>livir-console</module>
         <module>mcml-compiler</module>
         <module>shapes-console</module>
+        <module>vehicles-console</module>
     </modules>
 
     <build>

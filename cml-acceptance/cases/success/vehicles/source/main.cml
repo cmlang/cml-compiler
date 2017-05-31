@@ -1,0 +1,42 @@
+
+concept Vehicle
+{
+    plate: String;
+    driver: Employee?;
+    owner: Organization;
+}
+
+concept Employee
+{
+    name: String;
+    employer: Organization;
+}
+
+concept Organization
+{
+    name: String;
+    employees: Employee*;
+    fleet: Vehicle*;
+}
+
+association Employment
+{
+    Employee.employer;
+    Organization.employees;
+}
+
+association VehicleOwnership
+{
+    Vehicle.owner: Organization;
+    Organization.fleet: Vehicle*;
+}
+
+task vehicles_poj by poj
+{
+    groupId = "vehicles";
+    artifactId = "vehicles";
+    artifactVersion = "1.0.1-SNAPSHOT";
+    packageName = "vehicles";
+    packagePath = "vehicles";
+}
+

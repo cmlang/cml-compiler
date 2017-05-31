@@ -67,7 +67,8 @@ public class AcceptanceTest
         new SuccessCase("mini_cml_language", "mcml_compiler", "mcml_py", PYTHON),
         new SuccessCase("shapes", "shapes-console", "shapes_java", JAVA),
         new SuccessCase("shapes", "shapes_cmlc_console", "shapes_cmlc_py", PYTHON, "shapes_cmlc"),
-//        new SuccessCase("shapes", "shapes_pop_console", "shapes_pop_py", PYTHON, "shapes_pop")
+//        new SuccessCase("shapes", "shapes_pop_console", "shapes_pop_py", PYTHON, "shapes_pop"),
+        new SuccessCase("vehicles", "vehicles-console", "vehicles_poj", JAVA)
     };
 
     @DataPoints("validation-modules")
