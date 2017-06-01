@@ -2,6 +2,11 @@ package cml.io;
 
 public interface Console
 {
+    default void println()
+    {
+        println("");
+    }
+
     void print(String message, Object... args);
     void println(String message, Object... args);
     void info(final String message, final Object... args);

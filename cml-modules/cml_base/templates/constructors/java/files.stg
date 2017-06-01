@@ -6,3 +6,7 @@ java:pom|pom.xml
 concept_files(task, concept) ::= <<
 concept_file|src/main/java/<task.packagePath>/<concept.name>.java
 >>
+
+association_files(task, association) ::= <<
+association_file|src/main/java/<task.packagePath>/<association.name>.java
+>>

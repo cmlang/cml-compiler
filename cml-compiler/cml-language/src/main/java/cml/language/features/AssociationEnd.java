@@ -25,6 +25,11 @@ public interface AssociationEnd extends ModelElement
     Optional<Property> getProperty();
     void setProperty(@Nullable Property property);
 
+    static AssociationEnd create(String conceptName, String propertyName)
+    {
+        return new AssociationEndImpl(conceptName, propertyName, null);
+    }
+
     static AssociationEnd create(String conceptName, String propertyName, @Nullable Type propertyType)
     {
         return new AssociationEndImpl(conceptName, propertyName, propertyType);

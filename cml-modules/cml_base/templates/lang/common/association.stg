@@ -1,0 +1,19 @@
+
+import "/lang/common/structure.stg"
+
+association_class(association) ::= <<
+<modifier("public")><\\>
+<structure(
+    keyword="class",
+    header=type_name(association),
+    base_list=true,
+    sections = [
+        association_fields(association.associationEnds),
+        association_constructor(association)
+    ]
+)>
+>>
+
+association_fields(association_ends) ::= <<
+<association_ends:association_field_decl();separator="\n">
+>>

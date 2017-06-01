@@ -193,6 +193,27 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 <if(abstract || ancestors || interfaces)>)<endif>
 >>
 
+// Associations
+
+association_field_decl(association_ends) ::= ""
+
+association_constructor(association) ::= <<
+<instance_operation(
+    name=constructor_name(type_name(association)),
+    params=[],
+    result_type=[],
+    statements=association_constructor_statements(association)
+)>
+>>
+
+association_constructor_statements(association) ::= <<
+<association.associationEnds:association_field_init(); separator="\n">
+>>
+
+association_field_init(association_end) ::= <<
+<field_access(association_end.property)> = {}
+>>
+
 // Type
 
 primitive_type_boolean() ::= "bool"

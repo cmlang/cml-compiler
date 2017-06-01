@@ -16,6 +16,7 @@ public interface Type extends NamedElement
 {
     Type UNDEFINED = Type.create("Undefined");
     Type BOOLEAN = Type.create("Boolean");
+    Type STRING = Type.create("String");
 
     Collection<String> PRIMITIVE_TYPE_NAMES = unmodifiableCollection(asList(
         "Boolean", "Integer", "Decimal", "String", "Regex", // main primitive types

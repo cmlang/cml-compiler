@@ -3,15 +3,17 @@ package cml.generator;
 import cml.io.Console;
 import cml.io.FileSystem;
 import cml.language.features.Task;
+import cml.language.foundation.NamedElement;
 import cml.templates.TemplateRenderer;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface TargetFileRenderer
 {
-    void renderTargetFiles(Task task, String targetDirPath, String fileType, Map<String, Object> templateArgs);
+    void renderTargetFiles(Task task, String targetDirPath, String fileType, NamedElement namedElement);
 
     static TargetFileRenderer create(
         Console console,
@@ -25,6 +27,8 @@ public interface TargetFileRenderer
 
 class TargetFileRendererImpl implements TargetFileRenderer
 {
+    private static final String TASK = "task";
+
     private final Console console;
     private final FileSystem fileSystem;
     private final TargetFileRepository targetFileRepository;
@@ -44,20 +48,34 @@ class TargetFileRendererImpl implements TargetFileRenderer
 
     @Override
     public void renderTargetFiles(
-        Task task,
-        String targetDirPath,
-        String fileType,
-        Map<String, Object> templateArgs)
+        final Task task,
+        final String targetDirPath,
+        final String modelElementType,
+        final NamedElement namedElement)
     {
-        final List<TargetFile> targetFiles = targetFileRepository.findTargetFiles(task, fileType, templateArgs);
+        final Map<String, Object> templateArgs = new HashMap<>();
+        templateArgs.put(TASK, getTargetProperties(task));
+        templateArgs.put(modelElementType, namedElement);
 
-        targetFiles.forEach(targetFile -> renderTargetFile(targetFile, targetDirPath, templateArgs));
+        final List<TargetFile> targetFiles = targetFileRepository.findTargetFiles(task, modelElementType, templateArgs);
+
+        if (targetFiles.size() > 0)
+        {
+            if (!namedElement.getName().equals("model"))
+            {
+                console.println();
+            }
+
+            console.println("%s files:", namedElement.getName());
+
+            targetFiles.forEach(targetFile -> renderTargetFile(targetFile, targetDirPath, templateArgs));
+        }
     }
 
     private void renderTargetFile(
         final TargetFile targetFile,
         final String targetDirPath,
-        final Map<String, Object> args)
+        final Map<String, Object> templateArgs)
     {
         console.println("- %s", targetFile.getPath());
 
@@ -67,7 +85,7 @@ class TargetFileRendererImpl implements TargetFileRenderer
             final String contents = templateRenderer.renderTemplate(
                 targetFile.getTemplateFile().get(),
                 targetFile.getTemplateName(),
-                args,
+                templateArgs,
                 targetLanguageExtension);
 
             final String path = targetDirPath + File.separatorChar + targetFile.getPath();
@@ -77,5 +95,18 @@ class TargetFileRendererImpl implements TargetFileRenderer
         {
             console.println(" (not found template for: %s)", targetFile.getPath());
         }
+    }
+
+    private static Map<String, Object> getTargetProperties(final Task task)
+    {
+        final Map<String, Object> properties = new HashMap<>();
+
+        //noinspection ConstantConditions
+        task.getProperties()
+            .stream()
+            .filter(property -> property.getValue().isPresent())
+            .forEach(property -> properties.put(property.getName(), property.getValue().get()));
+
+        return properties;
     }
 }

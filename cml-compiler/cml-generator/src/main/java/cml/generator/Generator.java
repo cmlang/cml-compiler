@@ -86,10 +86,7 @@ class GeneratorImpl implements Generator
         final Optional<Directory> targetDir = fileSystem.findDirectory(targetDirPath);
         targetDir.ifPresent(fileSystem::cleanDirectory);
 
-        final TargetGenerator targetGenerator = new TargetGenerator(
-            console, targetFileRenderer,
-            target.get(), targetDirPath
-        );
+        final TargetGenerator targetGenerator = new TargetGenerator(targetFileRenderer, target.get(), targetDirPath);
         final ModelVisitor modelVisitor = new ModelVisitor(targetGenerator);
 
         modelVisitor.visit(model);

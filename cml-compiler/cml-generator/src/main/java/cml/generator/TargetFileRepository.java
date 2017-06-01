@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 interface TargetFileRepository
 {
     boolean templatesFoundFor(Task task);
-    List<TargetFile> findTargetFiles(Task task, String fileType, Map<String, Object> args);
+    List<TargetFile> findTargetFiles(Task task, String fileType, Map<String, Object> templateArgs);
 
     static TargetFileRepository create(TemplateRepository templateRepository, TemplateRenderer templateRenderer)
     {
@@ -52,8 +52,8 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     @Override
     public List<TargetFile> findTargetFiles(
         final Task task,
-        final String fileType,
-        final Map<String, Object> args)
+        final String modelElementType,
+        final Map<String, Object> templateArgs)
     {
         final Optional<TemplateFile> fileTemplates = findFilesTemplateForTask(task);
 
@@ -64,12 +64,18 @@ class TargetFileRepositoryImpl implements TargetFileRepository
 
             if (module.isPresent() && task.getConstructor().isPresent())
             {
-                final String templateName = fileType + FILES_SUFFIX;
-                final String files = templateRenderer.renderTemplate(fileTemplates.get(), templateName, args);
-                return stream(files.split("\n"))
-                    .map(line -> line.split(FILE_LINE_SEPARATOR))
-                    .map(pair -> createTargetFile(module.get(), task.getConstructor().get(), pair[1], pair[0]))
-                    .collect(toList());
+                final String templateName = modelElementType + FILES_SUFFIX;
+                final String files = templateRenderer.renderTemplate(fileTemplates.get(), templateName, templateArgs);
+
+                if (files.trim().length() > 0)
+                {
+                    final String constructorName = task.getConstructor().get();
+
+                    return stream(files.split("\n"))
+                        .map(line -> line.split(FILE_LINE_SEPARATOR))
+                        .map(pair -> createTargetFile(module.get(), constructorName, pair[1], pair[0]))
+                        .collect(toList());
+                }
             }
         }
 
@@ -78,7 +84,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
 
     private Optional<TemplateFile> findFilesTemplateForTask(Task task)
     {
-        if (task.getModule().isPresent())
+        if (task.getModule().isPresent() & task.getConstructor().isPresent())
         {
             final Module module = task.getModule().get();
             final String constructorName = task.getConstructor().get();
@@ -143,6 +149,5 @@ class TargetFileRepositoryImpl implements TargetFileRepository
 
         return templateFile;
     }
-
 }
 

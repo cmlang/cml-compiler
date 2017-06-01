@@ -44,6 +44,11 @@ public abstract class LangTest extends TemplateTest
 
     protected abstract String getExpectedOutputPath();
 
+    protected String getTargetLanguageExtension()
+    {
+        return targetLanguageExtension;
+    }
+
     @Override
     protected String getTemplatePath()
     {

@@ -6,6 +6,7 @@ import cml.language.features.Module;
 import cml.language.features.Task;
 import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
+import cml.language.foundation.NamedElement;
 import cml.language.foundation.Scope;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,8 +15,13 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public interface Model extends Scope
+public interface Model extends NamedElement, Scope
 {
+    default String getName()
+    {
+        return "model";
+    }
+
     default List<Module> getModules()
     {
         return getMembers().stream()

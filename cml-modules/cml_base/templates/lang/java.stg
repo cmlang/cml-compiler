@@ -193,6 +193,14 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 <if(interfaces)> implements <interfaces:type_name();separator=", "><endif>
 >>
 
+// Associations
+
+association_field_decl(association_ends) ::= <<
+private final Map\<<field_type(association_ends.concept)>, <field_type(association_ends.property)>\> <association_ends.property.name> = new HashMap\<>();
+>>
+
+association_constructor(association) ::= ""
+
 // Type
 
 primitive_type_boolean() ::= "boolean"

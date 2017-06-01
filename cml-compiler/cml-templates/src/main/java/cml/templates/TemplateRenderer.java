@@ -33,6 +33,7 @@ public interface TemplateRenderer
 class TemplateRendererImpl implements TemplateRenderer
 {
     private static final String LANGUAGE_GROUP = "cml_base:/lang/%s.stg";
+    private static final String UNABLE_TO_LOAD_TEMPLATE = "Unable to load template named '%s' from file: %s";
 
     private final Console console;
 
@@ -61,7 +62,8 @@ class TemplateRendererImpl implements TemplateRenderer
 
         if (template == null)
         {
-            printErrorMessage(templateFile, templateName);
+            console.info(UNABLE_TO_LOAD_TEMPLATE, templateName, templateFile.getPath());
+            
             return "";
         }
 
@@ -71,13 +73,6 @@ class TemplateRendererImpl implements TemplateRenderer
         }
 
         return template.render();
-    }
-
-    private void printErrorMessage(TemplateFile templateFile, String templateName)
-    {
-        console.println(
-            "Unable to load template named '%s' from file: %s",
-            templateName, templateFile.getPath());
     }
 
     private static Optional<TemplateGroupFile> loadLanguageTemplates(@Nullable String targetLanguageExtension)

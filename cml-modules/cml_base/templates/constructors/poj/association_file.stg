@@ -1,0 +1,10 @@
+
+association_file(task, association) ::= <<
+package <task.packageName>;
+
+import java.util.*;
+import java.math.*;
+import org.jetbrains.annotations.*;
+
+<association_class(association)>
+>>
