@@ -1,0 +1,5 @@
+Vehicles Console
+----------------
+
+Organization(name=Walt Disney, employees=[], fleet=[])
+Employee(name=Donald Duck, employer=Organization(name=Walt Disney, employees=[], fleet=[]))

@@ -195,8 +195,12 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 
 // Associations
 
-association_field_decl(association_ends) ::= <<
-private final Map\<<field_type(association_ends.concept)>, <field_type(association_ends.property)>\> <association_ends.property.name> = new HashMap\<>();
+association_name(association) ::= <<
+<type_name(association)>
+>>
+
+association_field_decl(association_end) ::= <<
+private final Map\<<field_type(association_end.concept)>, <field_type(association_end.property)>\> <association_end.property.name> = new HashMap\<>();
 >>
 
 association_constructor(association) ::= ""

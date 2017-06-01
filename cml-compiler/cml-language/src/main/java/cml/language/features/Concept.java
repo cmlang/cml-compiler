@@ -28,19 +28,70 @@ public interface Concept extends NamedElement, PropertyList
     default List<String> getDependencies()
     {
         return concat(
-            getAllAncestors().stream().map(Concept::getName),
-            getPropertyTypes().stream().map(Type::getName))
+            getGeneralizationDependencies().stream(),
+            getPropertyDependencies().stream())
+            .distinct()
+            .collect(toList());
+    }
+
+    default List<String> getGeneralizationDependencies()
+    {
+        return getAllAncestors().stream()
+                                .map(Concept::getName)
+                                .filter(name -> !name.equals(getName()))
+                                .distinct()
+                                .collect(toList());
+    }
+
+    default List<String> getPropertyDependencies()
+    {
+        final Stream<String> generalizations = getTransitivePropertyConcepts().stream()
+                                                                              .flatMap(concept -> concept.getGeneralizationDependencies().stream());
+
+        final Stream<String> directDependencies = getTransitivePropertyConcepts().stream()
+                                                                                 .map(Concept::getName);
+
+        return concat(generalizations, directDependencies)
             .filter(name -> !name.equals(getName()))
             .distinct()
             .collect(toList());
     }
 
+    default List<Concept> getTransitivePropertyConcepts()
+    {
+        final List<Concept> concepts = new ArrayList<>();
+
+        getPropertyConcepts().forEach(c -> c.appendToPropertyConcepts(concepts));
+
+        return concepts;
+    }
+
+    default void appendToPropertyConcepts(List<Concept> concepts)
+    {
+        if (!concepts.contains(this))
+        {
+            concepts.add(this);
+
+            getPropertyConcepts().forEach(c -> c.appendToPropertyConcepts(concepts));
+        }
+    }
+
+    default List<Concept> getPropertyConcepts()
+    {
+        return getPropertyTypes().stream()
+                                 .filter(type -> !type.isPrimitive())
+                                 .map(Type::getConcept)
+                                 .filter(Optional::isPresent)
+                                 .map(Optional::get)
+                                 .distinct()
+                                 .collect(toList());
+    }
+
     default List<Type> getPropertyTypes()
     {
         return getAllProperties().stream()
-            .map(Property::getType)
-            .filter(type -> !type.isPrimitive())
-            .collect(toList());
+                                 .map(Property::getType)
+                                 .collect(toList());
     }
 
     @SuppressWarnings("unused")

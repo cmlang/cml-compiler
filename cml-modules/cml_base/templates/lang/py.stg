@@ -195,6 +195,10 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 
 // Associations
 
+association_name(association) ::= <<
+_<type_name(association)>
+>>
+
 association_field_decl(association_ends) ::= ""
 
 association_constructor(association) ::= <<
@@ -211,7 +215,7 @@ association_constructor_statements(association) ::= <<
 >>
 
 association_field_init(association_end) ::= <<
-<field_access(association_end.property)> = {}
+<field_access(association_end.property)> = {} # type: Dict[<field_type(association_end.concept)>, <field_type(association_end.property)>]
 >>
 
 // Type

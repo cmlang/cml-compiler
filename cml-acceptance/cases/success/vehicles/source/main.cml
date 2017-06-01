@@ -40,3 +40,8 @@ task vehicles_poj by poj
     packagePath = "vehicles";
 }
 
+task vehicles_pop by pop
+{
+    moduleName = "vehicles";
+    moduleVersion = "1.0.1";
+}

@@ -10,6 +10,7 @@ import cml.language.foundation.NamedElement;
 import cml.language.foundation.Scope;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,40 @@ public interface Model extends NamedElement, Scope
         }
 
         return Optional.empty();
+    }
+
+    default List<Concept> getOrderedConcepts()
+    {
+        return getConcepts().stream()
+                            .sorted(byDependencyOrder())
+                            .collect(toList());
+    }
+
+    static Comparator<Concept> byDependencyOrder()
+    {
+        return (Concept c1, Concept c2) -> {
+            try
+            {
+                final boolean c1_gt_c2 = c1.getDependencies().contains(c2.getName());
+                final boolean c2_gt_c1 = c2.getDependencies().contains(c1.getName());
+
+                if (c1_gt_c2 && c2_gt_c1)
+                {
+                    // If concepts depend on each other, the more general one is listed first:
+                    if (c1.getGeneralizationDependencies().contains(c2)) return +1;
+                    else if (c2.getGeneralizationDependencies().contains(c1)) return -1;
+                    else return 0;
+                }
+                else if (c1_gt_c2) return +1;
+                else if (c2_gt_c1) return -1;
+                else return 0;
+            }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+                return 0;
+            }
+        };
     }
 
     default List<Concept> getConcepts()

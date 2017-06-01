@@ -5,7 +5,7 @@ association_class(association) ::= <<
 <modifier("public")><\\>
 <structure(
     keyword="class",
-    header=type_name(association),
+    header=association_name(association),
     base_list=true,
     sections = [
         association_fields(association.associationEnds),

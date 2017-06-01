@@ -1,13 +1,15 @@
 
-import "/constructors/python/imports.stg"
+import "/constructors/python/common.stg"
 
 init(task, model) ::= <<
-__all__ = [
-<indent()><model.concepts:{concept|"<python_file_name(concept.name)>"};separator=",\n", anchor>
-]
+from typing import *
+from abc import *
+from decimal import *
 
-<model.concepts:{concept|<concept_file_import(concept.name)>};separator="\n">
+<model.orderedConcepts:concept_file();separator="\n\n\n">
+<if(model.associations)>
+
+
+<model.associations:association_file();separator="\n\n\n"><\\>
+<endif>
 >>
-
-
-

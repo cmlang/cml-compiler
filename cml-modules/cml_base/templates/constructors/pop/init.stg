@@ -1,0 +1,12 @@
+
+import "/constructors/python/init.stg"
+
+concept_file(concept) ::= <<
+<class(concept)>
+>>
+
+association_file(association) ::= <<
+<association_class(association)>
+>>
+
+

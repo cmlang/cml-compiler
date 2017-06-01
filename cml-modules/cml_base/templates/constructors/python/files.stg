@@ -1,12 +1,7 @@
 
-import "/constructors/python/imports.stg"
+import "/constructors/python/common.stg"
 
 model_files(task, model) ::= <<
 python:setup|setup.py
-python:init|<python_file_name(task.moduleName)>/__init__.py
+init|<python_file_name(task.moduleName)>/__init__.py
 >>
-
-concept_files(task, concept) ::= <<
-concept_file|<python_file_name(task.moduleName)>/<python_file_name(concept.name)>.py
->>
-
