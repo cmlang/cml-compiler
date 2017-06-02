@@ -9,11 +9,50 @@ association_class(association) ::= <<
     base_list=true,
     sections = [
         association_fields(association.associationEnds),
-        association_constructor(association)
+        association_constructor(association),
+        association_link_method(association)
     ]
 )>
 >>
 
 association_fields(association_ends) ::= <<
 <association_ends:association_field_decl();separator="\n">
+>>
+
+association_link_method(association) ::= <<
+<modifier("synchronized")><\\>
+<instance_operation(
+    name="link",
+    params=association.propertyTypes,
+    result_type=void(),
+    statements=association_link_method_statements(association.associationEnds)
+)>
+>>
+
+association_link_method_statements(association_ends) ::= <<
+<association_ends:association_link_statement(); separator="\n\n">
+>>
+
+association_link_statement(association_end) ::= <<
+<if(association_end.property.type.sequence)><\\>
+<association_link_statement_seq(association_end)><\\>
+<else><\\>
+<association_link_statement_non_seq(association_end)><\\>
+<endif>
+>>
+
+association_link_seq(association_end) ::= <<
+<association_link_target(association_end)><association_link_seq_suffix()>
+>>
+
+association_link_target(association_end) ::= <<
+<field_name(association_end.property.type)>
+>>
+
+association_link_source(association_end) ::= <<
+<field_name(association_end.concept)>
+>>
+
+association_link_field(association_end) ::= <<
+<field_access(association_end.property)>
 >>

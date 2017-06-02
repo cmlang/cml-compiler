@@ -7,6 +7,10 @@ lang ::= [
     "fields": false
 ]
 
+// Void
+
+void() ::= "None"
+
 // Blocks
 
 block(statements) ::= <<
@@ -217,6 +221,22 @@ association_constructor_statements(association) ::= <<
 association_field_init(association_end) ::= <<
 <field_access(association_end.property)> = {} # type: Dict[<field_type(association_end.concept)>, <field_type(association_end.property)>]
 >>
+
+association_link_statement_seq(association_end) ::= <<
+if <association_link_field(association_end)>[<association_link_source(association_end)>] is None:
+<indent()><association_link_seq(association_end)> = [<association_link_target(association_end)>]
+else:
+<indent()><association_link_seq(association_end)> = <association_link_field(association_end)>[<association_link_source(association_end)>]
+if not (<association_link_target(association_end)> in <association_link_seq(association_end)>):
+<indent()><association_link_seq(association_end)>.append(<association_link_target(association_end)>)
+<association_link_field(association_end)>[<association_link_source(association_end)>] = <association_link_seq(association_end)>
+>>
+
+association_link_statement_non_seq(association_end) ::= <<
+<association_link_field(association_end)>[<association_link_source(association_end)>] = <association_link_target(association_end)>
+>>
+
+association_link_seq_suffix() ::= "_list"
 
 // Type
 

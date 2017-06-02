@@ -7,6 +7,10 @@ lang ::= [
     "fields": true
 ]
 
+// Void
+
+void() ::= "void"
+
 // Modifiers
 
 modifier(m) ::= <<
@@ -204,6 +208,20 @@ private final Map\<<field_type(association_end.concept)>, <field_type(associatio
 >>
 
 association_constructor(association) ::= ""
+
+association_link_statement_seq(association_end) ::= <<
+final <field_type(association_end.property)> <association_link_seq(association_end)> = <association_link_field(association_end)>.computeIfAbsent(<association_link_source(association_end)>, key -> new ArrayList\<>());
+if (!<association_link_seq(association_end)>.contains(<association_link_target(association_end)>))
+{
+<indent()><association_link_seq(association_end)>.add(<association_link_target(association_end)>);
+}
+>>
+
+association_link_statement_non_seq(association_end) ::= <<
+<association_link_field(association_end)>.put(<association_link_source(association_end)>, <association_link_target(association_end)>);
+>>
+
+association_link_seq_suffix() ::= "List"
 
 // Type
 

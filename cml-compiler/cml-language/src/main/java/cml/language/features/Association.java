@@ -27,6 +27,17 @@ public interface Association extends NamedElement, Scope
                            .collect(toList());
     }
 
+    default List<Type> getPropertyTypes()
+    {
+        return getAssociationEnds()
+            .stream()
+            .map(AssociationEnd::getProperty)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(Property::getType)
+            .collect(toList());
+    }
+
     static Association create(String name)
     {
         return new AssociationImpl(name);
