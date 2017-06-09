@@ -49,7 +49,8 @@ class7(
         class_secondary_constructor(concept.nonInitProperties),
         class_primary_constructor(inherited_properties, super_properties, concept.nonDerivedProperties, field_ancestors),
         class_getters(),
-        class_to_string()
+        class_to_string(),
+        class_association_setters(concept)
     ]
 )>
 >>
@@ -188,6 +189,21 @@ delegate_getter(property) ::= <<
     params=[],
     result_type=getter_type(property.type),
     statements=return({<field_access(property.parentScope)>.<getter_call(property)>})
+)>
+>>
+
+class_association_setters(concept) ::= <<
+<concept.associations:class_association_setter();separator="\n\n">
+>>
+
+class_association_setter(association) ::= <<
+<class_association_field(association)>
+
+<static_operation(
+    name=association_setter_name(association),
+    params=[association_setter_param(association)],
+    result_type=void(),
+    statements=association_setter_statements(association)
 )>
 >>
 

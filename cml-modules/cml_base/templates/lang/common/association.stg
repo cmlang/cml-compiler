@@ -8,15 +8,32 @@ association_class(association) ::= <<
     header=association_name(association),
     base_list=true,
     sections = [
-        association_fields(association.associationEnds),
+        association_singleton(association),
+        association_new(association),
+        association_init(association),
+        association_fields(association),
         association_constructor(association),
-        association_link_method(association)
+        association_link_method(association),
+        association_getters(association)
     ]
 )>
 >>
 
-association_fields(association_ends) ::= <<
-<association_ends:association_field_decl();separator="\n">
+association_init(association) ::= <<
+<static_operation(
+    name="init",
+    params=[association_init_param()],
+    result_type=void(),
+    statements=association_init_statements(association)
+)>
+>>
+
+association_init_statements(association) ::= <<
+<association.associationEnds:association_init_statement(association);separator="\n">
+>>
+
+association_fields(association) ::= <<
+<association.associationEnds:association_field_decl();separator="\n">
 >>
 
 association_link_method(association) ::= <<
@@ -55,4 +72,34 @@ association_link_source(association_end) ::= <<
 
 association_link_field(association_end) ::= <<
 <field_access(association_end.property)>
+>>
+
+association_getters(association) ::= <<
+<association.associationEnds:association_getter(); separator="\n\n">
+>>
+
+association_getter(association_end) ::= <<
+<modifier("synchronized")><\\>
+<instance_operation(
+    name=association_getter_name(association_end.property),
+    params=[association_end.concept],
+    result_type=association_getter_result_type(association_end),
+    statements=association_getter_statements(association_end)
+)>
+>>
+
+association_getter_result_type(association_end) ::= <<
+<if(association_end.property.type.sequence)><\\>
+<getter_type_sequence(association_end.property.type)><\\>
+<else><\\>
+<getter_type_optional(association_end.property.type)><\\>
+<endif>
+>>
+
+association_getter_statements(association_end) ::= <<
+<if(association_end.property.type.sequence)><\\>
+<association_getter_statements_seq(association_end)><\\>
+<else><\\>
+<association_getter_statements_non_seq(association_end)><\\>
+<endif>
 >>

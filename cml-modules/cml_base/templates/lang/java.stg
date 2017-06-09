@@ -93,8 +93,12 @@ operation_header_content(instance, name, params, result_type) ::= <<
 <name>(<params:var_decl(); separator=", ">)
 >>
 
-var_decl(typed_element) ::= <<
-<field_type(typed_element)> <field_name(typed_element)>
+var_decl(object) ::= <<
+<if(object.name || object.type)><\\>
+<field_type(object)> <field_name(object)><\\>
+<else><\\>
+<object><\\>
+<endif>
 >>
 
 local_var_decl(typed_element) ::= <<
@@ -199,6 +203,21 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 
 // Associations
 
+association_singleton(association) ::= <<
+private static final <association_name(association)> singleton = new <association_name(association)>();
+>>
+
+association_new(association) ::= ""
+
+association_init_param() ::= "Class\<?> cls"
+
+association_init_statement(association_end, association) ::= <<
+if (<type_name(association_end.concept)>.class.isAssignableFrom(cls))
+{
+<indent()><type_name(association_end.concept)>.set<type_name(association)>(singleton);
+}
+>>
+
 association_name(association) ::= <<
 <type_name(association)>
 >>
@@ -222,6 +241,36 @@ association_link_statement_non_seq(association_end) ::= <<
 >>
 
 association_link_seq_suffix() ::= "List"
+
+association_getter_name(property) ::= <<
+<property.name; format="camel-case">Of
+>>
+
+association_getter_statements_seq(association_end) ::= <<
+final <field_type(association_end.property)> <association_link_seq(association_end)> = <association_link_field(association_end)>.get(<association_link_source(association_end)>);
+
+return (<association_link_seq(association_end)> == null) ? Collections.emptyList() : new ArrayList\<>(<association_link_seq(association_end)>);
+>>
+
+association_getter_statements_non_seq(association_end) ::= <<
+return Optional.ofNullable(<association_link_field(association_end)>.get(<association_link_source(association_end)>));
+>>
+
+class_association_field(association) ::= <<
+private static <field_type(association)> <field_name(association)>;
+>>
+
+association_setter_name(association) ::= <<
+set<association_name(association)>
+>>
+
+association_setter_param(association) ::= <<
+<association_name(association)> association
+>>
+
+association_setter_statements(association) ::= <<
+<field_name(association)> = association;
+>>
 
 // Type
 

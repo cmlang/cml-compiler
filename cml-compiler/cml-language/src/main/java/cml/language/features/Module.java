@@ -1,5 +1,6 @@
 package cml.language.features;
 
+import cml.language.Model;
 import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
@@ -14,6 +15,14 @@ import static java.util.stream.Collectors.toList;
 
 public interface Module extends NamedElement, Scope
 {
+    default Model getModel()
+    {
+        assert getParentScope().isPresent();
+        assert getParentScope().get() instanceof Model;
+
+        return (Model) getParentScope().get();
+    }
+
     default List<Import> getImports()
     {
         return getMembers().stream()

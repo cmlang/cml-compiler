@@ -69,10 +69,14 @@ operation_header_content(instance, name, params, result_type) ::= <<
 <\ >-><\ >'<if(result_type)><result_type><else>None<endif>'
 >>
 
-var_decl(typed_element) ::= <<
-<field_name(typed_element)>: '<field_type(typed_element)>'<\\>
-<if(typed_element.value)><\\>
-<\ >=<\ ><literal_expr(typed_element.value)><\\>
+var_decl(object) ::= <<
+<if(object.name || object.type)><\\>
+<field_name(object)>: '<field_type(object)>'<\\>
+<if(object.value)><\\>
+<\ >=<\ ><literal_expr(object.value)><\\>
+<endif><\\>
+<else><\\>
+<object><\\>
 <endif>
 >>
 
@@ -199,9 +203,22 @@ ancestor_list(abstract, ancestors, interfaces) ::= <<
 
 // Associations
 
+association_singleton(association) ::= <<
+_singleton = None
+>>
+
+association_new(association) ::= <<
+def __new__(cls) -> '<association_name(association)>':
+<indent()>if cls._singleton is None:
+<indent()><indent()>cls._singleton = super(<association_name(association)>, cls).__new__(cls)
+<indent()>return cls._singleton
+>>
+
 association_name(association) ::= <<
 _<type_name(association)>
 >>
+
+association_init(association) ::= ""
 
 association_field_decl(association_ends) ::= ""
 
@@ -237,6 +254,35 @@ association_link_statement_non_seq(association_end) ::= <<
 >>
 
 association_link_seq_suffix() ::= "_list"
+
+association_getter_name(property) ::= <<
+<property.name; format="underscore-case">_of
+>>
+
+association_getter_statements_non_seq(association_end) ::= <<
+return <association_link_field(association_end)>[<association_link_source(association_end)>]
+>>
+
+association_getter_statements_seq(association_end) ::= <<
+<association_link_seq(association_end)> = <association_link_field(association_end)>[<association_link_source(association_end)>]
+if <association_link_seq(association_end)> is None:
+<indent()><association_link_seq(association_end)> = []
+return list(<association_link_seq(association_end)>)
+>>
+
+class_association_field(association) ::= ""
+
+association_setter_name(association) ::= <<
+set_<field_name(association)>
+>>
+
+association_setter_param(association) ::= <<
+association: '<association_name(association)>'
+>>
+
+association_setter_statements(association) ::= <<
+_<field_name(association)> = association
+>>
 
 // Type
 

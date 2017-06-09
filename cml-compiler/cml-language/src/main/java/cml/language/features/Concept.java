@@ -1,5 +1,6 @@
 package cml.language.features;
 
+import cml.language.Model;
 import cml.language.foundation.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -152,7 +153,7 @@ public interface Concept extends NamedElement, PropertyList
     {
         return getInheritedProperties()
             .stream()
-            .filter(p -> p.isConcrete())
+            .filter(Property::isConcrete)
             .map(p -> getProperty(p.getName()).orElse(p))
             .collect(toList());
     }
@@ -249,6 +250,29 @@ public interface Concept extends NamedElement, PropertyList
         )
         .distinct()
         .collect(toList());
+    }
+
+    default Module getModule()
+    {
+        assert getParentScope().isPresent();
+        assert getParentScope().get() instanceof Module;
+
+        return (Module) getParentScope().get();
+    }
+
+    default Model getModel()
+    {
+        return getModule().getModel();
+    }
+
+    default List<Association> getAssociations()
+    {
+        return getModel().getAssociations()
+                         .stream()
+                         .filter(assoc -> assoc.getAssociationEnds()
+                                               .stream()
+                                               .anyMatch(end -> end.getConcept().isPresent() && end.getConcept().get() == this))
+                         .collect(toList());
     }
 
     static Concept create(String name)

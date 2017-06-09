@@ -1,10 +1,13 @@
 package templates.lang.common;
 
+import cml.language.Model;
 import cml.language.features.Association;
 import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
+import cml.language.features.Module;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
 
@@ -28,22 +31,18 @@ public class AssociationTest extends LangTest
     @Test
     public void test_employment() throws IOException
     {
-        final Association employment = createEmployment();
+        final Concept employee = createEmployee();
+        final Concept organization = createOrganization();
+        final Association employment = createEmployment(employee, organization);
 
         test_association_class(employment, "employment");
+        test_concept_class(employee, "employee");
+        test_concept_class(organization, "organization");
     }
 
     @SuppressWarnings("ConstantConditions")
-    private static Association createEmployment()
+    private static Association createEmployment(Concept employee, Concept organization)
     {
-        final Concept employee = Concept.create("Employee");
-        employee.addMember(Property.create("name", Type.STRING));
-        employee.addMember(Property.create("employer", Type.create("Organization")));
-
-        final Concept organization = Concept.create("Organization");
-        organization.addMember(Property.create("name", Type.STRING));
-        organization.addMember(Property.create("employees", Type.create("Employee", "*")));
-
         final Association employment = Association.create("Employment");
         employment.addMember(AssociationEnd.create("Employee", "employer"));
         employment.addMember(AssociationEnd.create("Organization", "employees"));
@@ -54,7 +53,33 @@ public class AssociationTest extends LangTest
         employment.getAssociationEnds().get(1).setConcept(organization);
         employment.getAssociationEnds().get(1).setProperty(organization.getProperty("employees").get());
 
+        final Model model = Model.create();
+        final Module module = Module.create("some_module");
+
+        model.addMember(module);
+        module.addMember(employee);
+        module.addMember(organization);
+        module.addMember(employment);
+
         return employment;
+    }
+
+    @NotNull
+    private static Concept createOrganization()
+    {
+        final Concept organization = Concept.create("Organization");
+        organization.addMember(Property.create("name", Type.STRING));
+        organization.addMember(Property.create("employees", Type.create("Employee", "*")));
+        return organization;
+    }
+
+    @NotNull
+    private static Concept createEmployee()
+    {
+        final Concept employee = Concept.create("Employee");
+        employee.addMember(Property.create("name", Type.STRING));
+        employee.addMember(Property.create("employer", Type.create("Organization")));
+        return employee;
     }
 
     private void test_association_class(Association association, String expectedOutputPath) throws IOException
@@ -69,4 +94,15 @@ public class AssociationTest extends LangTest
         assertThatOutputMatches(expectedOutputPath + "." + getTargetLanguageExtension(), result);
     }
 
+    private void test_concept_class(Concept concept, String expectedOutputPath) throws IOException
+    {
+        final String templateName = "class";
+        final ST template = getTemplate(templateName);
+        assertNotNull("Expected template: " + templateName, template);
+
+        template.add("concept", concept);
+
+        final String result = template.render();
+        assertThatOutputMatches(expectedOutputPath + "." + getTargetLanguageExtension(), result);
+    }
 }
