@@ -35,4 +35,9 @@ class Employee
     {
         employment = association;
     }
+
+    static
+    {
+        Employment.init(Employee.class);
+    }
 }

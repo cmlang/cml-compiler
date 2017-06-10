@@ -35,4 +35,9 @@ class Organization
     {
         employment = association;
     }
+
+    static
+    {
+        Employment.init(Organization.class);
+    }
 }

@@ -272,6 +272,10 @@ association_setter_statements(association) ::= <<
 <field_name(association)> = association;
 >>
 
+association_static_initializer_statement(association, concept) ::= <<
+<association_name(association)>.init(<field_type(concept)>.class);
+>>
+
 // Type
 
 primitive_type_boolean() ::= "boolean"

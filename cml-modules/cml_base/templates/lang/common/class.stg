@@ -51,7 +51,8 @@ class7(
         class_primary_constructor(inherited_properties, super_properties, concept.nonDerivedProperties, field_ancestors),
         class_getters(),
         class_to_string(),
-        class_association_setters(concept)
+        class_association_setters(concept),
+        class_static_initializer(concept)
     ]
 )>
 >>
@@ -61,7 +62,11 @@ class_abstract() ::= <<
 >>
 
 class_header() ::= <<
-<type_name(concept)><class_name_suffix><ancestor_list(abstract, ancestors, interfaces)>
+<class_name()><ancestor_list(abstract, ancestors, interfaces)>
+>>
+
+class_name() ::= <<
+<type_name(concept)><class_name_suffix>
 >>
 
 class_fields(properties) ::= <<
@@ -214,6 +219,12 @@ class_association_setter(association) ::= <<
 )>
 >>
 
-class_name() ::= <<
-<concept.name><class_name_suffix>
+class_static_initializer(concept) ::= <<
+<if(concept.associations)><\\>
+<static_initializer(class_static_initializer_statements(concept))><\\>
+<endif>
+>>
+
+class_static_initializer_statements(concept) ::= <<
+<concept.associations:association_static_initializer_statement(concept);separator="\n">
 >>

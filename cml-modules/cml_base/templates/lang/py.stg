@@ -188,6 +188,8 @@ constructor_name(class_name) ::= "__init__"
 
 class_secondary_constructor(non_init_properties) ::= ""
 
+class_static_initializer(concept) ::= ""
+
 // Ancestors
 
 ancestor_list(abstract, ancestors, interfaces) ::= <<
