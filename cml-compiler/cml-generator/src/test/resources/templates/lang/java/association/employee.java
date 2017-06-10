@@ -1,5 +1,7 @@
 class Employee
 {
+    private static Employment employment;
+
     private final String name;
     private final Organization employer;
 
@@ -28,8 +30,6 @@ class Employee
                    .append(')')
                    .toString();
     }
-
-    private static Employment employment;
 
     static void setEmployment(Employment association)
     {

@@ -45,6 +45,7 @@ class7(
     header=class_header(),
     base_list=true,
     sections = [
+        class_association_fields(concept),
         class_fields(concept.nonDerivedProperties),
         class_secondary_constructor(concept.nonInitProperties),
         class_primary_constructor(inherited_properties, super_properties, concept.nonDerivedProperties, field_ancestors),
@@ -192,13 +193,19 @@ delegate_getter(property) ::= <<
 )>
 >>
 
+class_association_fields(concept) ::= <<
+<concept.associations:class_association_field();separator="\n">
+>>
+
+class_association_field(association) ::= <<
+<concept.associations:class_association_field();separator="\n\n">
+>>
+
 class_association_setters(concept) ::= <<
 <concept.associations:class_association_setter();separator="\n\n">
 >>
 
 class_association_setter(association) ::= <<
-<class_association_field(association)>
-
 <static_operation(
     name=association_setter_name(association),
     params=[association_setter_param(association)],

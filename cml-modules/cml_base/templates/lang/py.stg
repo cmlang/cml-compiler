@@ -270,19 +270,11 @@ if <association_link_seq(association_end)> is None:
 return list(<association_link_seq(association_end)>)
 >>
 
-class_association_field(association) ::= ""
-
-association_setter_name(association) ::= <<
-set_<field_name(association)>
+class_association_field(association) ::= <<
+_<field_name(association)> = <association_name(association)>()
 >>
 
-association_setter_param(association) ::= <<
-association: '<association_name(association)>'
->>
-
-association_setter_statements(association) ::= <<
-_<field_name(association)> = association
->>
+class_association_setter(association) ::= ""
 
 // Type
 

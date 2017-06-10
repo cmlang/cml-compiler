@@ -6,10 +6,10 @@ from typing import *
 from abc import *
 from decimal import *
 
-<model.orderedConcepts:concept_file();separator="\n\n\n">
 <if(model.associations)>
+<model.associations:association_file();separator="\n\n\n">
 
 
-<model.associations:association_file();separator="\n\n\n"><\\>
 <endif>
+<model.orderedConcepts:concept_file();separator="\n\n\n">
 >>

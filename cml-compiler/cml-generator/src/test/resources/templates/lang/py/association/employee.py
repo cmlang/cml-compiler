@@ -1,5 +1,7 @@
 class Employee:
 
+    _employment = _Employment()
+
     def __init__(self, name: 'str', employer: 'Organization') -> 'None':
         self.__name = name
         self.__employer = employer
@@ -18,7 +20,3 @@ class Employee:
             self.name,
             self.employer
         )
-
-    @staticmethod
-    def set_employment(association: '_Employment') -> 'None':
-        _employment = association
