@@ -33,8 +33,8 @@ to_string_name() ::= "__str__"
 
 to_string_expr(concept) ::= <<
 "%s(<\\>
-<if(concept.allProperties)><\\>
-<concept.allProperties:{p|<getter_call(p)>=%s}; separator=", ">)" % (
+<if(concept.printableProperties)><\\>
+<concept.printableProperties:{p|<getter_call(p)>=%s}; separator=", ">)" % (
 <indent()><to_string_expr_params(concept); anchor>
 )<\\>
 <else><\\>
@@ -44,7 +44,7 @@ to_string_expr(concept) ::= <<
 
 to_string_expr_params(concept) ::= <<
 type(self).__name__,
-<to_string_fields(concept.allProperties, ",\n")>
+<to_string_fields(concept.printableProperties, ",\n")>
 >>
 
 to_string_field(property) ::= <<
@@ -242,10 +242,10 @@ association_field_init(association_end) ::= <<
 >>
 
 association_link_statement_seq(association_end) ::= <<
-if <association_link_field(association_end)>[<association_link_source(association_end)>] is None:
-<indent()><association_link_seq(association_end)> = [<association_link_target(association_end)>]
-else:
+if <association_link_source(association_end)> in <association_link_field(association_end)>:
 <indent()><association_link_seq(association_end)> = <association_link_field(association_end)>[<association_link_source(association_end)>]
+else:
+<indent()><association_link_seq(association_end)> = [<association_link_target(association_end)>]
 if not (<association_link_target(association_end)> in <association_link_seq(association_end)>):
 <indent()><association_link_seq(association_end)>.append(<association_link_target(association_end)>)
 <association_link_field(association_end)>[<association_link_source(association_end)>] = <association_link_seq(association_end)>
@@ -262,12 +262,16 @@ association_getter_name(property) ::= <<
 >>
 
 association_getter_statements_non_seq(association_end) ::= <<
-return <association_link_field(association_end)>[<association_link_source(association_end)>]
+if <association_link_source(association_end)> in <association_link_field(association_end)>:
+<indent()>return <association_link_field(association_end)>[<association_link_source(association_end)>]
+else:
+<indent()>return None
 >>
 
 association_getter_statements_seq(association_end) ::= <<
-<association_link_seq(association_end)> = <association_link_field(association_end)>[<association_link_source(association_end)>]
-if <association_link_seq(association_end)> is None:
+if <association_link_source(association_end)> in <association_link_field(association_end)>:
+<indent()><association_link_seq(association_end)> = <association_link_field(association_end)>[<association_link_source(association_end)>]
+else:
 <indent()><association_link_seq(association_end)> = []
 return list(<association_link_seq(association_end)>)
 >>
@@ -277,6 +281,22 @@ _<field_name(association)> = <association_name(association)>()
 >>
 
 class_association_setter(association) ::= ""
+
+association_one_to_many_link_method_statements(association) ::= <<
+for <field_name(association.manyProperty.type)> in <field_name(association.manyProperty)>: self.link(<field_name(association.oneProperty)>, <field_name(association.manyProperty.type)>)
+>>
+
+association_link_call_seq(property) ::= <<
+self._<field_name(property.association)>.link_many(self, <field_name(property)>)
+>>
+
+association_link_call_non_seq(property) ::= <<
+self._<field_name(property.association)>.link(<field_name(property)>, self)
+>>
+
+association_class_getter_expr(property) ::= <<
+self._<field_name(property.association)>.<field_name(property)>_of(self)
+>>
 
 // Type
 

@@ -206,6 +206,27 @@ public interface Concept extends NamedElement, PropertyList
                                  .collect(toList());
     }
 
+    default List<Property> getAssociationProperties()
+    {
+        return getProperties().stream()
+                              .filter(p -> p.getAssociation().isPresent())
+                              .collect(toList());
+    }
+
+    default List<Property> getSlotProperties()
+    {
+        return getProperties().stream()
+                              .filter(Property::isSlot)
+                              .collect(toList());
+    }
+
+    default List<Property> getPrintableProperties()
+    {
+        return getAllProperties().stream()
+                                 .filter(property -> property.isSlot() || property.getType().isPrimitive())
+                                 .collect(toList());
+    }
+
     default List<Concept> getAllGeneralizations()
     {
         final List<Concept> generalizations = new ArrayList<>();

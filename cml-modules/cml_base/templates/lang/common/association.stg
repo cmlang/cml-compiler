@@ -13,7 +13,7 @@ association_class(association) ::= <<
         association_init(association),
         association_fields(association),
         association_constructor(association),
-        association_link_method(association),
+        association_link_methods(association),
         association_getters(association)
     ]
 )>
@@ -34,6 +34,24 @@ association_init_statements(association) ::= <<
 
 association_fields(association) ::= <<
 <association.associationEnds:association_field_decl();separator="\n">
+>>
+
+association_link_methods(association) ::= <<
+<if(association.oneToMany)><\\>
+<association_one_to_many_link_method(association)>
+
+<endif><\\>
+<association_link_method(association)>
+>>
+
+association_one_to_many_link_method(association) ::= <<
+<modifier("synchronized")><\\>
+<instance_operation(
+    name="link_many",
+    params=[association.oneProperty, association.manyProperty],
+    result_type=void(),
+    statements=association_one_to_many_link_method_statements(association)
+)>
 >>
 
 association_link_method(association) ::= <<
@@ -103,3 +121,34 @@ association_getter_statements(association_end) ::= <<
 <association_getter_statements_non_seq(association_end)><\\>
 <endif>
 >>
+
+association_link_calls(concept) ::= <<
+<if(concept.associationProperties)>
+
+<[concept.associationProperties]:association_link_call();separator="\n"><\\>
+<endif>
+>>
+
+association_link_call(property) ::= <<
+<if(property.type.sequence)><\\>
+<association_link_call_seq(property)><\\>
+<else><\\>
+<association_link_call_non_seq(property)><\\>
+<endif>
+>>
+
+association_class_getters(properties) ::= <<
+<properties:association_class_getter();separator="\n\n">
+>>
+
+association_class_getter(property) ::= <<
+<class_getter_annotations(property)><\\>
+<modifier("public")><\\>
+<instance_operation(
+    name=getter_name(property),
+    params=[],
+    result_type=getter_type(property.type),
+    statements=return(association_class_getter_expr(property))
+)>
+>>
+

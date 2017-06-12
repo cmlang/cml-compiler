@@ -3,12 +3,12 @@ class Employee
     private static Employment employment;
 
     private final String name;
-    private final Organization employer;
 
     public Employee(String name, Organization employer)
     {
         this.name = name;
-        this.employer = employer;
+
+        employment.link(employer, this);
     }
 
     public String getName()
@@ -18,15 +18,14 @@ class Employee
 
     public Organization getEmployer()
     {
-        return this.employer;
+        return employment.employerOf(this).get();
     }
 
     public String toString()
     {
         return new StringBuilder(Employee.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
-                   .append("employer=").append(String.format("\"%s\"", getEmployer()))
+                   .append("name=").append(String.format("\"%s\"", getName()))
                    .append(')')
                    .toString();
     }

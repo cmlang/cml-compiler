@@ -3,6 +3,7 @@ import "/lang/common/generic.stg"
 import "/lang/common/getter.stg"
 import "/lang/common/to_string.stg"
 import "/lang/common/interface.stg"
+import "/lang/common/association.stg"
 
 class(concept) ::= <<
 <class7(
@@ -46,9 +47,9 @@ class7(
     base_list=true,
     sections = [
         class_association_fields(concept),
-        class_fields(concept.nonDerivedProperties),
+        class_fields(concept.slotProperties),
         class_secondary_constructor(concept.nonInitProperties),
-        class_primary_constructor(inherited_properties, super_properties, concept.nonDerivedProperties, field_ancestors),
+        class_primary_constructor(inherited_properties, super_properties, field_ancestors),
         class_getters(),
         class_to_string(),
         class_association_setters(concept),
@@ -77,7 +78,8 @@ class_fields(properties) ::= <<
 
 class_getters() ::= <<
 <line_list([
-    field_getters(concept.nonDerivedProperties),
+    field_getters(concept.slotProperties),
+    association_class_getters(concept.associationProperties),
     derived_getters(concept.derivedProperties),
     delegated_getters(delegated_properties)
 ])>
@@ -103,19 +105,20 @@ delegated_getters(properties) ::= <<
 <properties:delegate_getter();separator="\n\n">
 >>
 
-class_primary_constructor(inherited_properties, super_properties, properties, ancestors) ::= <<
-<if(ancestors || properties)><\\>
+class_primary_constructor(inherited_properties, super_properties, ancestors) ::= <<
+<if(ancestors || concept.nonDerivedProperties)><\\>
 <modifier("public")><\\>
-<class_constructor([ancestors, properties, super_properties], class_primary_constructor_statements())><\\>
+<class_constructor([ancestors, concept.nonDerivedProperties, super_properties], class_primary_constructor_statements())><\\>
 <endif>
 >>
 
 class_primary_constructor_statements() ::= <<
 <super_constructor(inherited_properties)><\\>
 <if(super_properties)><\\>
-<properties:field_init();separator="\n"><\\>
+<concept.nonDerivedProperties:field_init();separator="\n"><\\>
 <else><\\>
-<[ancestors, properties]:field_init();separator="\n"><\\>
+<[ancestors, concept.slotProperties]:field_init();separator="\n"><\\>
+<association_link_calls(concept)><\\>
 <endif>
 >>
 

@@ -1,2 +1,6 @@
 Vehicles Console
+----------------
 
+Organization(name="Walt Disney")
+Employee(name="Donald Duck")
+Vehicle(plate="DUCK", driver="Optional[Employee(name="Donald Duck")]")

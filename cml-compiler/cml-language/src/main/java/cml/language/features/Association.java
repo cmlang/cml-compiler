@@ -38,6 +38,50 @@ public interface Association extends NamedElement, Scope
             .collect(toList());
     }
 
+    default boolean isOneToMany()
+    {
+        return oneToMany(getAssociationEnds().get(0), getAssociationEnds().get(1)) ||
+               oneToMany(getAssociationEnds().get(1), getAssociationEnds().get(0));
+    }
+
+    default Optional<Property> getOneProperty()
+    {
+        if (oneToMany(getAssociationEnds().get(0), getAssociationEnds().get(1)))
+        {
+            return getAssociationEnds().get(0).getProperty();
+        }
+
+        if (oneToMany(getAssociationEnds().get(1), getAssociationEnds().get(0)))
+        {
+            return getAssociationEnds().get(1).getProperty();
+        }
+
+        return Optional.empty();
+    }
+
+    default Optional<Property> getManyProperty()
+    {
+        if (oneToMany(getAssociationEnds().get(0), getAssociationEnds().get(1)))
+        {
+            return getAssociationEnds().get(1).getProperty();
+        }
+
+        if (oneToMany(getAssociationEnds().get(1), getAssociationEnds().get(0)))
+        {
+            return getAssociationEnds().get(0).getProperty();
+        }
+
+        return Optional.empty();
+    }
+
+    static boolean oneToMany(AssociationEnd end1, AssociationEnd end2)
+    {
+        assert end1.getProperty().isPresent();
+        assert end2.getProperty().isPresent();
+
+        return !end1.getProperty().get().getType().isSequence() && end2.getProperty().get().getType().isSequence();
+    }
+
     static Association create(String name)
     {
         return new AssociationImpl(name);

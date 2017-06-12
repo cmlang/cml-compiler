@@ -10,7 +10,7 @@ public interface PropertyList extends Scope
     default List<Property> getDerivedProperties()
     {
         return getProperties().stream()
-                              .filter(p -> p.isDerived())
+                              .filter(Property::isDerived)
                               .collect(toList());
     }
 

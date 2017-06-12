@@ -3,12 +3,12 @@ class Organization
     private static Employment employment;
 
     private final String name;
-    private final List<Employee> employees;
 
     public Organization(String name, List<Employee> employees)
     {
         this.name = name;
-        this.employees = employees;
+
+        employment.linkMany(this, employees);
     }
 
     public String getName()
@@ -18,15 +18,14 @@ class Organization
 
     public List<Employee> getEmployees()
     {
-        return Collections.unmodifiableList(this.employees);
+        return employment.employeesOf(this);
     }
 
     public String toString()
     {
         return new StringBuilder(Organization.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
-                   .append("employees=").append(getEmployees())
+                   .append("name=").append(String.format("\"%s\"", getName()))
                    .append(')')
                    .toString();
     }

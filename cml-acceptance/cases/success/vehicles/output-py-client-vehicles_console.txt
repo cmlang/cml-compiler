@@ -1,6 +1,6 @@
 Vehicles Console
 ----------------
 
-Organization(name=Walt Disney, employees=[], fleet=[])
-Employee(name=Donald Duck, employer=Organization(name=Walt Disney, employees=[], fleet=[]))
-Vehicle(plate=DUCK, driver=Employee(name=Donald Duck, employer=Organization(name=Walt Disney, employees=[], fleet=[])), owner=Organization(name=Walt Disney, employees=[], fleet=[]))
+Organization(name=Walt Disney)
+Employee(name=Donald Duck)
+Vehicle(plate=DUCK, driver=Employee(name=Donald Duck))

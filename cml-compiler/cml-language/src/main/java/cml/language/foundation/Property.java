@@ -1,6 +1,8 @@
 package cml.language.foundation;
 
+import cml.language.Model;
 import cml.language.expressions.Expression;
+import cml.language.features.Association;
 import cml.language.features.Concept;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +32,16 @@ public interface Property extends TypedElement, Scope
         return getValue().isPresent() && !isDerived();
     }
 
+    default boolean isSlot()
+    {
+        return !isDerived() && !isAssociationEnd();
+    }
+
+    default boolean isAssociationEnd()
+    {
+        return getAssociation().isPresent();
+    }
+
     Optional<Type> getDeclaredType();
 
     Optional<Expression> getValue();
@@ -40,6 +52,29 @@ public interface Property extends TypedElement, Scope
 
     boolean isTypeAllowed();
     void setTypeAllowed(boolean typeAllowed);
+
+    default Concept getConcept()
+    {
+        assert getParentScope().isPresent();
+        assert getParentScope().get() instanceof Concept;
+
+        return (Concept) getParentScope().get();
+    }
+
+    default Model getModel()
+    {
+        return getConcept().getModel();
+    }
+
+    default Optional<Association> getAssociation()
+    {
+        return getModel().getAssociations()
+                         .stream()
+                         .filter(assoc -> assoc.getAssociationEnds()
+                                               .stream()
+                                               .anyMatch(end -> end.getProperty().isPresent() && end.getProperty().get() == this))
+                         .findFirst();
+    }
 
     static Property create(String name, @Nullable Type type)
     {

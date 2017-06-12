@@ -11,22 +11,29 @@ class _Employment:
         self.__employer = {} # type: Dict[Employee, Organization]
         self.__employees = {} # type: Dict[Organization, List[Employee]]
 
+    def link_many(self, employer: 'Organization', employees: 'List[Employee]') -> 'None':
+        for employee in employees: self.link(employer, employee)
+
     def link(self, organization: 'Organization', employee: 'Employee') -> 'None':
         self.__employer[employee] = organization
 
-        if self.__employees[organization] is None:
-            employee_list = [employee]
-        else:
+        if organization in self.__employees:
             employee_list = self.__employees[organization]
+        else:
+            employee_list = [employee]
         if not (employee in employee_list):
             employee_list.append(employee)
         self.__employees[organization] = employee_list
 
     def employer_of(self, employee: 'Employee') -> 'Organization':
-        return self.__employer[employee]
+        if employee in self.__employer:
+            return self.__employer[employee]
+        else:
+            return None
 
     def employees_of(self, organization: 'Organization') -> 'List[Employee]':
-        employee_list = self.__employees[organization]
-        if employee_list is None:
+        if organization in self.__employees:
+            employee_list = self.__employees[organization]
+        else:
             employee_list = []
         return list(employee_list)

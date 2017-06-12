@@ -4,7 +4,8 @@ class Employee:
 
     def __init__(self, name: 'str', employer: 'Organization') -> 'None':
         self.__name = name
-        self.__employer = employer
+
+        self._employment.link(employer, self)
 
     @property
     def name(self) -> 'str':
@@ -12,11 +13,10 @@ class Employee:
 
     @property
     def employer(self) -> 'Organization':
-        return self.__employer
+        return self._employment.employer_of(self)
 
     def __str__(self) -> 'str':
-        return "%s(name=%s, employer=%s)" % (
+        return "%s(name=%s)" % (
             type(self).__name__,
-            self.name,
-            self.employer
+            self.name
         )

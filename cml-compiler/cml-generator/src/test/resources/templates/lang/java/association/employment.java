@@ -17,6 +17,11 @@ public class Employment
     private final Map<Employee, Organization> employer = new HashMap<>();
     private final Map<Organization, List<Employee>> employees = new HashMap<>();
 
+    synchronized void linkMany(Organization employer, List<Employee> employees)
+    {
+        for (Employee employee: employees) link(employer, employee);
+    }
+
     synchronized void link(Organization organization, Employee employee)
     {
         this.employer.put(employee, organization);

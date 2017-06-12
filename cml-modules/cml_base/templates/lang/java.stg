@@ -51,7 +51,7 @@ to_string_name() ::= "toString"
 
 to_string_expr(concept) ::= <<
 new StringBuilder(<type_name(concept)>.class.getSimpleName())
-<indent()><to_string_appends(concept.allProperties); anchor>
+<indent()><to_string_appends(concept.printableProperties); anchor>
 >>
 
 to_string_appends(properties) ::= <<
@@ -274,6 +274,25 @@ association_setter_statements(association) ::= <<
 
 association_static_initializer_statement(association, concept) ::= <<
 <association_name(association)>.init(<field_type(concept)>.class);
+>>
+
+association_one_to_many_link_method_statements(association) ::= <<
+for (<type_name(association.manyProperty.type)> <field_name(association.manyProperty.type)>: <field_name(association.manyProperty)>) link(<field_name(association.oneProperty)>, <field_name(association.manyProperty.type)>);
+>>
+
+association_link_call_seq(property) ::= <<
+<field_name(property.association)>.linkMany(this, <field_name(property)>);
+>>
+
+association_link_call_non_seq(property) ::= <<
+<field_name(property.association)>.link(<field_name(property)>, this);
+>>
+
+association_class_getter_expr(property) ::= <<
+<field_name(property.association)>.<field_name(property)>Of(this)<\\>
+<if(property.type.required)><\\>
+.get()<\\>
+<endif>
 >>
 
 // Type

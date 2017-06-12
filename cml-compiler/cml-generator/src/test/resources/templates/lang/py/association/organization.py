@@ -4,7 +4,8 @@ class Organization:
 
     def __init__(self, name: 'str', employees: 'List[Employee]') -> 'None':
         self.__name = name
-        self.__employees = employees
+
+        self._employment.link_many(self, employees)
 
     @property
     def name(self) -> 'str':
@@ -12,11 +13,10 @@ class Organization:
 
     @property
     def employees(self) -> 'List[Employee]':
-        return self.__employees
+        return self._employment.employees_of(self)
 
     def __str__(self) -> 'str':
-        return "%s(name=%s, employees=%s)" % (
+        return "%s(name=%s)" % (
             type(self).__name__,
-            self.name,
-            self.employees
+            self.name
         )

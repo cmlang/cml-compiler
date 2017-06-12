@@ -1,6 +1,8 @@
 package templates.lang.common;
 
+import cml.language.Model;
 import cml.language.features.Concept;
+import cml.language.features.Module;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import org.junit.Test;
@@ -25,6 +27,9 @@ public class ToStringTest  extends LangTest
     {
         final Concept concept = Concept.create("SomeConcept");
 
+        final Module module = createModule();
+        module.addMember(concept);
+
         to_string(concept, "empty.txt");
     }
 
@@ -34,6 +39,9 @@ public class ToStringTest  extends LangTest
         final Concept concept = Concept.create("SomeConcept");
 
         concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
+
+        final Module module = createModule();
+        module.addMember(concept);
 
         to_string(concept, "required.txt");
     }
@@ -45,6 +53,9 @@ public class ToStringTest  extends LangTest
 
         concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
         concept.addMember(Property.create("optionalProperty", Type.create("AnotherType", "?")));
+
+        final Module module = createModule();
+        module.addMember(concept);
 
         to_string(concept, "optional.txt");
     }
@@ -58,11 +69,22 @@ public class ToStringTest  extends LangTest
         concept.addMember(Property.create("optionalProperty", Type.create("AnotherType", "?")));
         concept.addMember(Property.create("setProperty", Type.create("YetAnotherType", "*")));
 
+        final Module module = createModule();
+        module.addMember(concept);
+
         to_string(concept, "set.txt");
     }
 
     private void to_string(Concept concept, String expectedOutputFileName) throws IOException
     {
         testTemplateWithConcept("to_string", concept, expectedOutputFileName);
+    }
+
+    private static Module createModule()
+    {
+        final Model model = Model.create();
+        final Module module = Module.create("some_module");
+        model.addMember(module);
+        return module;
     }
 }
