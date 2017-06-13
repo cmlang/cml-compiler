@@ -3,13 +3,19 @@ concept Employee
 {
     name: String;
     employer: Organization;
+
+    /employerName = employer.name;
 }
 
 concept Organization
 {
     name: String;
     employees: Employee*;
+
     /employeeNames = employees.name;
+    /employerNames = employees.employer.name;
+
+    /employers = employees.employer;
 }
 
 association Employment

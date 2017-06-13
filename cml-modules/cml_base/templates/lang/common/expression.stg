@@ -4,7 +4,7 @@ expression(expr) ::= <<
 >>
 
 expression_path(path) ::= <<
-<path.names:path_getter_call(); separator=".">
+<path_start(path)><path_expr(path)><path_end(path)>
 >>
 
 expression_infix(infix) ::= <<

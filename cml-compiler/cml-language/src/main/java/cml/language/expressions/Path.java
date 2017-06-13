@@ -83,7 +83,10 @@ public interface Path extends Expression
 
                     if (memberType.isPresent())
                     {
-                        type = memberType.get();
+                        final String name = memberType.get().getName();
+                        final String cardinality = memberType.get().getCardinality().orElse(null);
+
+                        type = Type.create(name, type.isSequence() ? "*" : cardinality);
                     }
                     else
                     {
@@ -115,7 +118,14 @@ public interface Path extends Expression
 
         for (String name: names)
         {
-            path = new PathImpl(path, name);
+            final Path base = path;
+
+            path = new PathImpl(base, name);
+
+            if (base != null)
+            {
+                path.addMember(base);
+            }
         }
 
         return path;

@@ -16,12 +16,39 @@ class Organization:
         return self._employment.employees_of(self)
 
     @property
-    def employee_names(self) -> 'str':
-        return self.employees.self.name
+    def employee_names(self) -> 'List[str]':
+        return list(
+            map(
+                lambda employee: employee.name,
+                self.employees
+            )
+        )
+
+    @property
+    def employer_names(self) -> 'List[str]':
+        return list(
+            map(
+                lambda organization: organization.name,
+                map(
+                    lambda employee: employee.employer,
+                    self.employees
+                )
+            )
+        )
+
+    @property
+    def employers(self) -> 'List[Organization]':
+        return list(
+            map(
+                lambda employee: employee.employer,
+                self.employees
+            )
+        )
 
     def __str__(self) -> 'str':
-        return "%s(name=%s, employee_names=%s)" % (
+        return "%s(name=%s, employee_names=%s, employer_names=%s)" % (
             type(self).__name__,
             self.name,
-            self.employee_names
+            self.employee_names,
+            self.employer_names
         )

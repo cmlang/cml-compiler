@@ -21,9 +21,29 @@ class Organization
         return employment.employeesOf(this);
     }
 
-    public String getEmployeeNames()
+    public List<String> getEmployeeNames()
     {
-        return getEmployees().getName();
+        return getEmployees()
+                   .stream()
+                   .map(employee -> employee.getName())
+                   .collect(toList());
+    }
+
+    public List<String> getEmployerNames()
+    {
+        return getEmployees()
+                   .stream()
+                   .map(employee -> employee.getEmployer())
+                   .map(organization -> organization.getName())
+                   .collect(toList());
+    }
+
+    public List<Organization> getEmployers()
+    {
+        return getEmployees()
+                   .stream()
+                   .map(employee -> employee.getEmployer())
+                   .collect(toList());
     }
 
     public String toString()
@@ -31,7 +51,8 @@ class Organization
         return new StringBuilder(Organization.class.getSimpleName())
                    .append('(')
                    .append("name=").append(String.format("\"%s\"", getName())).append(", ")
-                   .append("employeeNames=").append(String.format("\"%s\"", getEmployeeNames()))
+                   .append("employeeNames=").append(getEmployeeNames()).append(", ")
+                   .append("employerNames=").append(getEmployerNames())
                    .append(')')
                    .toString();
     }

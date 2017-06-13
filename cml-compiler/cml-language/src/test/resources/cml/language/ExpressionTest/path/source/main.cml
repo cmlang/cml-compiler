@@ -3,11 +3,13 @@ concept Expressions
 {
     foo: String;
     somePath: SomeConcept;
+    somePathList: SomeConcept*;
 
     self_var = self;
     single_var = foo;
     path_var = somePath.bar;
     path_var2 = somePath.oneMorePath.etc;
+    path_var3 = somePathList.oneMorePath.etc;
 }
 
 concept SomeConcept

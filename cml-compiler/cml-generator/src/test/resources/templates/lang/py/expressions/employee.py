@@ -15,8 +15,13 @@ class Employee:
     def employer(self) -> 'Organization':
         return self._employment.employer_of(self)
 
+    @property
+    def employer_name(self) -> 'str':
+        return self.employer.name
+
     def __str__(self) -> 'str':
-        return "%s(name=%s)" % (
+        return "%s(name=%s, employer_name=%s)" % (
             type(self).__name__,
-            self.name
+            self.name,
+            self.employer_name
         )

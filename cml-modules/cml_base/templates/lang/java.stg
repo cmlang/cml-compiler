@@ -173,11 +173,6 @@ getter_call(property) ::= <<
 get<property.name; format="pascal-case">()
 >>
 
-path_getter_call(name) ::= <<
-get<name; format="pascal-case">()
->>
-
-
 // Interfaces
 
 interface_keyword() ::= "interface "
@@ -374,3 +369,40 @@ operation_lte(left, right) ::= "<left> \<= <right>"
 operation_and(left, right) ::= "<left> && <right>"
 operation_or(left, right) ::= "<left> || <right>"
 operation_not(expr) ::= "!<expr>"
+
+// Paths
+
+path_start(path) ::= ""
+
+path_expr(path) ::= <<
+<if(path.base)><\\>
+<path_base_call(path)><\\>
+<else><\\>
+<path_getter_call(path)><\\>
+<endif>
+>>
+
+path_getter_call(path) ::= <<
+get<path.name; format="pascal-case">()
+>>
+
+path_base_call(path) ::= <<
+<path_expr(path.base)>
+<if(path.base.type.sequence)><\\>
+<indent()><path_map_call(path); anchor><\\>
+<else><\\>
+<indent()>.<path_getter_call(path)><\\>
+<endif>
+>>
+
+path_map_call(path) ::= <<
+<if(!path.base.base)><\\>
+.stream()
+<endif><\\>
+.map(<field_name(path.base.type)> -> <field_name(path.base.type)>.<path_getter_call(path)>)
+>>
+
+path_end(path) ::= <<
+<if(path.type.sequence)><\n><indent()>.collect(toList())<endif>
+>>
+

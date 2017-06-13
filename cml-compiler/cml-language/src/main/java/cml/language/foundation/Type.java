@@ -162,7 +162,7 @@ public interface Type extends NamedElement
         return new TypeImpl(name, null, null);
     }
 
-    static Type create(String name, String cardinality)
+    static Type create(String name, @Nullable String cardinality)
     {
         return new TypeImpl(name, cardinality, null);
     }

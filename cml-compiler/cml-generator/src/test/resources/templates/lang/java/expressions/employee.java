@@ -21,11 +21,18 @@ class Employee
         return employment.employerOf(this).get();
     }
 
+    public String getEmployerName()
+    {
+        return getEmployer()
+                   .getName();
+    }
+
     public String toString()
     {
         return new StringBuilder(Employee.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName()))
+                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
+                   .append("employerName=").append(String.format("\"%s\"", getEmployerName()))
                    .append(')')
                    .toString();
     }

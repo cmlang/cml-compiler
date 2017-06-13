@@ -154,10 +154,6 @@ getter_call(property) ::= <<
 <property.name; format="underscore-case">
 >>
 
-path_getter_call(name) ::= <<
-self.<name; format="underscore-case">
->>
-
 // Structure
 
 structure_preamble() ::= "<\n>"
@@ -377,3 +373,45 @@ operation_lte(left, right) ::= "<left> \<= <right>"
 operation_and(left, right) ::= "<left> and <right>"
 operation_or(left, right) ::= "<left> or <right>"
 operation_not(expr) ::= "not <expr>"
+
+// Paths
+
+path_start(path) ::= <<
+<if(path.type.sequence)>list(<\n><indent()><endif>
+>>
+
+path_expr(path) ::= <<
+<if(path.base)><\\>
+<path_base_call(path)><\\>
+<else><\\>
+<path_getter_call(path)><\\>
+<endif>
+>>
+
+path_getter_call(path) ::= <<
+self.<path_property(path)>
+>>
+
+path_base_call(path) ::= <<
+<if(path.base.type.sequence)><\\>
+<path_map_call(path); anchor><\\>
+<else><\\>
+<path_expr(path.base)>.<path_property(path)><\\>
+<endif>
+>>
+
+path_map_call(path) ::= <<
+map(
+<indent()>lambda <field_name(path.base.type)>: <field_name(path.base.type)>.<path_property(path)>,
+<indent()><path_expr(path.base)>
+)
+>>
+
+path_property(path) ::= <<
+<path.name; format="underscore-case">
+>>
+
+path_end(path) ::= <<
+<if(path.type.sequence)><\n>)<endif>
+>>
+
