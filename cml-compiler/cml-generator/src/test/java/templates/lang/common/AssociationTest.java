@@ -9,11 +9,8 @@ import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
-import org.stringtemplate.v4.ST;
 
 import java.io.IOException;
-
-import static junit.framework.TestCase.assertNotNull;
 
 public class AssociationTest extends LangTest
 {
@@ -35,9 +32,9 @@ public class AssociationTest extends LangTest
         final Concept organization = createOrganization();
         final Association employment = createEmployment(employee, organization);
 
-        test_association_class(employment, "employment");
-        test_concept_class(employee, "employee");
-        test_concept_class(organization, "organization");
+        testAssociationClass(employment, "employment");
+        testConceptClass(employee, "employee");
+        testConceptClass(organization, "organization");
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -80,29 +77,5 @@ public class AssociationTest extends LangTest
         employee.addMember(Property.create("name", Type.STRING));
         employee.addMember(Property.create("employer", Type.create("Organization")));
         return employee;
-    }
-
-    private void test_association_class(Association association, String expectedOutputPath) throws IOException
-    {
-        final String templateName = "association_class";
-        final ST template = getTemplate(templateName);
-        assertNotNull("Expected template: " + templateName, template);
-
-        template.add("association", association);
-
-        final String result = template.render();
-        assertThatOutputMatches(expectedOutputPath + "." + getTargetLanguageExtension(), result);
-    }
-
-    private void test_concept_class(Concept concept, String expectedOutputPath) throws IOException
-    {
-        final String templateName = "class";
-        final ST template = getTemplate(templateName);
-        assertNotNull("Expected template: " + templateName, template);
-
-        template.add("concept", concept);
-
-        final String result = template.render();
-        assertThatOutputMatches(expectedOutputPath + "." + getTargetLanguageExtension(), result);
     }
 }

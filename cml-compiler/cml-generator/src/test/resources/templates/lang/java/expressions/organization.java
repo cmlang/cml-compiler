@@ -21,11 +21,17 @@ class Organization
         return employment.employeesOf(this);
     }
 
+    public String getEmployeeNames()
+    {
+        return getEmployees().getName();
+    }
+
     public String toString()
     {
         return new StringBuilder(Organization.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName()))
+                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
+                   .append("employeeNames=").append(String.format("\"%s\"", getEmployeeNames()))
                    .append(')')
                    .toString();
     }

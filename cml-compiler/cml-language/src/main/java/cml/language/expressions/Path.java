@@ -6,16 +6,34 @@ import cml.language.foundation.Scope;
 import cml.language.foundation.Type;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public interface Path extends Expression
 {
-    List<String> getNames();
+    Optional<Path> getBase();
+    String getName();
+
+    default List<String> getNames()
+    {
+        List<String> names = new LinkedList<>();
+        names.add(getName());
+
+        Optional<Path> path = getBase();
+        while (path.isPresent())
+        {
+            names.add(0, path.get().getName());
+
+            path = path.get().getBase();
+        }
+
+        return unmodifiableList(names);
+    }
 
     default List<String> getMemberNames()
     {
@@ -93,7 +111,14 @@ public interface Path extends Expression
 
     static Path create(List<String> names)
     {
-        return new PathImpl(names);
+        Path path = null;
+
+        for (String name: names)
+        {
+            path = new PathImpl(path, name);
+        }
+
+        return path;
     }
 }
 
@@ -102,14 +127,16 @@ class PathImpl implements Path
     private final ModelElement modelElement;
     private final Scope scope;
 
-    private final List<String> names;
+    private final @Nullable Path base;
+    private final String name;
 
-    PathImpl(List<String> names)
+    PathImpl(@Nullable Path base, String name)
     {
         modelElement = ModelElement.create(this);
         scope = Scope.create(this, modelElement);
 
-        this.names = new ArrayList<>(names);
+        this.base = base;
+        this.name = name;
     }
 
     @Override
@@ -125,9 +152,15 @@ class PathImpl implements Path
     }
 
     @Override
-    public List<String> getNames()
+    public Optional<Path> getBase()
     {
-        return new ArrayList<>(names);
+        return Optional.ofNullable(base);
+    }
+
+    @Override
+    public String getName()
+    {
+        return name;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package templates.lang.common;
 
+import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.foundation.NamedElement;
 import cml.language.foundation.Property;
@@ -44,7 +45,7 @@ public abstract class LangTest extends TemplateTest
 
     protected abstract String getExpectedOutputPath();
 
-    protected String getTargetLanguageExtension()
+    private String getTargetLanguageExtension()
     {
         return targetLanguageExtension;
     }
@@ -53,6 +54,30 @@ public abstract class LangTest extends TemplateTest
     protected String getTemplatePath()
     {
         return format(LANG_GROUP_PATH, targetLanguageExtension);
+    }
+
+    void testAssociationClass(Association association, String expectedOutputPath) throws IOException
+    {
+        final String templateName = "association_class";
+        final ST template = getTemplate(templateName);
+        assertNotNull("Expected template: " + templateName, template);
+
+        template.add("association", association);
+
+        final String result = template.render();
+        assertThatOutputMatches(expectedOutputPath + "." + getTargetLanguageExtension(), result);
+    }
+
+    void testConceptClass(Concept concept, String expectedOutputPath) throws IOException
+    {
+        final String templateName = "class";
+        final ST template = getTemplate(templateName);
+        assertNotNull("Expected template: " + templateName, template);
+
+        template.add("concept", concept);
+
+        final String result = template.render();
+        assertThatOutputMatches(expectedOutputPath + "." + getTargetLanguageExtension(), result);
     }
 
     void testTemplateWithConcept(String templateName, Concept concept, String expectedOutputPath)

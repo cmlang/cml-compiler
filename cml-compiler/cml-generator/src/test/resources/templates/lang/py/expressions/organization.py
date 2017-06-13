@@ -15,8 +15,13 @@ class Organization:
     def employees(self) -> 'List[Employee]':
         return self._employment.employees_of(self)
 
+    @property
+    def employee_names(self) -> 'str':
+        return self.employees.self.name
+
     def __str__(self) -> 'str':
-        return "%s(name=%s)" % (
+        return "%s(name=%s, employee_names=%s)" % (
             type(self).__name__,
-            self.name
+            self.name,
+            self.employee_names
         )

@@ -1,0 +1,19 @@
+
+concept Employee
+{
+    name: String;
+    employer: Organization;
+}
+
+concept Organization
+{
+    name: String;
+    employees: Employee*;
+    /employeeNames = employees.name;
+}
+
+association Employment
+{
+    Employee.employer;
+    Organization.employees;
+}
