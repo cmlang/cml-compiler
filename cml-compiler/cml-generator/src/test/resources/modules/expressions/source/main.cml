@@ -7,7 +7,7 @@ concept Employee
     /employerName = employer.name;
 
     /selfEmployee = self;
-    //single_var = foo;
+    /alias = name;
 }
 
 concept Organization

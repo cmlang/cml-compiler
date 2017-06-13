@@ -32,12 +32,18 @@ class Employee
         return this;
     }
 
+    public String getAlias()
+    {
+        return getName();
+    }
+
     public String toString()
     {
         return new StringBuilder(Employee.class.getSimpleName())
                    .append('(')
                    .append("name=").append(String.format("\"%s\"", getName())).append(", ")
-                   .append("employerName=").append(String.format("\"%s\"", getEmployerName()))
+                   .append("employerName=").append(String.format("\"%s\"", getEmployerName())).append(", ")
+                   .append("alias=").append(String.format("\"%s\"", getAlias()))
                    .append(')')
                    .toString();
     }
