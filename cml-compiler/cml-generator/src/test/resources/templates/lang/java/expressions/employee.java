@@ -27,6 +27,11 @@ class Employee
                    .getName();
     }
 
+    public Employee getSelfEmployee()
+    {
+        return this;
+    }
+
     public String toString()
     {
         return new StringBuilder(Employee.class.getSimpleName())

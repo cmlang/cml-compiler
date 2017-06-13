@@ -5,6 +5,9 @@ concept Employee
     employer: Organization;
 
     /employerName = employer.name;
+
+    /selfEmployee = self;
+    //single_var = foo;
 }
 
 concept Organization

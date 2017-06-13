@@ -4,7 +4,11 @@ expression(expr) ::= <<
 >>
 
 expression_path(path) ::= <<
-<path_start(path)><path_expr(path)><path_end(path)>
+<if(path.self)><\\>
+<self()><\\>
+<else><\\>
+<path_start(path)><path_expr(path)><path_end(path)><\\>
+<endif>
 >>
 
 expression_infix(infix) ::= <<

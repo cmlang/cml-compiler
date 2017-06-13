@@ -7,9 +7,11 @@ lang ::= [
     "fields": false
 ]
 
-// Void
+// Keywords
 
 void() ::= "None"
+
+self() ::= "self"
 
 // Blocks
 
