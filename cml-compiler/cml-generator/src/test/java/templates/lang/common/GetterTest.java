@@ -68,6 +68,12 @@ public class GetterTest extends LangTest
     }
 
     @Test
+    public void getter_type__sequence_integer() throws IOException
+    {
+        testTemplateWithType("getter_type", Type.create("Integer", "*"), "sequence_integer.txt");
+    }
+
+    @Test
     public void interface_getter__required() throws IOException
     {
         final String cardinality = null; // required

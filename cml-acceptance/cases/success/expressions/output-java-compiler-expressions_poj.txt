@@ -3,3 +3,9 @@ model files:
 
 ExpressionCases files:
 - src/main/java/expressions/cases/ExpressionCases.java
+
+SomeConcept files:
+- src/main/java/expressions/cases/SomeConcept.java
+
+AnotherConcept files:
+- src/main/java/expressions/cases/AnotherConcept.java

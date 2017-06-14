@@ -45,10 +45,20 @@ class Organization:
             )
         )
 
+    @property
+    def employee_numbers(self) -> 'List[int]':
+        return list(
+            map(
+                lambda employee: employee.number,
+                self.employees
+            )
+        )
+
     def __str__(self) -> 'str':
-        return "%s(name=%s, employee_names=%s, employer_names=%s)" % (
+        return "%s(name=%s, employee_names=%s, employer_names=%s, employee_numbers=%s)" % (
             type(self).__name__,
             self.name,
             self.employee_names,
-            self.employer_names
+            self.employer_names,
+            self.employee_numbers
         )

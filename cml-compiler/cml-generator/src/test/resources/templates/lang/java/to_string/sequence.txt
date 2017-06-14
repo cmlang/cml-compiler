@@ -4,7 +4,7 @@ public String toString()
                .append('(')
                .append("someProperty=").append(String.format("\"%s\"", getSomeProperty())).append(", ")
                .append("optionalProperty=").append(getOptionalProperty().isPresent() ? String.format("\"%s\"", getOptionalProperty()) : "not present").append(", ")
-               .append("setProperty=").append(getSetProperty())
+               .append("sequenceProperty=").append(getSequenceProperty())
                .append(')')
                .toString();
 }

@@ -61,18 +61,18 @@ public class ToStringTest  extends LangTest
     }
 
     @Test
-    public void to_string__set() throws IOException
+    public void to_string__sequence() throws IOException
     {
         final Concept concept = Concept.create("SomeConcept");
 
         concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
         concept.addMember(Property.create("optionalProperty", Type.create("AnotherType", "?")));
-        concept.addMember(Property.create("setProperty", Type.create("YetAnotherType", "*")));
+        concept.addMember(Property.create("sequenceProperty", Type.create("String", "*")));
 
         final Module module = createModule();
         module.addMember(concept);
 
-        to_string(concept, "set.txt");
+        to_string(concept, "sequence.txt");
     }
 
     private void to_string(Concept concept, String expectedOutputFileName) throws IOException

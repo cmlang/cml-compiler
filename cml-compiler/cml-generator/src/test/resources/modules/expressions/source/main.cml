@@ -1,6 +1,7 @@
 
 concept Employee
 {
+    number: Integer;
     name: String;
     employer: Organization;
 
@@ -19,6 +20,8 @@ concept Organization
     /employerNames = employees.employer.name;
 
     /employers = employees.employer;
+
+    /employeeNumbers = employees.number;
 }
 
 association Employment

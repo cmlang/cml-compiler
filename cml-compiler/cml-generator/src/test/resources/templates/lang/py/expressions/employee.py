@@ -2,10 +2,15 @@ class Employee:
 
     _employment = _Employment()
 
-    def __init__(self, name: 'str', employer: 'Organization') -> 'None':
+    def __init__(self, number: 'int', name: 'str', employer: 'Organization') -> 'None':
+        self.__number = number
         self.__name = name
 
         self._employment.link(employer, self)
+
+    @property
+    def number(self) -> 'int':
+        return self.__number
 
     @property
     def name(self) -> 'str':
@@ -28,8 +33,9 @@ class Employee:
         return self.name
 
     def __str__(self) -> 'str':
-        return "%s(name=%s, employer_name=%s, alias=%s)" % (
+        return "%s(number=%s, name=%s, employer_name=%s, alias=%s)" % (
             type(self).__name__,
+            self.number,
             self.name,
             self.employer_name,
             self.alias

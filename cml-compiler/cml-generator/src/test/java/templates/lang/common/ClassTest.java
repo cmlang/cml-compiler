@@ -159,7 +159,7 @@ public class ClassTest extends LangTest
 
         concept.addMember(Property.create("title", Type.create("String", null)));
         concept.addMember(Property.create("sequel", Type.create("Book", "?")));
-        concept.addMember(Property.create("categories", Type.create("Category", "*")));
+        concept.addMember(Property.create("categories", Type.create("String", "*")));
 
         testClassTemplateWithConcept(concept, "class__concept_property_sequence.txt");
     }

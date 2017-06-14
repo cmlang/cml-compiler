@@ -1,6 +1,6 @@
 class Book:
 
-    def __init__(self, title: 'str', sequel: 'Book', categories: 'List[Category]') -> 'None':
+    def __init__(self, title: 'str', sequel: 'Book', categories: 'List[str]') -> 'None':
         self.__title = title
         self.__sequel = sequel
         self.__categories = categories
@@ -14,7 +14,7 @@ class Book:
         return self.__sequel
 
     @property
-    def categories(self) -> 'List[Category]':
+    def categories(self) -> 'List[str]':
         return self.__categories
 
     def __str__(self) -> 'str':

@@ -1,7 +1,7 @@
 def __str__(self) -> 'str':
-    return "%s(some_property=%s, optional_property=%s, set_property=%s)" % (
+    return "%s(some_property=%s, optional_property=%s, sequence_property=%s)" % (
         type(self).__name__,
         self.some_property,
         self.optional_property,
-        self.set_property
+        self.sequence_property
     )

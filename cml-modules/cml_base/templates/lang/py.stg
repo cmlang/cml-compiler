@@ -184,7 +184,7 @@ class_type_name(name) ::= <<
 
 constructor_name(class_name) ::= "__init__"
 
-class_secondary_constructor(non_init_properties) ::= ""
+class_secondary_constructor(non_init_properties, super_properties) ::= ""
 
 class_static_initializer(concept) ::= ""
 

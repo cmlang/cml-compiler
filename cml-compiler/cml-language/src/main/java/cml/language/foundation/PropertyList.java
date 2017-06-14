@@ -1,5 +1,8 @@
 package cml.language.foundation;
 
+import cml.language.features.Concept;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +21,19 @@ public interface PropertyList extends Scope
     {
         return getProperties().stream()
                               .filter(p -> !p.isDerived())
+                              .sorted(byInitOrder())
                               .collect(toList());
     }
+
+    static Comparator<Property> byInitOrder()
+    {
+        return (Property p1, Property p2) -> {
+            if (p1.getValue().isPresent() && !p2.getValue().isPresent()) return +1;
+            else if (!p1.getValue().isPresent() && p2.getValue().isPresent()) return -1;
+            else return 0;
+        };
+    }
+
 
     default List<Property> getProperties()
     {

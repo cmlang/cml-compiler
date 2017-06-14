@@ -46,13 +46,22 @@ class Organization
                    .collect(toList());
     }
 
+    public List<Integer> getEmployeeNumbers()
+    {
+        return getEmployees()
+                   .stream()
+                   .map(employee -> employee.getNumber())
+                   .collect(toList());
+    }
+
     public String toString()
     {
         return new StringBuilder(Organization.class.getSimpleName())
                    .append('(')
                    .append("name=").append(String.format("\"%s\"", getName())).append(", ")
                    .append("employeeNames=").append(getEmployeeNames()).append(", ")
-                   .append("employerNames=").append(getEmployerNames())
+                   .append("employerNames=").append(getEmployerNames()).append(", ")
+                   .append("employeeNumbers=").append(getEmployeeNumbers())
                    .append(')')
                    .toString();
     }

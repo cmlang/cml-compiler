@@ -1,7 +1,15 @@
 
 type_name(named_element) ::= <<
+<prefix_type_name(named_element, "")>
+>>
+
+boxed_type_name(named_element) ::= <<
+<prefix_type_name(named_element, "boxed_")>
+>>
+
+prefix_type_name(named_element, prefix) ::= <<
 <if(named_element.primitive)><\\>
-<primitive_type_name(named_element.name)><\\>
+<prefix_primitive_type_name(named_element.name, prefix)><\\>
 <elseif(named_element.name)><\\>
 <class_type_name(named_element.name)><\\>
 <else><\\>
@@ -10,9 +18,31 @@ type_name(named_element) ::= <<
 >>
 
 primitive_type_name(element_name) ::= <<
-<(primitive_type_template_name(element_name))()>
+<prefix_primitive_type_name(element_name, "")>
 >>
 
-primitive_type_template_name(element_name) ::= <<
-primitive_type_<element_name; format="underscore-case">
+boxed_primitive_type_name(element_name) ::= <<
+<prefix_primitive_type_name(element_name, "boxed_")>
 >>
+
+prefix_primitive_type_name(element_name, prefix) ::= <<
+<(primitive_type_template_name(element_name, prefix))()>
+>>
+
+primitive_type_template_name(element_name, prefix) ::= <<
+<prefix>primitive_type_<element_name; format="underscore-case">
+>>
+
+boxed_primitive_type_boolean() ::= "<primitive_type_boolean()>"
+boxed_primitive_type_integer() ::= "<primitive_type_integer()>"
+boxed_primitive_type_decimal() ::= "<primitive_type_decimal()>"
+boxed_primitive_type_string() ::= "<primitive_type_string()>"
+boxed_primitive_type_regex() ::= "<primitive_type_regex()>"
+boxed_primitive_type_byte() ::= "<primitive_type_byte()>"
+boxed_primitive_type_short() ::= "<primitive_type_short()>"
+boxed_primitive_type_long() ::= "<primitive_type_long()>"
+boxed_primitive_type_float() ::= "<primitive_type_float()>"
+boxed_primitive_type_double() ::= "<primitive_type_double()>"
+boxed_primitive_type_char() ::= "<primitive_type_char()>"
+
+

@@ -2,9 +2,9 @@ class Book
 {
     private final String title;
     private final @Nullable Book sequel;
-    private final List<Category> categories;
+    private final List<String> categories;
 
-    public Book(String title, @Nullable Book sequel, List<Category> categories)
+    public Book(String title, @Nullable Book sequel, List<String> categories)
     {
         this.title = title;
         this.sequel = sequel;
@@ -21,7 +21,7 @@ class Book
         return Optional.ofNullable(this.sequel);
     }
 
-    public List<Category> getCategories()
+    public List<String> getCategories()
     {
         return Collections.unmodifiableList(this.categories);
     }

@@ -156,7 +156,7 @@ Optional\<<type_name(type)>\>
 >>
 
 getter_type_sequence(type) ::= <<
-List\<<type_name(type)>\>
+List\<<boxed_type_name(type)>\>
 >>
 
 getter_field_value_required(property) ::= <<
@@ -305,6 +305,18 @@ primitive_type_long() ::= "long"
 primitive_type_float() ::= "float"
 primitive_type_double() ::= "double"
 primitive_type_char() ::= "char"
+
+boxed_primitive_type_boolean() ::= "Boolean"
+boxed_primitive_type_integer() ::= "Integer"
+boxed_primitive_type_decimal() ::= "BigDecimal"
+boxed_primitive_type_string() ::= "String"
+boxed_primitive_type_regex() ::= "Pattern"
+boxed_primitive_type_byte() ::= "Byte"
+boxed_primitive_type_short() ::= "Short"
+boxed_primitive_type_long() ::= "Long"
+boxed_primitive_type_float() ::= "Float"
+boxed_primitive_type_double() ::= "Double"
+boxed_primitive_type_char() ::= "Char"
 
 type_hint_name(name) ::=<<
 <class_type_name(name)>

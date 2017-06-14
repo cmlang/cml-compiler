@@ -48,7 +48,7 @@ class7(
     sections = [
         class_association_fields(concept),
         class_fields(concept.slotProperties),
-        class_secondary_constructor(concept.nonInitProperties),
+        class_secondary_constructor(concept.nonInitProperties, super_properties),
         class_primary_constructor(inherited_properties, super_properties, field_ancestors),
         class_getters(),
         class_to_string(),
@@ -128,15 +128,15 @@ super_constructor(inherited_properties) ::= <<
 <endif>
 >>
 
-class_secondary_constructor(non_init_properties) ::= <<
+class_secondary_constructor(non_init_properties, super_properties) ::= <<
 <if(!interfaces && concept.initProperties)><\\>
 <modifier("public")><\\>
-<class_constructor(non_init_properties, class_secondary_constructor_statements())><\\>
+<class_constructor(non_init_properties, class_secondary_constructor_statements(concept, super_properties))><\\>
 <endif>
 >>
 
-class_secondary_constructor_statements() ::= <<
-<this_constructor_call(concept.allProperties)>
+class_secondary_constructor_statements(concept, super_properties) ::= <<
+<this_constructor_call([concept.nonDerivedProperties, super_properties])>
 >>
 
 class_to_string() ::= <<

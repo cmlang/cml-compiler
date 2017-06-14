@@ -2,13 +2,20 @@ class Employee
 {
     private static Employment employment;
 
+    private final int number;
     private final String name;
 
-    public Employee(String name, Organization employer)
+    public Employee(int number, String name, Organization employer)
     {
+        this.number = number;
         this.name = name;
 
         employment.link(employer, this);
+    }
+
+    public int getNumber()
+    {
+        return this.number;
     }
 
     public String getName()
@@ -41,6 +48,7 @@ class Employee
     {
         return new StringBuilder(Employee.class.getSimpleName())
                    .append('(')
+                   .append("number=").append(String.format("\"%s\"", getNumber())).append(", ")
                    .append("name=").append(String.format("\"%s\"", getName())).append(", ")
                    .append("employerName=").append(String.format("\"%s\"", getEmployerName())).append(", ")
                    .append("alias=").append(String.format("\"%s\"", getAlias()))

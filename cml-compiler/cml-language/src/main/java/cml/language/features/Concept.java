@@ -223,7 +223,7 @@ public interface Concept extends NamedElement, PropertyList
     default List<Property> getPrintableProperties()
     {
         return getAllProperties().stream()
-                                 .filter(property -> property.isSlot() || property.getType().isPrimitive())
+                                 .filter(property -> (property.isSlot() && !property.getType().isSequence()) || property.getType().isPrimitive())
                                  .collect(toList());
     }
 
