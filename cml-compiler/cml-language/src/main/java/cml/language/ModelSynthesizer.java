@@ -3,6 +3,7 @@ package cml.language;
 import cml.language.expressions.*;
 import cml.language.features.*;
 import cml.language.foundation.Location;
+import cml.language.foundation.Parameter;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
@@ -13,9 +14,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 class ModelSynthesizer extends CMLBaseListener
 {
@@ -24,8 +25,10 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_NAME_PROVIDED_FOR_CONCEPT = "No name provided for concept.";
     private static final String NO_NAME_PROVIDED_FOR_ASSOCIATION = "No name provided for association.";
     private static final String NO_NAME_PROVIDED_FOR_TYPE = "No name provided for type.";
+    private static final String NO_NAME_PROVIDED_FOR_PARAMETER = "No name provided for parameter.";
     private static final String NO_NAME_PROVIDED_FOR_PROPERTY = "No name provided for property.";
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
+    private static final String NO_NAME_PROVIDED_FOR_MACRO = "No name provided for macro.";
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
 
@@ -55,6 +58,11 @@ class ModelSynthesizer extends CMLBaseListener
                .stream()
                .filter(node -> node.taskDeclaration() != null)
                .forEach(node -> module.addMember(node.taskDeclaration().task));
+
+            ctx.declarations()
+               .stream()
+               .filter(node -> node.macroDeclaration() != null)
+               .forEach(node -> module.addMember(node.macroDeclaration().macro));
         }
     }
 
@@ -178,6 +186,45 @@ class ModelSynthesizer extends CMLBaseListener
     }
 
     @Override
+    public void exitMacroDeclaration(MacroDeclarationContext ctx)
+    {
+        if (ctx.NAME() == null)
+        {
+            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_MACRO);
+        }
+
+        final String name = ctx.NAME().getText();
+        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+
+        ctx.macro = Macro.create(name, type);
+
+        if (ctx.macroParameterList() != null)
+        {
+            ctx.macroParameterList()
+               .macroParameterDeclaration()
+               .forEach(node -> ctx.macro.addMember(node.parameter));
+        }
+    }
+
+    @Override
+    public void exitMacroParameterDeclaration(MacroParameterDeclarationContext ctx)
+    {
+        if (ctx.name == null)
+        {
+            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_PARAMETER);
+        }
+
+        final String name = ctx.name.getText();
+        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final String scopeName = (ctx.scope == null) ? null : ctx.scope.getText();
+        final Parameter parameter = Parameter.create(name, type, scopeName);
+
+        parameter.setLocation(locationOf(ctx));
+
+        ctx.parameter = parameter;
+    }
+
+    @Override
     public void exitPropertyDeclaration(PropertyDeclarationContext ctx)
     {
         if (ctx.NAME() == null)
@@ -220,6 +267,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.cond != null) ctx.expr = createConditional(ctx);
         else if (ctx.queryExpression() != null) ctx.expr = ctx.queryExpression().expr;
+        else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
     }
 
@@ -351,7 +399,7 @@ class ModelSynthesizer extends CMLBaseListener
         final List<JoinVar> variables = ctx.enumeratorDeclaration()
                                           .stream()
                                           .map(e -> JoinVar.create(e.NAME().getText(), e.pathExpression().path))
-                                          .collect(Collectors.toList());
+                                          .collect(toList());
 
         ctx.join = Join.create(variables);
     }
@@ -375,7 +423,7 @@ class ModelSynthesizer extends CMLBaseListener
     {
         return ctx.NAME().stream()
                          .map(ParseTree::getText)
-                         .collect(Collectors.toList());
+                         .collect(toList());
     }
 
     @Override
@@ -388,6 +436,23 @@ class ModelSynthesizer extends CMLBaseListener
             final Type type = Type.create(getPrimitiveTypeName(ctx), null);
             ctx.literal = Literal.create(text, type);
         }
+    }
+
+    @Override
+    public void exitInvocationExpression(InvocationExpressionContext ctx)
+    {
+        if (ctx.NAME() == null)
+        {
+            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_CONCEPT);
+        }
+
+        final String name = ctx.NAME().getText();
+        final List<Expression> arguments = ctx.expression()
+                                              .stream()
+                                              .map(e -> e.expr)
+                                              .collect(toList());
+
+        ctx.invocation = Invocation.create(name, arguments);
     }
 
     private static String getText(LiteralExpressionContext ctx)

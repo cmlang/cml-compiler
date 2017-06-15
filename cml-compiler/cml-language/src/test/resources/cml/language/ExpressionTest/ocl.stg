@@ -3,6 +3,34 @@ ocl(expr) ::= <<
 <({<expr.kind>_expr})(expr)>
 >>
 
+invocation_expr(invocation) ::= <<
+<({<invocation.name>})(invocation.namedArguments)>
+>>
+
+exists_i(args) ::= <<
+(<ocl(args.seq)> -> exists(<ocl(args.where)>))
+>>
+
+select_i(args) ::= <<
+(<ocl(args.seq)> -> select(<ocl(args.where)>))
+>>
+
+reject_i(args) ::= <<
+(<ocl(args.seq)> -> reject(<ocl(args.where)>))
+>>
+
+yield_i(args) ::= <<
+((<ocl(args.seq)> -> collect(<ocl(args.expr)>)) -> flatten())
+>>
+
+distinct_i(args) ::= <<
+(<ocl(args.seq)> -> asSet())
+>>
+
+recurse_i(args) ::= <<
+((<ocl(args.seq)> -> closure(<ocl(args.expr)>)) -> flatten())
+>>
+
 query_expr(query) ::= <<
 <if(query.transform.suffix)><\\>
 <({<query.transform.suffix>_suffix})(transform_expr(query))><\\>

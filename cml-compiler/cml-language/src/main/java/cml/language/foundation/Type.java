@@ -35,6 +35,10 @@ public interface Type extends NamedElement
     String OPTIONAL = "optional";
     String SEQUENCE = "sequence";
 
+    default boolean isParameter() { return isDefined() && !isPrimitive() && !isConcept(); }
+
+    default boolean isConcept() { return getConcept().isPresent(); }
+
     default boolean isPrimitive()
     {
         return PRIMITIVE_TYPE_NAMES.contains(getName());

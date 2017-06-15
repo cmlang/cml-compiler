@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
+import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toList;
 
 public interface Scope extends ModelElement
@@ -46,7 +47,7 @@ public interface Scope extends ModelElement
             return getParentScope().get().getElementNamed(name, clazz);
         }
 
-        return Optional.empty();
+        return empty();
     }
 
     default Optional<Type> getTypeOfMemberNamed(String name)
@@ -93,7 +94,7 @@ public interface Scope extends ModelElement
             }
         }
 
-        return Optional.empty();
+        return empty();
     }
 
     default Type getSelfType()

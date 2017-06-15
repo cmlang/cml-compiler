@@ -1,0 +1,70 @@
+
+macro exists_i(seq: T*, seq/where: Boolean): Boolean;
+macro select_i(seq: T*, seq/where: Boolean): T*;
+macro reject_i(seq: T*, seq/where: Boolean): T*;
+macro yield_i(seq: T*, seq/expr: R*): R*;
+macro recurse_i(seq: T*, seq/expr: T*): T*;
+macro distinct_i(seq: T*): T*;
+
+concept Expressions
+{
+    top_items: Item*;
+    class: Class;
+    children: Class*;
+    top_orders: Order*;
+
+    path_ancestors = class.ancestors;
+
+    exists_invocation = exists_i(top_items, qty > 10);
+
+    select_invocation = select_i(top_items, name == "this");
+    select_invocation_nested = select_i(top_items | select name == "this",  qty > 10);
+    select_invocation_nested_nested = select_i(select_i(top_items | select name == "this",  qty > 10), number <= 10);
+    select_invocation_intermediate = top_orders | select exists_i(items, qty > 10) | select total > 100;
+//    select_invocation_base = select_i(top_orders, total > 100) | select exists_i(items, qty > 10);
+
+    reject_invocation = reject_i(top_items, name == "this");
+
+    yield_invocation = yield_i(top_orders, items);
+    yield_invocation_distinct = distinct_i(yield_i(top_orders, items.product));
+
+    recurse_ancestors = recurse_i(class, ancestors);
+    recurse_distinct = distinct_i(recurse_i(class, ancestors));
+    recurse_children = select_i(recurse_i(children, children), ranking > 10); // equivalent to: self | recurse children | ...
+
+//    enumeration = select_i(for order in top_orders, order.total > 100);
+//    enumeration_yield = yield_i(for order in top_orders, order.items);
+//    enumeration_nested = yield_i(for order in top_orders, goldCustomer in goldCustomers
+//                               | select order.customer == goldCustomer and order.total > 1000,
+//                               order.customer.name);
+//    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
+//                             | yield_i(order | select customer == goldCustomer and total > 1000, order.customer.name)
+}
+
+concept Order
+{
+    customer: Customer;
+    items: Item*;
+    total: Decimal;
+}
+
+concept Item
+{
+    name: String;
+    product: Product;
+}
+
+concept Customer
+{
+    name: String;
+}
+
+concept Product;
+
+concept Class
+{
+    ancestors: Class*;
+    children: Class*;
+    ranking: Integer;
+}
+

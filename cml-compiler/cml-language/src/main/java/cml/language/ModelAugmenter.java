@@ -1,5 +1,6 @@
 package cml.language;
 
+import cml.language.expressions.Invocation;
 import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
 import cml.language.features.Module;
@@ -16,8 +17,6 @@ import java.util.stream.Collectors;
 
 class ModelAugmenter extends CMLBaseListener
 {
-    private static final String UNABLE_TO_FIND_CONCEPT_IN_TYPE_DECLARATION = "Unable to find concept in type declaration: %s";
-    
     private final Module module;
 
     ModelAugmenter(Module module)
@@ -87,11 +86,20 @@ class ModelAugmenter extends CMLBaseListener
         if (!type.isPrimitive())
         {
             module.getConcept(type.getName()).ifPresent(type::setConcept);
+        }
+    }
 
-            if (!type.getConcept().isPresent())
-            {
-                throw new ModelAugmentationException(UNABLE_TO_FIND_CONCEPT_IN_TYPE_DECLARATION, type.getName());
-            }
+    @Override
+    public void enterInvocationExpression(CMLParser.InvocationExpressionContext ctx)
+    {
+        final Invocation invocation = ctx.invocation;
+
+        module.getMacro(invocation.getName()).ifPresent(invocation::setMacro);
+
+        if (invocation.getMacro().isPresent())
+        {
+            invocation.getParameterizedArguments().forEach(
+                (parameter, expression) -> invocation.getParentScopeOf(parameter).addMember(expression));
         }
     }
 }

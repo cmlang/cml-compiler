@@ -34,7 +34,6 @@ public interface PropertyList extends Scope
         };
     }
 
-
     default List<Property> getProperties()
     {
         return getMembers().stream()

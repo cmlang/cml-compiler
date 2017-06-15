@@ -19,12 +19,16 @@ expression returns [Expression expr]
       THEN then=expression
       ELSE else_=expression
     | queryExpression
+    | invocationExpression
     | '(' inner=expression ')';
 
 queryExpression returns [Expression expr]
     : pathExpression
     | joinExpression
     | queryExpression '|' transformDeclaration;
+
+invocationExpression returns [Invocation invocation]:
+    NAME '(' expression (',' expression)* ')';
 
 joinExpression returns [Join join]:
     FOR enumeratorDeclaration (',' enumeratorDeclaration)*;

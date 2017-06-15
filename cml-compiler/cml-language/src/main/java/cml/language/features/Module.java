@@ -9,9 +9,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 public interface Module extends NamedElement, Scope
 {
@@ -73,17 +73,15 @@ public interface Module extends NamedElement, Scope
 
     default List<Concept> getImportedConcepts()
     {
-        return getImports().stream()
-                        .map(Import::getModule)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .flatMap(m -> m.getConcepts().stream())
-                        .collect(toList());
+        return getImportedModules()
+                    .stream()
+                    .flatMap(m -> m.getConcepts().stream())
+                    .collect(toList());
     }
 
     default List<Concept> getAllConcepts()
     {
-        return Stream.concat(
+        return concat(
             getConcepts().stream(),
             getImportedConcepts().stream())
             .collect(toList());
@@ -110,6 +108,34 @@ public interface Module extends NamedElement, Scope
                            .filter(e -> e instanceof Task)
                            .map(e -> (Task)e)
                            .collect(toList());
+    }
+
+    default List<Macro> getMacros()
+    {
+        return getMembers().stream()
+                           .filter(e -> e instanceof Macro)
+                           .map(e -> (Macro)e)
+                           .collect(toList());
+    }
+
+    default List<Macro> getImportedMacros()
+    {
+        return getImportedModules()
+                    .stream()
+                    .flatMap(m -> m.getMacros().stream())
+                    .collect(toList());
+    }
+
+    default List<Macro> getAllMacros()
+    {
+        return concat(getMacros().stream(), getImportedMacros().stream()).collect(toList());
+    }
+
+    default Optional<Macro> getMacro(String name)
+    {
+        return getAllMacros().stream()
+                             .filter(macro -> macro.getName().equals(name))
+                             .findFirst();
     }
 
     static Module create(String name)
