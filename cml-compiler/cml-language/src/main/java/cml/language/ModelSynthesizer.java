@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 class ModelSynthesizer extends CMLBaseListener
@@ -29,6 +30,8 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_NAME_PROVIDED_FOR_PROPERTY = "No name provided for property.";
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
     private static final String NO_NAME_PROVIDED_FOR_MACRO = "No name provided for macro.";
+    private static final String NO_MACRO_PROVIDED_FOR_INVOCATION = "No macro provided for invocation.";
+    private static final String NO_MACRO_PROVIDED_FOR_PIPE = "No macro provided for pipe expression.";
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
 
@@ -268,6 +271,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.cond != null) ctx.expr = createConditional(ctx);
         else if (ctx.queryExpression() != null) ctx.expr = ctx.queryExpression().expr;
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
+        else if (ctx.pipe != null) ctx.expr = createInvocationFromPipeExpression(ctx);
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
     }
 
@@ -307,6 +311,20 @@ class ModelSynthesizer extends CMLBaseListener
         conditional.addMember(else_);
 
         return conditional;
+    }
+
+    private Expression createInvocationFromPipeExpression(ExpressionContext ctx)
+    {
+        if (ctx.macro == null)
+        {
+            throw new ModelSynthesisException(NO_MACRO_PROVIDED_FOR_PIPE);
+        }
+
+        final String name = ctx.macro.getText();
+        final Expression input = ctx.input.expr;
+        final Expression lambda = ctx.lambda.expr;
+
+        return Invocation.create(name, asList(input, lambda));
     }
 
     @Override
@@ -443,7 +461,7 @@ class ModelSynthesizer extends CMLBaseListener
     {
         if (ctx.NAME() == null)
         {
-            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_CONCEPT);
+            throw new ModelSynthesisException(NO_MACRO_PROVIDED_FOR_INVOCATION);
         }
 
         final String name = ctx.NAME().getText();

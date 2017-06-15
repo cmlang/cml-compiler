@@ -21,7 +21,7 @@ concept Expressions
     select_invocation_nested = select_i(top_items | select name == "this",  qty > 10);
     select_invocation_nested_nested = select_i(select_i(top_items | select name == "this",  qty > 10), number <= 10);
     select_invocation_intermediate = top_orders | select exists_i(items, qty > 10) | select total > 100;
-//    select_invocation_base = select_i(top_orders, total > 100) | select exists_i(items, qty > 10);
+    select_invocation_base = select_i(top_orders, total > 100) | select_i exists_i(items, qty > 10);
 
     reject_invocation = reject_i(top_items, name == "this");
 

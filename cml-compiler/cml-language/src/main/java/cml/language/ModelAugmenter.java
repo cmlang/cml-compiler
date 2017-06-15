@@ -90,10 +90,16 @@ class ModelAugmenter extends CMLBaseListener
     }
 
     @Override
-    public void enterInvocationExpression(CMLParser.InvocationExpressionContext ctx)
+    public void enterExpression(CMLParser.ExpressionContext ctx)
     {
-        final Invocation invocation = ctx.invocation;
+        if (ctx.expr instanceof Invocation)
+        {
+            augmentInvocation((Invocation) ctx.expr);
+        }
+    }
 
+    private void augmentInvocation(Invocation invocation)
+    {
         module.getMacro(invocation.getName()).ifPresent(invocation::setMacro);
 
         if (invocation.getMacro().isPresent())

@@ -20,15 +20,13 @@ expression returns [Expression expr]
       ELSE else_=expression
     | queryExpression
     | invocationExpression
+    | input=expression pipe='|' macro=NAME lambda=expression
     | '(' inner=expression ')';
 
 queryExpression returns [Expression expr]
     : pathExpression
     | joinExpression
     | queryExpression '|' transformDeclaration;
-
-invocationExpression returns [Invocation invocation]:
-    NAME '(' expression (',' expression)* ')';
 
 joinExpression returns [Join join]:
     FOR enumeratorDeclaration (',' enumeratorDeclaration)*;
@@ -52,3 +50,5 @@ transformDeclaration returns [Transform transform]:
     suffix=(UNIQUE | WHILE)?
     expr=expression?;
 
+invocationExpression returns [Invocation invocation]:
+    NAME '(' expression (',' expression)* ')';

@@ -1,8 +1,0 @@
-
-concept SomeConcept
-{
-    someProperty: MissingConcept;
-}
-
-task some_task;
-

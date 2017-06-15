@@ -93,7 +93,6 @@ public class AcceptanceTest
     public static String[] failingModules = {
         "invalid_module_name",
         "missing_ancestor",
-        "missing_concept_in_type",
         "parsing_failed"
     };
 
