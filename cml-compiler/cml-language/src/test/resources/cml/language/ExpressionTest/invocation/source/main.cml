@@ -45,7 +45,7 @@ concept Expressions
 //    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
 //                             | yield_i(order | select customer == goldCustomer and total > 1000, order.customer.name)
 
-    reduce_invocation = reduce_i(top_orders, s := 0, s + total);
+    reduce_invocation = reduce_i(top_orders, s = 0, s + total);
 }
 
 concept Order
