@@ -23,12 +23,16 @@ yield_i(args) ::= <<
 ((<ocl(args.seq)> -> collect(<ocl(args.expr)>)) -> flatten())
 >>
 
-distinct_i(args) ::= <<
-(<ocl(args.seq)> -> asSet())
->>
-
 recurse_i(args) ::= <<
 ((<ocl(args.seq)> -> closure(<ocl(args.expr)>)) -> flatten())
+>>
+
+reduce_i(args) ::= <<
+(<ocl(args.seq)> -> iterate(self; <args.init.variable> = <ocl(args.init.value)> | <ocl(args.expr)>))
+>>
+
+distinct_i(args) ::= <<
+(<ocl(args.seq)> -> asSet())
 >>
 
 query_expr(query) ::= <<

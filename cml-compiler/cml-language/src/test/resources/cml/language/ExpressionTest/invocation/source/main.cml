@@ -1,9 +1,14 @@
 
 macro exists_i(seq: T*, seq/where: Boolean): Boolean;
+
 macro select_i(seq: T*, seq/where: Boolean): T*;
 macro reject_i(seq: T*, seq/where: Boolean): T*;
+
 macro yield_i(seq: T*, seq/expr: R*): R*;
 macro recurse_i(seq: T*, seq/expr: T*): T*;
+
+macro reduce_i(init/seq: T*, init: R, seq/expr: S): S;
+
 macro distinct_i(seq: T*): T*;
 
 concept Expressions
@@ -39,6 +44,8 @@ concept Expressions
 //                               order.customer.name);
 //    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
 //                             | yield_i(order | select customer == goldCustomer and total > 1000, order.customer.name)
+
+    reduce_invocation = reduce_i(top_orders, s := 0, s + total);
 }
 
 concept Order

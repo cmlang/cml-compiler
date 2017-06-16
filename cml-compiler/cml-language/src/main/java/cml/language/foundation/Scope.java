@@ -59,7 +59,7 @@ public interface Scope extends ModelElement
 
     default Optional<Type> getTypeOfElementNamed(String name)
     {
-        final Optional<Type> memberType = getContext().getTypeOfMemberNamed(name);
+        final Optional<Type> memberType = getTypeOfMemberNamed(name);
         if (memberType.isPresent()) return memberType;
 
         final Optional<TypedElement> typedElement = getElementNamed(name, TypedElement.class);
@@ -67,9 +67,13 @@ public interface Scope extends ModelElement
         return typedElement.map(TypedElement::getType);
     }
 
-    default Scope getContext()
+    default Optional<Type> getTypeOfVariableNamed(String name)
     {
-        return this;
+        final Optional<Type> type = getTypeOfElementNamed(name);
+
+        if (type.isPresent()) return type;
+
+        return getParentScope().flatMap(scope -> scope.getTypeOfVariableNamed(name));
     }
 
     default Optional<Scope> getScopeOfType(Type type)

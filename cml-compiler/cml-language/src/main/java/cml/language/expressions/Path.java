@@ -42,13 +42,20 @@ public interface Path extends Expression
         return getNames().stream().skip(1).collect(toList());
     }
 
-    default Scope getContext()
+    @Override
+    default Optional<Type> getTypeOfVariableNamed(String name)
     {
-        final Type type = getType();
-        if (type.equals(Type.UNDEFINED)) return this;
+        final Optional<Scope> scope = getScopeOfType(getType());
+        final Optional<Type> type = scope.flatMap(s -> s.getTypeOfVariableNamed(name));
 
-        final Optional<Scope> typeScope = getScopeOfType(type);
-        return typeScope.orElse(this);
+        if (type.isPresent())
+        {
+            return type;
+        }
+        else
+        {
+            return Expression.super.getTypeOfVariableNamed(name);
+        }
     }
 
     default Type getType()
@@ -61,7 +68,7 @@ public interface Path extends Expression
         if (isSelf()) return scope.getSelfType();
 
         final String variableName = getNames().get(0);
-        final Optional<Type> variableType = scope.getTypeOfElementNamed(variableName);
+        final Optional<Type> variableType = scope.getTypeOfVariableNamed(variableName);
 
         StringBuilder intermediatePath = new StringBuilder(variableName);
 

@@ -7,6 +7,7 @@ import cml.language.foundation.Parameter;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
+import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -34,6 +35,7 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_MACRO_PROVIDED_FOR_PIPE = "No macro provided for pipe expression.";
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
+    private static final String NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT = "No variable name provided for assignment.";
 
     private final Module module;
 
@@ -269,6 +271,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.cond != null) ctx.expr = createConditional(ctx);
+        else if (ctx.assignment != null) ctx.expr = createAssignment(ctx);
         else if (ctx.queryExpression() != null) ctx.expr = ctx.queryExpression().expr;
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.pipe != null) ctx.expr = createInvocationFromPipeExpression(ctx);
@@ -311,6 +314,19 @@ class ModelSynthesizer extends CMLBaseListener
         conditional.addMember(else_);
 
         return conditional;
+    }
+
+    private Expression createAssignment(ExpressionContext ctx)
+    {
+        if (ctx.variable == null)
+        {
+            throw new ModelSynthesisException(NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT);
+        }
+
+        final String variable = ctx.variable.getText();
+        final Expression value = ctx.value.expr;
+
+        return Assignment.create(variable, value);
     }
 
     private Expression createInvocationFromPipeExpression(ExpressionContext ctx)

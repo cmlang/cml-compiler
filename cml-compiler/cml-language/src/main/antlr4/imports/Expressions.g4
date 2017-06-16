@@ -18,6 +18,7 @@ expression returns [Expression expr]
     | IF cond=expression
       THEN then=expression
       ELSE else_=expression
+    | variable=NAME assignment=':=' value=expression
     | queryExpression
     | invocationExpression
     | input=expression pipe='|' macro=NAME lambda=expression
