@@ -1,13 +1,13 @@
 
-macro exists_i(seq: T*, seq/where: Boolean): Boolean;
+macro exists_i(seq: T*, seq/expr: Boolean): Boolean;
 
-macro select_i(seq: T*, seq/where: Boolean): T*;
-macro reject_i(seq: T*, seq/where: Boolean): T*;
+macro select_i(seq: T*, seq/expr: Boolean): T*;
+macro reject_i(seq: T*, seq/expr: Boolean): T*;
 
 macro yield_i(seq: T*, seq/expr: R*): R*;
 macro recurse_i(seq: T*, seq/expr: T*): T*;
 
-macro reduce_i(init/seq: T*, init: R, seq/expr: S): S;
+macro reduce_i(from_i/seq: T*, seq/expr: S, from_i: R): S;
 
 macro distinct_i(seq: T*): T*;
 
@@ -45,7 +45,8 @@ concept Expressions
 //    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
 //                             | yield_i(order | select customer == goldCustomer and total > 1000, order.customer.name)
 
-    reduce_invocation = reduce_i(top_orders, s = 0, s + total);
+    reduce_invocation = reduce_i(top_orders, s + total, s = 0);
+    reduce_invocation_pipe = top_orders | reduce_i s + total from_i s = 0;
 }
 
 concept Order

@@ -8,15 +8,15 @@ invocation_expr(invocation) ::= <<
 >>
 
 exists_i(args) ::= <<
-(<ocl(args.seq)> -> exists(<ocl(args.where)>))
+(<ocl(args.seq)> -> exists(<ocl(args.expr)>))
 >>
 
 select_i(args) ::= <<
-(<ocl(args.seq)> -> select(<ocl(args.where)>))
+(<ocl(args.seq)> -> select(<ocl(args.expr)>))
 >>
 
 reject_i(args) ::= <<
-(<ocl(args.seq)> -> reject(<ocl(args.where)>))
+(<ocl(args.seq)> -> reject(<ocl(args.expr)>))
 >>
 
 yield_i(args) ::= <<
@@ -28,7 +28,7 @@ recurse_i(args) ::= <<
 >>
 
 reduce_i(args) ::= <<
-(<ocl(args.seq)> -> iterate(self; <args.init.variable> = <ocl(args.init.value)> | <ocl(args.expr)>))
+(<ocl(args.seq)> -> iterate(self; <args.from_i.variable> = <ocl(args.from_i.value)> | <ocl(args.expr)>))
 >>
 
 distinct_i(args) ::= <<

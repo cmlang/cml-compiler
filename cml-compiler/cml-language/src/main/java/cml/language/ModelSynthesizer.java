@@ -7,17 +7,16 @@ import cml.language.foundation.Parameter;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
-import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 class ModelSynthesizer extends CMLBaseListener
@@ -32,7 +31,7 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
     private static final String NO_NAME_PROVIDED_FOR_MACRO = "No name provided for macro.";
     private static final String NO_MACRO_PROVIDED_FOR_INVOCATION = "No macro provided for invocation.";
-    private static final String NO_MACRO_PROVIDED_FOR_PIPE = "No macro provided for pipe expression.";
+    private static final String NO_FUNCTION_NAME_PROVIDED_FOR_PIPE = "No function name provided for pipe expression.";
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
     private static final String NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT = "No variable name provided for assignment.";
@@ -331,16 +330,22 @@ class ModelSynthesizer extends CMLBaseListener
 
     private Expression createInvocationFromPipeExpression(ExpressionContext ctx)
     {
-        if (ctx.macro == null)
+        if (ctx.function == null)
         {
-            throw new ModelSynthesisException(NO_MACRO_PROVIDED_FOR_PIPE);
+            throw new ModelSynthesisException(NO_FUNCTION_NAME_PROVIDED_FOR_PIPE);
         }
 
-        final String name = ctx.macro.getText();
-        final Expression input = ctx.input.expr;
-        final Expression lambda = ctx.lambda.expr;
+        final String name = ctx.function.getText();
+        final LinkedHashMap<String, Expression> namedArguments = new LinkedHashMap<>();
 
-        return Invocation.create(name, asList(input, lambda));
+        namedArguments.put("seq", ctx.seq.expr);
+        namedArguments.put("expr", ctx.lambda.expr);
+
+        ctx.expressionParams().forEach(param -> {
+            namedArguments.put(param.NAME().getText(), param.expression().expr);
+        });
+
+        return Invocation.create(name, namedArguments);
     }
 
     @Override

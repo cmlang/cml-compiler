@@ -3,40 +3,18 @@ package cml.language.expressions;
 import cml.language.features.Macro;
 import cml.language.foundation.*;
 import org.jetbrains.annotations.Nullable;
-import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
 import static org.jooq.lambda.Seq.seq;
 
 public interface Invocation extends Expression, NamedElement
 {
     List<Expression> getArguments();
-
-    Optional<Macro> getMacro();
-    void setMacro(@Nullable Macro macro);
-
-    default Map<String, Expression> getNamedArguments()
-    {
-        if (getMacro().isPresent())
-        {
-            return seq(getMacro().get().getParameters())
-                .zip(getArguments())
-                .collect(toMap(t -> t.v1().getName(), Tuple2::v2));
-        }
-        else
-        {
-            return emptyMap();
-        }
-    }
+    Map<String, Expression> getNamedArguments();
 
     default Map<Parameter, Expression> getParameterizedArguments()
     {
@@ -49,6 +27,39 @@ public interface Invocation extends Expression, NamedElement
         else
         {
             return emptyMap();
+        }
+    }
+
+    Optional<Macro> getMacro();
+    void setMacro(@Nullable Macro macro);
+
+    default Type getType()
+    {
+        if (getMacro().isPresent())
+        {
+            final Macro macro = getMacro().get();
+
+            assert macro.getParameters().size() == getArguments().size()
+                : "Number of arguments in invocation should match the number of parameters in macro.";
+
+            if (macro.getType().isParameter())
+            {
+                final int paramIndex = macro.getParamIndexOfMatchingType();
+                final Type paramType = getArguments().get(paramIndex).getType();
+                final Type type = Type.create(paramType.getName(), macro.getType().getCardinality().orElse(null));
+
+                paramType.getConcept().ifPresent(type::setConcept);
+
+                return type;
+            }
+            else
+            {
+                return macro.getType();
+            }
+        }
+        else
+        {
+            return Type.createUndefined("Unable to find macro of invocation: " + getName());
         }
     }
 
@@ -78,6 +89,11 @@ public interface Invocation extends Expression, NamedElement
     {
         return new InvocationImpl(name, arguments);
     }
+
+    static Invocation create(String name, LinkedHashMap<String, Expression> namedArguments)
+    {
+        return new ParameterizedInvocation(name, namedArguments);
+    }
 }
 
 class InvocationImpl implements Invocation
@@ -106,6 +122,21 @@ class InvocationImpl implements Invocation
     }
 
     @Override
+    public Map<String, Expression> getNamedArguments()
+    {
+        if (getMacro().isPresent())
+        {
+            return seq(getMacro().get().getParameters())
+                .zip(getArguments())
+                .collect(toMap(t -> t.v1().getName(), Tuple2::v2));
+        }
+        else
+        {
+            return emptyMap();
+        }
+    }
+
+    @Override
     public Optional<Macro> getMacro()
     {
         return Optional.ofNullable(macro);
@@ -124,34 +155,89 @@ class InvocationImpl implements Invocation
     }
 
     @Override
-    public Type getType()
+    public Optional<Location> getLocation()
     {
-        if (getMacro().isPresent())
-        {
-            final Macro macro = getMacro().get();
+        return modelElement.getLocation();
+    }
 
-            assert macro.getParameters().size() == getArguments().size()
-                : "Number of arguments in invocation should match the number of parameters in macro.";
+    @Override
+    public void setLocation(@Nullable Location location)
+    {
+        modelElement.setLocation(location);
+    }
 
-            if (macro.getType().isParameter())
-            {
-                final int paramIndex = macro.getParamIndexOfMatchingType();
-                final Type paramType = getArguments().get(paramIndex).getType();
-                final Type type = Type.create(paramType.getName(), macro.getType().getCardinality().orElse(null));
+    @Override
+    public Optional<Scope> getParentScope()
+    {
+        return modelElement.getParentScope();
+    }
 
-                paramType.getConcept().ifPresent(type::setConcept);
-                
-                return type;
-            }
-            else
-            {
-                return macro.getType();
-            }
-        }
-        else
-        {
-            return Type.createUndefined("Unable to find macro of invocation: " + getName());
-        }
+    @Override
+    public String getName()
+    {
+        return namedElement.getName();
+    }
+
+    @Override
+    public List<ModelElement> getMembers()
+    {
+        return scope.getMembers();
+    }
+
+    @Override
+    public void addMember(ModelElement member)
+    {
+        scope.addMember(member);
+    }
+}
+
+class ParameterizedInvocation implements Invocation
+{
+    private final ModelElement modelElement;
+    private final NamedElement namedElement;
+    private final Scope scope;
+
+    private final LinkedHashMap<String, Expression> namedArguments;
+
+    private @Nullable Macro macro;
+
+    ParameterizedInvocation(String name, LinkedHashMap<String, Expression> namedArguments)
+    {
+        modelElement = ModelElement.create(this);
+        namedElement = NamedElement.create(modelElement, name);
+        scope = Scope.create(this, modelElement);
+
+        this.namedArguments = new LinkedHashMap<>(namedArguments);
+    }
+
+    @Override
+    public List<Expression> getArguments()
+    {
+        return new ArrayList<>(namedArguments.values());
+    }
+
+    @Override
+    public Map<String, Expression> getNamedArguments()
+    {
+        return unmodifiableMap(namedArguments);
+    }
+
+    @Override
+    public Optional<Macro> getMacro()
+    {
+        return Optional.ofNullable(macro);
+    }
+
+    @Override
+    public void setMacro(@Nullable Macro macro)
+    {
+        this.macro = macro;
+    }
+
+    @Override
+    public String getKind()
+    {
+        return "invocation";
     }
 
     @Override

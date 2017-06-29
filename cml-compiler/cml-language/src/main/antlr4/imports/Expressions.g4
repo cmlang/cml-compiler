@@ -21,8 +21,11 @@ expression returns [Expression expr]
     | variable=NAME assignment='=' value=expression
     | queryExpression
     | invocationExpression
-    | input=expression pipe='|' macro=NAME lambda=expression
+    | seq=expression pipe='|' function=NAME lambda=expression expressionParams*
     | '(' inner=expression ')';
+
+expressionParams:
+    NAME expression;
 
 queryExpression returns [Expression expr]
     : pathExpression
