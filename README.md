@@ -135,4 +135,4 @@ and should always be backward-compatible.
 
 ## Contributing / Development
 
-For information on helping us to develop CML, go to [CONTRIBUTING.md](https://github.com/cmlang/cml-compiler/blob/master/CONTRIBUTING.md)
+For information on helping us to develop CML, go to: [CONTRIBUTING.md](https://github.com/cmlang/cml-compiler/blob/master/CONTRIBUTING.md)
