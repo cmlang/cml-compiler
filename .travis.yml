@@ -12,8 +12,7 @@ jdk:
   - oraclejdk8
 
 env:
-  - PYTHON_HOME="$(dirname $(dirname $(which python3)))"
-  - M2_HOME="/usr/local/maven-3.3.9"
+  - PYTHON_HOME="$(dirname $(dirname $(which python3)))" M2_HOME="/usr/local/maven-3.3.9"
 
 before_install:
   - python3 -m pip install -U mypy
