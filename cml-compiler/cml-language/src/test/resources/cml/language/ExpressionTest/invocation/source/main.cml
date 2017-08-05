@@ -1,7 +1,7 @@
 
 macro exists_i(seq: T*, seq/expr: Boolean): Boolean;
 
-macro select_i(seq: T*, seq/expr: Boolean): T*;
+macro select(seq: T*, seq/expr: Boolean): T*;
 macro reject_i(seq: T*, seq/expr: Boolean): T*;
 
 macro yield_i(seq: T*, seq/expr: R*): R*;
@@ -22,11 +22,11 @@ concept Expressions
 
     exists_invocation = exists_i(top_items, qty > 10);
 
-    select_invocation = select_i(top_items, name == "this");
-    select_invocation_nested = select_i(top_items | select name == "this",  qty > 10);
-    select_invocation_nested_nested = select_i(select_i(top_items | select name == "this",  qty > 10), number <= 10);
+    select_invocation = select(top_items, name == "this");
+    select_invocation_nested = select(top_items | select name == "this",  qty > 10);
+    select_invocation_nested_nested = select(select(top_items | select name == "this",  qty > 10), number <= 10);
     select_invocation_intermediate = top_orders | select exists_i(items, qty > 10) | select total > 100;
-    select_invocation_base = select_i(top_orders, total > 100) | select_i exists_i(items, qty > 10);
+    select_invocation_base = select(top_orders, total > 100) | select exists_i(items, qty > 10);
 
     reject_invocation = reject_i(top_items, name == "this");
 
@@ -35,9 +35,9 @@ concept Expressions
 
     recurse_ancestors = recurse_i(class, ancestors);
     recurse_distinct = distinct_i(recurse_i(class, ancestors));
-    recurse_children = select_i(recurse_i(children, children), ranking > 10); // equivalent to: self | recurse children | ...
+    recurse_children = select(recurse_i(children, children), ranking > 10); // equivalent to: self | recurse children | ...
 
-//    enumeration = select_i(for order in top_orders, order.total > 100);
+//    enumeration = select(for order in top_orders, order.total > 100);
 //    enumeration_yield = yield_i(for order in top_orders, order.items);
 //    enumeration_nested = yield_i(for order in top_orders, goldCustomer in goldCustomers
 //                               | select order.customer == goldCustomer and order.total > 1000,

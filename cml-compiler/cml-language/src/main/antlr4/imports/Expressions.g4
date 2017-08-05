@@ -15,17 +15,15 @@ expression returns [Expression expr]
     | expression operator=OR expression
     | expression operator=XOR expression
     | expression operator=IMPLIES expression
+    | expression operator='|' expression
     | IF cond=expression
       THEN then=expression
       ELSE else_=expression
     | variable=NAME assignment='=' value=expression
     | queryExpression
     | invocationExpression
-    | seq=expression pipe='|' function=NAME lambda=expression expressionParams*
+    | namedExpressionSequence
     | '(' inner=expression ')';
-
-expressionParams:
-    NAME expression;
 
 queryExpression returns [Expression expr]
     : pathExpression
@@ -41,7 +39,7 @@ enumeratorDeclaration:
 transformDeclaration returns [Transform transform]:
     (FROM var=NAME '=' init=expression)?
     operation=
-        ( SELECT   | REJECT
+        ( REJECT
         | YIELD    | RECURSE
         | INCLUDES | EXCLUDES
         | EVERY    | EXISTS
@@ -56,3 +54,6 @@ transformDeclaration returns [Transform transform]:
 
 invocationExpression returns [Invocation invocation]:
     NAME '(' expression (',' expression)* ')';
+
+namedExpressionSequence returns [NamedExprSeq namedExprSeq]:
+    (NAME expression)+;

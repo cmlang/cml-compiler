@@ -273,7 +273,6 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.assignment != null) ctx.expr = createAssignment(ctx);
         else if (ctx.queryExpression() != null) ctx.expr = ctx.queryExpression().expr;
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
-        else if (ctx.pipe != null) ctx.expr = createInvocationFromPipeExpression(ctx);
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
     }
 
@@ -420,7 +419,7 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final TransformDeclarationContext transformCtx = ctx.transformDeclaration();
 
-        return transformCtx != null && (transformCtx.SELECT() != null || transformCtx.REJECT() != null);
+        return transformCtx != null && (transformCtx.REJECT() != null);
     }
 
     private Transform createTransformWithVariables(List<String> variables, Transform originalTransform)

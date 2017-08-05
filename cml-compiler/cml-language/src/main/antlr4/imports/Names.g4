@@ -8,7 +8,6 @@ lexer grammar Names;
 FOR: 'for';
 IN: 'in';
 
-SELECT: 'select';
 REJECT: 'reject';
 
 YIELD: 'yield';

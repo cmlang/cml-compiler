@@ -11,7 +11,7 @@ exists_i(args) ::= <<
 (<ocl(args.seq)> -> exists(<ocl(args.expr)>))
 >>
 
-select_i(args) ::= <<
+select(args) ::= <<
 (<ocl(args.seq)> -> select(<ocl(args.expr)>))
 >>
 
@@ -49,10 +49,6 @@ transform_expr(query) ::= <<
 
 join_expr(join) ::= <<
 join(<join.paths:ocl(); separator=", ">)
->>
-
-select_expr(base_expr, transform) ::= <<
-<collection_call("select", base_expr, transform)>
 >>
 
 reject_expr(base_expr, transform) ::= <<
