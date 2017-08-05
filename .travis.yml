@@ -9,16 +9,16 @@ cache:
   - $HOME/.m2
 
 jdk:
-  - oraclejdk8
+- oraclejdk8
 
 env:
   global:
-    - PYTHON_HOME="/opt/python/3.5.3"
-    - M2_HOME="/usr/local/maven-3.3.9"
+  - PYTHON_HOME="/opt/python/3.5.3"
+  - M2_HOME="/usr/local/maven-3.3.9"
 
 before_install:
-  - python3 -m pip install -U mypy
+- python3 -m pip install -U mypy
 
 script:
-  - cd cml-acceptance
-  - mvn clean install
+- cd cml-acceptance
+- mvn clean install
