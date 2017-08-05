@@ -110,7 +110,7 @@ $ brew upgrade cml-compiler@MAJOR
 You may get a new minor version,
 which will have new features,
 but it is supposed to always be backward-compatible.
-(Please report an issue, otherwise.)
+(Please report an issue otherwise.)
 You may also get a new patch under the major version.
 
 ### Specific Minor Version
@@ -131,7 +131,7 @@ You only get patches for the specific minor version.
 Patches only have fixes.
 They should never have new functionality,
 and should always be backward-compatible.
-(Please report an issue, otherwise.)
+(Please report an issue otherwise.)
 
 ## Contributing / Development
 
