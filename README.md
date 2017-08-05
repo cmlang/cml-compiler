@@ -132,3 +132,7 @@ Patches only have fixes.
 They should never have new functionality,
 and should always be backward-compatible.
 (Please report an issue, otherwise.)
+
+## Contributing / Development
+
+For information on helping us to develop CML, go to [CONTRIBUTING.md](https://github.com/cmlang/cml-compiler/blob/master/CONTRIBUTING.md)
