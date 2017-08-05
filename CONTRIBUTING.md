@@ -14,7 +14,7 @@ You can install Maven with Homebrew / Linuxbrew:
 brew install maven
 ```
 
-The following variables must be available on your environment:
+The following variables must be available in your environment:
 
 ```
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_20.jdk/Contents/Home"
@@ -37,7 +37,7 @@ You can install MyPy with Pip:
 pip3 install mypy
 ```
 
-The following variable must be set on your environment:
+The following variable must be set in your environment:
 
 ```
 export PYTHON_HOME="/usr/local/Cellar/python3/3.6.2"
