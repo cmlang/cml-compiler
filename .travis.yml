@@ -16,6 +16,8 @@ env:
 
 before_install:
   - python3 -m pip install -U mypy
+  - echo $M2_HOME
+  - which mvn
 
 script:
   - cd cml-acceptance
