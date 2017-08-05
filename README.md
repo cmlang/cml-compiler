@@ -4,7 +4,9 @@ This repository contains the source code for the CML compiler.
 
 ## Branches
 
-Master ![Build Status](https://travis-ci.org/cmlang/cml-compiler.svg?branch=master)
+Master
+
+![Build Status](https://travis-ci.org/cmlang/cml-compiler.svg?branch=master)
 
 ## Pre-requisites
 
