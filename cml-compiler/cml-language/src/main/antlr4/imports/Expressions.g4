@@ -1,11 +1,12 @@
 grammar Expressions;
 
-import Literals, Paths;
+import Literals;
 
 expression returns [Expression expr]
     : literalExpression
     | pathExpression
     | comprehensionExpression
+    | invocationExpression
     | operator=('+' | '-' | NOT) expression
     | <assoc=right> expression operator='^' expression
     | expression operator=('*' | '/' | '%') expression
@@ -20,20 +21,22 @@ expression returns [Expression expr]
       THEN then=expression
       ELSE else_=expression
     | variable=NAME assignment='=' value=expression
-    | invocationExpression
     | keyword=NAME ':' arg=expression
     | expression operator=',' expression
     | expression operator='|' expression
     | '(' inner=expression ')';
-
-invocationExpression returns [Invocation invocation]:
-    NAME '(' expression (',' expression)* ')';
 
 comprehensionExpression returns [Comprehension comprehension]:
     FOR enumeratorDeclaration (',' enumeratorDeclaration)* '|' expression;
 
 enumeratorDeclaration returns [Enumerator enumerator]:
     var=NAME IN pathExpression;
+
+invocationExpression returns [Invocation invocation]:
+    NAME '(' expression (',' expression)* ')';
+
+pathExpression returns [Path path]:
+    NAME ('.' NAME)*;
 
 //transformDeclaration returns [Transform transform]:
 //    (FROM var=NAME '=' init=expression)?
