@@ -121,6 +121,16 @@ public interface Type extends NamedElement
         return REQUIRED;
     }
 
+    default Type getElementType()
+    {
+        final Type elementType = Type.create(getName());
+
+        if (getConcept().isPresent()) elementType.setConcept(getConcept().get());
+
+        return elementType;
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
     default boolean isTypeAssignableFrom(Type other)
     {
         if (this.getName().equals(other.getName()))
