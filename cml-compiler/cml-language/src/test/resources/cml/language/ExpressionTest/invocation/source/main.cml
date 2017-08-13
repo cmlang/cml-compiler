@@ -1,15 +1,15 @@
 
-macro exists_i(seq: T*, seq/expr: Boolean): Boolean;
+macro exists(seq: T*, seq/expr: Boolean): Boolean;
 
 macro select(seq: T*, seq/expr: Boolean): T*;
-macro reject_i(seq: T*, seq/expr: Boolean): T*;
+macro reject(seq: T*, seq/expr: Boolean): T*;
 
-macro yield_i(seq: T*, seq/expr: R*): R*;
-macro recurse_i(seq: T*, seq/expr: T*): T*;
+macro yield(seq: T*, seq/expr: R*): R*;
+macro recurse(seq: T*, seq/expr: T*): T*;
 
-macro reduce_i(from_i/seq: T*, seq/expr: S, from_i: R): S;
+macro reduce(from/seq: T*, seq/expr: S, from_i: R): S;
 
-macro distinct_i(seq: T*): T*;
+macro distinct(seq: T*): T*;
 
 concept Expressions
 {
@@ -20,32 +20,21 @@ concept Expressions
 
     path_ancestors = class.ancestors;
 
-    exists_invocation = exists_i(top_items, qty > 10);
+//    exists_invocation = exists(top_items, name == "this");
 
-    select_invocation = select(top_items, name == "this");
-    select_invocation_nested = select(top_items | select name == "this",  qty > 10);
-    select_invocation_nested_nested = select(select(top_items | select name == "this",  qty > 10), number <= 10);
-    select_invocation_intermediate = top_orders | select exists_i(items, qty > 10) | select total > 100;
-    select_invocation_base = select(top_orders, total > 100) | select exists_i(items, qty > 10);
+//    select_invocation = select(top_items, name == "this");
 
-    reject_invocation = reject_i(top_items, name == "this");
+//    reject_invocation = reject(top_items, name == "this");
 
-    yield_invocation = yield_i(top_orders, items);
-    yield_invocation_distinct = distinct_i(yield_i(top_orders, items.product));
+//    yield_invocation = yield(top_orders, items);
+//    yield_invocation_distinct = distinct(yield(top_orders, items.product));
 
-    recurse_ancestors = recurse_i(class, ancestors);
-    recurse_distinct = distinct_i(recurse_i(class, ancestors));
-    recurse_children = select(recurse_i(children, children), ranking > 10); // equivalent to: self | recurse children | ...
+//    recurse_ancestors = recurse(class, ancestors);
+//    recurse_distinct = distinct(recurse(class, ancestors));
+//    recurse_children = select(recurse(children, children), ranking > 10); // equivalent to: self | recurse children | ...
 
-//    enumeration = select(for order in top_orders, order.total > 100);
-//    enumeration_yield = yield_i(for order in top_orders, order.items);
-//    enumeration_nested = yield_i(for order in top_orders, goldCustomer in goldCustomers
-//                               | select order.customer == goldCustomer and order.total > 1000,
-//                               order.customer.name);
-//    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
-//                             | yield_i(order | select customer == goldCustomer and total > 1000, order.customer.name)
+//    reduce_invocation = reduce(top_orders, s + total, s = 0);
 
-    reduce_invocation = reduce_i(top_orders, s + total, s = 0);
 }
 
 concept Order

@@ -69,12 +69,12 @@ path_ocl(path) ::= <<
 <path.names; separator=".">
 >>
 
-unary_expr(unary) ::= <<
-<expr_operator(unary)> <ocl(unary.expr)>
+unary_ocl(unary) ::= <<
+(<expr_operator(unary)> <ocl(unary.expr)>)
 >>
 
 infix_ocl(infix) ::= <<
-<ocl(infix.left)> <expr_operator(infix)> <ocl(infix.right)>
+(<ocl(infix.left)> <expr_operator(infix)> <ocl(infix.right)>)
 >>
 
 expr_operator(expr) ::= <<
@@ -105,7 +105,7 @@ operator_xor() ::= "xor"
 operator_implies() ::= "implies"
 operator_not() ::= "not"
 
-conditional_expr(conditional) ::= <<
+conditional_ocl(conditional) ::= <<
 (if <ocl(conditional.cond)> then <ocl(conditional.then)> else <ocl(conditional.else_)> endif)
 >>
 

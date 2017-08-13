@@ -20,6 +20,11 @@ concept Expressions
     select_query_nested = top_items | select: name == "this" | select: qty > 10;
     select_query_nested_nested = top_items | select: name == "this" | select: qty > 10 | select: number <= 10;
 
+//    select_invocation_nested = select(top_items | select: name == "this",  qty > 10);
+//    select_invocation_nested_nested = select(select(top_items | select: name == "this",  qty > 10), number <= 10);
+//    select_invocation_intermediate = top_orders | select: exists(items, qty > 10) | select: total > 100;
+//    select_invocation_base = select(top_orders, total > 100) | select: exists(items, qty > 10);
+
     reject_query = top_items | reject: name == "this";
 
     yield_query = top_orders | yield: items;
@@ -30,10 +35,10 @@ concept Expressions
     recurse_children = children | recurse: children | select: ranking > 10; // equivalent to: self | recurse children | ...
     //recurse_self = self | recurse: children | select: ranking > 10;
 
+//    reduce_query = top_orders | reduce: s + total, from: s = 0;
+
 //    enumeration = for order in top_orders | select: order.total > 100;
-
 //    enumeration_yield = for order in top_orders | yield: order.items;
-
 //    enumeration_select = for order in top_orders | select: order.total > 1000 | yield: order.items;
 
 //    product = for order in top_orders, gold_customer in gold_customers
@@ -45,7 +50,14 @@ concept Expressions
 //    ->collect(order, gold_customer | order)
 //    ->flatten()
 
-//    reduce_query = top_orders | reduce: s + total, from: s = 0;
+//    enumeration = select(for order in top_orders | yield: order, order.total > 100);
+//    enumeration_yield = yield(for order in top_orders | yield: order, order.items);
+//    enumeration_nested = yield(for order in top_orders, goldCustomer in goldCustomers
+//                               | select order.customer == goldCustomer and order.total > 1000,
+//                               order.customer.name);
+//    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
+//                             | yield(order | select customer == goldCustomer and total > 1000, order.customer.name)
+
 }
 
 concept Order
