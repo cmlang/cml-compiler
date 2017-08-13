@@ -1,31 +1,51 @@
 
+macro select(seq: T*, seq/expr: Boolean): T*;
+macro reject(seq: T*, seq/expr: Boolean): T*;
+macro yield(seq: T*, seq/expr: R*): R*;
+macro distinct(seq: T*): T*;
+macro recurse(seq: T*, seq/expr: T*): T*;
+macro reduce(from/seq: T*, seq/expr: S, from: R): S;
+
 concept Expressions
 {
     top_items: Item*;
     class: Class;
     children: Class*;
     top_orders: Order*;
+    gold_customers: Customer*;
 
     path_ancestors = class.ancestors;
 
-    select_transform = top_items | select name == "this";
-    select_transform_nested = top_items | select name == "this" | select qty > 10;
-    select_transform_nested_nested = top_items | select name == "this" | select qty > 10 | select number <= 10;
+    select_query = top_items | select: name == "this";
+    select_query_nested = top_items | select: name == "this" | select: qty > 10;
+    select_query_nested_nested = top_items | select: name == "this" | select: qty > 10 | select: number <= 10;
 
-    reject_transform = top_items | reject name == "this";
+    reject_query = top_items | reject: name == "this";
 
-    yield_transform = top_orders | yield items;
-    yield_transform_unique = top_orders | yield unique items.product;
+    yield_query = top_orders | yield: items;
+    yield_query_unique = top_orders | yield: items.product | distinct;
 
-    recurse_ancestors = class | recurse ancestors;
-    recurse_unique = class | recurse unique ancestors;
-    recurse_children = children | recurse children | select ranking > 10; // equivalent to: self | recurse children | ...
+    recurse_ancestors = class | recurse: ancestors;
+    recurse_unique = class | recurse: ancestors | distinct;
+    recurse_children = children | recurse: children | select: ranking > 10; // equivalent to: self | recurse children | ...
+    //recurse_self = self | recurse: children | select: ranking > 10;
 
-    enumeration = for order in top_orders | select order.total > 100;
-    enumeration_yield = for order in top_orders | yield order.items;
-    enumeration_nested = for order in top_orders, goldCustomer in goldCustomers
-                             | select order.customer == goldCustomer and order.total > 1000
-                             | yield order.customer.name;
+//    enumeration = for order in top_orders | select: order.total > 100;
+
+//    enumeration_yield = for order in top_orders | yield: order.items;
+
+//    enumeration_select = for order in top_orders | select: order.total > 1000 | yield: order.items;
+
+//    product = for order in top_orders, gold_customer in gold_customers
+//               | select: order.customer == gold_customer
+//               | yield: order;
+
+//product(top_orders, gold_customers)
+//    ->select(order, gold_customer | order.customer == gold_customer)
+//    ->collect(order, gold_customer | order)
+//    ->flatten()
+
+//    reduce_query = top_orders | reduce: s + total, from: s = 0;
 }
 
 concept Order

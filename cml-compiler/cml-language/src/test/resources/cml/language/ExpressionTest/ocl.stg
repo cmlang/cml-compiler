@@ -1,94 +1,80 @@
 
 ocl(expr) ::= <<
-<({<expr.kind>_expr})(expr)>
+<({<expr.kind>_ocl})(expr)>
 >>
 
-invocation_expr(invocation) ::= <<
+invocation_ocl(invocation) ::= <<
 <({<invocation.name>})(invocation.namedArguments)>
 >>
 
-exists_i(args) ::= <<
-(<ocl(args.seq)> -> exists(<ocl(args.expr)>))
+exists(args) ::= <<
+(<ocl(args.seq)> -> exists(<args_expr(args)>))
 >>
 
 select(args) ::= <<
-(<ocl(args.seq)> -> select(<ocl(args.expr)>))
+<collection_invocation(args, "select", "")>
 >>
 
-reject_i(args) ::= <<
-(<ocl(args.seq)> -> reject(<ocl(args.expr)>))
+reject(args) ::= <<
+<collection_invocation(args, "reject", "")>
 >>
 
-yield_i(args) ::= <<
-((<ocl(args.seq)> -> collect(<ocl(args.expr)>)) -> flatten())
+yield(args) ::= <<
+<collection_invocation(args, "collect", "->flatten()")>
 >>
 
-recurse_i(args) ::= <<
-((<ocl(args.seq)> -> closure(<ocl(args.expr)>)) -> flatten())
+recurse(args) ::= <<
+<collection_invocation(args, "closure", "->flatten()")>
 >>
 
-reduce_i(args) ::= <<
-(<ocl(args.seq)> -> iterate(self; <args.from_i.variable> = <ocl(args.from_i.value)> | <ocl(args.expr)>))
+reduce(args) ::= <<
+(<ocl(args.seq)> -> iterate(self; <args.from.variable> = <ocl(args.from.value)> | <ocl(args.expr)>))
 >>
 
-distinct_i(args) ::= <<
-(<ocl(args.seq)> -> asSet())
+distinct(args) ::= <<
+<ocl(args.seq)>->asSet()
 >>
 
-query_expr(query) ::= <<
-<if(query.transform.suffix)><\\>
-<({<query.transform.suffix>_suffix})(transform_expr(query))><\\>
-<else><\\>
-<transform_expr(query)><\\>
-<endif>
->>
-
-transform_expr(query) ::= <<
-<({<query.transform.operation>_expr})(ocl(query.base), query.transform)>
->>
-
-join_expr(join) ::= <<
-join(<join.paths:ocl(); separator=", ">)
->>
-
-reject_expr(base_expr, transform) ::= <<
-<collection_call("reject", base_expr, transform)>
->>
-
-yield_expr(base_expr, transform) ::= <<
-<flatten_call(collection_call("collect", base_expr, transform))>
->>
-
-recurse_expr(base_expr, transform) ::= <<
-<flatten_call(collection_call("closure", base_expr, transform))>
->>
-
-flatten_call(expr) ::= <<
+flatten(expr) ::= <<
 (<expr> -> flatten())
 >>
 
-collection_call(name, base_expr, transform) ::= <<
-(<base_expr> -> <name>(<\\>
-<if(transform.variables)><\\>
-<transform.variables; separator="; "><\ >|<\ ><\\>
-<endif><\\>
-<ocl(transform.expr)>))
+collection_invocation(args, operation, appendix) ::= <<
+<ocl(args.seq)>-><operation>(<closure(args.seq.variables, args.expr)>)<appendix>
 >>
 
-unique_suffix(body) ::= <<
-(<body> -> asSet())
+closure(vars, expr) ::= <<
+<join_var_decl(vars)><ocl(expr)>
 >>
 
-path_expr(path) ::= <<
+join_ocl(join) ::= <<
+<join_var_path(first(join.variables))>
+>>
+
+join_var_decl(join_vars) ::= <<
+<if(join_vars)><\\>
+<join_var_name(last(join_vars))> | <\\>
+<endif>
+>>
+
+join_var_name(join_var) ::= <<
+<join_var.name>
+>>
+
+join_var_path(join_var) ::= <<
+<ocl(join_var.path)>
+>>
+
+path_ocl(path) ::= <<
 <path.names; separator=".">
 >>
 
 unary_expr(unary) ::= <<
-(<expr_operator(unary)> <ocl(unary.expr)>)
+<expr_operator(unary)> <ocl(unary.expr)>
 >>
 
-infix_expr(infix) ::= <<
-(<ocl(infix.left)> <expr_operator(infix)> <ocl(infix.right)>)
+infix_ocl(infix) ::= <<
+<ocl(infix.left)> <expr_operator(infix)> <ocl(infix.right)>
 >>
 
 expr_operator(expr) ::= <<
@@ -123,30 +109,31 @@ conditional_expr(conditional) ::= <<
 (if <ocl(conditional.cond)> then <ocl(conditional.then)> else <ocl(conditional.else_)> endif)
 >>
 
-literal_expr(literal) ::= <<
-<({literal_expr_<literal.type.name>})(literal.text)>
+literal_ocl(literal) ::= <<
+<({literal_<literal.type.name>})(literal.text)>
 >>
 
-literal_expr_Boolean(text) ::= <<
+literal_Boolean(text) ::= <<
 <text>
 >>
 
-literal_expr_String(text) ::= <<
+literal_String(text) ::= <<
 "<text>"
 >>
 
-literal_expr_Integer(text) ::= <<
+literal_Integer(text) ::= <<
 <text>
 >>
 
-literal_expr_Decimal(text) ::= <<
+literal_Decimal(text) ::= <<
 <text>
 >>
 
-literal_expr_Float(text) ::= <<
+literal_Float(text) ::= <<
 <text>f
 >>
 
-literal_expr_Double(text) ::= <<
+literal_Double(text) ::= <<
 <text>d
 >>
+
