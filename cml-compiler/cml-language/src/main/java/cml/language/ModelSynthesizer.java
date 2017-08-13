@@ -7,6 +7,7 @@ import cml.language.foundation.Parameter;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
+import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -276,7 +277,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.comprehensionExpression() != null) ctx.expr = ctx.comprehensionExpression().comprehension;
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfixOrInvocation(ctx);
-        else if (ctx.assignment != null) ctx.expr = createAssignment(ctx);
+        else if (ctx.assignmentExpression() != null) ctx.expr = ctx.assignmentExpression().assignment;
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
     }
 
@@ -309,19 +310,6 @@ class ModelSynthesizer extends CMLBaseListener
         infix.addMember(right);
 
         return infix;
-    }
-
-    private Expression createAssignment(ExpressionContext ctx)
-    {
-        if (ctx.variable == null)
-        {
-            throw new ModelSynthesisException(NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT);
-        }
-
-        final String variable = ctx.variable.getText();
-        final Expression value = ctx.value.expr;
-
-        return Assignment.create(variable, value);
     }
 
     private Expression createInvocationFromPipeInfix(ExpressionContext ctx)
@@ -421,6 +409,20 @@ class ModelSynthesizer extends CMLBaseListener
         final Path path = ctx.pathExpression().path;
 
         ctx.enumerator = new Enumerator(variable, path);
+    }
+
+    @Override
+    public void exitAssignmentExpression(final AssignmentExpressionContext ctx)
+    {
+        if (ctx.variable == null)
+        {
+            throw new ModelSynthesisException(NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT);
+        }
+
+        final String variable = ctx.variable.getText();
+        final Expression value = ctx.value.expr;
+
+        ctx.assignment = Assignment.create(variable, value);
     }
 
     @Override

@@ -35,7 +35,7 @@ concept Expressions
     recurse_children = children | recurse: children | select: ranking > 10; // equivalent to: self | recurse children | ...
     //recurse_self = self | recurse: children | select: ranking > 10;
 
-//    reduce_query = top_orders | reduce: s + total, from: s = 0;
+    reduce_query = top_orders | reduce: s + total, from: s = 0;
 
 //    enumeration = for order in top_orders | select: order.total > 100;
 //    enumeration_yield = for order in top_orders | yield: order.items;

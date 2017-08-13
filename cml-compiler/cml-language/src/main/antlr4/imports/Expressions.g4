@@ -6,6 +6,7 @@ expression returns [Expression expr]
     : literalExpression
     | pathExpression
     | conditionalExpression
+    | assignmentExpression
     | comprehensionExpression
     | invocationExpression
     | operator=('+' | '-' | NOT) expression
@@ -18,7 +19,6 @@ expression returns [Expression expr]
     | expression operator=OR expression
     | expression operator=XOR expression
     | expression operator=IMPLIES expression
-    | variable=NAME assignment='=' value=expression
     | keyword=NAME ':' arg=expression
     | expression operator=',' expression
     | expression operator='|' expression
@@ -37,6 +37,9 @@ conditionalExpression returns [Conditional conditional]:
     IF cond=expression
     THEN then=expression
     ELSE else_=expression;
+
+assignmentExpression returns [Assignment assignment]:
+    variable=NAME '=' value=expression;
 
 pathExpression returns [Path path]:
     NAME ('.' NAME)*;
