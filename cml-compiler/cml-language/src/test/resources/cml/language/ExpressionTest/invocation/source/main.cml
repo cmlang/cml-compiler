@@ -46,7 +46,6 @@ concept Expressions
 //                             | yield_i(order | select customer == goldCustomer and total > 1000, order.customer.name)
 
     reduce_invocation = reduce_i(top_orders, s + total, s = 0);
-    reduce_invocation_pipe = top_orders | reduce_i s + total from_i s = 0;
 }
 
 concept Order
