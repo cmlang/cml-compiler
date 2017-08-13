@@ -11,6 +11,7 @@ import cml.language.grammar.CMLParser.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
@@ -21,6 +22,8 @@ import static java.util.stream.Collectors.toList;
 
 class ModelSynthesizer extends CMLBaseListener
 {
+    private static final String PIPE_OPERATOR = "|";
+    private static final String COMMA_OPERATOR = ",";
     private static final String QUOTE = "\"";
     private static final String INVALID_MODULE_NAME = "Module declaration name (%s) should match the module's directory name: %s";
     private static final String NO_NAME_PROVIDED_FOR_CONCEPT = "No name provided for concept.";
@@ -31,10 +34,11 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
     private static final String NO_NAME_PROVIDED_FOR_MACRO = "No name provided for macro.";
     private static final String NO_MACRO_PROVIDED_FOR_INVOCATION = "No macro provided for invocation.";
-    private static final String NO_FUNCTION_NAME_PROVIDED_FOR_PIPE = "No function name provided for pipe expression.";
+    private static final String NO_NAMED_EXPRESSIONS_FOR_PIPE = "No named expressions provided for pipe expression:";
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
     private static final String NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT = "No variable name provided for assignment.";
+    private static final String ONLY_SINGLE_NAMED_PATH_ALLOWED_FOR_PIPE = "Only single-named paths are allowed after pipes";
 
     private final Module module;
 
@@ -267,11 +271,11 @@ class ModelSynthesizer extends CMLBaseListener
     {
         if (ctx.literalExpression() != null) ctx.expr = ctx.literalExpression().literal;
         else if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
+        else if (ctx.comprehensionExpression() != null) ctx.expr = ctx.comprehensionExpression().comprehension;
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
-        else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
+        else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfixOrInvocation(ctx);
         else if (ctx.cond != null) ctx.expr = createConditional(ctx);
         else if (ctx.assignment != null) ctx.expr = createAssignment(ctx);
-        else if (ctx.queryExpression() != null) ctx.expr = ctx.queryExpression().expr;
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
     }
@@ -285,6 +289,13 @@ class ModelSynthesizer extends CMLBaseListener
         unary.addMember(expr);
         
         return unary;
+    }
+
+    private Expression createInfixOrInvocation(ExpressionContext ctx)
+    {
+        if (ctx.operator.getText().equals(COMMA_OPERATOR)) return null;
+        else if (ctx.operator.getText().equals(PIPE_OPERATOR)) return createInvocationFromPipeInfix(ctx);
+        else return createInfix(ctx);
     }
 
     private Infix createInfix(ExpressionContext ctx)
@@ -327,128 +338,103 @@ class ModelSynthesizer extends CMLBaseListener
         return Assignment.create(variable, value);
     }
 
-    private Expression createInvocationFromPipeExpression(ExpressionContext ctx)
+    private Expression createInvocationFromPipeInfix(ExpressionContext ctx)
     {
-        if (ctx.function == null)
+        if (ctx.expression(1).pathExpression() == null) return createInvocationFromKeywords(ctx);
+        else return createInvocationFromPath(ctx);
+    }
+
+    @NotNull
+    private Expression createInvocationFromKeywords(ExpressionContext ctx)
+    {
+        final ExpressionContext command = getFirstKeyword(ctx.expression(1));
+
+        if (command == null)
         {
-            throw new ModelSynthesisException(NO_FUNCTION_NAME_PROVIDED_FOR_PIPE);
+            throw new ModelSynthesisException(NO_NAMED_EXPRESSIONS_FOR_PIPE + ctx.getText());
         }
 
-        final String name = ctx.function.getText();
+        final String name = command.keyword.getText();
+        final Expression expr = command.arg.expr;
+        final Expression seq = ctx.expression(0).expr;
+
+        if (expr == null)
+        {
+            throw new ModelSynthesisException(NO_NAMED_EXPRESSIONS_FOR_PIPE + ctx.getText());
+        }
+
+        if (seq == null)
+        {
+            throw new ModelSynthesisException(NO_NAMED_EXPRESSIONS_FOR_PIPE + ctx.getText());
+        }
+
         final LinkedHashMap<String, Expression> namedArguments = new LinkedHashMap<>();
+        namedArguments.put("seq", seq);
+        namedArguments.put("expr", expr);
 
-        namedArguments.put("seq", ctx.seq.expr);
-        namedArguments.put("expr", ctx.lambda.expr);
+        final ExpressionContext keywordList = getKeywordList(ctx.expression(1));
 
-        ctx.expressionParams().forEach(param -> {
-            namedArguments.put(param.NAME().getText(), param.expression().expr);
-        });
+        for (int i = 1; i < keywordList.expression().size(); i++) {
+            namedArguments.put(keywordList.expression(i).keyword.getText(), keywordList.expression(i).arg.expr);
+        }
 
         return Invocation.create(name, namedArguments);
     }
 
-    @Override
-    public void exitQueryExpression(QueryExpressionContext ctx)
+    private Expression createInvocationFromPath(ExpressionContext ctx)
     {
-        if (ctx.pathExpression() != null)
-        {
-            ctx.expr = ctx.pathExpression().path;
+        final Path path = ctx.expression(1).pathExpression().path;
+
+        if (path.getNames().size() > 1) {
+            throw new ModelSynthesisException(ONLY_SINGLE_NAMED_PATH_ALLOWED_FOR_PIPE);
         }
-        else if (ctx.queryExpression() != null)
-        {
-            final QueryExpressionContext baseCtx = ctx.queryExpression();
 
-            if (baseCtx.joinExpression() != null)
-            {
-                final Join join = baseCtx.joinExpression().join;
-                final Transform transform = createTransformWithVariables(
-                    join.getVarNames(),
-                    ctx.transformDeclaration().transform);
+        final String name = path.getNames().get(0);
+        final Expression seq = ctx.expression(0).expr;
 
-                if (join.isComplete())
-                {
-                    ctx.expr = createQuery(join, transform);
-                }
-                else
-                {
-                    ctx.expr = createQuery(join.getFirstPath(), transform);
-                }
+        final LinkedHashMap<String, Expression> namedArguments = new LinkedHashMap<>();
+        namedArguments.put("seq", seq);
 
-                for (JoinVar joinVar: join.getVariables())
-                {
-                    ctx.expr.addMember(joinVar);
-                    ctx.expr.addMember(joinVar.getPath());
-                }
-            }
-            else if (isSelectionTransform(baseCtx))
-            {
-                final Query baseQuery = (Query) baseCtx.expr;
-                final Transform transform = createTransformWithVariables(
-                    baseQuery.getTransform().getVariables(),
-                    ctx.transformDeclaration().transform);
-
-                ctx.expr = createQuery(baseCtx.expr, transform);
-            }
-            else
-            {
-                ctx.expr = createQuery(baseCtx.expr, ctx.transformDeclaration().transform);
-            }
-        }
+        return Invocation.create(name, namedArguments);
     }
 
-    private Query createQuery(Expression baseExpr, Transform transform)
+    private ExpressionContext getFirstKeyword(ExpressionContext ctx)
     {
-        final Query query = Query.create(baseExpr, transform);
-
-        query.addMember(baseExpr);
-
-        if (transform.getExpr().isPresent())
-        {
-            baseExpr.addMember(transform.getExpr().get());
+        while (ctx.keyword == null && (ctx.inner != null || ctx.operator != null)) {
+            ctx = ctx.expression(0);
         }
 
-        if (transform.getInit().isPresent())
-        {
-            baseExpr.addMember(transform.getInit().get());
+        return ctx;
+    }
+
+    private ExpressionContext getKeywordList(ExpressionContext ctx)
+    {
+        while (ctx.keyword == null && ctx.inner != null) {
+            ctx = ctx.expression(0);
         }
 
-        return query;
-    }
-
-    private boolean isSelectionTransform(QueryExpressionContext ctx)
-    {
-        final TransformDeclarationContext transformCtx = ctx.transformDeclaration();
-
-        return transformCtx != null && (transformCtx.REJECT() != null);
-    }
-
-    private Transform createTransformWithVariables(List<String> variables, Transform originalTransform)
-    {
-        return Transform.create(
-            originalTransform.getOperation(),
-            variables,
-            originalTransform.getExpr().orElseGet(null)
-        );
+        return ctx;
     }
 
     @Override
-    public void exitJoinExpression(JoinExpressionContext ctx)
+    public void exitComprehensionExpression(ComprehensionExpressionContext ctx)
     {
-        final List<JoinVar> variables = ctx.enumeratorDeclaration()
-                                          .stream()
-                                          .map(e -> JoinVar.create(e.NAME().getText(), e.pathExpression().path))
-                                          .collect(toList());
+        final List<Enumerator> enumerators = ctx.enumeratorDeclaration()
+                                                .stream()
+                                                .map(e -> e.enumerator)
+                                                .collect(toList());
+        final Expression expression = ctx.expression().expr;
 
-        ctx.join = Join.create(variables);
+        ctx.comprehension = new Comprehension(enumerators, expression);
     }
 
     @Override
-    public void exitTransformDeclaration(TransformDeclarationContext ctx)
+    public void exitEnumeratorDeclaration(EnumeratorDeclarationContext ctx)
     {
-        final String operation = ctx.operation.getText();
-        final String suffix = ctx.suffix == null ? null : ctx.suffix.getText();
+        final String variable = ctx.var.getText();
+        final Path path = ctx.pathExpression().path;
 
-        ctx.transform = Transform.create(operation, suffix, ctx.expr.expr);
+        ctx.enumerator = new Enumerator(variable, path);
     }
 
     @Override
