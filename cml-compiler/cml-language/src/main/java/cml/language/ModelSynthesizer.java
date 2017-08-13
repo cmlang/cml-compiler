@@ -271,12 +271,12 @@ class ModelSynthesizer extends CMLBaseListener
     {
         if (ctx.literalExpression() != null) ctx.expr = ctx.literalExpression().literal;
         else if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
+        else if (ctx.conditionalExpression() != null) ctx.expr = ctx.conditionalExpression().conditional;
+        else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.comprehensionExpression() != null) ctx.expr = ctx.comprehensionExpression().comprehension;
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfixOrInvocation(ctx);
-        else if (ctx.cond != null) ctx.expr = createConditional(ctx);
         else if (ctx.assignment != null) ctx.expr = createAssignment(ctx);
-        else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
     }
 
@@ -309,20 +309,6 @@ class ModelSynthesizer extends CMLBaseListener
         infix.addMember(right);
 
         return infix;
-    }
-
-    private Conditional createConditional(ExpressionContext ctx)
-    {
-        final Expression cond = ctx.cond.expr;
-        final Expression then = ctx.then.expr;
-        final Expression else_ = ctx.else_.expr;
-        final Conditional conditional = Conditional.create(cond, then, else_);
-
-        conditional.addMember(cond);
-        conditional.addMember(then);
-        conditional.addMember(else_);
-
-        return conditional;
     }
 
     private Expression createAssignment(ExpressionContext ctx)
@@ -435,6 +421,21 @@ class ModelSynthesizer extends CMLBaseListener
         final Path path = ctx.pathExpression().path;
 
         ctx.enumerator = new Enumerator(variable, path);
+    }
+
+    @Override
+    public void exitConditionalExpression(final ConditionalExpressionContext ctx)
+    {
+        final Expression cond = ctx.cond.expr;
+        final Expression then = ctx.then.expr;
+        final Expression else_ = ctx.else_.expr;
+        final Conditional conditional = Conditional.create(cond, then, else_);
+
+        conditional.addMember(cond);
+        conditional.addMember(then);
+        conditional.addMember(else_);
+
+        ctx.conditional = conditional;
     }
 
     @Override
