@@ -8,7 +8,7 @@ public abstract class ModelElementBase implements ModelElement
 {
     protected final ModelElement modelElement;
 
-    ModelElementBase()
+    protected ModelElementBase()
     {
         modelElement = ModelElement.create(this);
     }
