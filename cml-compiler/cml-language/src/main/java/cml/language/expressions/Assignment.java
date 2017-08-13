@@ -36,7 +36,7 @@ class AssignmentImpl implements Assignment
     private final String variable;
     private final Expression value;
 
-    public AssignmentImpl(String variable, Expression value)
+    AssignmentImpl(String variable, Expression value)
     {
         modelElement = ModelElement.create(this);
         scope = Scope.create(this, modelElement);
