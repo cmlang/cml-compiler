@@ -2,60 +2,41 @@ lexer grammar Names;
 
 // import: none
 
-// All keywords must be declared before NAME.
+// All reserved words must be declared before NAME.
 // Otherwise, they are recognized as a NAME instead.
 
-FOR: 'for';
-IN: 'in';
+FOR:
+    'for';
 
-REJECT: 'reject';
+IN:
+    'in';
 
-YIELD: 'yield';
-RECURSE: 'recurse';
+IF:
+    'if';
 
-INCLUDES: 'includes';
-EXCLUDES: 'excludes';
+THEN:
+    'then';
 
-EVERY: 'every';
-EXISTS: 'exists';
+ELSE:
+    'else';
 
-FROM: 'from';
-REDUCE: 'reduce';
+BOOLEAN:
+    'true' | 'false';
 
-TAKE: 'take';
-DROP: 'drop';
+AND:
+    'and';
 
-FIRST: 'first';
-LAST: 'last';
+OR:
+    'or';
 
-COUNT: 'count';
-SUM: 'sum';
-AVERAGE: 'average';
-MAX: 'max';
-MIN: 'min';
-REVERSE: 'reverse';
+XOR:
+    'xor';
 
-UNIQUE: 'unique';
-WHILE: 'while';
+IMPLIES:
+    'implies';
 
-
-IF: 'if';
-
-THEN: 'then';
-
-ELSE: 'else';
-
-BOOLEAN: 'true' | 'false';
-
-AND: 'and';
-
-OR: 'or';
-
-XOR: 'xor';
-
-IMPLIES: 'implies';
-
-NOT: 'not';
+NOT:
+    'not';
 
 ABSTRACT:
     'abstract';
