@@ -114,6 +114,11 @@ public interface Path extends Expression
         }
     }
 
+    default Type getElementType()
+    {
+        return getType().getElementType();
+    }
+
     default boolean isSelf()
     {
         return getNames().size() == 1 && getNames().get(0).equals("self");
