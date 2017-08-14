@@ -7,8 +7,8 @@ expression returns [Expression expr]
     | pathExpression
     | conditionalExpression
     | assignmentExpression
-    | comprehensionExpression
     | invocationExpression
+    | comprehensionExpression
     | operator=('+' | '-' | NOT) expression
     | <assoc=right> expression operator='^' expression
     | expression operator=('*' | '/' | '%') expression
@@ -19,19 +19,19 @@ expression returns [Expression expr]
     | expression operator=OR expression
     | expression operator=XOR expression
     | expression operator=IMPLIES expression
-    | keyword=NAME ':' arg=expression
-    | expression operator=',' expression
-    | expression operator='|' expression
     | '(' inner=expression ')';
 
+invocationExpression returns [Invocation invocation]:
+    NAME '(' expression (',' expression)* ')';
+
 comprehensionExpression returns [Comprehension comprehension]:
-    FOR enumeratorDeclaration (',' enumeratorDeclaration)* '|' expression;
+    (pathExpression | FOR enumeratorDeclaration (',' enumeratorDeclaration)*) queryStatement+;
 
 enumeratorDeclaration returns [Enumerator enumerator]:
     var=NAME IN pathExpression;
 
-invocationExpression returns [Invocation invocation]:
-    NAME '(' expression (',' expression)* ')';
+queryStatement returns [Query query]:
+    '|' keyword=NAME ':' expression;
 
 conditionalExpression returns [Conditional conditional]:
     IF cond=expression

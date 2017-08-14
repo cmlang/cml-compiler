@@ -276,7 +276,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.comprehensionExpression() != null) ctx.expr = ctx.comprehensionExpression().comprehension;
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
-        else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfixOrInvocation(ctx);
+        else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.assignmentExpression() != null) ctx.expr = ctx.assignmentExpression().assignment;
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
     }
@@ -292,13 +292,6 @@ class ModelSynthesizer extends CMLBaseListener
         return unary;
     }
 
-    private Expression createInfixOrInvocation(ExpressionContext ctx)
-    {
-        if (ctx.operator.getText().equals(COMMA_OPERATOR)) return null;
-        else if (ctx.operator.getText().equals(PIPE_OPERATOR)) return createInvocationFromPipeInfix(ctx);
-        else return createInfix(ctx);
-    }
-
     private Infix createInfix(ExpressionContext ctx)
     {
         final String operator = ctx.operator.getText();
@@ -310,105 +303,6 @@ class ModelSynthesizer extends CMLBaseListener
         infix.addMember(right);
 
         return infix;
-    }
-
-    private Expression createInvocationFromPipeInfix(ExpressionContext ctx)
-    {
-        if (ctx.expression(1).pathExpression() == null) return createInvocationFromKeywords(ctx);
-        else return createInvocationFromPath(ctx);
-    }
-
-    @NotNull
-    private Expression createInvocationFromKeywords(ExpressionContext ctx)
-    {
-        final ExpressionContext command = getFirstKeyword(ctx.expression(1));
-
-        if (command == null)
-        {
-            throw new ModelSynthesisException(NO_NAMED_EXPRESSIONS_FOR_PIPE + ctx.getText());
-        }
-
-        final String name = command.keyword.getText();
-        final Expression expr = command.arg.expr;
-        final Expression seq = ctx.expression(0).expr;
-
-        if (expr == null)
-        {
-            throw new ModelSynthesisException(NO_NAMED_EXPRESSIONS_FOR_PIPE + ctx.getText());
-        }
-
-        if (seq == null)
-        {
-            throw new ModelSynthesisException(NO_NAMED_EXPRESSIONS_FOR_PIPE + ctx.getText());
-        }
-
-        final LinkedHashMap<String, Expression> namedArguments = new LinkedHashMap<>();
-        namedArguments.put("seq", seq);
-        namedArguments.put("expr", expr);
-
-        final ExpressionContext keywordList = getKeywordList(ctx.expression(1));
-
-        for (int i = 1; i < keywordList.expression().size(); i++) {
-            namedArguments.put(keywordList.expression(i).keyword.getText(), keywordList.expression(i).arg.expr);
-        }
-
-        return Invocation.create(name, namedArguments);
-    }
-
-    private Expression createInvocationFromPath(ExpressionContext ctx)
-    {
-        final Path path = ctx.expression(1).pathExpression().path;
-
-        if (path.getNames().size() > 1) {
-            throw new ModelSynthesisException(ONLY_SINGLE_NAMED_PATH_ALLOWED_FOR_PIPE);
-        }
-
-        final String name = path.getNames().get(0);
-        final Expression seq = ctx.expression(0).expr;
-
-        final LinkedHashMap<String, Expression> namedArguments = new LinkedHashMap<>();
-        namedArguments.put("seq", seq);
-
-        return Invocation.create(name, namedArguments);
-    }
-
-    private ExpressionContext getFirstKeyword(ExpressionContext ctx)
-    {
-        while (ctx.keyword == null && (ctx.inner != null || ctx.operator != null)) {
-            ctx = ctx.expression(0);
-        }
-
-        return ctx;
-    }
-
-    private ExpressionContext getKeywordList(ExpressionContext ctx)
-    {
-        while (ctx.keyword == null && ctx.inner != null) {
-            ctx = ctx.expression(0);
-        }
-
-        return ctx;
-    }
-
-    @Override
-    public void exitComprehensionExpression(ComprehensionExpressionContext ctx)
-    {
-        final List<Enumerator> enumerators = ctx.enumeratorDeclaration()
-                                                .stream()
-                                                .map(e -> e.enumerator)
-                                                .collect(toList());
-        final Expression expression = ctx.expression().expr;
-
-        ctx.comprehension = new Comprehension(enumerators, expression);
-    }
-
-    @Override
-    public void exitEnumeratorDeclaration(EnumeratorDeclarationContext ctx)
-    {
-        final String variable = ctx.var.getText();
-        final Path path = ctx.pathExpression().path;
-
-        ctx.enumerator = new Enumerator(variable, path);
     }
 
     @Override
@@ -480,6 +374,27 @@ class ModelSynthesizer extends CMLBaseListener
                                               .collect(toList());
 
         ctx.invocation = Invocation.create(name, arguments);
+    }
+
+    @Override
+    public void exitComprehensionExpression(ComprehensionExpressionContext ctx)
+    {
+        final List<Enumerator> enumerators = ctx.enumeratorDeclaration()
+                                                .stream()
+                                                .map(e -> e.enumerator)
+                                                .collect(toList());
+        final Expression expression = null;
+
+        ctx.comprehension = new Comprehension(enumerators, expression);
+    }
+
+    @Override
+    public void exitEnumeratorDeclaration(EnumeratorDeclarationContext ctx)
+    {
+        final String variable = ctx.var.getText();
+        final Path path = ctx.pathExpression().path;
+
+        ctx.enumerator = new Enumerator(variable, path);
     }
 
     private static String getText(LiteralExpressionContext ctx)
