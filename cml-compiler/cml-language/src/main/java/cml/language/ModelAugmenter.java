@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.jooq.lambda.Seq.seq;
+
 class ModelAugmenter extends CMLBaseListener
 {
     private final Module module;
@@ -35,7 +37,7 @@ class ModelAugmenter extends CMLBaseListener
                                                   .collect(Collectors.toList());
 
             final List<Concept> foundAncestors = ancestorNames.stream()
-                                                         .map(name -> module.getConcept(name))
+                                                         .map(module::getConcept)
                                                          .filter(Optional::isPresent)
                                                          .map(Optional::get)
                                                          .collect(Collectors.toList());
@@ -107,5 +109,9 @@ class ModelAugmenter extends CMLBaseListener
             invocation.getParameterizedArguments().forEach(
                 (parameter, expression) -> invocation.getParentScopeOf(parameter).addMember(expression));
         }
+
+        seq(invocation.getArguments()).filter(a -> a instanceof Invocation)
+                                      .map(a -> (Invocation)a)
+                                      .forEach(this::augmentInvocation);
     }
 }

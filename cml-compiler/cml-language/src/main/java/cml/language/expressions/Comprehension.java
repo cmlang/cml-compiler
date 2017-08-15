@@ -1,28 +1,60 @@
 package cml.language.expressions;
 
 import cml.language.foundation.Type;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.seq;
 
 public class Comprehension extends ExpressionBase
 {
+    private final @Nullable Path path;
     private final List<Enumerator> enumerators;
-    private final Expression expression;
+    private final List<Query> queries;
 
-    public Comprehension(List<Enumerator> enumerators, Expression expression)
+    public Comprehension(
+        @SuppressWarnings("NullableProblems") final Path path,
+        final Stream<Query> queries)
     {
-        this.enumerators = enumerators;
-        this.expression = expression;
+        this.path = path;
+        this.enumerators = emptyList();
+        this.queries = queries.collect(toList());
+    }
+
+    public Comprehension(
+        final Stream<Enumerator> enumerators,
+        final Stream<Query> queries)
+    {
+        this.path = null;
+        this.enumerators = enumerators.collect(toList());
+        this.queries = queries.collect(toList());
+    }
+
+    public Optional<Path> getPath()
+    {
+        return Optional.ofNullable(path);
     }
 
     public List<Enumerator> getEnumerators()
     {
-        return enumerators;
+        return unmodifiableList(enumerators);
     }
 
-    public Expression getExpression()
+    public List<Query> getQueries()
     {
-        return expression;
+        return unmodifiableList(queries);
+    }
+
+    public List<Expression> getExpressions()
+    {
+        return seq(enumerators).map(Enumerator::getPath)
+                               .collect(toList());
     }
 
     @Override
@@ -34,6 +66,6 @@ public class Comprehension extends ExpressionBase
     @Override
     public Type getType()
     {
-        return expression.getType();
+        return null;
     }
 }

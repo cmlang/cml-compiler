@@ -16,8 +16,8 @@ concept Expressions
 
     path_ancestors = class.ancestors;
 
-//    select_query = top_items | select: name == "this";
-//    select_query_nested = top_items | select: name == "this" | select: qty > 10;
+    select_query = top_items | select: name == "this";
+    select_query_nested = top_items | select: name == "this" | select: qty > 10;
 //    select_query_nested_nested = top_items | select: name == "this" | select: qty > 10 | select: number <= 10;
 
 //    select_invocation_nested = select(top_items | select: name == "this",  qty > 10);

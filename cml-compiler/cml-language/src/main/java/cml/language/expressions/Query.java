@@ -1,112 +1,43 @@
 package cml.language.expressions;
 
-import cml.language.foundation.Location;
-import cml.language.foundation.ModelElement;
-import cml.language.foundation.Scope;
-import cml.language.foundation.Type;
-import org.jetbrains.annotations.Nullable;
+import cml.language.foundation.ModelElementBase;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-public interface Query extends Expression
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.seq;
+
+public class Query extends ModelElementBase
 {
-    Expression getBase();
-    Transform getTransform();
+    private final List<Keyword> keywords;
 
-    default Type getType()
+    public Query(final Stream<Keyword> keywords)
     {
-        if (getTransform().isSelection())
-        {
-            return getBase().getType();
-        }
-        else if (getTransform().isProjection() && getTransform().getExpr().isPresent())
-        {
-            final Type exprType = getTransform().getExpr().get().getType();
-
-            if (exprType.equals(Type.UNDEFINED))
-            {
-                return exprType;
-            }
-            else
-            {
-                return Type.create(exprType.getName(), "*");
-            }
-        }
-        else
-        {
-            return Type.UNDEFINED;
-        }
+        this.keywords = keywords.collect(toList());
     }
 
-    static Query create(Expression expr, Transform transform)
+    public List<Keyword> getKeywords()
     {
-        return new QueryImpl(expr, transform);
+        return unmodifiableList(keywords);
+    }
+
+    public String getInvocationName()
+    {
+        final Optional<Keyword> first = seq(keywords).findFirst();
+        assert first.isPresent();
+
+        return first.get().getName();
+    }
+
+    public Expression getExpression()
+    {
+        final Optional<Keyword> first = seq(keywords).findFirst();
+        assert first.isPresent();
+
+        return first.get().getExpression();
     }
 }
 
-class QueryImpl implements Query
-{
-    private final ModelElement modelElement;
-    private final Scope scope;
-
-    private final Expression base;
-    private final Transform transform;
-
-    QueryImpl(Expression base, Transform transform)
-    {
-        modelElement = ModelElement.create(this);
-        scope = Scope.create(this, modelElement);
-
-        this.base = base;
-        this.transform = transform;
-    }
-
-    @Override
-    public Optional<Location> getLocation()
-    {
-        return modelElement.getLocation();
-    }
-
-    @Override
-    public void setLocation(@Nullable Location location)
-    {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Expression getBase()
-    {
-        return base;
-    }
-
-    @Override
-    public Transform getTransform()
-    {
-        return transform;
-    }
-
-    @Override
-    public String getKind()
-    {
-        return "query";
-    }
-
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
-    }
-
-    @Override
-    public List<ModelElement> getMembers()
-    {
-        return scope.getMembers();
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
-    }
-}

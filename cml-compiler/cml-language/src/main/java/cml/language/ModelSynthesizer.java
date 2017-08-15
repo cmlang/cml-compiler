@@ -7,24 +7,22 @@ import cml.language.foundation.Parameter;
 import cml.language.foundation.Property;
 import cml.language.foundation.Type;
 import cml.language.grammar.CMLBaseListener;
-import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
+import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.seq;
 
 class ModelSynthesizer extends CMLBaseListener
 {
-    private static final String PIPE_OPERATOR = "|";
-    private static final String COMMA_OPERATOR = ",";
     private static final String QUOTE = "\"";
     private static final String INVALID_MODULE_NAME = "Module declaration name (%s) should match the module's directory name: %s";
     private static final String NO_NAME_PROVIDED_FOR_CONCEPT = "No name provided for concept.";
@@ -35,11 +33,9 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
     private static final String NO_NAME_PROVIDED_FOR_MACRO = "No name provided for macro.";
     private static final String NO_MACRO_PROVIDED_FOR_INVOCATION = "No macro provided for invocation.";
-    private static final String NO_NAMED_EXPRESSIONS_FOR_PIPE = "No named expressions provided for pipe expression:";
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
     private static final String NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT = "No variable name provided for assignment.";
-    private static final String ONLY_SINGLE_NAMED_PATH_ALLOWED_FOR_PIPE = "Only single-named paths are allowed after pipes";
 
     private final Module module;
 
@@ -274,7 +270,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
         else if (ctx.conditionalExpression() != null) ctx.expr = ctx.conditionalExpression().conditional;
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
-        else if (ctx.comprehensionExpression() != null) ctx.expr = ctx.comprehensionExpression().comprehension;
+        else if (ctx.comprehensionExpression() != null) ctx.expr = invocationOf(ctx.comprehensionExpression().comprehension);
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.assignmentExpression() != null) ctx.expr = ctx.assignmentExpression().assignment;
@@ -379,13 +375,21 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitComprehensionExpression(ComprehensionExpressionContext ctx)
     {
-        final List<Enumerator> enumerators = ctx.enumeratorDeclaration()
+        final Path path = ctx.pathExpression() == null ? null : ctx.pathExpression().path;
+        final Stream<Enumerator> enumerators = ctx.enumeratorDeclaration()
                                                 .stream()
-                                                .map(e -> e.enumerator)
-                                                .collect(toList());
-        final Expression expression = null;
+                                                .map(e -> e.enumerator);
+        final Stream<Query> queries = ctx.queryStatement()
+                                       .stream().map(q -> q.query);
 
-        ctx.comprehension = new Comprehension(enumerators, expression);
+        if (path == null)
+        {
+            ctx.comprehension = new Comprehension(seq(enumerators), seq(queries));
+        }
+        else
+        {
+            ctx.comprehension = new Comprehension(path, seq(queries));
+        }
     }
 
     @Override
@@ -395,6 +399,25 @@ class ModelSynthesizer extends CMLBaseListener
         final Path path = ctx.pathExpression().path;
 
         ctx.enumerator = new Enumerator(variable, path);
+    }
+
+    @Override
+    public void exitQueryStatement(final QueryStatementContext ctx)
+    {
+        final Stream<Keyword> keywords = ctx.keywordExpression()
+                                            .stream()
+                                            .map(k -> k.keyword);
+
+        ctx.query = new Query(keywords);
+    }
+
+    @Override
+    public void exitKeywordExpression(final KeywordExpressionContext ctx)
+    {
+        final String name = ctx.NAME().getText();
+        final Expression expression = ctx.expression().expr;
+
+        ctx.keyword = new Keyword(name, expression);
     }
 
     private static String getText(LiteralExpressionContext ctx)
