@@ -24,7 +24,6 @@ concept Expressions
     select_invocation_nested = select(top_items | select: name == "this",  qty > 10);
     select_invocation_nested_nested = select(select(top_items | select: name == "this",  qty > 10), number <= 10);
     select_invocation_intermediate = top_orders | select: exists(items, qty > 10) | select: total > 100;
-//    select_invocation_base = select(top_orders, total > 100) | select: exists(items, qty > 10);
 
 //    reject_query = top_items | reject: name == "this";
 
