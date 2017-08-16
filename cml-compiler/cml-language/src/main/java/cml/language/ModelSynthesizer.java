@@ -404,11 +404,20 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitQueryStatement(final QueryStatementContext ctx)
     {
-        final Stream<Keyword> keywords = ctx.keywordExpression()
-                                            .stream()
-                                            .map(k -> k.keyword);
+        if (ctx.NAME() == null)
+        {
+            final Stream<Keyword> keywords = ctx.keywordExpression()
+                                                .stream()
+                                                .map(k -> k.keyword);
 
-        ctx.query = new Query(keywords);
+            ctx.query = new Query(keywords);
+        }
+        else
+        {
+            final String name = ctx.NAME().getText();
+
+            ctx.query = new Query(name);
+        }
     }
 
     @Override

@@ -28,7 +28,7 @@ concept Expressions
     reject_query = top_items | reject: name == "this";
 
     yield_query = top_orders | yield: items;
-//    yield_query_unique = top_orders | yield: items.product | distinct;
+    yield_query_unique = top_orders | yield: items.product | distinct;
 
 //    recurse_ancestors = class | recurse: ancestors;
 //    recurse_unique = class | recurse: ancestors | distinct;

@@ -31,7 +31,7 @@ enumeratorDeclaration returns [Enumerator enumerator]:
     var=NAME IN pathExpression;
 
 queryStatement returns [Query query]:
-    '|' keywordExpression+;
+    '|' (NAME | keywordExpression+);
 
 keywordExpression returns [Keyword keyword]:
     NAME ':' expression;

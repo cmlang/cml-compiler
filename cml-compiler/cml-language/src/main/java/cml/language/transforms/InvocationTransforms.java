@@ -46,7 +46,9 @@ public class InvocationTransforms
             arguments.put("seq", invocationOf(comprehension, rest));
         }
 
-        arguments.put("expr", first.get().getExpression());
+        final Optional<Expression> expression = first.get().getExpression();
+
+        expression.ifPresent(expr -> arguments.put("expr", expr));
 
         return Invocation.create(name, arguments);
     }

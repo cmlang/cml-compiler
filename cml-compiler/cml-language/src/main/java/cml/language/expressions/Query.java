@@ -1,21 +1,32 @@
 package cml.language.expressions;
 
 import cml.language.foundation.ModelElementBase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.seq;
 
 public class Query extends ModelElementBase
 {
+    private final @Nullable String name;
     private final List<Keyword> keywords;
+
+    public Query(final @NotNull String name)
+    {
+        this.name = name;
+        this.keywords = emptyList();
+    }
 
     public Query(final Stream<Keyword> keywords)
     {
+        this.name = null;
         this.keywords = keywords.collect(toList());
     }
 
@@ -27,17 +38,17 @@ public class Query extends ModelElementBase
     public String getInvocationName()
     {
         final Optional<Keyword> first = seq(keywords).findFirst();
-        assert first.isPresent();
 
-        return first.get().getName();
+        assert name != null || first.isPresent();
+
+        return first.map(Keyword::getName).orElse(name);
     }
 
-    public Expression getExpression()
+    public Optional<Expression> getExpression()
     {
         final Optional<Keyword> first = seq(keywords).findFirst();
-        assert first.isPresent();
 
-        return first.get().getExpression();
+        return first.map(Keyword::getExpression);
     }
 }
 
