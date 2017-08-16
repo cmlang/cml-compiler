@@ -50,5 +50,10 @@ public class Query extends ModelElementBase
 
         return first.map(Keyword::getExpression);
     }
+
+    public List<Keyword> getExtraKeywords()
+    {
+        return seq(keywords).skip(1).toList();
+    }
 }
 

@@ -25,7 +25,8 @@ public class InvocationTransforms
         final Optional<Query> first = seq(queries).findFirst();
         assert first.isPresent();
 
-        final String name = first.get().getInvocationName();
+        final Query query = first.get();
+        final String name = query.getInvocationName();
         final LinkedHashMap<String, Expression> arguments = new LinkedHashMap<>();
 
         final List<Query> rest = seq(queries).skip(1).toList();
@@ -46,9 +47,9 @@ public class InvocationTransforms
             arguments.put("seq", invocationOf(comprehension, rest));
         }
 
-        final Optional<Expression> expression = first.get().getExpression();
+        query.getExpression().ifPresent(expr -> arguments.put("expr", expr));
 
-        expression.ifPresent(expr -> arguments.put("expr", expr));
+        query.getExtraKeywords().forEach(k -> arguments.put(k.getName(), k.getExpression()));
 
         return Invocation.create(name, arguments);
     }
