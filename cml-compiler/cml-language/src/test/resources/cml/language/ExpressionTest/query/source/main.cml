@@ -25,9 +25,9 @@ concept Expressions
     select_invocation_nested_nested = select(select(top_items | select: name == "this",  qty > 10), number <= 10);
     select_invocation_intermediate = top_orders | select: exists(items, qty > 10) | select: total > 100;
 
-//    reject_query = top_items | reject: name == "this";
+    reject_query = top_items | reject: name == "this";
 
-//    yield_query = top_orders | yield: items;
+    yield_query = top_orders | yield: items;
 //    yield_query_unique = top_orders | yield: items.product | distinct;
 
 //    recurse_ancestors = class | recurse: ancestors;
