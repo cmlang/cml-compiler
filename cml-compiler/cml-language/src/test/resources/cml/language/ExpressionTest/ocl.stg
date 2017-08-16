@@ -8,7 +8,7 @@ invocation_ocl(invocation) ::= <<
 >>
 
 exists(args) ::= <<
-(<ocl(args.seq)> -> exists(<args_expr(args)>))
+<collection_invocation(args, "exists", "")>
 >>
 
 select(args) ::= <<

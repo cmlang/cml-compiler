@@ -5,6 +5,7 @@ macro yield(seq: T*, seq/expr: R*): R*;
 macro distinct(seq: T*): T*;
 macro recurse(seq: T*, seq/expr: T*): T*;
 macro reduce(from/seq: T*, seq/expr: S, from: R): S;
+macro exists(seq: T*, seq/expr: Boolean): Boolean;
 
 concept Expressions
 {
@@ -18,11 +19,11 @@ concept Expressions
 
     select_query = top_items | select: name == "this";
     select_query_nested = top_items | select: name == "this" | select: qty > 10;
-//    select_query_nested_nested = top_items | select: name == "this" | select: qty > 10 | select: number <= 10;
+    select_query_nested_nested = top_items | select: name == "this" | select: qty > 10 | select: number <= 10;
 
-//    select_invocation_nested = select(top_items | select: name == "this",  qty > 10);
-//    select_invocation_nested_nested = select(select(top_items | select: name == "this",  qty > 10), number <= 10);
-//    select_invocation_intermediate = top_orders | select: exists(items, qty > 10) | select: total > 100;
+    select_invocation_nested = select(top_items | select: name == "this",  qty > 10);
+    select_invocation_nested_nested = select(select(top_items | select: name == "this",  qty > 10), number <= 10);
+    select_invocation_intermediate = top_orders | select: exists(items, qty > 10) | select: total > 100;
 //    select_invocation_base = select(top_orders, total > 100) | select: exists(items, qty > 10);
 
 //    reject_query = top_items | reject: name == "this";
