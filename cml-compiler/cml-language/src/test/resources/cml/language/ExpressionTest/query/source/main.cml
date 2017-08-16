@@ -30,10 +30,10 @@ concept Expressions
     yield_query = top_orders | yield: items;
     yield_query_unique = top_orders | yield: items.product | distinct;
 
-//    recurse_ancestors = class | recurse: ancestors;
-//    recurse_unique = class | recurse: ancestors | distinct;
-//    recurse_children = children | recurse: children | select: ranking > 10; // equivalent to: self | recurse children | ...
-    //recurse_self = self | recurse: children | select: ranking > 10;
+    recurse_ancestors = class | recurse: ancestors;
+    recurse_unique = class | recurse: ancestors | distinct;
+    recurse_children = children | recurse: children | select: ranking > 10; // equivalent to: self | recurse children | ...
+//    recurse_self = self | recurse: children | select: ranking > 10;
 
 //    reduce_query = top_orders | reduce: s + total, from: s = 0;
 
