@@ -7,6 +7,11 @@ invocation_ocl(invocation) ::= <<
 <({<invocation.name>})(invocation.namedArguments)>
 >>
 
+lambda_ocl(lambda) ::= <<
+<if(lambda.parameters)><lambda.parameters; separator=", "> | <endif><\\>
+<ocl(lambda.expression)>
+>>
+
 exists(args) ::= <<
 <collection_invocation(args, "exists", "")>
 >>

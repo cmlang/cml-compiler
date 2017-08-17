@@ -2,28 +2,30 @@ package cml.language.expressions;
 
 import cml.language.foundation.Type;
 
-import java.util.Collections;
 import java.util.List;
 
+import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 
 public class Lambda extends ExpressionBase
 {
-    private final List<String> variables;
+    private final List<String> parameters;
     private final Expression expression;
 
-    public Lambda(final List<String> variables, final Expression expression)
+    public Lambda(final List<String> parameters, final Expression expression)
     {
-        this.variables = variables;
+        this.parameters = parameters;
         this.expression = expression;
+
+        addMember(expression);
     }
 
-    private List<String> getVariables()
+    public List<String> getParameters()
     {
-        return unmodifiableList(variables);
+        return unmodifiableList(parameters);
     }
 
-    private Expression getExpression()
+    public Expression getExpression()
     {
         return expression;
     }
@@ -38,6 +40,12 @@ public class Lambda extends ExpressionBase
     public Type getType()
     {
         return expression.getType();
+    }
+
+    @Override
+    public String toString()
+    {
+        return format("Lambda { %s -> %s }", parameters, expression);
     }
 }
 

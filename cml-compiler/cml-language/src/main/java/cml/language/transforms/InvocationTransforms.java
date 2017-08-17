@@ -1,9 +1,6 @@
 package cml.language.transforms;
 
-import cml.language.expressions.Comprehension;
-import cml.language.expressions.Expression;
-import cml.language.expressions.Invocation;
-import cml.language.expressions.Query;
+import cml.language.expressions.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +34,11 @@ public class InvocationTransforms
             {
                 arguments.put("seq", comprehension.getPath().get());
             }
+            else if (comprehension.getEnumerators().size() == 1)
+            {
+                seq(comprehension.getEnumerators()).findFirst()
+                                                   .ifPresent(e -> arguments.put("seq", e.getPath()));
+            }
             else
             {
                 return Invocation.create("cross_join", comprehension.getExpressions());
@@ -47,7 +49,8 @@ public class InvocationTransforms
             arguments.put("seq", invocationOf(comprehension, rest));
         }
 
-        query.getExpression().ifPresent(expr -> arguments.put("expr", expr));
+        query.getExpression().ifPresent(expr -> arguments.put(
+            "expr", new Lambda(comprehension.getEnumeratorVariablesForQuery(query), expr)));
 
         query.getExtraKeywords().forEach(k -> arguments.put(k.getName(), k.getExpression()));
 

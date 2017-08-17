@@ -38,7 +38,7 @@ concept Expressions
 
     reduce_query = top_orders | reduce: s + total from: s = 0;
 
-//    enumeration = for order in top_orders | select: order.total > 100;
+    enumeration = for order in top_orders | select: order.total > 100;
 //    enumeration_yield = for order in top_orders | yield: order.items;
 //    enumeration_select = for order in top_orders | select: order.total > 1000 | yield: order.items;
 

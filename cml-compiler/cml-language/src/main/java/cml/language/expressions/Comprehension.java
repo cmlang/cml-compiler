@@ -57,6 +57,18 @@ public class Comprehension extends ExpressionBase
                                .collect(toList());
     }
 
+    public List<String> getEnumeratorVariablesForQuery(final Query query)
+    {
+        if (queries.size() >= 1 && queries.get(0) == query)
+        {
+            return seq(enumerators).map(Enumerator::getVariable).toList();
+        }
+        else
+        {
+            return emptyList();
+        }
+    }
+
     @Override
     public String getKind()
     {
