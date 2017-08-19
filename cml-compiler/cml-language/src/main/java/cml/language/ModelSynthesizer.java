@@ -5,7 +5,6 @@ import cml.language.features.*;
 import cml.language.foundation.Location;
 import cml.language.foundation.Property;
 import cml.language.grammar.CMLBaseListener;
-import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
@@ -15,15 +14,15 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.empty;
 import static org.jooq.lambda.Seq.seq;
 
 class ModelSynthesizer extends CMLBaseListener
@@ -32,11 +31,8 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String INVALID_MODULE_NAME = "Module declaration name (%s) should match the module's directory name: %s";
     private static final String NO_NAME_PROVIDED_FOR_CONCEPT = "No name provided for concept.";
     private static final String NO_NAME_PROVIDED_FOR_ASSOCIATION = "No name provided for association.";
-    private static final String NO_NAME_PROVIDED_FOR_PARAMETER = "No name provided for parameter.";
     private static final String NO_NAME_PROVIDED_FOR_PROPERTY = "No name provided for property.";
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
-    private static final String NO_NAME_PROVIDED_FOR_MACRO = "No name provided for macro.";
-    private static final String NO_MACRO_PROVIDED_FOR_INVOCATION = "No macro provided for invocation.";
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
     private static final String NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT = "No variable name provided for assignment.";
@@ -375,16 +371,11 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitInvocationExpression(InvocationExpressionContext ctx)
     {
-        if (ctx.NAME() == null)
-        {
-            throw new ModelSynthesisException(NO_MACRO_PROVIDED_FOR_INVOCATION);
-        }
-
         final String name = ctx.NAME().getText();
-        final List<Expression> arguments = ctx.expression()
-                                              .stream()
-                                              .map(e -> e.expr)
-                                              .collect(toList());
+        final Optional<Lambda> lambda = ofNullable(ctx.lambdaExpression()).map(c -> c.lambda);
+        final List<Expression> arguments = seq(ctx.expression()).map(e -> e.expr)
+                                                                .concat(seq(lambda))
+                                                                .toList();
 
         ctx.invocation = Invocation.create(name, arguments);
     }

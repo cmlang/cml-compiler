@@ -26,7 +26,7 @@ lambdaExpression returns[Lambda lambda]:
     '{' expression '}';
 
 invocationExpression returns [Invocation invocation]:
-    NAME '(' expression (',' expression)* ')';
+    NAME '(' expression (',' expression)* ')' lambdaExpression?;
 
 comprehensionExpression returns [Comprehension comprehension]:
     (pathExpression | FOR enumeratorDeclaration (',' enumeratorDeclaration)*) queryStatement+;

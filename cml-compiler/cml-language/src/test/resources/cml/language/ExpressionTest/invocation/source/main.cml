@@ -22,7 +22,7 @@ concept Expressions
 
     exists_invocation = exists(top_items, { name == "this" });
     select_invocation = select(top_items, { name == "this" });
-    reject_invocation = reject(top_items, { name == "this" });
+    reject_invocation = reject(top_items) { name == "this" };
 
 //    yield_invocation = yield(top_orders, items);
 //    yield_invocation_distinct = distinct(yield(top_orders, items.product));
