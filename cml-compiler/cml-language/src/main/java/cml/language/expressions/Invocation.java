@@ -46,13 +46,13 @@ public interface Invocation extends Expression, NamedElement
             final Function function = getFunction().get();
 
             assert function.getParameters().size() == getArguments().size()
-                : "Number of arguments in invocation should match the number of parameters in macro.";
+                : "Number of arguments in invocation should match the number of parameters in function.";
 
             if (function.getType().isParameter())
             {
                 final int paramIndex = function.getParamIndexOfMatchingType();
                 final Type paramType = getArguments().get(paramIndex).getType();
-                final Type type = paramType.getElementType();
+                final Type type = paramType.withCardinality(function.getType().getCardinality().orElse(null));
 
                 paramType.getConcept().ifPresent(type::setConcept);
 
@@ -65,7 +65,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else
         {
-            return NamedType.createUndefined("Unable to find macro of invocation: " + getName());
+            return NamedType.createUndefined("Unable to find function of invocation: " + getName());
         }
     }
 

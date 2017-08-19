@@ -1,10 +1,10 @@
 
 template function exists<T>(seq: T*, expr: (T) -> Boolean) -> Boolean;
+template function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
+template function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 
-//macro select(seq: T*, seq/expr: Boolean): T*;
-//macro reject(seq: T*, seq/expr: Boolean): T*;
+template function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
 
-//macro yield(seq: T*, seq/expr: R*): R*;
 //macro recurse(seq: T*, seq/expr: T*): T*;
 
 //macro reduce(from/seq: T*, seq/expr: S, from_i: R): S;
@@ -20,11 +20,11 @@ concept Expressions
 
     path_ancestors = class.ancestors;
 
-//    exists_invocation = exists(top_items, name == "this");
+    exists_invocation = exists(top_items, name == "this");
 
-//    select_invocation = select(top_items, name == "this");
+    select_invocation = select(top_items, name == "this");
 
-//    reject_invocation = reject(top_items, name == "this");
+    reject_invocation = reject(top_items, name == "this");
 
 //    yield_invocation = yield(top_orders, items);
 //    yield_invocation_distinct = distinct(yield(top_orders, items.product));

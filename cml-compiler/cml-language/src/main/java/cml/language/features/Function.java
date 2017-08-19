@@ -34,7 +34,7 @@ public class Function extends TypedElementBase
 
     public int getParamIndexOfMatchingType()
     {
-        assert getType().isParameter(): "Must be called only when macro's resulting type is a parameter.";
+        assert getType().isParameter(): "Must be called only when function's result type is a parameter.";
 
         int index = 0;
         for (FunctionParameter parameter: getParameters())
