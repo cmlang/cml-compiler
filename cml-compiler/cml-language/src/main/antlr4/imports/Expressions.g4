@@ -7,6 +7,7 @@ expression returns [Expression expr]
     | pathExpression
     | conditionalExpression
     | assignmentExpression
+    | lambdaExpression
     | invocationExpression
     | comprehensionExpression
     | operator=('+' | '-' | NOT) expression
@@ -20,6 +21,9 @@ expression returns [Expression expr]
     | expression operator=XOR expression
     | expression operator=IMPLIES expression
     | '(' inner=expression ')';
+
+lambdaExpression returns[Lambda lambda]:
+    '{' expression '}';
 
 invocationExpression returns [Invocation invocation]:
     NAME '(' expression (',' expression)* ')';

@@ -18,13 +18,11 @@ concept Expressions
     children: Class*;
     top_orders: Order*;
 
-    path_ancestors = class.ancestors;
+//    path_ancestors = class.ancestors;
 
-    exists_invocation = exists(top_items, name == "this");
-
-    select_invocation = select(top_items, name == "this");
-
-    reject_invocation = reject(top_items, name == "this");
+    exists_invocation = exists(top_items, { name == "this" });
+    select_invocation = select(top_items, { name == "this" });
+    reject_invocation = reject(top_items, { name == "this" });
 
 //    yield_invocation = yield(top_orders, items);
 //    yield_invocation_distinct = distinct(yield(top_orders, items.product));

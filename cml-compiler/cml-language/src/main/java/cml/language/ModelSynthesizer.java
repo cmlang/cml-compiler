@@ -5,6 +5,7 @@ import cml.language.features.*;
 import cml.language.foundation.Location;
 import cml.language.foundation.Property;
 import cml.language.grammar.CMLBaseListener;
+import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
@@ -14,12 +15,15 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.empty;
 import static org.jooq.lambda.Seq.seq;
 
 class ModelSynthesizer extends CMLBaseListener
@@ -275,6 +279,7 @@ class ModelSynthesizer extends CMLBaseListener
         if (ctx.literalExpression() != null) ctx.expr = ctx.literalExpression().literal;
         else if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
         else if (ctx.conditionalExpression() != null) ctx.expr = ctx.conditionalExpression().conditional;
+        else if (ctx.lambdaExpression() != null) ctx.expr = ctx.lambdaExpression().lambda;
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.comprehensionExpression() != null) ctx.expr = invocationOf(ctx.comprehensionExpression().comprehension);
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
@@ -359,6 +364,12 @@ class ModelSynthesizer extends CMLBaseListener
             final NamedType type = NamedType.create(getPrimitiveTypeName(ctx), null);
             ctx.literal = Literal.create(text, type);
         }
+    }
+
+    @Override
+    public void exitLambdaExpression(final LambdaExpressionContext ctx)
+    {
+        ctx.lambda = new Lambda(emptyList(), ctx.expression().expr);
     }
 
     @Override
