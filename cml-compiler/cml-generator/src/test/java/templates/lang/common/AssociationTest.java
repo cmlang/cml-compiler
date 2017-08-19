@@ -6,7 +6,7 @@ import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.Property;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -65,8 +65,8 @@ public class AssociationTest extends LangTest
     private static Concept createOrganization()
     {
         final Concept organization = Concept.create("Organization");
-        organization.addMember(Property.create("name", Type.STRING));
-        organization.addMember(Property.create("employees", Type.create("Employee", "*")));
+        organization.addMember(Property.create("name", NamedType.STRING));
+        organization.addMember(Property.create("employees", NamedType.create("Employee", "*")));
         return organization;
     }
 
@@ -74,8 +74,8 @@ public class AssociationTest extends LangTest
     private static Concept createEmployee()
     {
         final Concept employee = Concept.create("Employee");
-        employee.addMember(Property.create("name", Type.STRING));
-        employee.addMember(Property.create("employer", Type.create("Organization")));
+        employee.addMember(Property.create("name", NamedType.STRING));
+        employee.addMember(Property.create("employer", NamedType.create("Organization")));
         return employee;
     }
 }

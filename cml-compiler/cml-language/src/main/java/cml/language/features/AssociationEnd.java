@@ -1,6 +1,7 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface AssociationEnd extends ModelElement
 {
     String getConceptName();
     String getPropertyName();
-    Optional<Type> getPropertyType();
+    Optional<NamedType> getPropertyType();
 
     Optional<Concept> getConcept();
     void setConcept(@Nullable Concept concept);
@@ -30,7 +31,7 @@ public interface AssociationEnd extends ModelElement
         return new AssociationEndImpl(conceptName, propertyName, null);
     }
 
-    static AssociationEnd create(String conceptName, String propertyName, @Nullable Type propertyType)
+    static AssociationEnd create(String conceptName, String propertyName, @Nullable NamedType propertyType)
     {
         return new AssociationEndImpl(conceptName, propertyName, propertyType);
     }
@@ -49,12 +50,12 @@ class AssociationEndImpl implements AssociationEnd
     private final ModelElement modelElement;
     private final String conceptName;
     private final String propertyName;
-    private final @Nullable Type propertyType;
+    private final @Nullable NamedType propertyType;
 
     private @Nullable Concept concept;
     private @Nullable Property property;
 
-    AssociationEndImpl(String conceptName, String propertyName, @Nullable Type propertyType)
+    AssociationEndImpl(String conceptName, String propertyName, @Nullable NamedType propertyType)
     {
         this.modelElement = ModelElement.create(this);
         this.conceptName = conceptName;
@@ -75,7 +76,7 @@ class AssociationEndImpl implements AssociationEnd
     }
 
     @Override
-    public Optional<Type> getPropertyType()
+    public Optional<NamedType> getPropertyType()
     {
         return Optional.ofNullable(propertyType);
     }

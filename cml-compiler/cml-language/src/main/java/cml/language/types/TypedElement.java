@@ -1,8 +1,10 @@
-package cml.language.foundation;
+package cml.language.types;
+
+import cml.language.foundation.NamedElement;
 
 public interface TypedElement extends NamedElement
 {
-    Type getType();
+    NamedType getType();
 
     default boolean matchesTypeOf(TypedElement other)
     {

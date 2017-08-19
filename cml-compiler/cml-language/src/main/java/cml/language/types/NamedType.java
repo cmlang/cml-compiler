@@ -1,6 +1,10 @@
-package cml.language.foundation;
+package cml.language.types;
 
 import cml.language.features.Concept;
+import cml.language.foundation.Location;
+import cml.language.foundation.ModelElement;
+import cml.language.foundation.NamedElement;
+import cml.language.foundation.Scope;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -12,11 +16,11 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
 
-public interface Type extends NamedElement
+public interface NamedType extends Type, NamedElement
 {
-    Type UNDEFINED = Type.create("Undefined");
-    Type BOOLEAN = Type.create("Boolean");
-    Type STRING = Type.create("String");
+    NamedType UNDEFINED = NamedType.create("Undefined");
+    NamedType BOOLEAN = NamedType.create("Boolean");
+    NamedType STRING = NamedType.create("String");
 
     Collection<String> PRIMITIVE_TYPE_NAMES = unmodifiableCollection(asList(
         "Boolean", "Integer", "Decimal", "String", "Regex", // main primitive types
@@ -79,7 +83,7 @@ public interface Type extends NamedElement
         return getKind().equals(SEQUENCE);
     }
 
-    default boolean isNumericWiderThan(Type other)
+    default boolean isNumericWiderThan(NamedType other)
     {
         assert this.isNumeric() && other.isNumeric()
             : "Both types must be numeric in order to be compared: " + this.getName() + " & " + other.getName();
@@ -87,7 +91,7 @@ public interface Type extends NamedElement
         return NUMERIC_TYPE_NAMES.indexOf(this.getName()) > NUMERIC_TYPE_NAMES.indexOf(other.getName());
     }
 
-    default boolean isBinaryFloatingPointWiderThan(Type other)
+    default boolean isBinaryFloatingPointWiderThan(NamedType other)
     {
         assert this.isBinaryFloatingPoint() && other.isBinaryFloatingPoint()
             : "Both types must be binary floating-point in order to be compared: " + this.getName() + " & " + other.getName();
@@ -121,9 +125,9 @@ public interface Type extends NamedElement
         return REQUIRED;
     }
 
-    default Type getElementType()
+    default NamedType getElementType()
     {
-        final Type elementType = Type.create(getName());
+        final NamedType elementType = NamedType.create(getName());
 
         if (getConcept().isPresent()) elementType.setConcept(getConcept().get());
 
@@ -131,7 +135,7 @@ public interface Type extends NamedElement
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    default boolean isTypeAssignableFrom(Type other)
+    default boolean isTypeAssignableFrom(NamedType other)
     {
         if (this.getName().equals(other.getName()))
         {
@@ -159,35 +163,35 @@ public interface Type extends NamedElement
         }
     }
 
-    default boolean isCardinalityAssignableFrom(Type other)
+    default boolean isCardinalityAssignableFrom(NamedType other)
     {
         return Objects.equals(this.getCardinality(), other.getCardinality()) ||
                (this.isOptional() && other.isRequired()) ||
                (this.isSequence());
     }
 
-    default boolean isAssignableFrom(Type other)
+    default boolean isAssignableFrom(NamedType other)
     {
         return this.isTypeAssignableFrom(other) && this.isCardinalityAssignableFrom(other);
     }
 
-    static Type create(String name)
+    static NamedType create(String name)
     {
-        return new TypeImpl(name, null, null);
+        return new NamedTypeImpl(name, null, null);
     }
 
-    static Type create(String name, @Nullable String cardinality)
+    static NamedType create(String name, @Nullable String cardinality)
     {
-        return new TypeImpl(name, cardinality, null);
+        return new NamedTypeImpl(name, cardinality, null);
     }
 
-    static Type createUndefined(String errorMessage)
+    static NamedType createUndefined(String errorMessage)
     {
-        return new TypeImpl(Type.UNDEFINED.getName(), null, errorMessage);
+        return new NamedTypeImpl(NamedType.UNDEFINED.getName(), null, errorMessage);
     }
 }
 
-class TypeImpl implements Type
+class NamedTypeImpl implements NamedType
 {
     private final ModelElement modelElement;
     private final NamedElement namedElement;
@@ -196,7 +200,7 @@ class TypeImpl implements Type
 
     private @Nullable Concept concept;
 
-    TypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
+    NamedTypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
     {
         this.modelElement = ModelElement.create(this);
         this.namedElement = NamedElement.create(modelElement, name);
@@ -262,7 +266,7 @@ class TypeImpl implements Type
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final TypeImpl other = (TypeImpl) o;
+        final NamedTypeImpl other = (NamedTypeImpl) o;
         return
             Objects.equals(this.getName(), other.getName()) &&
             Objects.equals(this.cardinality, other.cardinality);

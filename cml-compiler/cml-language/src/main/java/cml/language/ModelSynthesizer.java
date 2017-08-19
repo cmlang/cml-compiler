@@ -5,7 +5,7 @@ import cml.language.features.*;
 import cml.language.foundation.Location;
 import cml.language.foundation.Parameter;
 import cml.language.foundation.Property;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -27,7 +27,6 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String INVALID_MODULE_NAME = "Module declaration name (%s) should match the module's directory name: %s";
     private static final String NO_NAME_PROVIDED_FOR_CONCEPT = "No name provided for concept.";
     private static final String NO_NAME_PROVIDED_FOR_ASSOCIATION = "No name provided for association.";
-    private static final String NO_NAME_PROVIDED_FOR_TYPE = "No name provided for type.";
     private static final String NO_NAME_PROVIDED_FOR_PARAMETER = "No name provided for parameter.";
     private static final String NO_NAME_PROVIDED_FOR_PROPERTY = "No name provided for property.";
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
@@ -155,7 +154,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String conceptName = ctx.conceptName.getText();
         final String propertyName = ctx.propertyName.getText();
-        final @Nullable Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final @Nullable NamedType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final AssociationEnd associationEnd = AssociationEnd.create(conceptName, propertyName, type);
 
         associationEnd.setLocation(locationOf(ctx));
@@ -199,7 +198,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final NamedType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
 
         ctx.macro = Macro.create(name, type);
 
@@ -220,7 +219,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.name.getText();
-        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final NamedType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final String scopeName = (ctx.scope == null) ? null : ctx.scope.getText();
         final Parameter parameter = Parameter.create(name, type, scopeName);
 
@@ -238,7 +237,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final NamedType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
         final Property property = Property.create(name, type, value, ctx.DERIVED() != null);
 
@@ -252,15 +251,13 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitTypeDeclaration(TypeDeclarationContext ctx)
     {
-        if (ctx.NAME() == null)
+        if (ctx.NAME() != null)
         {
-            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_TYPE);
+            final String name = ctx.NAME().getText();
+            final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
+
+            ctx.type = NamedType.create(name, cardinality);
         }
-
-        final String name = ctx.NAME().getText();
-        final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
-
-        ctx.type = Type.create(name, cardinality);
     }
 
     @Override
@@ -350,7 +347,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         if (text != null)
         {
-            final Type type = Type.create(getPrimitiveTypeName(ctx), null);
+            final NamedType type = NamedType.create(getPrimitiveTypeName(ctx), null);
             ctx.literal = Literal.create(text, type);
         }
     }

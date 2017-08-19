@@ -7,7 +7,7 @@ import cml.language.expressions.Path;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.Property;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
 
@@ -43,7 +43,7 @@ public class ClassTest extends LangTest
         final Module module = createModule();
 
         final Concept product = Concept.create("Product");
-        product.addMember(Property.create("description", Type.create("String")));
+        product.addMember(Property.create("description", NamedType.create("String")));
         module.addMember(product);
 
         final Concept intermediate = Concept.create("Intermediate");
@@ -62,7 +62,7 @@ public class ClassTest extends LangTest
     {
         final Concept concept = createConceptWithMultipleAncestors(false);
 
-        concept.addMember(Property.create("initProperty", null, Literal.create("initialValue", Type.create("String"))));
+        concept.addMember(Property.create("initProperty", null, Literal.create("initialValue", NamedType.create("String"))));
 
         testClassTemplateWithSuffix(concept, "class2__concept_concrete_ancestor_multiple.txt");
     }
@@ -73,11 +73,11 @@ public class ClassTest extends LangTest
         final Module module = createModule();
 
         final Concept product = Concept.create("Product");
-        product.addMember(Property.create("description", Type.create("String")));
+        product.addMember(Property.create("description", NamedType.create("String")));
         module.addMember(product);
 
         final Concept book = Concept.create("Book", true);
-        book.addMember(Property.create("title", Type.create("String")));
+        book.addMember(Property.create("title", NamedType.create("String")));
         book.addDirectAncestor(product);
         module.addMember(book);
 
@@ -90,20 +90,20 @@ public class ClassTest extends LangTest
         final Module module = createModule();
 
         final Concept product = Concept.create("Product", true);
-        product.addMember(Property.create("name", Type.create("String"), null, true));
-        product.addMember(Property.create("description", Type.create("String")));
-        product.addMember(Property.create("value", Type.create("Decimal")));
+        product.addMember(Property.create("name", NamedType.create("String"), null, true));
+        product.addMember(Property.create("description", NamedType.create("String")));
+        product.addMember(Property.create("value", NamedType.create("Decimal")));
         module.addMember(product);
 
         final Concept book = Concept.create("Book");
-        book.addMember(Property.create("title", Type.create("String")));
+        book.addMember(Property.create("title", NamedType.create("String")));
         book.addMember(
             Property.create(
                 "name",
-                Type.create("String"),
+                NamedType.create("String"),
                 Path.create(singletonList("title")),
                 true));
-        book.addMember(Property.create("value", null, Literal.create("3", Type.create("Decimal")), true));
+        book.addMember(Property.create("value", null, Literal.create("3", NamedType.create("Decimal")), true));
         book.addDirectAncestor(product);
         module.addMember(book);
 
@@ -130,8 +130,8 @@ public class ClassTest extends LangTest
         final Concept concept = Concept.create("Book");
         module.addMember(concept);
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
-        concept.addMember(Property.create("sequel", Type.create("Book", "?")));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
+        concept.addMember(Property.create("sequel", NamedType.create("Book", "?")));
 
         testClassTemplateWithConcept(concept, "class__concept_property_optional.txt");
     }
@@ -144,7 +144,7 @@ public class ClassTest extends LangTest
         final Concept concept = Concept.create("Book");
         module.addMember(concept);
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
 
         testClassTemplateWithConcept(concept, "class__concept_property_required.txt");
     }
@@ -157,9 +157,9 @@ public class ClassTest extends LangTest
         final Concept concept = Concept.create("Book");
         module.addMember(concept);
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
-        concept.addMember(Property.create("sequel", Type.create("Book", "?")));
-        concept.addMember(Property.create("categories", Type.create("String", "*")));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
+        concept.addMember(Property.create("sequel", NamedType.create("Book", "?")));
+        concept.addMember(Property.create("categories", NamedType.create("String", "*")));
 
         testClassTemplateWithConcept(concept, "class__concept_property_sequence.txt");
     }
@@ -172,8 +172,8 @@ public class ClassTest extends LangTest
         final Concept concept = Concept.create("Book");
         module.addMember(concept);
 
-        final Expression value = Literal.create("No Title", Type.create("String", null));
-        concept.addMember(Property.create("title", Type.create("String", null), value));
+        final Expression value = Literal.create("No Title", NamedType.create("String", null));
+        concept.addMember(Property.create("title", NamedType.create("String", null), value));
 
         testClassTemplateWithConcept(concept, "class__concept_property_initialized.txt");
     }
@@ -202,33 +202,33 @@ public class ClassTest extends LangTest
         final Module module = createModule();
 
         final Concept baseConcept = Concept.create("Base", true);
-        baseConcept.addMember(Property.create("baseConcreteProperty", Type.create("String")));
-        baseConcept.addMember(Property.create("baseAbstractProperty", Type.create("String"), null, true));
-        baseConcept.addMember(Property.create("derivedBaseProperty", null, Literal.create("initValue", Type.create("String")), true));
+        baseConcept.addMember(Property.create("baseConcreteProperty", NamedType.create("String")));
+        baseConcept.addMember(Property.create("baseAbstractProperty", NamedType.create("String"), null, true));
+        baseConcept.addMember(Property.create("derivedBaseProperty", null, Literal.create("initValue", NamedType.create("String")), true));
         module.addMember(baseConcept);
 
         final Concept product = Concept.create("Product");
-        product.addMember(Property.create("description", Type.create("String", null)));
-        product.addMember(Property.create("baseAbstractProperty", null, Literal.create("1", Type.create("String")), true));
+        product.addMember(Property.create("description", NamedType.create("String", null)));
+        product.addMember(Property.create("baseAbstractProperty", null, Literal.create("1", NamedType.create("String")), true));
         product.addDirectAncestor(baseConcept);
         module.addMember(product);
 
         final Concept stockItem = Concept.create("StockItem");
-        stockItem.addMember(Property.create("quantity", Type.create("Integer", null)));
-        stockItem.addMember(Property.create("baseAbstractProperty", null, Literal.create("2", Type.create("String")), true));
+        stockItem.addMember(Property.create("quantity", NamedType.create("Integer", null)));
+        stockItem.addMember(Property.create("baseAbstractProperty", null, Literal.create("2", NamedType.create("String")), true));
         stockItem.addDirectAncestor(baseConcept);
         module.addMember(stockItem);
 
         final Concept book = Concept.create("Book", _abstract);
-        book.addMember(Property.create("title", Type.create("String")));
-        book.addMember(Property.create("baseAbstractProperty", null, Literal.create("3", Type.create("String")), true));
+        book.addMember(Property.create("title", NamedType.create("String")));
+        book.addMember(Property.create("baseAbstractProperty", null, Literal.create("3", NamedType.create("String")), true));
         book.addDirectAncestor(product);
         book.addDirectAncestor(stockItem);
         module.addMember(book);
 
         if (_abstract)
         {
-            book.addMember(Property.create("abstractProperty", Type.create("String"), null, true));
+            book.addMember(Property.create("abstractProperty", NamedType.create("String"), null, true));
         }
 
         return book;

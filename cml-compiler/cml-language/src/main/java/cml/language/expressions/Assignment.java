@@ -3,7 +3,7 @@ package cml.language.expressions;
 import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface Assignment extends Expression
     Expression getValue();
 
     @Override
-    default Optional<Type> getTypeOfVariableNamed(String name)
+    default Optional<NamedType> getTypeOfVariableNamed(String name)
     {
         if (name.equals(getVariable())) return Optional.of(getType());
 
@@ -64,7 +64,7 @@ class AssignmentImpl implements Assignment
     }
 
     @Override
-    public Type getType()
+    public NamedType getType()
     {
         return value.getType();
     }

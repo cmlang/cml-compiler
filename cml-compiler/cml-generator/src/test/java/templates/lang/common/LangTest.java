@@ -4,7 +4,7 @@ import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.foundation.NamedElement;
 import cml.language.foundation.Property;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import com.google.common.io.Resources;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -92,7 +92,7 @@ public abstract class LangTest extends TemplateTest
         testTemplate(templateName, "property", property, expectedOutputPath);
     }
 
-    void testTemplateWithType(String templateName, Type type, String expectedOutputPath) throws IOException
+    void testTemplateWithType(String templateName, NamedType type, String expectedOutputPath) throws IOException
     {
         testTemplate(templateName, "type", type, expectedOutputPath);
     }

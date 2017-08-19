@@ -5,7 +5,7 @@ import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.NamedElement;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
@@ -83,9 +83,9 @@ class ModelAugmenter extends CMLBaseListener
     @Override
     public void enterTypeDeclaration(CMLParser.TypeDeclarationContext ctx)
     {
-        final Type type = ctx.type;
+        final NamedType type = ctx.type;
 
-        if (!type.isPrimitive())
+        if (type != null && !type.isPrimitive())
         {
             module.getConcept(type.getName()).ifPresent(type::setConcept);
         }

@@ -4,7 +4,7 @@ import cml.language.Model;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.Property;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class ToStringTest  extends LangTest
     {
         final Concept concept = Concept.create("SomeConcept");
 
-        concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
+        concept.addMember(Property.create("someProperty", NamedType.create("SomeType", null)));
 
         final Module module = createModule();
         module.addMember(concept);
@@ -51,8 +51,8 @@ public class ToStringTest  extends LangTest
     {
         final Concept concept = Concept.create("SomeConcept");
 
-        concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
-        concept.addMember(Property.create("optionalProperty", Type.create("AnotherType", "?")));
+        concept.addMember(Property.create("someProperty", NamedType.create("SomeType", null)));
+        concept.addMember(Property.create("optionalProperty", NamedType.create("AnotherType", "?")));
 
         final Module module = createModule();
         module.addMember(concept);
@@ -65,9 +65,9 @@ public class ToStringTest  extends LangTest
     {
         final Concept concept = Concept.create("SomeConcept");
 
-        concept.addMember(Property.create("someProperty", Type.create("SomeType", null)));
-        concept.addMember(Property.create("optionalProperty", Type.create("AnotherType", "?")));
-        concept.addMember(Property.create("sequenceProperty", Type.create("String", "*")));
+        concept.addMember(Property.create("someProperty", NamedType.create("SomeType", null)));
+        concept.addMember(Property.create("optionalProperty", NamedType.create("AnotherType", "?")));
+        concept.addMember(Property.create("sequenceProperty", NamedType.create("String", "*")));
 
         final Module module = createModule();
         module.addMember(concept);

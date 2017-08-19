@@ -1,6 +1,6 @@
 package templates.lang.common;
 
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
 
@@ -12,14 +12,14 @@ import static java.util.Collections.unmodifiableCollection;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class TypeTest extends LangTest
+public class NamedTypeTest extends LangTest
 {
     private static final Collection<String> primitiveTypeNames = unmodifiableCollection(asList(
         "Boolean", "Integer", "Decimal", "String", "Regex", // main primitive types
         "Byte", "Short", "Long", "Float", "Double", "Char" // remaining primitive types
     ));
 
-    public TypeTest(String targetLanguageExtension)
+    public NamedTypeTest(String targetLanguageExtension)
     {
         super(targetLanguageExtension);
     }
@@ -35,7 +35,7 @@ public class TypeTest extends LangTest
     {
         for (String typeName : primitiveTypeNames)
         {
-            final Type type = Type.create(typeName, null);
+            final NamedType type = NamedType.create(typeName, null);
 
             testTemplateWithNamedElement("type_name", type, typeName + ".txt");
         }
@@ -54,7 +54,7 @@ public class TypeTest extends LangTest
     {
         final ST template = getTemplate("type_name");
 
-        template.add("named_element", Type.create(name, null));
+        template.add("named_element", NamedType.create(name, null));
 
         final String result = template.render();
 

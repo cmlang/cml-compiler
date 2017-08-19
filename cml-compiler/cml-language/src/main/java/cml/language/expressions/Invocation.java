@@ -2,6 +2,7 @@ package cml.language.expressions;
 
 import cml.language.features.Macro;
 import cml.language.foundation.*;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.tuple.Tuple2;
 
@@ -33,7 +34,7 @@ public interface Invocation extends Expression, NamedElement
     Optional<Macro> getMacro();
     void setMacro(@Nullable Macro macro);
 
-    default Type getType()
+    default NamedType getType()
     {
         if (getMacro().isPresent())
         {
@@ -45,8 +46,8 @@ public interface Invocation extends Expression, NamedElement
             if (macro.getType().isParameter())
             {
                 final int paramIndex = macro.getParamIndexOfMatchingType();
-                final Type paramType = getArguments().get(paramIndex).getType();
-                final Type type = Type.create(paramType.getName(), macro.getType().getCardinality().orElse(null));
+                final NamedType paramType = getArguments().get(paramIndex).getType();
+                final NamedType type = NamedType.create(paramType.getName(), macro.getType().getCardinality().orElse(null));
 
                 paramType.getConcept().ifPresent(type::setConcept);
 
@@ -59,7 +60,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else
         {
-            return Type.createUndefined("Unable to find macro of invocation: " + getName());
+            return NamedType.createUndefined("Unable to find macro of invocation: " + getName());
         }
     }
 

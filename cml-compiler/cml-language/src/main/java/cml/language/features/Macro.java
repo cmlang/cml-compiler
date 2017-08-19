@@ -1,6 +1,8 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
+import cml.language.types.NamedType;
+import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -44,7 +46,7 @@ public interface Macro extends TypedElement, Scope
         return index;
     }
 
-    static Macro create(String name, Type type)
+    static Macro create(String name, NamedType type)
     {
         return new MacroImpl(name, type);
     }
@@ -56,9 +58,9 @@ class MacroImpl implements Macro
     private final NamedElement namedElement;
     private final Scope scope;
 
-    private final Type type;
+    private final NamedType type;
 
-    MacroImpl(String name, Type type)
+    MacroImpl(String name, NamedType type)
     {
         this.modelElement = ModelElement.create(this);
         this.namedElement = NamedElement.create(modelElement, name);
@@ -68,7 +70,7 @@ class MacroImpl implements Macro
     }
 
     @Override
-    public Type getType()
+    public NamedType getType()
     {
         return type;
     }

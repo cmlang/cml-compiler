@@ -5,7 +5,7 @@ import cml.io.FileSystem;
 import cml.language.expressions.Literal;
 import cml.language.features.*;
 import cml.language.foundation.Property;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
@@ -114,8 +114,8 @@ public class ModelLoaderTest
         assertAssociationEndFound(employment, "Organization", "employees");
 
         final Association vehicleOwnership = loadAssociation("VehicleOwnership");
-        assertAssociationEndFound(vehicleOwnership, "Vehicle", "owner", Type.create("Organization"));
-        assertAssociationEndFound(vehicleOwnership, "Organization", "fleet", Type.create("Vehicle", "*"));
+        assertAssociationEndFound(vehicleOwnership, "Vehicle", "owner", NamedType.create("Organization"));
+        assertAssociationEndFound(vehicleOwnership, "Organization", "fleet", NamedType.create("Vehicle", "*"));
     }
 
     private Module loadModule(String sourceFileName)
@@ -166,7 +166,7 @@ public class ModelLoaderTest
     private void assertAssociationEndFound(
         Association association,
         String conceptName, String propertyName,
-        @Nullable Type expectedType)
+        @Nullable NamedType expectedType)
     {
         final AssociationEnd associationEnd = association.getAssociationEnd(conceptName, propertyName).orElse(null);
         assertNotNull(conceptName + "." + propertyName, associationEnd);

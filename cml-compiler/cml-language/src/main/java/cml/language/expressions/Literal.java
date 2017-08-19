@@ -3,7 +3,7 @@ package cml.language.expressions;
 import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public interface Literal extends Expression
 {
     String getText();
 
-    static Literal create(String text, Type type)
+    static Literal create(String text, NamedType type)
     {
         return new LiteralImpl(text, type);
     }
@@ -25,9 +25,9 @@ class LiteralImpl implements Literal
     private final Scope scope;
 
     private final String text;
-    private final Type type;
+    private final NamedType type;
 
-    LiteralImpl(String text, Type type)
+    LiteralImpl(String text, NamedType type)
     {
         modelElement = ModelElement.create(this);
         scope = Scope.create(this, modelElement);
@@ -55,7 +55,7 @@ class LiteralImpl implements Literal
     }
 
     @Override
-    public Type getType()
+    public NamedType getType()
     {
         return type;
     }

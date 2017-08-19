@@ -3,7 +3,7 @@ package cml.language.expressions;
 import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -43,10 +43,10 @@ public interface Path extends Expression
     }
 
     @Override
-    default Optional<Type> getTypeOfVariableNamed(String name)
+    default Optional<NamedType> getTypeOfVariableNamed(String name)
     {
         final Optional<Scope> scope = getScopeOfType(getType());
-        final Optional<Type> type = scope.flatMap(s -> s.getTypeOfVariableNamed(name));
+        final Optional<NamedType> type = scope.flatMap(s -> s.getTypeOfVariableNamed(name));
 
         if (type.isPresent())
         {
@@ -58,7 +58,7 @@ public interface Path extends Expression
         }
     }
 
-    default Type getType()
+    default NamedType getType()
     {
         assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
         assert getParentScope().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames();
@@ -68,13 +68,13 @@ public interface Path extends Expression
         if (isSelf()) return scope.getSelfType();
 
         final String variableName = getNames().get(0);
-        final Optional<Type> variableType = scope.getTypeOfVariableNamed(variableName);
+        final Optional<NamedType> variableType = scope.getTypeOfVariableNamed(variableName);
 
         StringBuilder intermediatePath = new StringBuilder(variableName);
 
         if (variableType.isPresent())
         {
-            Type type = variableType.get();
+            NamedType type = variableType.get();
 
             for (final String memberName: getMemberNames())
             {
@@ -86,23 +86,23 @@ public interface Path extends Expression
                 {
                     scope = optionalScope.get();
 
-                    final Optional<Type> memberType = scope.getTypeOfMemberNamed(memberName);
+                    final Optional<NamedType> memberType = scope.getTypeOfMemberNamed(memberName);
 
                     if (memberType.isPresent())
                     {
                         final String name = memberType.get().getName();
                         final String cardinality = memberType.get().getCardinality().orElse(null);
 
-                        type = Type.create(name, type.isSequence() ? "*" : cardinality);
+                        type = NamedType.create(name, type.isSequence() ? "*" : cardinality);
                     }
                     else
                     {
-                        return Type.createUndefined("Unable to find type of member: " + intermediatePath);
+                        return NamedType.createUndefined("Unable to find type of member: " + intermediatePath);
                     }
                 }
                 else
                 {
-                    return Type.createUndefined("Unable to find type: " + type.getName());
+                    return NamedType.createUndefined("Unable to find type: " + type.getName());
                 }
             }
 
@@ -110,11 +110,11 @@ public interface Path extends Expression
         }
         else
         {
-            return Type.createUndefined("Unable to find type of variable: " + intermediatePath);
+            return NamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
         }
     }
 
-    default Type getElementType()
+    default NamedType getElementType()
     {
         return getType().getElementType();
     }

@@ -2,6 +2,7 @@ package cml.language.features;
 
 import cml.language.Model;
 import cml.language.foundation.*;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ public interface Concept extends NamedElement, PropertyList
     boolean isAbstract();
 
     @Override
-    default Type getSelfType()
+    default NamedType getSelfType()
     {
-        return Type.create(getName());
+        return NamedType.create(getName());
     }
 
     default List<String> getDependencies()
@@ -81,14 +82,14 @@ public interface Concept extends NamedElement, PropertyList
     {
         return getPropertyTypes().stream()
                                  .filter(type -> !type.isPrimitive())
-                                 .map(Type::getConcept)
+                                 .map(NamedType::getConcept)
                                  .filter(Optional::isPresent)
                                  .map(Optional::get)
                                  .distinct()
                                  .collect(toList());
     }
 
-    default List<Type> getPropertyTypes()
+    default List<NamedType> getPropertyTypes()
     {
         return getAllProperties().stream()
                                  .map(Property::getType)

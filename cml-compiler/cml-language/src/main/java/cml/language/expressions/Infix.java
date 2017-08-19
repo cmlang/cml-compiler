@@ -3,7 +3,7 @@ package cml.language.expressions;
 import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -124,17 +124,17 @@ class InfixImpl implements Infix
     }
 
     @Override
-    public Type getType()
+    public NamedType getType()
     {
-        final Type leftType = left.getType();
-        final Type rightType = right.getType();
+        final NamedType leftType = left.getType();
+        final NamedType rightType = right.getType();
 
         assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + left.getKind();
         assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + right.getKind();
 
         if (LOGIC_OPERATORS.contains(operator))
         {
-            return Type.BOOLEAN;
+            return NamedType.BOOLEAN;
         }
         else if (MATH_OPERATORS.contains(operator) && leftType.isNumeric() && rightType.isNumeric())
         {
@@ -151,10 +151,10 @@ class InfixImpl implements Infix
         else
         {
             System.out.println("Undefined type for: " + toString());
-            System.out.println(">>> Left Type: " + leftType);
-            System.out.println(">>> Right Type: " + rightType);
+            System.out.println(">>> Left NamedType: " + leftType);
+            System.out.println(">>> Right NamedType: " + rightType);
 
-            return Type.createUndefined(format("Unsupported operands for operator '%s'.", getOperator()));
+            return NamedType.createUndefined(format("Unsupported operands for operator '%s'.", getOperator()));
         }
     }
 

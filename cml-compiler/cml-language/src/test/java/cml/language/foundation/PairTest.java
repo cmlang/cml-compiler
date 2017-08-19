@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.types.NamedType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -9,8 +10,8 @@ public class PairTest
     @Test
     public void equals_hashCode() throws Exception
     {
-        final Property p1 = Property.create("p1", Type.create("Integer"));
-        final Property p2 = Property.create("p2", Type.create("Decimal"));
+        final Property p1 = Property.create("p1", NamedType.create("Integer"));
+        final Property p2 = Property.create("p2", NamedType.create("Decimal"));
 
         final Pair<Property> pair1 = new Pair<>(p1, p2);
         final Pair<Property> pair2 = new Pair<>(p2, p1);

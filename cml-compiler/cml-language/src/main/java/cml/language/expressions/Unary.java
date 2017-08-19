@@ -3,7 +3,7 @@ package cml.language.expressions;
 import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -91,9 +91,9 @@ class UnaryImpl implements Unary
     }
 
     @Override
-    public Type getType()
+    public NamedType getType()
     {
-        return LOGIC_OPERATORS.contains(getOperator()) ? Type.BOOLEAN : expr.getType();
+        return LOGIC_OPERATORS.contains(getOperator()) ? NamedType.BOOLEAN : expr.getType();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package cml.language.foundation;
 
+import cml.language.types.NamedType;
+import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -22,7 +24,7 @@ public interface Parameter extends TypedElement
         }
     }
 
-    static Parameter create(String name, Type type, String scopeName)
+    static Parameter create(String name, NamedType type, String scopeName)
     {
         return new ParameterImpl(name, type, scopeName);
     }
@@ -33,10 +35,10 @@ class ParameterImpl implements Parameter
     private final ModelElement modelElement;
     private final NamedElement namedElement;
 
-    private final Type type;
+    private final NamedType type;
     private final @Nullable String scopeName;
 
-    ParameterImpl(String name, Type type, String scopeName)
+    ParameterImpl(String name, NamedType type, String scopeName)
     {
         modelElement = ModelElement.create(this);
         namedElement = NamedElement.create(modelElement, name);
@@ -52,7 +54,7 @@ class ParameterImpl implements Parameter
     }
 
     @Override
-    public Type getType()
+    public NamedType getType()
     {
         return type;
     }

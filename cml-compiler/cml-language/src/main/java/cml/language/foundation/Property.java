@@ -4,6 +4,8 @@ import cml.language.Model;
 import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.Concept;
+import cml.language.types.NamedType;
+import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -42,7 +44,7 @@ public interface Property extends TypedElement, Scope
         return getAssociation().isPresent();
     }
 
-    Optional<Type> getDeclaredType();
+    Optional<NamedType> getDeclaredType();
 
     Optional<Expression> getValue();
     boolean isDerived();
@@ -76,7 +78,7 @@ public interface Property extends TypedElement, Scope
                          .findFirst();
     }
 
-    static Property create(String name, @Nullable Type type)
+    static Property create(String name, @Nullable NamedType type)
     {
         return new PropertyImpl(name, type, null, false);
     }
@@ -86,12 +88,12 @@ public interface Property extends TypedElement, Scope
         return new PropertyImpl(name, null, value, false);
     }
 
-    static Property create(String name, @Nullable Type type, @Nullable Expression value)
+    static Property create(String name, @Nullable NamedType type, @Nullable Expression value)
     {
         return new PropertyImpl(name, type, value, false);
     }
 
-    static Property create(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
+    static Property create(String name, @Nullable NamedType type, @Nullable Expression value, boolean derived)
     {
         return new PropertyImpl(name, type, value, derived);
     }
@@ -117,11 +119,11 @@ class PropertyImpl implements Property
     private boolean typeRequired;
     private boolean typeAllowed;
 
-    private final @Nullable Type type;
+    private final @Nullable NamedType type;
     private final @Nullable Expression value;
     private boolean derived;
 
-    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
+    PropertyImpl(String name, @Nullable NamedType type, @Nullable Expression value, boolean derived)
     {
         modelElement = ModelElement.create(this);
         namedElement = NamedElement.create(modelElement, name);
@@ -139,7 +141,7 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public Optional<Type> getDeclaredType()
+    public Optional<NamedType> getDeclaredType()
     {
         return Optional.ofNullable(type);
     }
@@ -175,13 +177,13 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public Type getType()
+    public NamedType getType()
     {
         if (type == null)
         {
             if (value == null)
             {
-                return Type.createUndefined("No type or expression defined for property: " + getName());
+                return NamedType.createUndefined("No type or expression defined for property: " + getName());
             }
             else
             {

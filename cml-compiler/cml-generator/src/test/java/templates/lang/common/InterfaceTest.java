@@ -3,7 +3,7 @@ package templates.lang.common;
 import cml.language.expressions.Literal;
 import cml.language.features.Concept;
 import cml.language.foundation.Property;
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
 
@@ -27,7 +27,7 @@ public class InterfaceTest extends LangTest
     {
         final Concept concept = Concept.create("Book", true);
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
 
         testInterfaceTemplateWithCreateMethod(concept, "concept_abstract.txt");
     }
@@ -37,7 +37,7 @@ public class InterfaceTest extends LangTest
     {
         final Concept concept = Concept.create("Book", true);
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
         concept.addDirectAncestor(Concept.create("Product"));
 
         testInterfaceTemplateWithCreateMethod(concept, "concept_abstract_ancestor.txt");
@@ -48,9 +48,9 @@ public class InterfaceTest extends LangTest
     {
         final Concept concept = Concept.create("Book");
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
-        concept.addMember(Property.create("sequel", Type.create("Book", "?")));
-        concept.addMember(Property.create("categories", Type.create("Category", "*")));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
+        concept.addMember(Property.create("sequel", NamedType.create("Book", "?")));
+        concept.addMember(Property.create("categories", NamedType.create("Category", "*")));
 
         testInterfaceTemplateWithCreateMethod(concept, "concept_concrete.txt");
     }
@@ -60,7 +60,7 @@ public class InterfaceTest extends LangTest
     {
         final Concept concept = Concept.create("Book");
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
         concept.addDirectAncestor(Concept.create("Product"));
 
         testInterfaceTemplateWithCreateMethod(concept, "concept_concrete_ancestor.txt");
@@ -70,7 +70,7 @@ public class InterfaceTest extends LangTest
     public void concept_concrete_ancestor_empty() throws IOException
     {
         final Concept productConcept = Concept.create("Product");
-        productConcept.addMember(Property.create("description", Type.create("String", null)));
+        productConcept.addMember(Property.create("description", NamedType.create("String", null)));
 
         final Concept intermediateConcept = Concept.create("Intermediate");
         intermediateConcept.addDirectAncestor(productConcept);
@@ -85,8 +85,8 @@ public class InterfaceTest extends LangTest
     public void concept_concrete_ancestor_multiple() throws IOException
     {
         final Concept baseConcept = Concept.create("Base", true);
-        baseConcept.addMember(Property.create("baseProperty", Type.create("String")));
-        baseConcept.addMember(Property.create("derivedBaseProperty", null, Literal.create("initValue", Type.create("String")), true));
+        baseConcept.addMember(Property.create("baseProperty", NamedType.create("String")));
+        baseConcept.addMember(Property.create("derivedBaseProperty", null, Literal.create("initValue", NamedType.create("String")), true));
 
         final Concept productConcept = Concept.create("Product");
         productConcept.addDirectAncestor(baseConcept);
@@ -95,8 +95,8 @@ public class InterfaceTest extends LangTest
         stockItemConcept.addDirectAncestor(baseConcept);
 
         final Concept concept = Concept.create("Book");
-        concept.addMember(Property.create("title", Type.create("String", null)));
-        concept.addMember(Property.create("value", null, Literal.create("10.0", Type.create("Decimal"))));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
+        concept.addMember(Property.create("value", null, Literal.create("10.0", NamedType.create("Decimal"))));
         concept.addDirectAncestor(productConcept);
         concept.addDirectAncestor(stockItemConcept);
 
@@ -116,8 +116,8 @@ public class InterfaceTest extends LangTest
     {
         final Concept concept = Concept.create("Book");
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
-        concept.addMember(Property.create("sequel", Type.create("Book", "?")));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
+        concept.addMember(Property.create("sequel", NamedType.create("Book", "?")));
 
         testInterfaceTemplateWithConcept(concept, "concept_property_optional.txt");
     }
@@ -127,7 +127,7 @@ public class InterfaceTest extends LangTest
     {
         final Concept concept = Concept.create("StringTitledBook");
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
 
         testInterfaceTemplateWithConcept(concept, "concept_property_required.txt");
     }
@@ -137,9 +137,9 @@ public class InterfaceTest extends LangTest
     {
         final Concept concept = Concept.create("Book");
 
-        concept.addMember(Property.create("title", Type.create("String", null)));
-        concept.addMember(Property.create("sequel", Type.create("Book", "?")));
-        concept.addMember(Property.create("categories", Type.create("Category", "*")));
+        concept.addMember(Property.create("title", NamedType.create("String", null)));
+        concept.addMember(Property.create("sequel", NamedType.create("Book", "?")));
+        concept.addMember(Property.create("categories", NamedType.create("Category", "*")));
 
         testInterfaceTemplateWithConcept(concept, "concept_property_sequence.txt");
     }

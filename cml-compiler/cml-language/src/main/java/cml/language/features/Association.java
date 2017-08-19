@@ -1,6 +1,7 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface Association extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default List<Type> getPropertyTypes()
+    default List<NamedType> getPropertyTypes()
     {
         return getAssociationEnds()
             .stream()

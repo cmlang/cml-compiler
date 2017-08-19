@@ -1,5 +1,7 @@
 package cml.language.foundation;
 
+import cml.language.types.NamedType;
+import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -50,16 +52,16 @@ public interface Scope extends ModelElement
         return empty();
     }
 
-    default Optional<Type> getTypeOfMemberNamed(String name)
+    default Optional<NamedType> getTypeOfMemberNamed(String name)
     {
         final Optional<TypedElement> typedElement = getMemberNamed(name, TypedElement.class);
 
         return typedElement.map(TypedElement::getType);
     }
 
-    default Optional<Type> getTypeOfElementNamed(String name)
+    default Optional<NamedType> getTypeOfElementNamed(String name)
     {
-        final Optional<Type> memberType = getTypeOfMemberNamed(name);
+        final Optional<NamedType> memberType = getTypeOfMemberNamed(name);
         if (memberType.isPresent()) return memberType;
 
         final Optional<TypedElement> typedElement = getElementNamed(name, TypedElement.class);
@@ -67,16 +69,16 @@ public interface Scope extends ModelElement
         return typedElement.map(TypedElement::getType);
     }
 
-    default Optional<Type> getTypeOfVariableNamed(String name)
+    default Optional<NamedType> getTypeOfVariableNamed(String name)
     {
-        final Optional<Type> type = getTypeOfElementNamed(name);
+        final Optional<NamedType> type = getTypeOfElementNamed(name);
 
         if (type.isPresent()) return type;
 
         return getParentScope().flatMap(scope -> scope.getTypeOfVariableNamed(name));
     }
 
-    default Optional<Scope> getScopeOfType(Type type)
+    default Optional<Scope> getScopeOfType(NamedType type)
     {
         return getElementNamed(type.getName(), Scope.class);
     }
@@ -101,7 +103,7 @@ public interface Scope extends ModelElement
         return empty();
     }
 
-    default Type getSelfType()
+    default NamedType getSelfType()
     {
         assert getParentScope().isPresent(): "Parent scope required in order to determine self's type.";
         

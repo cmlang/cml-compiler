@@ -1,6 +1,6 @@
 package cml.language.expressions;
 
-import cml.language.foundation.Type;
+import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -76,7 +76,7 @@ public class Comprehension extends ExpressionBase
     }
 
     @Override
-    public Type getType()
+    public NamedType getType()
     {
         return null;
     }
