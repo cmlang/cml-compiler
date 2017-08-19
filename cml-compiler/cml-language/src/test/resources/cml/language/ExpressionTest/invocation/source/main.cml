@@ -1,8 +1,7 @@
 
 //macro exists(seq: T*, seq/expr: Boolean): Boolean;
 
-template<T>
-function exists(seq: T*, expr: (T) -> Boolean) -> Boolean;
+template function exists<T>(seq: T*, expr: (T) -> Boolean) -> Boolean;
 
 macro select(seq: T*, seq/expr: Boolean): T*;
 macro reject(seq: T*, seq/expr: Boolean): T*;

@@ -17,6 +17,12 @@ tupleTypeDeclaration:
 tupleElementDeclaration:
    (name=NAME ':')? typeDeclaration;
 
+typeParameterList:
+    '<' typeParameter (',' typeParameter)* '>';
+
+typeParameter returns [TypeParameter param]:
+    name=NAME;
+
 
 
 
