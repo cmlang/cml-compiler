@@ -2,7 +2,7 @@ grammar CML;
 
 @header
 {
-import java.util.stream.*;
+import org.jooq.lambda.*;
 import cml.language.features.*;
 import cml.language.expressions.*;
 import cml.language.types.*;

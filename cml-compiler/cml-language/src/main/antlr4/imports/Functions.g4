@@ -8,7 +8,7 @@ functionDeclaration returns [Function function]:
     params=functionParameterList
     '->' resultType=typeDeclaration ';';
 
-functionParameterList returns [Stream<FunctionParameter> params]:
+functionParameterList returns [Seq<FunctionParameter> params]:
     '(' functionParameterDeclaration? (',' functionParameterDeclaration)* ')';
 
 functionParameterDeclaration returns [FunctionParameter param]:

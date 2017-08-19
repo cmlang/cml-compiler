@@ -6,13 +6,12 @@ import cml.language.foundation.Location;
 import cml.language.foundation.Property;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
-import cml.language.types.NamedType;
-import cml.language.types.Type;
-import cml.language.types.TypeParameter;
+import cml.language.types.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.lambda.Seq;
 
 import java.util.List;
 import java.util.Optional;
@@ -222,13 +221,36 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitTypeDeclaration(TypeDeclarationContext ctx)
     {
-        if (ctx.NAME() != null)
+        if (ctx.NAME() == null)
+        {
+            if (ctx.params != null) ctx.type = new FunctionType(ctx.params.type, ctx.result.type);
+            else if (ctx.tuple != null) ctx.type = ctx.tuple.type;
+            else if (ctx.inner != null) ctx.type = ctx.inner.type;
+        }
+        else
         {
             final String name = ctx.NAME().getText();
             final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
 
             ctx.type = NamedType.create(name, cardinality);
         }
+    }
+
+    @Override
+    public void exitTupleTypeDeclaration(final TupleTypeDeclarationContext ctx)
+    {
+        final Seq<TupleTypeElement> elements = seq(ctx.tupleTypeElementDeclaration()).map(c -> c.element);
+
+        ctx.type = new TupleType(elements);
+    }
+
+    @Override
+    public void exitTupleTypeElementDeclaration(final TupleTypeElementDeclarationContext ctx)
+    {
+        final Type type = ctx.type.type;
+        final Optional<String> name = ofNullable(ctx.name).map(Token::getText);
+
+        ctx.element = new TupleTypeElement(type, name.orElse(null));
     }
 
     @Override

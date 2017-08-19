@@ -7,12 +7,28 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Optional.empty;
+
 public interface Type extends ModelElement
 {
-    String getKind();
-    Optional<String> getCardinality();
+    String REQUIRED = "required";
+    String OPTIONAL = "optional";
+    String SEQUENCE = "sequence";
 
-    Optional<String> getErrorMessage();
+    default String getKind()
+    {
+        return REQUIRED;
+    }
+
+    default Optional<String> getCardinality()
+    {
+        return empty();
+    }
+
+    default Optional<String> getErrorMessage()
+    {
+        return empty();
+    }
 
     default Type getElementType()
     {
@@ -119,6 +135,13 @@ public interface Type extends ModelElement
             (this.isSequence());
     }
 
-    Optional<Concept> getConcept();
-    void setConcept(@Nullable Concept concept);
+    default Optional<Concept> getConcept()
+    {
+        return empty();
+    }
+
+    default void setConcept(@Nullable Concept concept)
+    {
+        // no-op
+    }
 }

@@ -11,13 +11,13 @@ typeDeclaration returns [Type type]
 cardinality:
     ('?' | '*');
 
-tupleTypeDeclaration:
-    '(' tupleElementDeclaration? (',' tupleElementDeclaration)* ')';
+tupleTypeDeclaration returns [TupleType type]:
+    '(' ( tupleTypeElementDeclaration (',' tupleTypeElementDeclaration)* )? ')';
 
-tupleElementDeclaration:
-   (name=NAME ':')? typeDeclaration;
+tupleTypeElementDeclaration returns [TupleTypeElement element]:
+   (name=NAME ':')? type=typeDeclaration;
 
-typeParameterList returns [Stream<TypeParameter> params]:
+typeParameterList returns [Seq<TypeParameter> params]:
     '<' typeParameter (',' typeParameter)* '>';
 
 typeParameter returns [TypeParameter param]:

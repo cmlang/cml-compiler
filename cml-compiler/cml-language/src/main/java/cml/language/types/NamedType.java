@@ -35,10 +35,6 @@ public interface NamedType extends Type, NamedElement
         "Float", "Double" // from narrower to wider
     ));
 
-    String REQUIRED = "required";
-    String OPTIONAL = "optional";
-    String SEQUENCE = "sequence";
-
     default boolean isPrimitive()
     {
         return PRIMITIVE_TYPE_NAMES.contains(getName());
