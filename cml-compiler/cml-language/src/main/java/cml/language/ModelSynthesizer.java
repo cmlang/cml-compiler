@@ -191,6 +191,12 @@ class ModelSynthesizer extends CMLBaseListener
     }
 
     @Override
+    public void exitTemplateDeclaration(final TemplateDeclarationContext ctx)
+    {
+        ctx.template = new Template(ctx.functionDeclaration().function);
+    }
+
+    @Override
     public void exitPropertyDeclaration(PropertyDeclarationContext ctx)
     {
         if (ctx.NAME() == null)
@@ -203,7 +209,10 @@ class ModelSynthesizer extends CMLBaseListener
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
         final Property property = Property.create(name, type, value, ctx.DERIVED() != null);
 
-        property.addMember(value);
+        if (value != null)
+        {
+            property.addMember(value);
+        }
 
         property.setLocation(locationOf(ctx));
 

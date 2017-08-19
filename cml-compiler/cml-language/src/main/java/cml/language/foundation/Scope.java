@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toList;
@@ -181,6 +182,9 @@ class ScopeImpl implements Scope
 
 class ScopeElement
 {
+    private static final String ATTEMPTING_LINK_TO_NULL = "Attempting to link \"%s\" to null.";
+    private static final String ATTEMPTING_UNLINK_TO_NULL = "Attempting to unlink \"%s\" to null.";
+
     private final Map<Scope, List<ModelElement>> elements = new HashMap<>();
     private final Map<ModelElement, Scope> parentScope = new HashMap<>();
 
@@ -198,8 +202,11 @@ class ScopeElement
         }
     }
 
-    void link(Scope scope, ModelElement modelElement)
+    void link(final Scope scope, final ModelElement modelElement)
     {
+        assert scope != null: format(ATTEMPTING_LINK_TO_NULL, modelElement);
+        assert modelElement != null: format(ATTEMPTING_LINK_TO_NULL, scope);
+
         final List<ModelElement> modelElementList =
             elements.computeIfAbsent(scope, key -> new ArrayList<>());
 
@@ -211,8 +218,11 @@ class ScopeElement
     }
 
     @SuppressWarnings("unused")
-    void unlink(Scope scope, ModelElement modelElement)
+    void unlink(final Scope scope, final ModelElement modelElement)
     {
+        assert scope != null: format(ATTEMPTING_UNLINK_TO_NULL, modelElement);
+        assert modelElement != null: format(ATTEMPTING_UNLINK_TO_NULL, scope);
+
         final List<ModelElement> modelElementList = elements.get(scope);
 
         if ((modelElementList != null) && modelElementList.contains(modelElement))

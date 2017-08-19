@@ -18,7 +18,7 @@ concept Expressions
     children: Class*;
     top_orders: Order*;
 
-//    path_ancestors = class.ancestors;
+    path_ancestors = class.ancestors;
 
 //    exists_invocation = exists(top_items, name == "this");
 
