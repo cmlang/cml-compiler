@@ -3,6 +3,7 @@ package cml.language.features;
 import cml.language.Model;
 import cml.language.foundation.*;
 import cml.language.types.NamedType;
+import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -82,14 +83,14 @@ public interface Concept extends NamedElement, PropertyList
     {
         return getPropertyTypes().stream()
                                  .filter(type -> !type.isPrimitive())
-                                 .map(NamedType::getConcept)
+                                 .map(Type::getConcept)
                                  .filter(Optional::isPresent)
                                  .map(Optional::get)
                                  .distinct()
                                  .collect(toList());
     }
 
-    default List<NamedType> getPropertyTypes()
+    default List<Type> getPropertyTypes()
     {
         return getAllProperties().stream()
                                  .map(Property::getType)
@@ -446,7 +447,7 @@ class ConflictRedefinition implements Invariant<Concept>
     public boolean evaluate(Concept self)
     {
         return getConflictingPropertyPairs(self)
-                   .map(pair -> pair.getLeft())
+                   .map(Pair::getLeft)
                    .allMatch(propertyRedefinedIn(self));
     }
 
@@ -460,7 +461,7 @@ class ConflictRedefinition implements Invariant<Concept>
                                    pair.getRight().getValue().isPresent());
     }
 
-    Predicate<Property> propertyRedefinedIn(Concept self)
+    private Predicate<Property> propertyRedefinedIn(Concept self)
     {
         return p1 -> self.getProperties()
                          .stream()

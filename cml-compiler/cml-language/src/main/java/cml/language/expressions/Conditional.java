@@ -4,6 +4,7 @@ import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.types.NamedType;
+import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -77,13 +78,12 @@ class ConditionalImpl implements Conditional
     }
 
     @Override
-    public NamedType getType()
+    public Type getType()
     {
-        final String thenType = then.getType().getName();
-        final String elseType = else_.getType().getName();
-        final String typeName = thenType.equals(elseType) ? thenType : thenType + "|" + elseType;
+        final Type thenType = then.getType();
+        final Type elseType = else_.getType();
 
-        return NamedType.create(typeName);
+        return thenType.equals(elseType) ? thenType : NamedType.create(thenType + "|" + elseType);
     }
 
     @Override

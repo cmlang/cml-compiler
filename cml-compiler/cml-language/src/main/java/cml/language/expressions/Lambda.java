@@ -1,6 +1,6 @@
 package cml.language.expressions;
 
-import cml.language.types.NamedType;
+import cml.language.types.Type;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class Lambda extends ExpressionBase
     }
 
     @Override
-    public NamedType getType()
+    public Type getType()
     {
         return expression.getType();
     }

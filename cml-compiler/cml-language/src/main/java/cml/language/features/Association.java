@@ -1,7 +1,7 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
-import cml.language.types.NamedType;
+import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public interface Association extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default List<NamedType> getPropertyTypes()
+    default List<Type> getPropertyTypes()
     {
         return getAssociationEnds()
             .stream()
@@ -206,7 +206,7 @@ class AssociationEndTypesMustMatch implements Invariant<Association>
 
     private static boolean typesMatch(Concept concept, Property property)
     {
-        return concept.getName().equals(property.getType().getName());
+        return concept.getSelfType().equals(property.getType().getElementType());
     }
 
     @Override

@@ -39,10 +39,6 @@ public interface NamedType extends Type, NamedElement
     String OPTIONAL = "optional";
     String SEQUENCE = "sequence";
 
-    default boolean isParameter() { return isDefined() && !isPrimitive() && !isConcept(); }
-
-    default boolean isConcept() { return getConcept().isPresent(); }
-
     default boolean isPrimitive()
     {
         return PRIMITIVE_TYPE_NAMES.contains(getName());
@@ -83,28 +79,35 @@ public interface NamedType extends Type, NamedElement
         return getKind().equals(SEQUENCE);
     }
 
-    default boolean isNumericWiderThan(NamedType other)
+    default boolean isNumericWiderThan(Type other)
     {
-        assert this.isNumeric() && other.isNumeric()
-            : "Both types must be numeric in order to be compared: " + this.getName() + " & " + other.getName();
+        if (other instanceof NamedType)
+        {
+            final NamedType otherType = (NamedType) other;
 
-        return NUMERIC_TYPE_NAMES.indexOf(this.getName()) > NUMERIC_TYPE_NAMES.indexOf(other.getName());
+            assert this.isNumeric() && other.isNumeric()
+                : "Both types must be numeric in order to be compared: " + this.getName() + " & " + otherType.getName();
+
+            return NUMERIC_TYPE_NAMES.indexOf(this.getName()) > NUMERIC_TYPE_NAMES.indexOf(otherType.getName());
+        }
+
+        return false;
     }
 
-    default boolean isBinaryFloatingPointWiderThan(NamedType other)
+    default boolean isBinaryFloatingPointWiderThan(Type other)
     {
-        assert this.isBinaryFloatingPoint() && other.isBinaryFloatingPoint()
-            : "Both types must be binary floating-point in order to be compared: " + this.getName() + " & " + other.getName();
+        if (other instanceof NamedType)
+        {
+            final NamedType otherType = (NamedType) other;
 
-        return BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(this.getName()) > BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(other.getName());
+            assert this.isBinaryFloatingPoint() && other.isBinaryFloatingPoint()
+                : "Both types must be binary floating-point in order to be compared: " + this.getName() + " & " + otherType.getName();
+
+            return BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(this.getName()) > BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(otherType.getName());
+        }
+
+        return false;
     }
-
-    Optional<String> getCardinality();
-
-    Optional<String> getErrorMessage();
-
-    Optional<Concept> getConcept();
-    void setConcept(@Nullable Concept concept);
 
     default String getKind()
     {
@@ -134,45 +137,10 @@ public interface NamedType extends Type, NamedElement
         return elementType;
     }
 
-    @SuppressWarnings("SimplifiableIfStatement")
-    default boolean isTypeAssignableFrom(NamedType other)
+    @Override
+    default Type withCardinality(String cardinality)
     {
-        if (this.getName().equals(other.getName()))
-        {
-            return true;
-        }
-        else if (this.isNumeric() && other.isNumeric())
-        {
-            return this.isNumericWiderThan(other);
-        }
-        else if (this.isBinaryFloatingPoint() && other.isBinaryFloatingPoint())
-        {
-            return this.isBinaryFloatingPointWiderThan(other);
-        }
-        else if (this.getConcept().isPresent() && other.getConcept().isPresent())
-        {
-            return other.getConcept()
-                        .get()
-                        .getAllGeneralizations()
-                        .stream()
-                        .anyMatch(c -> c.getName().equals(this.getName()));
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    default boolean isCardinalityAssignableFrom(NamedType other)
-    {
-        return Objects.equals(this.getCardinality(), other.getCardinality()) ||
-               (this.isOptional() && other.isRequired()) ||
-               (this.isSequence());
-    }
-
-    default boolean isAssignableFrom(NamedType other)
-    {
-        return this.isTypeAssignableFrom(other) && this.isCardinalityAssignableFrom(other);
+        return NamedType.create(getName(), cardinality);
     }
 
     static NamedType create(String name)

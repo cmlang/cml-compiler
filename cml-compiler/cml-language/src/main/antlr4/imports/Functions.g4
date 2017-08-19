@@ -3,10 +3,13 @@ grammar Functions;
 import Names, Types;
 
 functionDeclaration returns [Function function]:
-    FUNCTION NAME typeParameterList? functionParameterList '->' typeDeclaration ';';
+    FUNCTION name=NAME
+    typeParams=typeParameterList?
+    params=functionParameterList
+    '->' resultType=typeDeclaration ';';
 
-functionParameterList:
+functionParameterList returns [Stream<FunctionParameter> params]:
     '(' functionParameterDeclaration? (',' functionParameterDeclaration)* ')';
 
-functionParameterDeclaration returns [FunctionParameter parameter]:
-   name=NAME ':' typeDeclaration;
+functionParameterDeclaration returns [FunctionParameter param]:
+   name=NAME ':' type=typeDeclaration;

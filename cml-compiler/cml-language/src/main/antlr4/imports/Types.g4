@@ -2,7 +2,7 @@ grammar Types;
 
 import Names;
 
-typeDeclaration returns [NamedType type]
+typeDeclaration returns [Type type]
     : name=NAME cardinality? // named type
     | tuple=tupleTypeDeclaration // tuple type
     | params=tupleTypeDeclaration '->' result=typeDeclaration // function type
@@ -17,7 +17,7 @@ tupleTypeDeclaration:
 tupleElementDeclaration:
    (name=NAME ':')? typeDeclaration;
 
-typeParameterList:
+typeParameterList returns [Stream<TypeParameter> params]:
     '<' typeParameter (',' typeParameter)* '>';
 
 typeParameter returns [TypeParameter param]:

@@ -1,6 +1,6 @@
 grammar CompilationUnits;
 
-import Modules, Concepts, Associations, Tasks, Macros, Templates;
+import Modules, Concepts, Associations, Tasks, Templates;
 
 compilationUnit:
     declarations*;
@@ -10,6 +10,5 @@ declarations
     | conceptDeclaration
     | associationDeclaration
     | taskDeclaration
-    | macroDeclaration
     | templateDeclaration;
 

@@ -4,11 +4,12 @@ import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.types.NamedType;
+import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-import static java.util.Collections.*;
+import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableCollection;
 
 public interface Unary extends Expression
@@ -91,7 +92,7 @@ class UnaryImpl implements Unary
     }
 
     @Override
-    public NamedType getType()
+    public Type getType()
     {
         return LOGIC_OPERATORS.contains(getOperator()) ? NamedType.BOOLEAN : expr.getType();
     }

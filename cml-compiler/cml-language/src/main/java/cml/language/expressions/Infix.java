@@ -4,6 +4,7 @@ import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.types.NamedType;
+import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -124,10 +125,10 @@ class InfixImpl implements Infix
     }
 
     @Override
-    public NamedType getType()
+    public Type getType()
     {
-        final NamedType leftType = left.getType();
-        final NamedType rightType = right.getType();
+        final Type leftType = left.getType();
+        final Type rightType = right.getType();
 
         assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + left.getKind();
         assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + right.getKind();

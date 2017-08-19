@@ -1,6 +1,7 @@
 package cml.language.foundation;
 
 import cml.language.types.NamedType;
+import cml.language.types.Type;
 import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,16 +53,16 @@ public interface Scope extends ModelElement
         return empty();
     }
 
-    default Optional<NamedType> getTypeOfMemberNamed(String name)
+    default Optional<Type> getTypeOfMemberNamed(String name)
     {
         final Optional<TypedElement> typedElement = getMemberNamed(name, TypedElement.class);
 
         return typedElement.map(TypedElement::getType);
     }
 
-    default Optional<NamedType> getTypeOfElementNamed(String name)
+    default Optional<Type> getTypeOfElementNamed(String name)
     {
-        final Optional<NamedType> memberType = getTypeOfMemberNamed(name);
+        final Optional<Type> memberType = getTypeOfMemberNamed(name);
         if (memberType.isPresent()) return memberType;
 
         final Optional<TypedElement> typedElement = getElementNamed(name, TypedElement.class);
@@ -69,18 +70,24 @@ public interface Scope extends ModelElement
         return typedElement.map(TypedElement::getType);
     }
 
-    default Optional<NamedType> getTypeOfVariableNamed(String name)
+    default Optional<Type> getTypeOfVariableNamed(String name)
     {
-        final Optional<NamedType> type = getTypeOfElementNamed(name);
+        final Optional<Type> type = getTypeOfElementNamed(name);
 
         if (type.isPresent()) return type;
 
         return getParentScope().flatMap(scope -> scope.getTypeOfVariableNamed(name));
     }
 
-    default Optional<Scope> getScopeOfType(NamedType type)
+    default Optional<Scope> getScopeOfType(final Type type)
     {
-        return getElementNamed(type.getName(), Scope.class);
+        if (type instanceof NamedType)
+        {
+            final NamedType namedType = (NamedType)type;
+            return getElementNamed(namedType.getName(), Scope.class);
+        }
+
+        return empty();
     }
 
     default <T> Optional<T> getParentScope(Class<T> clazz)

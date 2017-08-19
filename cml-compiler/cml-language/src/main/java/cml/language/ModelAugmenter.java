@@ -9,6 +9,7 @@ import cml.language.types.NamedType;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
+import cml.language.types.Type;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
@@ -83,11 +84,13 @@ class ModelAugmenter extends CMLBaseListener
     @Override
     public void enterTypeDeclaration(CMLParser.TypeDeclarationContext ctx)
     {
-        final NamedType type = ctx.type;
+        final Type type = ctx.type;
 
-        if (type != null && !type.isPrimitive())
+        if (type != null && type instanceof NamedType && !type.isPrimitive())
         {
-            module.getConcept(type.getName()).ifPresent(type::setConcept);
+            final NamedType namedType = (NamedType)type;
+
+            module.getConcept(namedType.getName()).ifPresent(type::setConcept);
         }
     }
 
@@ -102,12 +105,12 @@ class ModelAugmenter extends CMLBaseListener
 
     private void augmentInvocation(Invocation invocation)
     {
-        module.getMacro(invocation.getName()).ifPresent(invocation::setMacro);
+        module.getTemplate(invocation.getName()).ifPresent(t -> invocation.setFunction(t.getFunction()));
 
-        if (invocation.getMacro().isPresent())
+        if (invocation.getFunction().isPresent())
         {
             invocation.getParameterizedArguments().forEach(
-                (parameter, expression) -> invocation.getParentScopeOf(parameter).addMember(expression));
+                (parameter, expression) -> invocation.addMember(expression));
         }
 
         seq(invocation.getArguments()).filter(a -> a instanceof Invocation)

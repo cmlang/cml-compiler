@@ -5,6 +5,7 @@ import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.types.NamedType;
+import cml.language.types.Type;
 import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +45,7 @@ public interface Property extends TypedElement, Scope
         return getAssociation().isPresent();
     }
 
-    Optional<NamedType> getDeclaredType();
+    Optional<Type> getDeclaredType();
 
     Optional<Expression> getValue();
     boolean isDerived();
@@ -88,12 +89,12 @@ public interface Property extends TypedElement, Scope
         return new PropertyImpl(name, null, value, false);
     }
 
-    static Property create(String name, @Nullable NamedType type, @Nullable Expression value)
+    static Property create(String name, @Nullable Type type, @Nullable Expression value)
     {
         return new PropertyImpl(name, type, value, false);
     }
 
-    static Property create(String name, @Nullable NamedType type, @Nullable Expression value, boolean derived)
+    static Property create(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
     {
         return new PropertyImpl(name, type, value, derived);
     }
@@ -119,11 +120,11 @@ class PropertyImpl implements Property
     private boolean typeRequired;
     private boolean typeAllowed;
 
-    private final @Nullable NamedType type;
+    private final @Nullable Type type;
     private final @Nullable Expression value;
     private boolean derived;
 
-    PropertyImpl(String name, @Nullable NamedType type, @Nullable Expression value, boolean derived)
+    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
     {
         modelElement = ModelElement.create(this);
         namedElement = NamedElement.create(modelElement, name);
@@ -141,7 +142,7 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public Optional<NamedType> getDeclaredType()
+    public Optional<Type> getDeclaredType()
     {
         return Optional.ofNullable(type);
     }
@@ -177,7 +178,7 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public NamedType getType()
+    public Type getType()
     {
         if (type == null)
         {

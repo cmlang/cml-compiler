@@ -6,7 +6,7 @@ import cml.language.expressions.Expression;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.Property;
-import cml.language.types.NamedType;
+import cml.language.types.Type;
 import cml.templates.OptionalValueAdaptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -161,7 +161,7 @@ public class ExpressionTest
             final Expression value = property.getValue().orElse(null);
             assertNotNull("Should have init for property: " + property.getName(), value);
 
-            final NamedType type = value.getType();
+            final Type type = value.getType();
             assertNotNull("Should have computed type for property: " + property.getName(), type);
 
             if (type.getErrorMessage().isPresent())

@@ -1,17 +1,15 @@
 
-//macro exists(seq: T*, seq/expr: Boolean): Boolean;
-
 template function exists<T>(seq: T*, expr: (T) -> Boolean) -> Boolean;
 
-macro select(seq: T*, seq/expr: Boolean): T*;
-macro reject(seq: T*, seq/expr: Boolean): T*;
+//macro select(seq: T*, seq/expr: Boolean): T*;
+//macro reject(seq: T*, seq/expr: Boolean): T*;
 
-macro yield(seq: T*, seq/expr: R*): R*;
-macro recurse(seq: T*, seq/expr: T*): T*;
+//macro yield(seq: T*, seq/expr: R*): R*;
+//macro recurse(seq: T*, seq/expr: T*): T*;
 
-macro reduce(from/seq: T*, seq/expr: S, from_i: R): S;
+//macro reduce(from/seq: T*, seq/expr: S, from_i: R): S;
 
-macro distinct(seq: T*): T*;
+//macro distinct(seq: T*): T*;
 
 concept Expressions
 {
@@ -20,7 +18,7 @@ concept Expressions
     children: Class*;
     top_orders: Order*;
 
-    path_ancestors = class.ancestors;
+//    path_ancestors = class.ancestors;
 
 //    exists_invocation = exists(top_items, name == "this");
 

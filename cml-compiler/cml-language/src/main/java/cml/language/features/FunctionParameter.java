@@ -1,11 +1,12 @@
 package cml.language.features;
 
-import cml.language.foundation.NamedElementBase;
+import cml.language.types.Type;
+import cml.language.types.TypedElementBase;
 
-public class FunctionParameter extends NamedElementBase
+public class FunctionParameter extends TypedElementBase
 {
-    public FunctionParameter(final String name)
+    public FunctionParameter(final String name, final Type type)
     {
-        super(name);
+        super(name, type);
     }
 }

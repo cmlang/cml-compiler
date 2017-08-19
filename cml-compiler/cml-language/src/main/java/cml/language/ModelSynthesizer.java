@@ -3,11 +3,12 @@ package cml.language;
 import cml.language.expressions.*;
 import cml.language.features.*;
 import cml.language.foundation.Location;
-import cml.language.foundation.Parameter;
 import cml.language.foundation.Property;
-import cml.language.types.NamedType;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
+import cml.language.types.NamedType;
+import cml.language.types.Type;
+import cml.language.types.TypeParameter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -65,8 +66,8 @@ class ModelSynthesizer extends CMLBaseListener
 
             ctx.declarations()
                .stream()
-               .filter(node -> node.macroDeclaration() != null)
-               .forEach(node -> module.addMember(node.macroDeclaration().macro));
+               .filter(node -> node.templateDeclaration() != null)
+               .forEach(node -> module.addMember(node.templateDeclaration().template));
         }
     }
 
@@ -154,7 +155,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String conceptName = ctx.conceptName.getText();
         final String propertyName = ctx.propertyName.getText();
-        final @Nullable NamedType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final @Nullable Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final AssociationEnd associationEnd = AssociationEnd.create(conceptName, propertyName, type);
 
         associationEnd.setLocation(locationOf(ctx));
@@ -190,45 +191,6 @@ class ModelSynthesizer extends CMLBaseListener
     }
 
     @Override
-    public void exitMacroDeclaration(MacroDeclarationContext ctx)
-    {
-        if (ctx.NAME() == null)
-        {
-            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_MACRO);
-        }
-
-        final String name = ctx.NAME().getText();
-        final NamedType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-
-        ctx.macro = Macro.create(name, type);
-
-        if (ctx.macroParameterList() != null)
-        {
-            ctx.macroParameterList()
-               .macroParameterDeclaration()
-               .forEach(node -> ctx.macro.addMember(node.parameter));
-        }
-    }
-
-    @Override
-    public void exitMacroParameterDeclaration(MacroParameterDeclarationContext ctx)
-    {
-        if (ctx.name == null)
-        {
-            throw new ModelSynthesisException(NO_NAME_PROVIDED_FOR_PARAMETER);
-        }
-
-        final String name = ctx.name.getText();
-        final NamedType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-        final String scopeName = (ctx.scope == null) ? null : ctx.scope.getText();
-        final Parameter parameter = Parameter.create(name, type, scopeName);
-
-        parameter.setLocation(locationOf(ctx));
-
-        ctx.parameter = parameter;
-    }
-
-    @Override
     public void exitPropertyDeclaration(PropertyDeclarationContext ctx)
     {
         if (ctx.NAME() == null)
@@ -237,7 +199,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final NamedType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
         final Property property = Property.create(name, type, value, ctx.DERIVED() != null);
 
@@ -258,6 +220,44 @@ class ModelSynthesizer extends CMLBaseListener
 
             ctx.type = NamedType.create(name, cardinality);
         }
+    }
+
+    @Override
+    public void exitTypeParameterList(final TypeParameterListContext ctx)
+    {
+        ctx.params = seq(ctx.typeParameter()).map(c -> c.param);
+    }
+
+    @Override
+    public void exitFunctionDeclaration(final FunctionDeclarationContext ctx)
+    {
+        final String name = ctx.name.getText();
+        final Type type = ctx.resultType.type;
+        final Stream<FunctionParameter> params = ctx.functionParameterList().params;
+
+        ctx.function = new Function(name, type, params);
+    }
+
+    @Override
+    public void exitFunctionParameterList(final FunctionParameterListContext ctx)
+    {
+        ctx.params = seq(ctx.functionParameterDeclaration()).map(c -> c.param);
+    }
+
+    @Override
+    public void exitFunctionParameterDeclaration(final FunctionParameterDeclarationContext ctx)
+    {
+        final String name = ctx.name.getText();
+
+        ctx.param = new FunctionParameter(name, ctx.type.type);
+    }
+
+    @Override
+    public void exitTypeParameter(final TypeParameterContext ctx)
+    {
+        final String name = ctx.name.getText();
+
+        ctx.param = new TypeParameter(name);
     }
 
     @Override

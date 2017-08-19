@@ -1,7 +1,7 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
-import cml.language.types.NamedType;
+import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
@@ -18,7 +18,7 @@ public interface AssociationEnd extends ModelElement
 {
     String getConceptName();
     String getPropertyName();
-    Optional<NamedType> getPropertyType();
+    Optional<Type> getPropertyType();
 
     Optional<Concept> getConcept();
     void setConcept(@Nullable Concept concept);
@@ -31,7 +31,7 @@ public interface AssociationEnd extends ModelElement
         return new AssociationEndImpl(conceptName, propertyName, null);
     }
 
-    static AssociationEnd create(String conceptName, String propertyName, @Nullable NamedType propertyType)
+    static AssociationEnd create(String conceptName, String propertyName, @Nullable Type propertyType)
     {
         return new AssociationEndImpl(conceptName, propertyName, propertyType);
     }
@@ -50,12 +50,12 @@ class AssociationEndImpl implements AssociationEnd
     private final ModelElement modelElement;
     private final String conceptName;
     private final String propertyName;
-    private final @Nullable NamedType propertyType;
+    private final @Nullable Type propertyType;
 
     private @Nullable Concept concept;
     private @Nullable Property property;
 
-    AssociationEndImpl(String conceptName, String propertyName, @Nullable NamedType propertyType)
+    AssociationEndImpl(String conceptName, String propertyName, @Nullable Type propertyType)
     {
         this.modelElement = ModelElement.create(this);
         this.conceptName = conceptName;
@@ -76,7 +76,7 @@ class AssociationEndImpl implements AssociationEnd
     }
 
     @Override
-    public Optional<NamedType> getPropertyType()
+    public Optional<Type> getPropertyType()
     {
         return Optional.ofNullable(propertyType);
     }

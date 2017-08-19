@@ -110,31 +110,31 @@ public interface Module extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default List<Macro> getMacros()
+    default List<Template> getTemplates()
     {
         return getMembers().stream()
-                           .filter(e -> e instanceof Macro)
-                           .map(e -> (Macro)e)
+                           .filter(e -> e instanceof Template)
+                           .map(e -> (Template)e)
                            .collect(toList());
     }
 
-    default List<Macro> getImportedMacros()
+    default List<Template> getImportedTemplates()
     {
         return getImportedModules()
                     .stream()
-                    .flatMap(m -> m.getMacros().stream())
+                    .flatMap(m -> m.getTemplates().stream())
                     .collect(toList());
     }
 
-    default List<Macro> getAllMacros()
+    default List<Template> getAllMacros()
     {
-        return concat(getMacros().stream(), getImportedMacros().stream()).collect(toList());
+        return concat(getTemplates().stream(), getImportedTemplates().stream()).collect(toList());
     }
 
-    default Optional<Macro> getMacro(String name)
+    default Optional<Template> getTemplate(String name)
     {
         return getAllMacros().stream()
-                             .filter(macro -> macro.getName().equals(name))
+                             .filter(t -> t.getName().equals(name))
                              .findFirst();
     }
 
