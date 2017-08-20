@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.foundation.Scope;
 import cml.language.types.FunctionType;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
@@ -77,6 +78,11 @@ public class Lambda extends ExpressionBase
     public Type getMatchingResultType()
     {
         return expression.getType();
+    }
+
+    public void addExpressionScope(final Scope scope)
+    {
+        scope.addMember(expression);
     }
 
     @Override

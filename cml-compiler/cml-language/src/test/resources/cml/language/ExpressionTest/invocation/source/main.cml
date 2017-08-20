@@ -1,5 +1,6 @@
 
 template function exists<T>(seq: T*, expr: (T) -> Boolean) -> Boolean;
+
 template function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 template function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 
@@ -9,7 +10,7 @@ template function distinct<T>(seq: T*) -> T*;
 
 template function recurse<T>(seq: T*, expr: (T) -> T*) -> T*;
 
-//macro reduce(from/seq: T*, seq/expr: S, from_i: R): S;
+template function reduce<T>(seq: T*, expr: S, from: R) -> S;
 
 
 concept Expressions
@@ -30,10 +31,10 @@ concept Expressions
 
     recurse_ancestors = recurse(class, { ancestors });
     recurse_distinct = distinct(recurse(class, { ancestors }));
-//    recurse_children = select(recurse(children, { children }), { ranking > 10 }); // equivalent to: self | recurse children | ...
+
+    recurse_children = select(recurse(children, { children }), { ranking > 10 }); // equivalent to: self | recurse children | ...
 
 //    reduce_invocation = reduce(top_orders, s + total, s = 0);
-
 }
 
 concept Order

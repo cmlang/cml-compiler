@@ -100,6 +100,7 @@ class ModelAugmenter extends CMLBaseListener
         if (ctx.expr instanceof Invocation)
         {
             augmentInvocation((Invocation) ctx.expr);
+            augmentInvocationArguments((Invocation) ctx.expr);
         }
     }
 
@@ -107,17 +108,25 @@ class ModelAugmenter extends CMLBaseListener
     {
         module.getTemplate(invocation.getName()).ifPresent(t -> invocation.setFunction(t.getFunction()));
 
-        if (invocation.getFunction().isPresent())
-        {
-            invocation.getTypedLambdaArguments().forEach(
-                (functionType, lambda) -> lambda.setFunctionType(functionType));
-
-            invocation.getArguments().forEach(
-                expression -> invocation.getParentScopeOf(expression).addMember(expression));
-        }
-
         seq(invocation.getArguments()).filter(a -> a instanceof Invocation)
                                       .map(a -> (Invocation)a)
                                       .forEach(this::augmentInvocation);
+    }
+
+    private void augmentInvocationArguments(Invocation invocation)
+    {
+        seq(invocation.getArguments()).filter(a -> a instanceof Invocation)
+                                      .map(a -> (Invocation)a)
+                                      .forEach(this::augmentInvocationArguments);
+
+        if (invocation.getFunction().isPresent())
+        {
+            invocation.getTypedLambdaArguments().forEach(
+                (functionType, lambda) ->
+                {
+                    lambda.setFunctionType(functionType);
+                    lambda.addExpressionScope(invocation.getExpressionScopeFor(lambda));
+                });
+        }
     }
 }

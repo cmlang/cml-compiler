@@ -102,21 +102,17 @@ public interface Invocation extends Expression, NamedElement
         }
     }
 
-    default Scope getParentScopeOf(final Expression expression)
+    default Scope getExpressionScopeFor(final Lambda lambda)
     {
-        if (expression instanceof Lambda)
+        final Optional<Type> scopeType = lambda.getExpectedScopeType();
+
+        if (scopeType.isPresent())
         {
-            final Lambda lambda = (Lambda) expression;
-            final Optional<Type> type = lambda.getExpectedScopeType();
+            final Type matchingType = getMatchingTypeOf(scopeType.get());
 
-            if (type.isPresent())
-            {
-                final Type matchingType = getMatchingTypeOf(type.get());
+            assert matchingType.getConcept().isPresent();
 
-                assert matchingType.getConcept().isPresent();
-
-                return matchingType.getConcept().get();
-            }
+            return matchingType.getConcept().get();
         }
 
         return this;
@@ -237,6 +233,8 @@ class InvocationImpl implements Invocation
         scope = Scope.create(this, modelElement);
 
         this.arguments = new ArrayList<>(arguments);
+
+        this.arguments.forEach(a -> this.addMember(a));
     }
 
     @Override
