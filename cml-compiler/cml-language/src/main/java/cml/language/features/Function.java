@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static org.jooq.lambda.Seq.seq;
 
@@ -32,22 +33,28 @@ public class Function extends TypedElementBase
                               .findFirst();
     }
 
-    public int getParamIndexOfMatchingType()
+    public int getParamIndexOfMatchingType(final Type type)
     {
-        assert getType().isParameter(): "Must be called only when function's result type is a parameter.";
+        assert type.isParameter(): "Must be called only when type is a parameter.";
 
         int index = 0;
         for (FunctionParameter parameter: getParameters())
         {
-            if (parameter.getType().equals(getType()))
+            if (parameter.getMatchingResultType().getElementType().equals(type.getElementType()))
             {
                 break;
             }
             index++;
         }
 
-        assert index < getParameters().size(): "Expected to find a macro parameter with a type matching the resulting type.";
+        assert index < getParameters().size(): "Expected to find a function parameter with a type matching the result type.";
 
         return index;
+    }
+
+    @Override
+    public String toString()
+    {
+        return format("function %s(%s) -> %s", getName(), seq(parameters).toString(", "), getType());
     }
 }

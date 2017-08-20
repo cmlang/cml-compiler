@@ -5,6 +5,7 @@ import org.jooq.lambda.Seq;
 
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.jooq.lambda.Seq.seq;
 
 public class TupleType extends ModelElementBase implements Type
@@ -19,5 +20,11 @@ public class TupleType extends ModelElementBase implements Type
     public Seq<TupleTypeElement> getElements()
     {
         return seq(elements);
+    }
+
+    @Override
+    public String toString()
+    {
+        return format("(%s)", seq(elements).toString(","));
     }
 }

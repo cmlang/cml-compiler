@@ -6,13 +6,14 @@ import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
 import cml.language.foundation.Scope;
-import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.*;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
 
 import java.util.*;
 
+import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
 import static org.jooq.lambda.Seq.seq;
@@ -36,6 +37,14 @@ public interface Invocation extends Expression, NamedElement
         }
     }
 
+    default Map<FunctionType, Lambda> getTypedLambdaArguments()
+    {
+        return seq(getParameterizedArguments()).filter(t -> t.v1.getType() instanceof FunctionType)
+                                               .filter(t -> t.v2 instanceof Lambda)
+                                               .map(t -> new Tuple2<>((FunctionType) t.v1.getType(), (Lambda) t.v2))
+                                               .collect(toMap(Tuple2::v1, Tuple2::v2));
+    }
+
     Optional<Function> getFunction();
     void setFunction(@Nullable Function function);
 
@@ -43,30 +52,59 @@ public interface Invocation extends Expression, NamedElement
     {
         if (getFunction().isPresent())
         {
-            final Function function = getFunction().get();
+            final Type resultType = getFunction().get().getType();
 
-            assert function.getParameters().size() == getArguments().size()
-                : "Number of arguments in invocation should match the number of parameters in function.";
-
-            if (function.getType().isParameter())
-            {
-                final int paramIndex = function.getParamIndexOfMatchingType();
-                final Type paramType = getArguments().get(paramIndex).getType();
-                final Type type = paramType.withCardinality(function.getType().getCardinality().orElse(null));
-
-                paramType.getConcept().ifPresent(type::setConcept);
-
-                return type;
-            }
-            else
-            {
-                return function.getType();
-            }
+            return getMatchingTypeOf(resultType);
         }
         else
         {
             return NamedType.createUndefined("Unable to find function of invocation: " + getName());
         }
+    }
+
+    default Type getMatchingTypeOf(final Type type)
+    {
+        assert getFunction().isPresent();
+
+        final Function function = getFunction().get();
+
+        assert function.getParameters().size() == getArguments().size()
+            : "Number of arguments in invocation should match the number of parameters in function.";
+
+        if (type.isParameter())
+        {
+            final int paramIndex = function.getParamIndexOfMatchingType(type);
+            final Type paramType = getArguments().get(paramIndex).getType();
+            final Type matchingType = paramType.withCardinality(type.getCardinality().orElse(null));
+
+            paramType.getConcept().ifPresent(matchingType::setConcept);
+
+            return matchingType;
+        }
+        else
+        {
+            return type;
+        }
+    }
+
+    default Scope getParentScopeOf(final Expression expression)
+    {
+        if (expression instanceof Lambda)
+        {
+            final Lambda lambda = (Lambda) expression;
+            final Optional<Type> type = lambda.getExpectedScopeType();
+
+            if (type.isPresent())
+            {
+                final Type matchingType = getMatchingTypeOf(type.get());
+
+                assert matchingType.getConcept().isPresent();
+
+                return matchingType.getConcept().get();
+            }
+        }
+
+        return this;
     }
 
     static Invocation create(String name, List<Expression> arguments)
@@ -173,6 +211,12 @@ class InvocationImpl implements Invocation
     {
         scope.addMember(member);
     }
+
+    @Override
+    public String toString()
+    {
+        return format("%s(%s)", getName(), seq(arguments).toString(", "));
+    }
 }
 
 class ParameterizedInvocation implements Invocation
@@ -258,5 +302,13 @@ class ParameterizedInvocation implements Invocation
     public void addMember(ModelElement member)
     {
         scope.addMember(member);
+    }
+
+    @Override
+    public String toString()
+    {
+        final Seq<String> namedArguments = seq(getNamedArguments()).map(t -> format("%s: %s", t.v1, t.v2));
+
+        return format("%s(%s)", getName(), namedArguments.toString(", "));
     }
 }

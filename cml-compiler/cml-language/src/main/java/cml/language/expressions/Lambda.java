@@ -1,16 +1,23 @@
 package cml.language.expressions;
 
+import cml.language.types.FunctionType;
 import cml.language.types.Type;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Optional.*;
+import static org.jooq.lambda.Seq.seq;
 
 public class Lambda extends ExpressionBase
 {
     private final List<String> parameters;
     private final Expression expression;
+
+    private @Nullable FunctionType functionType;
 
     public Lambda(final List<String> parameters, final Expression expression)
     {
@@ -30,6 +37,29 @@ public class Lambda extends ExpressionBase
         return expression;
     }
 
+    public Optional<FunctionType> getFunctionType()
+    {
+        return ofNullable(functionType);
+    }
+
+    public void setFunctionType(@Nullable FunctionType functionType)
+    {
+        this.functionType = functionType;
+    }
+
+    public Optional<Type> getExpectedScopeType()
+    {
+        if (parameters.isEmpty() && functionType != null)
+        {
+            if (functionType.isSingleParam())
+            {
+                return of(functionType.getSingleParamType());
+            }
+        }
+
+        return empty();
+    }
+
     @Override
     public String getKind()
     {
@@ -45,7 +75,9 @@ public class Lambda extends ExpressionBase
     @Override
     public String toString()
     {
-        return format("Lambda { %s -> %s }", parameters, expression);
+        return parameters.isEmpty() ?
+            format("{ %s }", expression) :
+            format("{ %s -> %s }", seq(parameters).toString(", "), expression);
     }
 }
 

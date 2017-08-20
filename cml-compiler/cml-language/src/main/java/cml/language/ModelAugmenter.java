@@ -109,8 +109,11 @@ class ModelAugmenter extends CMLBaseListener
 
         if (invocation.getFunction().isPresent())
         {
-            invocation.getParameterizedArguments().forEach(
-                (parameter, expression) -> invocation.addMember(expression));
+            invocation.getTypedLambdaArguments().forEach(
+                (functionType, lambda) -> lambda.setFunctionType(functionType));
+
+            invocation.getArguments().forEach(
+                expression -> invocation.getParentScopeOf(expression).addMember(expression));
         }
 
         seq(invocation.getArguments()).filter(a -> a instanceof Invocation)
