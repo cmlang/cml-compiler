@@ -7,7 +7,7 @@ template function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
 
 template function distinct<T>(seq: T*) -> T*;
 
-//macro recurse(seq: T*, seq/expr: T*): T*;
+template function recurse<T>(seq: T*, expr: (T) -> T*) -> T*;
 
 //macro reduce(from/seq: T*, seq/expr: S, from_i: R): S;
 
@@ -28,9 +28,9 @@ concept Expressions
     yield_invocation = yield(top_orders, { items });
     yield_invocation_distinct = distinct(yield(top_orders, { items.product }));
 
-//    recurse_ancestors = recurse(class, ancestors);
-//    recurse_distinct = distinct(recurse(class, ancestors));
-//    recurse_children = select(recurse(children, children), ranking > 10); // equivalent to: self | recurse children | ...
+    recurse_ancestors = recurse(class, { ancestors });
+    recurse_distinct = distinct(recurse(class, { ancestors }));
+//    recurse_children = select(recurse(children, { children }), { ranking > 10 }); // equivalent to: self | recurse children | ...
 
 //    reduce_invocation = reduce(top_orders, s + total, s = 0);
 
