@@ -75,11 +75,22 @@ public interface Invocation extends Expression, NamedElement
         {
             if (type.isParameter())
             {
-                final int paramIndex = function.getParamIndexOfMatchingType(type);
+                int paramIndex = function.getParamIndexOfMatchingType(type);
 
                 if (paramIndex < getArguments().size())
                 {
-                    final Type paramType = getArguments().get(paramIndex).getMatchingResultType();
+                    Type paramType = getArguments().get(paramIndex).getMatchingResultType();
+
+                    if (paramType.isUndefined())
+                    {
+                        paramIndex = function.getParamIndexOfMatchingType(type, paramIndex);
+
+                        if (paramIndex < getArguments().size())
+                        {
+                            paramType = getArguments().get(paramIndex).getMatchingResultType();
+                        }
+                    }
+
                     final Type matchingType = paramType.withCardinality(type.getCardinality().orElse(null));
 
                     paramType.getConcept().ifPresent(matchingType::setConcept);
@@ -114,8 +125,15 @@ public interface Invocation extends Expression, NamedElement
 
             return matchingType.getConcept().get();
         }
+        else
+        {
+            final LambdaScope lambdaScope = new LambdaScope();
 
-        return this;
+            lambda.getTypedParameters()
+                  .forEach((name, type) -> lambdaScope.addParameter(name, getMatchingTypeOf(type)));
+
+            return lambdaScope;
+        }
     }
 
     @Override
@@ -234,7 +252,7 @@ class InvocationImpl implements Invocation
 
         this.arguments = new ArrayList<>(arguments);
 
-        this.arguments.forEach(a -> this.addMember(a));
+        this.arguments.forEach(this::addMember);
     }
 
     @Override

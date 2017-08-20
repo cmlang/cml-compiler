@@ -151,10 +151,6 @@ class InfixImpl implements Infix
         }
         else
         {
-            System.out.println("Undefined type for: " + toString());
-            System.out.println(">>> Left NamedType: " + leftType);
-            System.out.println(">>> Right NamedType: " + rightType);
-
             return NamedType.createUndefined(format("Unsupported operands for operator '%s'.", getOperator()));
         }
     }

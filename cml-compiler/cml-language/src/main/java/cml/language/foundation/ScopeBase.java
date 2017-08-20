@@ -2,7 +2,7 @@ package cml.language.foundation;
 
 import java.util.List;
 
-public class ScopeBase extends ModelElementBase implements Scope
+public abstract class ScopeBase extends ModelElementBase implements Scope
 {
     protected final Scope scope;
 

@@ -1,6 +1,7 @@
 package cml.language.types;
 
 import cml.language.foundation.ModelElementBase;
+import org.jooq.lambda.Seq;
 
 import java.util.Optional;
 
@@ -25,6 +26,11 @@ public class FunctionType extends ModelElementBase implements Type
     public Type getResult()
     {
         return result;
+    }
+
+    public Seq<Type> getParamTypes()
+    {
+        return params.getElements().map(TupleTypeElement::getType);
     }
 
     public boolean isSingleParam()

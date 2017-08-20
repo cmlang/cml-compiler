@@ -5,6 +5,7 @@ import cml.language.features.*;
 import cml.language.foundation.Location;
 import cml.language.foundation.Property;
 import cml.language.grammar.CMLBaseListener;
+import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.*;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -22,6 +23,7 @@ import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.empty;
 import static org.jooq.lambda.Seq.seq;
 
 class ModelSynthesizer extends CMLBaseListener
@@ -392,7 +394,16 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitLambdaExpression(final LambdaExpressionContext ctx)
     {
-        ctx.lambda = new Lambda(emptyList(), ctx.expression().expr);
+        final Seq<String> parameters = ctx.lambdaParameterList() == null ? empty() : ctx.lambdaParameterList().params;
+        final Expression expr = ctx.expression().expr;
+
+        ctx.lambda = new Lambda(parameters, expr);
+    }
+
+    @Override
+    public void exitLambdaParameterList(final LambdaParameterListContext ctx)
+    {
+        ctx.params = seq(ctx.NAME()).map(ParseTree::getText);
     }
 
     @Override

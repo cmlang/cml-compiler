@@ -33,7 +33,7 @@ recurse(args) ::= <<
 >>
 
 reduce(args) ::= <<
-(<ocl(args.seq)> -> iterate(self; <args.from.variable> = <ocl(args.from.value)> | <ocl(args.expr)>))
+<ocl(args.seq)>->iterate(<args.expr.parameters; separator="; "> = <args.from.expression> | <ocl(args.expr.expression)>)
 >>
 
 distinct(args) ::= <<

@@ -23,7 +23,10 @@ expression returns [Expression expr]
     | '(' inner=expression ')';
 
 lambdaExpression returns[Lambda lambda]:
-    '{' expression '}';
+    '{' lambdaParameterList? expression '}';
+
+lambdaParameterList returns[Seq<String> params]:
+    NAME (',' NAME)* '->';
 
 invocationExpression returns [Invocation invocation]:
     NAME '(' expression (',' expression)* ')' lambdaExpression?;

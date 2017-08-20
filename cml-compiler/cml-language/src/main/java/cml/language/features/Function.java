@@ -35,6 +35,11 @@ public class Function extends TypedElementBase
 
     public int getParamIndexOfMatchingType(final Type type)
     {
+        return getParamIndexOfMatchingType(type, -1);
+    }
+
+    public int getParamIndexOfMatchingType(final Type type, final int skipIndex)
+    {
         assert type.isParameter(): "Must be called only when type is a parameter.";
 
         int index = 0;
@@ -42,7 +47,7 @@ public class Function extends TypedElementBase
         {
             if (parameter.getMatchingResultType().getElementType().equals(type.getElementType()))
             {
-                break;
+                if (index != skipIndex) break;
             }
             index++;
         }

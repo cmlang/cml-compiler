@@ -5,13 +5,18 @@ import cml.language.types.FunctionType;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.lambda.Seq;
+import org.jooq.lambda.tuple.Tuple2;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.lang.String.format;
+import static java.util.Collections.emptyMap;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Optional.*;
+import static java.util.stream.Collectors.toMap;
 import static org.jooq.lambda.Seq.seq;
 
 public class Lambda extends ExpressionBase
@@ -21,9 +26,9 @@ public class Lambda extends ExpressionBase
 
     private @Nullable FunctionType functionType;
 
-    public Lambda(final List<String> parameters, final Expression expression)
+    public Lambda(final Seq<String> parameters, final Expression expression)
     {
-        this.parameters = parameters;
+        this.parameters = parameters.toList();
         this.expression = expression;
 
         addMember(expression);
@@ -49,17 +54,31 @@ public class Lambda extends ExpressionBase
         this.functionType = functionType;
     }
 
+    public Map<String, Type> getTypedParameters()
+    {
+        if (functionType == null)
+        {
+            return emptyMap();
+        }
+        else
+        {
+            assert parameters.size() == functionType.getParamTypes().count();
+
+            return seq(parameters).zip(functionType.getParamTypes())
+                                  .collect(toMap(Tuple2::v1, Tuple2::v2));
+        }
+    }
+
     public Optional<Type> getExpectedScopeType()
     {
-        if (parameters.isEmpty() && functionType != null)
+        if (parameters.isEmpty() && functionType != null && functionType.isSingleParam())
         {
-            if (functionType.isSingleParam())
-            {
-                return of(functionType.getSingleParamType());
-            }
+            return of(functionType.getSingleParamType());
         }
-
-        return empty();
+        else
+        {
+            return empty();
+        }
     }
 
     @Override

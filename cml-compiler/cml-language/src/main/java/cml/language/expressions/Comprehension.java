@@ -2,6 +2,7 @@ package cml.language.expressions;
 
 import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.lambda.Seq;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.empty;
 import static org.jooq.lambda.Seq.seq;
 
 public class Comprehension extends ExpressionBase
@@ -57,15 +59,15 @@ public class Comprehension extends ExpressionBase
                                .collect(toList());
     }
 
-    public List<String> getEnumeratorVariablesForQuery(final Query query)
+    public Seq<String> getEnumeratorVariablesForQuery(final Query query)
     {
         if (queries.size() >= 1 && queries.get(0) == query)
         {
-            return seq(enumerators).map(Enumerator::getVariable).toList();
+            return seq(enumerators).map(Enumerator::getVariable);
         }
         else
         {
-            return emptyList();
+            return empty();
         }
     }
 

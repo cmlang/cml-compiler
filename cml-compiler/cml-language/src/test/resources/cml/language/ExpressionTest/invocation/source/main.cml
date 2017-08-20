@@ -10,8 +10,7 @@ template function distinct<T>(seq: T*) -> T*;
 
 template function recurse<T>(seq: T*, expr: (T) -> T*) -> T*;
 
-template function reduce<T>(seq: T*, expr: S, from: R) -> S;
-
+template function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
 
 concept Expressions
 {
@@ -34,7 +33,7 @@ concept Expressions
 
     recurse_children = select(recurse(children, { children }), { ranking > 10 }); // equivalent to: self | recurse children | ...
 
-//    reduce_invocation = reduce(top_orders, s + total, s = 0);
+    reduce_invocation = reduce(top_orders, { order, sum -> sum + order.total }, { 0.0 });
 }
 
 concept Order
