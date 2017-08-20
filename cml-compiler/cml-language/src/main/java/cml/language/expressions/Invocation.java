@@ -354,6 +354,8 @@ class ParameterizedInvocation implements Invocation
         scope = Scope.create(this, modelElement);
 
         this.namedArguments = new LinkedHashMap<>(namedArguments);
+
+        this.namedArguments.values().forEach(this::addMember);
     }
 
     @Override
