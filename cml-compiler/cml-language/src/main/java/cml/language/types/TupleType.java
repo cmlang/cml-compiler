@@ -23,6 +23,23 @@ public class TupleType extends ModelElementBase implements Type
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final TupleType tupleType = (TupleType) o;
+
+        return elements.equals(tupleType.elements);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return elements.hashCode();
+    }
+
+    @Override
     public String toString()
     {
         return format("(%s)", seq(elements).toString(","));

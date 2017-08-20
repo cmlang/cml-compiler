@@ -30,6 +30,28 @@ public class TupleTypeElement extends ModelElementBase
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final TupleTypeElement that = (TupleTypeElement) o;
+
+        if (type != null ? type.equals(that.type) : that.type == null)
+            if (name != null ? name.equals(that.name) : that.name == null) return true;
+
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return name == null ? type.toString() : format("%s: %s", name, type);

@@ -2,6 +2,7 @@ package cml.language.foundation;
 
 import java.util.List;
 
+@FunctionalInterface
 public interface InvariantValidator<T extends ModelElement>
 {
     List<Invariant<T>> getInvariants();

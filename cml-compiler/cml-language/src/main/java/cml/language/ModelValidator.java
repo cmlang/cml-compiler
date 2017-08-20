@@ -1,5 +1,6 @@
 package cml.language;
 
+import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
@@ -16,6 +17,7 @@ public class ModelValidator implements ModelVisitor.Delegate
     private final InvariantValidator<Property> propertyInvariantValidator = Property.invariantValidator();
     private final InvariantValidator<Association> associationInvariantValidator = Association.invariantValidator();
     private final InvariantValidator<AssociationEnd> associationEndInvariantValidator = AssociationEnd.invariantValidator();
+    private final InvariantValidator<Expression> expressionInvariantValidator = Expression.invariantValidator();
     private final List<Diagnostic> diagnostics = new ArrayList<>();
 
     List<Diagnostic> getDiagnostics()
@@ -48,5 +50,11 @@ public class ModelValidator implements ModelVisitor.Delegate
     public void visit(AssociationEnd associationEnd)
     {
         associationEndInvariantValidator.validate(associationEnd, diagnostics);
+    }
+
+    @Override
+    public void visit(final Expression expression)
+    {
+        expressionInvariantValidator.validate(expression, diagnostics);
     }
 }

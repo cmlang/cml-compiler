@@ -35,6 +35,11 @@ public interface Type extends ModelElement
         return this;
     }
 
+    default Type getMatchingResultType()
+    {
+        return this;
+    }
+
     default Type withCardinality(String cardinality)
     {
         throw new UnsupportedOperationException(this + "withCardinality(" + cardinality + ")");

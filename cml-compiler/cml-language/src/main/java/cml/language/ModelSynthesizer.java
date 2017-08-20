@@ -304,6 +304,11 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.assignmentExpression() != null) ctx.expr = ctx.assignmentExpression().assignment;
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
+
+        if (ctx.expr != null)
+        {
+            ctx.expr.setLocation(locationOf(ctx));
+        }
     }
 
     private Unary createUnary(ExpressionContext ctx)

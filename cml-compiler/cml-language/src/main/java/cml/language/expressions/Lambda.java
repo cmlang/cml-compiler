@@ -1,6 +1,7 @@
 package cml.language.expressions;
 
 import cml.language.types.FunctionType;
+import cml.language.types.NamedType;
 import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,6 +69,12 @@ public class Lambda extends ExpressionBase
 
     @Override
     public Type getType()
+    {
+        return functionType == null ? NamedType.createUndefined("Function type not specified for: " + this) : functionType;
+    }
+
+    @Override
+    public Type getMatchingResultType()
     {
         return expression.getType();
     }

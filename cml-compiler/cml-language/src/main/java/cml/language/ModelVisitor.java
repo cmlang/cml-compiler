@@ -1,5 +1,6 @@
 package cml.language;
 
+import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
@@ -14,6 +15,7 @@ public class ModelVisitor
         default void visit(Property property) {}
         default void visit(Association association) {}
         default void visit(AssociationEnd associationEnd) {}
+        default void visit(Expression expression) {}
     }
 
     private Delegate delegate;
@@ -33,6 +35,11 @@ public class ModelVisitor
 
             for (final Property property: concept.getProperties())
             {
+                if (property.getValue().isPresent())
+                {
+                    delegate.visit(property.getValue().get());
+                }
+
                 delegate.visit(property);
             }
         }

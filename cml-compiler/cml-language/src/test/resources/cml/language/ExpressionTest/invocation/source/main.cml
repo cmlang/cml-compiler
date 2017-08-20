@@ -5,11 +5,12 @@ template function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 
 template function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
 
+template function distinct<T>(seq: T*) -> T*;
+
 //macro recurse(seq: T*, seq/expr: T*): T*;
 
 //macro reduce(from/seq: T*, seq/expr: S, from_i: R): S;
 
-//macro distinct(seq: T*): T*;
 
 concept Expressions
 {
@@ -25,7 +26,7 @@ concept Expressions
     reject_invocation = reject(top_items) { name == "this" }; // trailing lambdas
 
     yield_invocation = yield(top_orders, { items });
-//    yield_invocation_distinct = distinct(yield(top_orders, items.product));
+    yield_invocation_distinct = distinct(yield(top_orders, { items.product }));
 
 //    recurse_ancestors = recurse(class, ancestors);
 //    recurse_distinct = distinct(recurse(class, ancestors));

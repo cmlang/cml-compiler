@@ -1,6 +1,5 @@
 package cml.language.features;
 
-import cml.language.types.FunctionType;
 import cml.language.types.Type;
 import cml.language.types.TypedElementBase;
 
@@ -15,7 +14,7 @@ public class FunctionParameter extends TypedElementBase
 
     public Type getMatchingResultType()
     {
-        return getType() instanceof FunctionType ? ((FunctionType)getType()).getResult() : getType();
+        return getType().getMatchingResultType();
     }
 
     @Override

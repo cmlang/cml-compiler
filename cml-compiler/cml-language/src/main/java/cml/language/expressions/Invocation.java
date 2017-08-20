@@ -2,11 +2,10 @@ package cml.language.expressions;
 
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
-import cml.language.foundation.Location;
-import cml.language.foundation.ModelElement;
-import cml.language.foundation.NamedElement;
-import cml.language.foundation.Scope;
-import cml.language.types.*;
+import cml.language.foundation.*;
+import cml.language.types.FunctionType;
+import cml.language.types.NamedType;
+import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
@@ -20,6 +19,10 @@ import static org.jooq.lambda.Seq.seq;
 
 public interface Invocation extends Expression, NamedElement
 {
+    String MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION = "Unable to find function of invocation: ";
+    String MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION = "Number of arguments in invocation should match the number of parameters in function: ";
+    String MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION = "Argument type should match parameter type in function: ";
+
     List<Expression> getArguments();
     Map<String, Expression> getNamedArguments();
 
@@ -58,7 +61,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else
         {
-            return NamedType.createUndefined("Unable to find function of invocation: " + getName());
+            return NamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
         }
     }
 
@@ -68,22 +71,34 @@ public interface Invocation extends Expression, NamedElement
 
         final Function function = getFunction().get();
 
-        assert function.getParameters().size() == getArguments().size()
-            : "Number of arguments in invocation should match the number of parameters in function.";
-
-        if (type.isParameter())
+        if (function.getParameters().size() == getArguments().size())
         {
-            final int paramIndex = function.getParamIndexOfMatchingType(type);
-            final Type paramType = getArguments().get(paramIndex).getType();
-            final Type matchingType = paramType.withCardinality(type.getCardinality().orElse(null));
+            if (type.isParameter())
+            {
+                final int paramIndex = function.getParamIndexOfMatchingType(type);
 
-            paramType.getConcept().ifPresent(matchingType::setConcept);
+                if (paramIndex < getArguments().size())
+                {
+                    final Type paramType = getArguments().get(paramIndex).getMatchingResultType();
+                    final Type matchingType = paramType.withCardinality(type.getCardinality().orElse(null));
 
-            return matchingType;
+                    paramType.getConcept().ifPresent(matchingType::setConcept);
+
+                    return matchingType;
+                }
+                else
+                {
+                    return NamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName());
+                }
+            }
+            else
+            {
+                return type;
+            }
         }
         else
         {
-            return type;
+            return NamedType.createUndefined(MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION + getName());
         }
     }
 
@@ -105,6 +120,93 @@ public interface Invocation extends Expression, NamedElement
         }
 
         return this;
+    }
+
+    @Override
+    default boolean evaluateInvariants()
+    {
+        if (getFunction().isPresent())
+        {
+            final Function function = getFunction().get();
+
+            if (function.getParameters().size() == getArguments().size())
+            {
+                return seq(getParameterizedArguments()).allMatch(t -> typeMatches(t.v1, t.v2));
+            }
+        }
+
+        return false;
+    }
+
+    default boolean typeMatches(final FunctionParameter param, final Expression argument)
+    {
+        final Type type = argument.getType();
+
+        return !type.isUndefined() && (type.equals(param.getType()) || resultingTypesMatch(param, type));
+    }
+
+    default boolean resultingTypesMatch(final FunctionParameter param, final Type type)
+    {
+        return type.getMatchingResultType().equals(getMatchingTypeOf(param.getType()));
+    }
+
+    @Override
+    default Diagnostic createDiagnostic()
+    {
+        final boolean pass = evaluateInvariants();
+
+        assert !pass;
+
+        return new Diagnostic(
+            "matching_function_for_invocation",
+            this,
+            getDiagnosticMessage(),
+            getDiagnosticParticipants());
+    }
+
+    default String getDiagnosticMessage()
+    {
+        final boolean pass = evaluateInvariants();
+
+        assert !pass;
+
+        if (getFunction().isPresent())
+        {
+            final Function function = getFunction().get();
+
+            if (function.getParameters().size() == getArguments().size())
+            {
+                return MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName();
+            }
+            else
+            {
+                return MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION + getName();
+            }
+        }
+
+        return MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName();
+    }
+
+    default List<? extends ModelElement> getDiagnosticParticipants()
+    {
+        final boolean pass = evaluateInvariants();
+
+        assert !pass;
+
+        if (getFunction().isPresent())
+        {
+            final Function function = getFunction().get();
+
+            if (function.getParameters().size() == getArguments().size())
+            {
+                return seq(getParameterizedArguments()).filter(t -> !typeMatches(t.v1, t.v2))
+                                                       .flatMap(Tuple2::toSeq)
+                                                       .map(e -> (ModelElement)e)
+                                                       .toList();
+            }
+        }
+
+        return emptyList();
     }
 
     static Invocation create(String name, List<Expression> arguments)

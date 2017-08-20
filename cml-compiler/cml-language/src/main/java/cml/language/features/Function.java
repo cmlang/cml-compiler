@@ -47,8 +47,6 @@ public class Function extends TypedElementBase
             index++;
         }
 
-        assert index < getParameters().size(): "Expected to find a function parameter with a type matching the result type.";
-
         return index;
     }
 
