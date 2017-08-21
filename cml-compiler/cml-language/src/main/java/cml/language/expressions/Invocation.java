@@ -113,7 +113,7 @@ public interface Invocation extends Expression, NamedElement
         }
     }
 
-    default Scope getExpressionScopeFor(final Lambda lambda)
+    default Optional<Scope> getExpressionScopeFor(final Lambda lambda)
     {
         final Optional<Type> scopeType = lambda.getExpectedScopeType();
 
@@ -121,9 +121,9 @@ public interface Invocation extends Expression, NamedElement
         {
             final Type matchingType = getMatchingTypeOf(scopeType.get());
 
-            assert matchingType.getConcept().isPresent();
+            assert matchingType.getConcept().isPresent(): "Expected concept but found '" + matchingType + "' for lambda: " + lambda + " - " + scopeType.get();
 
-            return matchingType.getConcept().get();
+            return Optional.of(matchingType.getConcept().get());
         }
         else
         {
@@ -132,7 +132,7 @@ public interface Invocation extends Expression, NamedElement
             lambda.getTypedParameters()
                   .forEach((name, type) -> lambdaScope.addParameter(name, getMatchingTypeOf(type)));
 
-            return lambdaScope;
+            return Optional.of(lambdaScope);
         }
     }
 

@@ -30,8 +30,6 @@ public class Lambda extends ExpressionBase
     {
         this.parameters = parameters.toList();
         this.expression = expression;
-
-        addMember(expression);
     }
 
     public List<String> getParameters()
@@ -99,8 +97,15 @@ public class Lambda extends ExpressionBase
         return expression.getType();
     }
 
-    public void addExpressionScope(final Scope scope)
+    public boolean isExpressionInSomeScope()
     {
+        return expression.getParentScope().isPresent();
+    }
+
+    public void addExpressionToScope(final Scope scope)
+    {
+        assert !isExpressionInSomeScope();
+
         scope.addMember(expression);
     }
 
