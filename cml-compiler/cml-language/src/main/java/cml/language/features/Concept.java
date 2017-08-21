@@ -25,7 +25,11 @@ public interface Concept extends NamedElement, PropertyList
     @Override
     default NamedType getSelfType()
     {
-        return NamedType.create(getName());
+        final NamedType namedType = NamedType.create(getName());
+
+        namedType.setConcept(this);
+
+        return namedType;
     }
 
     default List<String> getDependencies()

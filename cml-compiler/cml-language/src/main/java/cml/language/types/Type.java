@@ -2,7 +2,7 @@ package cml.language.types;
 
 import cml.language.features.Concept;
 import cml.language.foundation.ModelElement;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -145,8 +145,8 @@ public interface Type extends ModelElement
         return empty();
     }
 
-    default void setConcept(@Nullable Concept concept)
+    default void setConcept(@NotNull Concept concept)
     {
-        // no-op
+        throw new UnsupportedOperationException("setConcept");
     }
 }

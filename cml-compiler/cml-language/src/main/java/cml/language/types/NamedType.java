@@ -5,6 +5,7 @@ import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
 import cml.language.foundation.Scope;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -128,7 +129,7 @@ public interface NamedType extends Type, NamedElement
     {
         final NamedType elementType = NamedType.create(getName());
 
-        if (getConcept().isPresent()) elementType.setConcept(getConcept().get());
+        getConcept().ifPresent(elementType::setConcept);
 
         return elementType;
     }
@@ -136,7 +137,11 @@ public interface NamedType extends Type, NamedElement
     @Override
     default Type withCardinality(String cardinality)
     {
-        return NamedType.create(getName(), cardinality);
+        final NamedType namedType = NamedType.create(getName(), cardinality);
+
+        getConcept().ifPresent(namedType::setConcept);
+
+        return namedType;
     }
 
     static NamedType create(String name)
@@ -214,7 +219,7 @@ class NamedTypeImpl implements NamedType
     }
 
     @Override
-    public void setConcept(@Nullable Concept concept)
+    public void setConcept(@NotNull Concept concept)
     {
         this.concept = concept;
     }
@@ -239,7 +244,7 @@ class NamedTypeImpl implements NamedType
     @Override
     public int hashCode()
     {
-        return Objects.hash(cardinality);
+        return Objects.hash(getName(), cardinality);
     }
 }
 
