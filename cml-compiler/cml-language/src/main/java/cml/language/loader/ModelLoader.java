@@ -1,9 +1,10 @@
-package cml.language;
+package cml.language.loader;
 
 import cml.io.Console;
 import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.io.SourceFile;
+import cml.language.foundation.Model;
 import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.foundation.Diagnostic;
@@ -65,6 +66,8 @@ class ModelLoaderImpl implements ModelLoader
 
             if (exitCode == SUCCESS)
             {
+                linkFunctions(model);
+
                 return validateModel(model);
             }
             
@@ -177,12 +180,16 @@ class ModelLoaderImpl implements ModelLoader
         walker.walk(modelAugmenter, compilationUnitContext);
     }
 
+    private void linkFunctions(final Model model)
+    {
+//        final ModelVisitor modelVisitor = new ModelVisitor(modelValidator);
+    }
+
     private int validateModel(Model model)
     {
         final ModelValidator modelValidator = new ModelValidator();
-        final ModelVisitor modelVisitor = new ModelVisitor(modelValidator);
 
-        modelVisitor.visit(model);
+        model.visit(modelValidator);
 
         if (modelValidator.getDiagnostics().size() == 0)
         {

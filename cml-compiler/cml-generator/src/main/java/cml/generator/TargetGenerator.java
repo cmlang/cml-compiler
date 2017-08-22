@@ -1,13 +1,13 @@
 package cml.generator;
 
-import cml.language.Model;
-import cml.language.ModelVisitor;
 import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.features.Task;
+import cml.language.foundation.Model;
 import cml.language.foundation.NamedElement;
+import cml.language.loader.ModelVisitor;
 
-class TargetGenerator implements ModelVisitor.Delegate
+class TargetGenerator implements ModelVisitor
 {
     private static final String MODEL = "model";
     private static final String CONCEPT = "concept";

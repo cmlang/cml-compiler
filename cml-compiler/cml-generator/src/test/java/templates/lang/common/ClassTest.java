@@ -1,6 +1,6 @@
 package templates.lang.common;
 
-import cml.language.Model;
+import cml.language.foundation.Model;
 import cml.language.expressions.Expression;
 import cml.language.expressions.Literal;
 import cml.language.expressions.Path;

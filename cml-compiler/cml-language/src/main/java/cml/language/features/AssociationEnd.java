@@ -1,7 +1,9 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
+import cml.language.loader.ModelVisitor;
 import cml.language.types.Type;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -21,10 +23,15 @@ public interface AssociationEnd extends ModelElement
     Optional<Type> getPropertyType();
 
     Optional<Concept> getConcept();
-    void setConcept(@Nullable Concept concept);
+    void setConcept(@NotNull Concept concept);
 
     Optional<Property> getProperty();
-    void setProperty(@Nullable Property property);
+    void setProperty(@NotNull Property property);
+
+    default void visit(ModelVisitor visitor)
+    {
+        visitor.visit(this);
+    }
 
     static AssociationEnd create(String conceptName, String propertyName)
     {
@@ -88,8 +95,10 @@ class AssociationEndImpl implements AssociationEnd
     }
 
     @Override
-    public void setConcept(@Nullable Concept concept)
+    public void setConcept(@NotNull Concept concept)
     {
+        assert this.concept == null;
+
         this.concept = concept;
     }
 
@@ -100,8 +109,10 @@ class AssociationEndImpl implements AssociationEnd
     }
 
     @Override
-    public void setProperty(@Nullable Property property)
+    public void setProperty(@NotNull Property property)
     {
+        assert this.property == null;
+
         this.property = property;
     }
 

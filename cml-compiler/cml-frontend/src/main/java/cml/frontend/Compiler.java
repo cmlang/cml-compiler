@@ -2,14 +2,10 @@ package cml.frontend;
 
 import cml.generator.Generator;
 import cml.io.Console;
-import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
-import cml.language.Model;
-import cml.language.ModelLoader;
-import cml.templates.TemplateGroupFile;
-
-import java.util.Optional;
+import cml.language.foundation.Model;
+import cml.language.loader.ModelLoader;
 
 public interface Compiler
 {

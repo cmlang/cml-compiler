@@ -1,6 +1,6 @@
 package cml.language.features;
 
-import cml.language.Model;
+import cml.language.foundation.Model;
 import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;

@@ -2,8 +2,8 @@ package templates.lang.common;
 
 import cml.io.Console;
 import cml.io.FileSystem;
-import cml.language.Model;
-import cml.language.ModelLoader;
+import cml.language.foundation.Model;
+import cml.language.loader.ModelLoader;
 import cml.language.features.Association;
 import cml.language.features.Concept;
 import org.junit.Test;

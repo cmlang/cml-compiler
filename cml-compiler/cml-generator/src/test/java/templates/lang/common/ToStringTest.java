@@ -1,6 +1,6 @@
 package templates.lang.common;
 
-import cml.language.Model;
+import cml.language.foundation.Model;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.foundation.Property;

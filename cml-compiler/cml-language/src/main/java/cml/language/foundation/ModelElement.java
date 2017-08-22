@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.loader.ModelVisitor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -23,6 +24,11 @@ public interface ModelElement
         {
             return empty();
         }
+    }
+
+    default void visit(ModelVisitor visitor)
+    {
+        throw new UnsupportedOperationException("visit() in: " + this);
     }
 
     static ModelElement create(ModelElement self)

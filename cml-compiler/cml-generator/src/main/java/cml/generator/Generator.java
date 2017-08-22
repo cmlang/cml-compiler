@@ -4,9 +4,8 @@ import cml.io.Console;
 import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
-import cml.language.Model;
-import cml.language.ModelVisitor;
 import cml.language.features.Task;
+import cml.language.foundation.Model;
 import cml.templates.TemplateGroupFile;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
@@ -87,9 +86,8 @@ class GeneratorImpl implements Generator
         targetDir.ifPresent(fileSystem::cleanDirectory);
 
         final TargetGenerator targetGenerator = new TargetGenerator(targetFileRenderer, target.get(), targetDirPath);
-        final ModelVisitor modelVisitor = new ModelVisitor(targetGenerator);
 
-        modelVisitor.visit(model);
+        model.visit(targetGenerator);
 
         return SUCCESS;
     }

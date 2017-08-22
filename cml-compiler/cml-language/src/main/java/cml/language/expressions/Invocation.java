@@ -285,6 +285,10 @@ class InvocationImpl implements Invocation
     @Override
     public void setFunction(@Nullable Function function)
     {
+        System.out.println("invocation: " + this);
+        System.out.println("function: " + function);
+        System.out.println("");
+
         this.function = function;
     }
 

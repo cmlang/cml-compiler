@@ -1,4 +1,4 @@
-package cml.language;
+package cml.language.loader;
 
 import static java.lang.String.format;
 

@@ -1,9 +1,9 @@
 package cml.language.foundation;
 
-import cml.language.Model;
 import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.Concept;
+import cml.language.loader.ModelVisitor;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import cml.language.types.TypedElement;
@@ -77,6 +77,16 @@ public interface Property extends TypedElement, Scope
                                                .stream()
                                                .anyMatch(end -> end.getProperty().isPresent() && end.getProperty().get() == this))
                          .findFirst();
+    }
+
+    default void visit(ModelVisitor visitor)
+    {
+        visitor.visit(this);
+
+        if (getValue().isPresent())
+        {
+            visitor.visit(getValue().get());
+        }
     }
 
     static Property create(String name, @Nullable NamedType type)

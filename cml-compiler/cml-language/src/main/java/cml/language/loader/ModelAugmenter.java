@@ -1,4 +1,4 @@
-package cml.language;
+package cml.language.loader;
 
 import cml.language.expressions.Invocation;
 import cml.language.features.AssociationEnd;
@@ -102,6 +102,7 @@ class ModelAugmenter extends CMLBaseListener
 
         if (ctx.expr instanceof Invocation)
         {
+            System.out.println("expr: " + ctx.expr);
             final Invocation invocation = (Invocation) ctx.expr;
 
             augmentFunctionOfInvocation(invocation);

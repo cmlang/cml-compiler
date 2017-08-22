@@ -221,6 +221,8 @@ class NamedTypeImpl implements NamedType
     @Override
     public void setConcept(@NotNull Concept concept)
     {
+        assert this.concept == null;
+
         this.concept = concept;
     }
 

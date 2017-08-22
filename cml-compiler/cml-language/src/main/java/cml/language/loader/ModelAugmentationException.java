@@ -1,4 +1,4 @@
-package cml.language;
+package cml.language.loader;
 
 class ModelAugmentationException extends ModelLoadingException
 {

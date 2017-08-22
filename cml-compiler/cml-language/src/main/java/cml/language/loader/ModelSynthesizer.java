@@ -1,11 +1,10 @@
-package cml.language;
+package cml.language.loader;
 
 import cml.language.expressions.*;
 import cml.language.features.*;
 import cml.language.foundation.Location;
 import cml.language.foundation.Property;
 import cml.language.grammar.CMLBaseListener;
-import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.*;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -20,7 +19,6 @@ import java.util.stream.Stream;
 
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
-import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.empty;

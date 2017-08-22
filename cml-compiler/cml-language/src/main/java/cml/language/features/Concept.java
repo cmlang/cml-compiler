@@ -1,7 +1,8 @@
 package cml.language.features;
 
-import cml.language.Model;
+import cml.language.foundation.Model;
 import cml.language.foundation.*;
+import cml.language.loader.ModelVisitor;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
@@ -300,6 +301,13 @@ public interface Concept extends NamedElement, PropertyList
                                                .stream()
                                                .anyMatch(end -> end.getConcept().isPresent() && end.getConcept().get() == this))
                          .collect(toList());
+    }
+
+    default void visit(ModelVisitor visitor)
+    {
+        visitor.visit(this);
+
+        getProperties().forEach(p -> p.visit(visitor));
     }
 
     static Concept create(String name)

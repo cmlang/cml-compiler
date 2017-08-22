@@ -1,13 +1,10 @@
-package cml.language;
+package cml.language.foundation;
 
 import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.features.Module;
 import cml.language.features.Task;
-import cml.language.foundation.Location;
-import cml.language.foundation.ModelElement;
-import cml.language.foundation.NamedElement;
-import cml.language.foundation.Scope;
+import cml.language.loader.ModelVisitor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -62,8 +59,8 @@ public interface Model extends NamedElement, Scope
                 if (c1_gt_c2 && c2_gt_c1)
                 {
                     // If concepts depend on each other, the more general one is listed first:
-                    if (c1.getGeneralizationDependencies().contains(c2)) return +1;
-                    else if (c2.getGeneralizationDependencies().contains(c1)) return -1;
+                    if (c1.getGeneralizationDependencies().contains(c2.getName())) return +1;
+                    else if (c2.getGeneralizationDependencies().contains(c1.getName())) return -1;
                     else return 0;
                 }
                 else if (c1_gt_c2) return +1;
@@ -118,6 +115,15 @@ public interface Model extends NamedElement, Scope
         return getTasks().stream()
                          .filter(target -> target.getName().equals(name))
                          .findFirst();
+    }
+
+    default void visit(ModelVisitor visitor)
+    {
+        visitor.visit(this);
+
+        getConcepts().forEach(c -> c.visit(visitor));
+
+        getAssociations().forEach(a -> a.visit(visitor));
     }
 
     static Model create()

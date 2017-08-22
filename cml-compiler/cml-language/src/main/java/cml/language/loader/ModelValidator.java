@@ -1,4 +1,4 @@
-package cml.language;
+package cml.language.loader;
 
 import cml.language.expressions.Expression;
 import cml.language.features.Association;
@@ -11,7 +11,7 @@ import cml.language.foundation.Property;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelValidator implements ModelVisitor.Delegate
+public class ModelValidator implements ModelVisitor
 {
     private final InvariantValidator<Concept> conceptInvariantValidator = Concept.invariantValidator();
     private final InvariantValidator<Property> propertyInvariantValidator = Property.invariantValidator();
@@ -24,9 +24,6 @@ public class ModelValidator implements ModelVisitor.Delegate
     {
         return diagnostics;
     }
-
-    @Override
-    public void visit(Model model) {}
 
     @Override
     public void visit(Concept concept)
