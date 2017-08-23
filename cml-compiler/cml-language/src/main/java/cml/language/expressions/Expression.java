@@ -1,12 +1,10 @@
 package cml.language.expressions;
 
 import cml.language.foundation.*;
+import cml.language.loader.ModelVisitor;
 import cml.language.types.Type;
 import org.jooq.lambda.Seq;
 
-import java.util.Collections;
-
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.jooq.lambda.Seq.seq;
 
@@ -29,6 +27,14 @@ public interface Expression extends ModelElement, Scope
     default boolean evaluateInvariants()
     {
         return true;
+    }
+
+    @Override
+    default void visit(ModelVisitor visitor)
+    {
+        visitor.visit(this);
+
+        getSubExpressions().forEach(e -> e.visit(visitor));
     }
 
     static InvariantValidator<Expression> invariantValidator()

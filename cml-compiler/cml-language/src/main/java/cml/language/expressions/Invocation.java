@@ -6,6 +6,7 @@ import cml.language.foundation.*;
 import cml.language.types.FunctionType;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
@@ -49,7 +50,7 @@ public interface Invocation extends Expression, NamedElement
     }
 
     Optional<Function> getFunction();
-    void setFunction(@Nullable Function function);
+    void setFunction(@NotNull Function function);
 
     default Type getType()
     {
@@ -91,11 +92,7 @@ public interface Invocation extends Expression, NamedElement
                         }
                     }
 
-                    final Type matchingType = paramType.withCardinality(type.getCardinality().orElse(null));
-
-                    paramType.getConcept().ifPresent(matchingType::setConcept);
-
-                    return matchingType;
+                    return paramType.withCardinality(type.getCardinality().orElse(null));
                 }
                 else
                 {
@@ -283,11 +280,9 @@ class InvocationImpl implements Invocation
     }
 
     @Override
-    public void setFunction(@Nullable Function function)
+    public void setFunction(@NotNull Function function)
     {
-        System.out.println("invocation: " + this);
-        System.out.println("function: " + function);
-        System.out.println("");
+        assert this.function == null;
 
         this.function = function;
     }
@@ -381,8 +376,10 @@ class ParameterizedInvocation implements Invocation
     }
 
     @Override
-    public void setFunction(@Nullable Function function)
+    public void setFunction(@NotNull Function function)
     {
+        assert this.function == null;
+
         this.function = function;
     }
 

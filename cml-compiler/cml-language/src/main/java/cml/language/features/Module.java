@@ -126,16 +126,16 @@ public interface Module extends NamedElement, Scope
                     .collect(toList());
     }
 
-    default List<Template> getAllMacros()
+    default List<Template> getAllTemplates()
     {
         return concat(getTemplates().stream(), getImportedTemplates().stream()).collect(toList());
     }
 
     default Optional<Template> getTemplate(String name)
     {
-        return getAllMacros().stream()
-                             .filter(t -> t.getName().equals(name))
-                             .findFirst();
+        return getAllTemplates().stream()
+                                .filter(t -> t.getName().equals(name))
+                                .findFirst();
     }
 
     static Module create(String name)

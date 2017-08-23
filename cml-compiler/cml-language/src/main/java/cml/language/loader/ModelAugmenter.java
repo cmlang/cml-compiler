@@ -1,6 +1,5 @@
 package cml.language.loader;
 
-import cml.language.expressions.Invocation;
 import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
 import cml.language.features.Module;
@@ -15,8 +14,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.jooq.lambda.Seq.seq;
 
 class ModelAugmenter extends CMLBaseListener
 {
@@ -91,79 +88,6 @@ class ModelAugmenter extends CMLBaseListener
             final NamedType namedType = (NamedType)type;
 
             module.getConcept(namedType.getName()).ifPresent(type::setConcept);
-        }
-    }
-
-    @Override
-    public void enterExpression(final CMLParser.ExpressionContext ctx)
-    {
-        // Some invocations may have been created from comprehensions.
-        // They are not in the parse tree's invocation nodes.
-
-        if (ctx.expr instanceof Invocation)
-        {
-            System.out.println("expr: " + ctx.expr);
-            final Invocation invocation = (Invocation) ctx.expr;
-
-            augmentFunctionOfInvocation(invocation);
-            augmentFunctionTypeOfLambdas(invocation);
-        }
-    }
-
-    @Override
-    public void exitExpression(final CMLParser.ExpressionContext ctx)
-    {
-        // Some invocations may have been created from comprehensions.
-        // They are not in the parse tree's invocation nodes.
-
-        if (ctx.expr instanceof Invocation)
-        {
-            augmentScopeOfLambdas((Invocation) ctx.expr);
-        }
-    }
-
-    private void augmentFunctionOfInvocation(Invocation invocation)
-    {
-        if (invocation.getFunction().isPresent()) return;
-
-        module.getTemplate(invocation.getName()).ifPresent(t -> invocation.setFunction(t.getFunction()));
-
-        seq(invocation.getArguments()).filter(a -> a instanceof Invocation)
-                                      .map(a -> (Invocation)a)
-                                      .forEach(this::augmentFunctionOfInvocation);
-    }
-
-    private void augmentFunctionTypeOfLambdas(Invocation invocation)
-    {
-        seq(invocation.getTypedLambdaArguments()).filter(t -> !t.v2.getFunctionType().isPresent())
-                                                 .forEach(t -> t.v2.setFunctionType(t.v1));
-
-        seq(invocation.getArguments()).filter(a -> a instanceof Invocation)
-                                      .map(a -> (Invocation)a)
-                                      .forEach(this::augmentFunctionTypeOfLambdas);
-    }
-
-    private void augmentScopeOfLambdas(Invocation invocation)
-    {
-        if (invocation.getFunction().isPresent())
-        {
-            seq(invocation.getArguments()).filter(a -> a instanceof Invocation)
-                                          .map(a -> (Invocation)a)
-                                          .forEach(this::augmentScopeOfLambdas);
-
-            invocation.getTypedLambdaArguments().forEach(
-                (functionType, lambda) ->
-                {
-                    if (lambda.getFunctionType().isPresent() && !lambda.isExpressionInSomeScope())
-                    {
-                        invocation.getExpressionScopeFor(lambda).ifPresent(lambda::addExpressionToScope);
-                    }
-
-                    if (lambda.getExpression() instanceof Invocation)
-                    {
-                        augmentScopeOfLambdas((Invocation) lambda.getExpression());
-                    }
-                });
         }
     }
 }

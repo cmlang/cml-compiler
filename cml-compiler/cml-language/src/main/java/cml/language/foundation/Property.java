@@ -85,7 +85,7 @@ public interface Property extends TypedElement, Scope
 
         if (getValue().isPresent())
         {
-            visitor.visit(getValue().get());
+            getValue().get().visit(visitor);
         }
     }
 

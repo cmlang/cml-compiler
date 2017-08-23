@@ -18,15 +18,15 @@ concept Expressions
     class: Class;
     children: Class*;
     top_orders: Order*;
-/*
+
     path_ancestors = class.ancestors;
 
     exists_invocation = exists(top_items, { name == "this" });
     select_invocation = select(top_items, { name == "this" });
     reject_invocation = reject(top_items) { name == "this" }; // trailing lambdas
-*/
-//    select_invocation_embedded = select(select(top_orders, { exists(items, { qty > 10 }) }), { total > 100 });
-/*
+
+    select_invocation_embedded = select(select(top_orders, { exists(items, { qty > 10 }) }), { total > 100 });
+
     yield_invocation = yield(top_orders, { items });
     yield_invocation_distinct = distinct(yield(top_orders, { items.product }));
 
@@ -36,7 +36,6 @@ concept Expressions
     recurse_children = select(recurse(children, { children }), { ranking > 10 }); // equivalent to: self | recurse children | ...
 
     reduce_invocation = reduce(top_orders, { order, sum -> sum + order.total }, { 0.0 });
-*/
 }
 
 concept Order

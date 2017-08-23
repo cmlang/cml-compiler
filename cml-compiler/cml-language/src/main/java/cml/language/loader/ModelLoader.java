@@ -67,6 +67,7 @@ class ModelLoaderImpl implements ModelLoader
             if (exitCode == SUCCESS)
             {
                 linkFunctions(model);
+                linkLambdaScope(model);
 
                 return validateModel(model);
             }
@@ -182,7 +183,12 @@ class ModelLoaderImpl implements ModelLoader
 
     private void linkFunctions(final Model model)
     {
-//        final ModelVisitor modelVisitor = new ModelVisitor(modelValidator);
+        model.visit(new FunctionLinker());
+    }
+
+    private void linkLambdaScope(final Model model)
+    {
+        model.visit(new LambdaScopeLinker());
     }
 
     private int validateModel(Model model)

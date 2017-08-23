@@ -1,9 +1,6 @@
 package cml.language.foundation;
 
-import cml.language.features.Association;
-import cml.language.features.Concept;
-import cml.language.features.Module;
-import cml.language.features.Task;
+import cml.language.features.*;
 import cml.language.loader.ModelVisitor;
 import org.jetbrains.annotations.Nullable;
 
@@ -115,6 +112,20 @@ public interface Model extends NamedElement, Scope
         return getTasks().stream()
                          .filter(target -> target.getName().equals(name))
                          .findFirst();
+    }
+
+    default List<Template> getTemplates()
+    {
+        return getModules().stream()
+                           .flatMap(m -> m.getTemplates().stream())
+                           .collect(toList());
+    }
+
+    default Optional<Template> getTemplate(String name)
+    {
+        return getTemplates().stream()
+                             .filter(t -> t.getName().equals(name))
+                             .findFirst();
     }
 
     default void visit(ModelVisitor visitor)

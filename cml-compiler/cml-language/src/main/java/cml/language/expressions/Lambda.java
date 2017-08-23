@@ -1,6 +1,8 @@
 package cml.language.expressions;
 
+import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
+import cml.language.loader.ModelVisitor;
 import cml.language.types.FunctionType;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
@@ -107,6 +109,20 @@ public class Lambda extends ExpressionBase
         assert !isExpressionInSomeScope();
 
         scope.addMember(expression);
+    }
+
+    @Override
+    public void addMember(final ModelElement member)
+    {
+        throw new UnsupportedOperationException("Lambda should not be used as scope. The scope of its expression is provided by addExpressionToScope().");
+    }
+
+    @Override
+    public void visit(final ModelVisitor visitor)
+    {
+        visitor.visit(this);
+
+        expression.visit(visitor);
     }
 
     @Override
