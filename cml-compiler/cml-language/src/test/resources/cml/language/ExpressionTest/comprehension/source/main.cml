@@ -44,6 +44,7 @@ concept Expressions
     recurse_self = self | recurse: children | select: ranking > 10;
 
     reduce_query = top_orders | reduce: order, sum -> sum + order.total from: 0;
+    reduce_enumeration = for order in top_orders | reduce: sum -> sum + order.total from: 0;
 
 //    enumeration = for order in top_orders | select: order.total > 100;
 //    enumeration_yield = for order in top_orders | yield: order.items;
