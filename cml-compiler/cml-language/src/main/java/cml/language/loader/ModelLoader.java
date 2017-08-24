@@ -208,7 +208,7 @@ class ModelLoaderImpl implements ModelLoader
                 console.print(
                     "\nFailed validation: required %s: in %s",
                     diagnostic.getCode(),
-                    diagnostic.getElement().toString());
+                    diagnostic.getElement().getDiagnosticIdentification());
 
                 printLocation(diagnostic.getElement());
 
@@ -219,7 +219,7 @@ class ModelLoaderImpl implements ModelLoader
 
                 for(ModelElement element: diagnostic.getParticipants())
                 {
-                    console.print("- %s", element.toString());
+                    console.print("- %s", element.getDiagnosticIdentification());
 
                     printLocation(element);
                 }

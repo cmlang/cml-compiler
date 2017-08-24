@@ -1,6 +1,5 @@
 package cml.language.features;
 
-import cml.language.foundation.Model;
 import cml.language.foundation.*;
 import cml.language.loader.ModelVisitor;
 import cml.language.types.NamedType;
@@ -280,17 +279,11 @@ public interface Concept extends NamedElement, PropertyList
         .collect(toList());
     }
 
-    default Module getModule()
-    {
-        assert getParentScope().isPresent();
-        assert getParentScope().get() instanceof Module;
-
-        return (Module) getParentScope().get();
-    }
-
     default Model getModel()
     {
-        return getModule().getModel();
+        assert getModule().isPresent();
+
+        return getModule().get().getModel();
     }
 
     default List<Association> getAssociations()

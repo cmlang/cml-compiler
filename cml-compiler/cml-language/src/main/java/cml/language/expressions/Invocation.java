@@ -124,13 +124,22 @@ public interface Invocation extends Expression, NamedElement
         }
         else
         {
-            final LambdaScope lambdaScope = new LambdaScope();
+            final LambdaScope lambdaScope = createLambdaScope();
 
             lambda.getTypedParameters()
                   .forEach((name, type) -> lambdaScope.addParameter(name, getMatchingTypeOf(type)));
 
             return Optional.of(lambdaScope);
         }
+    }
+
+    default LambdaScope createLambdaScope()
+    {
+        final LambdaScope lambdaScope = new LambdaScope();
+
+        getModule().ifPresent(m -> m.addMember(lambdaScope));
+
+        return lambdaScope;
     }
 
     @Override

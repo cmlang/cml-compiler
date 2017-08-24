@@ -126,11 +126,24 @@ public class Lambda extends ExpressionBase
     }
 
     @Override
+    public String getDiagnosticIdentification()
+    {
+        return toString() + " - inferred result type: " + getMatchingResultType();
+    }
+
+    @Override
     public String toString()
     {
         return parameters.isEmpty() ?
             format("{ %s }", expression) :
-            format("{ %s -> %s }", seq(parameters).toString(", "), expression);
+            format("{ %s -> %s }", seq(parameters).map(this::stringOf).toString(", "), expression);
+    }
+
+    private String stringOf(final String parameter)
+    {
+        final Optional<Type> type = expression.getTypeOfVariableNamed(parameter);
+
+        return type.map(t -> parameter + ": " + t).orElseGet(() -> getTypedParameters().get(parameter).toString());
     }
 }
 

@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.features.Module;
 import cml.language.loader.ModelVisitor;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +25,16 @@ public interface ModelElement
         {
             return empty();
         }
+    }
+
+    default Optional<Module> getModule()
+    {
+        return getParentScope().flatMap(ModelElement::getModule);
+    }
+
+    default String getDiagnosticIdentification()
+    {
+        return toString();
     }
 
     default void visit(ModelVisitor visitor)

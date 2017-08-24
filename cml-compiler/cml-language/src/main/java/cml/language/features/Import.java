@@ -4,14 +4,14 @@ import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
 import cml.language.foundation.Scope;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public interface Import extends NamedElement
 {
-    Optional<Module> getModule();
-    void setModule(Module module);
+    void setModule(@NotNull Module module);
 
     static Import create(String name)
     {
@@ -63,7 +63,7 @@ class ImportImpl implements Import
     }
 
     @Override
-    public void setModule(Module module)
+    public void setModule(@NotNull Module module)
     {
         this.module = module;
     }
