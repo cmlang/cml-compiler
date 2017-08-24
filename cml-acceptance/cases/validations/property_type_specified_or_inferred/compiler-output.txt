@@ -1,6 +1,6 @@
 
-Failed validation: required property_type_specified_or_inferred: in property Attributes.bad_prop1: Undefined (4:5)
+Failed validation: required property_type_specified_or_inferred: in property Attributes.bad_prop1: Undefined - No type or expression defined for property: bad_prop1 (4:5)
 No type or expression defined for property: bad_prop1
 
-Failed validation: required property_type_specified_or_inferred: in property Attributes.bad_prop2: Undefined (5:5)
+Failed validation: required property_type_specified_or_inferred: in property Attributes.bad_prop2: Undefined - No type or expression defined for property: bad_prop2 (5:5)
 No type or expression defined for property: bad_prop2
