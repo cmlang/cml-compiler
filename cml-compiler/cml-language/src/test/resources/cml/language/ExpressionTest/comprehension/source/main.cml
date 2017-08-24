@@ -9,7 +9,7 @@ template function distinct<T>(seq: T*) -> T*;
 
 template function exists<T>(seq: T*, expr: (T) -> Boolean) -> Boolean;
 
-template function recurse<T>(seq: T*, expr: (T) -> T*) -> T*;
+template function recurse<T,S>(seq: T*, expr: (T) -> S*) -> S*;
 
 template function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
 
@@ -41,8 +41,7 @@ concept Expressions
     recurse_ancestors = class | recurse: ancestors;
     recurse_unique = class | recurse: ancestors | distinct;
     recurse_children = children | recurse: children | select: ranking > 10; // equivalent to: self | recurse children | ...
-
-// TODO    recurse_self = self | recurse: children | select: ranking > 10;
+    recurse_self = self | recurse: children | select: ranking > 10;
 
 // TODO    reduce_query = top_orders | reduce: s + total from: s = 0;
 

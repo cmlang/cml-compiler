@@ -229,7 +229,14 @@ class NamedTypeImpl implements NamedType
     @Override
     public String toString()
     {
-        return getName() + (getCardinality().isPresent() ? getCardinality().get() : "");
+        if (isUndefined() && getErrorMessage().isPresent())
+        {
+            return getName() + " - " + getErrorMessage().get();
+        }
+        else
+        {
+            return getName() + (getCardinality().isPresent() ? getCardinality().get() : "");
+        }
     }
 
     @Override

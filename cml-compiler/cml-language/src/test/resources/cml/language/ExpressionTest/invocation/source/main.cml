@@ -8,7 +8,7 @@ template function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
 
 template function distinct<T>(seq: T*) -> T*;
 
-template function recurse<T>(seq: T*, expr: (T) -> T*) -> T*;
+template function recurse<T,S>(seq: T*, expr: (T) -> S*) -> S*;
 
 template function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
 
@@ -34,8 +34,10 @@ concept Expressions
     recurse_distinct = distinct(recurse(class, { ancestors }));
 
     recurse_children = select(recurse(children, { children }), { ranking > 10 }); // equivalent to: self | recurse children | ...
+    recurse_self = recurse(self, { children });
+    recurse_self_nested = select(recurse(self, { children }), { ranking > 10});
 
-    reduce_invocation = reduce(top_orders, { order, sum -> sum + order.total }, { 0.0 });
+//    reduce_invocation = reduce(top_orders, { order, sum -> sum + order.total }, { 0.0 });
 }
 
 concept Order

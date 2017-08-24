@@ -151,14 +151,10 @@ public interface Invocation extends Expression, NamedElement
 
     default boolean typeMatches(final FunctionParameter param, final Expression argument)
     {
-        final Type type = argument.getType();
+        final Type paramType = param.getMatchingResultType();
+        final Type argumentType = argument.getMatchingResultType();
 
-        return !type.isUndefined() && (type.equals(param.getType()) || resultingTypesAssignable(param, type));
-    }
-
-    default boolean resultingTypesAssignable(final FunctionParameter param, final Type type)
-    {
-        return getMatchingTypeOf(param.getType()).isAssignableFrom(type.getMatchingResultType());
+        return !argumentType.isUndefined() && getMatchingTypeOf(paramType).isAssignableFrom(argumentType);
     }
 
     @Override
