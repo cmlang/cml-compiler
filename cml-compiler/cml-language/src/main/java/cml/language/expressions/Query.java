@@ -3,6 +3,7 @@ package cml.language.expressions;
 import cml.language.foundation.ModelElementBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.lambda.Seq;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import java.util.stream.Stream;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.empty;
 import static org.jooq.lambda.Seq.seq;
 
 public class Query extends ModelElementBase
@@ -49,6 +51,13 @@ public class Query extends ModelElementBase
         final Optional<Keyword> first = seq(keywords).findFirst();
 
         return first.map(Keyword::getExpression);
+    }
+
+    public Seq<String> getExpressionParams()
+    {
+        final Optional<Keyword> first = seq(keywords).findFirst();
+
+        return first.map(Keyword::getParameters).orElse(empty());
     }
 
     public List<Keyword> getExtraKeywords()

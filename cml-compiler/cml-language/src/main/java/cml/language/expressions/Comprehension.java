@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
-import static org.jooq.lambda.Seq.empty;
 import static org.jooq.lambda.Seq.seq;
 
 public class Comprehension extends ExpressionBase
@@ -63,11 +62,12 @@ public class Comprehension extends ExpressionBase
     {
         if (queries.size() >= 1 && queries.get(0) == query)
         {
-            return seq(enumerators).map(Enumerator::getVariable);
+            return seq(enumerators).map(Enumerator::getVariable)
+                                   .concat(query.getExpressionParams());
         }
         else
         {
-            return empty();
+            return query.getExpressionParams();
         }
     }
 

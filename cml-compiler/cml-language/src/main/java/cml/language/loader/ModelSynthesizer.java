@@ -468,9 +468,10 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitKeywordExpression(final KeywordExpressionContext ctx)
     {
         final String name = ctx.NAME().getText();
+        final Seq<String> parameters = ctx.lambdaParameterList() == null ? empty() : ctx.lambdaParameterList().params;
         final Expression expression = ctx.expression().expr;
 
-        ctx.keyword = new Keyword(name, expression);
+        ctx.keyword = new Keyword(name, parameters, expression);
     }
 
     private static String getText(LiteralExpressionContext ctx)

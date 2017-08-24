@@ -52,7 +52,7 @@ public class InvocationTransforms
         query.getExpression().ifPresent(expr -> arguments.put(
             "expr", new Lambda(comprehension.getEnumeratorVariablesForQuery(query), expr)));
 
-        query.getExtraKeywords().forEach(k -> arguments.put(k.getName(), k.getExpression()));
+        query.getExtraKeywords().forEach(k -> arguments.put(k.getName(), k.getLambdaExpression()));
 
         return Invocation.create(name, arguments);
     }

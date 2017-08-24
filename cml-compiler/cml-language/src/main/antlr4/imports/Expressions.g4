@@ -41,7 +41,7 @@ queryStatement returns [Query query]:
     '|' (NAME | keywordExpression+);
 
 keywordExpression returns [Keyword keyword]:
-    NAME ':' expression;
+    NAME ':' lambdaParameterList? expression;
 
 conditionalExpression returns [Conditional conditional]:
     IF cond=expression
