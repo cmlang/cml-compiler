@@ -50,17 +50,18 @@ concept Expressions
     enumeration_yield = for order in top_orders | yield: order.items;
     enumeration_select = for order in top_orders | select: order.total > 1000 | yield: order.items;
 
-//    enumeration = select(for order in top_orders | yield: order, order.total > 100);
-//    enumeration_yield = yield(for order in top_orders | yield: order, order.items);
+    enumeration_embedded = select(for order in top_orders | yield: order, { total > 100 });
+    enumeration_embedded_select = yield(for order in top_orders | select: order.total > 100, { items });
+
+//    product = for order in top_orders, gold_customer in gold_customers
+//               | select: order.customer == gold_customer
+//               | yield: order;
+
 //    enumeration_nested = yield(for order in top_orders, goldCustomer in goldCustomers
 //                               | select order.customer == goldCustomer and order.total > 1000,
 //                               order.customer.name);
 //    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
 //                             | yield(order | select customer == goldCustomer and total > 1000, order.customer.name)
-
-//    product = for order in top_orders, gold_customer in gold_customers
-//               | select: order.customer == gold_customer
-//               | yield: order;
 
 }
 
