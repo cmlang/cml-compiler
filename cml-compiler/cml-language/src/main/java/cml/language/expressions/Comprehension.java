@@ -60,15 +60,8 @@ public class Comprehension extends ExpressionBase
 
     public Seq<String> getEnumeratorVariablesForQuery(final Query query)
     {
-        if (queries.size() >= 1 && queries.get(0) == query)
-        {
-            return seq(enumerators).map(Enumerator::getVariable)
-                                   .concat(query.getExpressionParams());
-        }
-        else
-        {
-            return query.getExpressionParams();
-        }
+        return seq(enumerators).map(Enumerator::getVariable)
+                               .concat(query.getExpressionParams());
     }
 
     @Override
