@@ -190,6 +190,3 @@ echo \$ brew upgrade cml-compiler
 echo \$ cd \<module\/path\>
 echo \$ cml \<task_name\>
 echo
-echo If successful, run: snapshot-version
-echo In order to update the snapshot version on the master\'s branch.
-echo
