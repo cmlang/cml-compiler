@@ -59,12 +59,9 @@ concept Expressions
     cross_join_enumeration = for order in top_orders, gold_customer in gold_customers
                                 | select: order.customer == gold_customer
                                 | yield: order;
-//    cross_join_nested = yield(for order in top_orders, goldCustomer in goldCustomers
-//                                  | select: order.customer == goldCustomer and order.total > 1000,
-//                              { order.customer.name });
-//    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
-//                             | yield(order | select customer == goldCustomer and total > 1000, order.customer.name)
-
+    cross_join_nested = yield(for order in top_orders, gold_customer in gold_customers
+                                  | select: order.customer == gold_customer and order.total > 1000,
+                              { order, gold_customer -> order.customer.name });
 }
 
 concept Order
