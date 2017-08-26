@@ -34,7 +34,6 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
-    private static final String NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT = "No variable name provided for assignment.";
 
     private final Module module;
 
@@ -303,7 +302,6 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.comprehensionExpression() != null) ctx.expr = invocationOf(ctx.comprehensionExpression().comprehension);
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
-        else if (ctx.assignmentExpression() != null) ctx.expr = ctx.assignmentExpression().assignment;
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
 
         if (ctx.expr != null)
@@ -334,20 +332,6 @@ class ModelSynthesizer extends CMLBaseListener
         infix.addMember(right);
 
         return infix;
-    }
-
-    @Override
-    public void exitAssignmentExpression(final AssignmentExpressionContext ctx)
-    {
-        if (ctx.variable == null)
-        {
-            throw new ModelSynthesisException(NO_VARIABLE_NAME_PROVIDED_FOR_ASSIGNMENT);
-        }
-
-        final String variable = ctx.variable.getText();
-        final Expression value = ctx.value.expr;
-
-        ctx.assignment = Assignment.create(variable, value);
     }
 
     @Override

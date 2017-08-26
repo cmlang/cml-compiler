@@ -6,7 +6,6 @@ expression returns [Expression expr]
     : literalExpression
     | pathExpression
     | conditionalExpression
-    | assignmentExpression
     | lambdaExpression
     | invocationExpression
     | comprehensionExpression
@@ -47,9 +46,6 @@ conditionalExpression returns [Conditional conditional]:
     IF cond=expression
     THEN then=expression
     ELSE else_=expression;
-
-assignmentExpression returns [Assignment assignment]:
-    variable=NAME '=' value=expression;
 
 pathExpression returns [Path path]:
     NAME ('.' NAME)*;
