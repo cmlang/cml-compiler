@@ -26,7 +26,7 @@ public class TemplateGroupFile extends STGroupFile
     {
         super(path, ENCODING, START_CHAR, STOP_CHAR);
 
-        registerModelAdaptor(Object.class, new OptionalValueAdaptor());
+        registerModelAdaptor(Object.class, new ModelAdaptor());
         registerRenderer(String.class, new NameRenderer());
     }
 

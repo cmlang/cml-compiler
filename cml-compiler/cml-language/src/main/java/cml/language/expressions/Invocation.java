@@ -3,9 +3,7 @@ package cml.language.expressions;
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
 import cml.language.foundation.*;
-import cml.language.types.FunctionType;
-import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
@@ -74,7 +72,15 @@ public interface Invocation extends Expression, NamedElement
 
         if (function.getParameters().size() == getArguments().size())
         {
-            if (type.isParameter())
+            if (type instanceof TupleType)
+            {
+                final TupleType tupleType = (TupleType) type;
+                final Seq<TupleTypeElement> matchingElements = tupleType.getElements()
+                                                                        .map(e -> new TupleTypeElement(getMatchingTypeOf(e.getType()), e.getName().orElse(null)));
+
+                return new TupleType(matchingElements, tupleType.getCardinality().orElse(null));
+            }
+            else if (type.isParameter())
             {
                 int paramIndex = function.getParamIndexOfMatchingType(type);
 
@@ -90,6 +96,16 @@ public interface Invocation extends Expression, NamedElement
                         {
                             paramType = getArguments().get(paramIndex).getMatchingResultType();
                         }
+                    }
+
+                    if (paramType instanceof TupleType && type instanceof MemberType)
+                    {
+                        final TupleType tupleType = (TupleType) paramType;
+                        final MemberType memberType = (MemberType) type;
+
+                        paramType = tupleType.getElementTypes()
+                                             .get(memberType.getParamIndex())
+                                             .orElse(NamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
                     }
 
                     return paramType.withCardinality(type.getCardinality().orElse(null));
@@ -223,6 +239,12 @@ public interface Invocation extends Expression, NamedElement
         }
 
         return emptyList();
+    }
+
+    @Override
+    default String getDiagnosticIdentification()
+    {
+        return format("%s -> %s", toString(), getType());
     }
 
     static Invocation create(String name, List<Expression> arguments)

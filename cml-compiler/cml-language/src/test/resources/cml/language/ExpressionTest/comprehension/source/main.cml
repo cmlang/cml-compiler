@@ -13,6 +13,8 @@ template function recurse<T,S>(seq: T*, expr: (T) -> S*) -> S*;
 
 template function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
 
+template function cross_join<T,S>(seq1: T*, seq2: S*) -> (T, S)*;
+
 concept Expressions
 {
     top_items: Item*;
@@ -53,13 +55,13 @@ concept Expressions
     enumeration_embedded = select(for order in top_orders | yield: order, { total > 100 });
     enumeration_embedded_select = yield(for order in top_orders | select: order.total > 100, { items });
 
-//    product = for order in top_orders, gold_customer in gold_customers
-//               | select: order.customer == gold_customer
-//               | yield: order;
 
-//    enumeration_nested = yield(for order in top_orders, goldCustomer in goldCustomers
-//                               | select order.customer == goldCustomer and order.total > 1000,
-//                               order.customer.name);
+    cross_join_enumeration = for order in top_orders, gold_customer in gold_customers
+                                | select: order.customer == gold_customer
+                                | yield: order;
+//    cross_join_nested = yield(for order in top_orders, goldCustomer in goldCustomers
+//                                  | select: order.customer == goldCustomer and order.total > 1000,
+//                              { order.customer.name });
 //    enumeration_reversed = for order in top_orders, goldCustomer in goldCustomers
 //                             | yield(order | select customer == goldCustomer and total > 1000, order.customer.name)
 

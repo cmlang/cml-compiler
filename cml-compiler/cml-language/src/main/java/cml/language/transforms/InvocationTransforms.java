@@ -41,7 +41,7 @@ public class InvocationTransforms
             }
             else
             {
-                return Invocation.create("cross_join", comprehension.getExpressions());
+                arguments.put("seq", Invocation.create("cross_join", comprehension.getExpressions()));
             }
         }
         else

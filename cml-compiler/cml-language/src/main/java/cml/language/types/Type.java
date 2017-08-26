@@ -40,6 +40,11 @@ public interface Type extends ModelElement
         return this;
     }
 
+    default Type getBaseType()
+    {
+        return this;
+    }
+
     default Type withCardinality(String cardinality)
     {
         throw new UnsupportedOperationException(this + "withCardinality(" + cardinality + ")");

@@ -4,6 +4,7 @@ import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
 import cml.language.loader.ModelVisitor;
 import cml.language.types.FunctionType;
+import cml.language.types.MemberType;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +17,6 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableList;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.toMap;
 import static org.jooq.lambda.Seq.seq;
@@ -34,9 +34,9 @@ public class Lambda extends ExpressionBase
         this.expression = expression;
     }
 
-    public List<String> getParameters()
+    public Seq<String> getParameters()
     {
-        return unmodifiableList(parameters);
+        return seq(parameters);
     }
 
     public Expression getExpression()
@@ -51,6 +51,8 @@ public class Lambda extends ExpressionBase
 
     public void setFunctionType(@Nullable FunctionType functionType)
     {
+        assert this.functionType == null;
+
         this.functionType = functionType;
     }
 
@@ -60,13 +62,47 @@ public class Lambda extends ExpressionBase
         {
             return emptyMap();
         }
-        else
+        if (parameters.size() == getParamTypeCount())
         {
-            assert parameters.size() == functionType.getParamTypes().count();
-
-            return seq(parameters).zip(functionType.getParamTypes())
+            return getParameters().zip(getParamTypes())
                                   .collect(toMap(Tuple2::v1, Tuple2::v2));
         }
+        else if (getParamTypeCount() == 1)
+        {
+            return getParameters().zip(getParameters().map(p -> new MemberType(functionType.getSingleParamType(), p, getParameters().indexOf(p).getAsLong())))
+                                  .collect(toMap(Tuple2::v1, Tuple2::v2));
+        }
+        else
+        {
+            return getTypeDefinedParams().zip(getParamTypes())
+                                         .concat(getUntypedParams())
+                                         .collect(toMap(Tuple2::v1, Tuple2::v2));
+        }
+    }
+
+    public Seq<Tuple2<String, Type>> getUntypedParams()
+    {
+        return getTypeUndefinedParams().zip(getTypeUndefinedParams().map(p -> NamedType.UNDEFINED));
+    }
+
+    public Seq<String> getTypeDefinedParams()
+    {
+        return getParameters().limit(getParamTypeCount());
+    }
+
+    public Seq<String> getTypeUndefinedParams()
+    {
+        return getParameters().skip(getParamTypeCount());
+    }
+
+    public Seq<Type> getParamTypes()
+    {
+        return functionType.getParamTypes();
+    }
+
+    public long getParamTypeCount()
+    {
+        return getParamTypes().count();
     }
 
     public Optional<Type> getExpectedScopeType()
@@ -141,9 +177,11 @@ public class Lambda extends ExpressionBase
 
     private String stringOf(final String parameter)
     {
-        final Optional<Type> type = expression.getTypeOfVariableNamed(parameter);
+        final Optional<Type> actualType = expression.getTypeOfVariableNamed(parameter);
+        final Type formalType = getTypedParameters().get(parameter);
 
-        return type.map(t -> parameter + ": " + t).orElseGet(() -> getTypedParameters().get(parameter).toString());
+        return actualType.map(t -> parameter + ": " + t)
+                   .orElseGet(() -> formalType == null ? parameter : formalType.toString());
     }
 }
 

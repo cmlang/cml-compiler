@@ -12,7 +12,7 @@ cardinality:
     ('?' | '*');
 
 tupleTypeDeclaration returns [TupleType type]:
-    '(' ( tupleTypeElementDeclaration (',' tupleTypeElementDeclaration)* )? ')';
+    '(' ( tupleTypeElementDeclaration (',' tupleTypeElementDeclaration)* )? ')' cardinality?;
 
 tupleTypeElementDeclaration returns [TupleTypeElement element]:
    (name=NAME ':')? type=typeDeclaration;

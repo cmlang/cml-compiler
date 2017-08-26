@@ -44,30 +44,12 @@ flatten(expr) ::= <<
 (<expr> -> flatten())
 >>
 
+cross_join(args) ::= <<
+cross_join(<args.seq1>, <args.seq2>)
+>>
+
 collection_invocation(args, operation, appendix) ::= <<
-<ocl(args.seq)>-><operation>(<closure(args.seq.variables, args.expr)>)<appendix>
->>
-
-closure(vars, expr) ::= <<
-<join_var_decl(vars)><ocl(expr)>
->>
-
-join_ocl(join) ::= <<
-<join_var_path(first(join.variables))>
->>
-
-join_var_decl(join_vars) ::= <<
-<if(join_vars)><\\>
-<join_var_name(last(join_vars))> | <\\>
-<endif>
->>
-
-join_var_name(join_var) ::= <<
-<join_var.name>
->>
-
-join_var_path(join_var) ::= <<
-<ocl(join_var.path)>
+<ocl(args.seq)>-><operation>(<ocl(args.expr)>)<appendix>
 >>
 
 path_ocl(path) ::= <<

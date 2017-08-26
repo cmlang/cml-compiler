@@ -9,7 +9,7 @@ import cml.language.foundation.Model;
 import cml.language.foundation.Property;
 import cml.language.loader.ModelLoader;
 import cml.language.types.Type;
-import cml.templates.OptionalValueAdaptor;
+import cml.templates.ModelAdaptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -117,7 +117,7 @@ public class ExpressionTest
             BASE_PATH + File.separator + "ocl.stg",
             ENCODING, START_CHAR, STOP_CHAR);
 
-        groupFile.registerModelAdaptor(Object.class, new OptionalValueAdaptor());
+        groupFile.registerModelAdaptor(Object.class, new ModelAdaptor());
 
         return groupFile;
     }
