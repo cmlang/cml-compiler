@@ -5,4 +5,12 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-mvn versions:set -DnewVersion=$1-SNAPSHOT
+CML_VERSION="$1-SNAPSHOT"
+mvn versions:set -DnewVersion=${CML_VERSION}
+if [ $? -ne 0 ]; then exit; fi
+
+git add -A .
+if [ $? -ne 0 ]; then exit; fi
+
+git commit -m "Committing snapshot version: ${CML_VERSION}"
+if [ $? -ne 0 ]; then exit; fi

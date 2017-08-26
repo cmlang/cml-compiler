@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 
 if [ -z "$1" ]; then
-    echo Please specify the release version as the only argument.
+    echo Please specify the release version as the first argument.
     exit 1
 fi
 
+if [ -z "$2" ]; then
+    echo Please specify the snapshot version as the second argument.
+    exit 1
+fi
+
+CML_SNAPSHOT_VERSION="$2"
 CML_VERSION="$1"
 CML_PKG_NAME="cml-compiler-${CML_VERSION}.zip"
 CML_RELEASE_DIR="cml-releases/cml-compiler"
@@ -181,6 +187,6 @@ echo \$ brew upgrade cml-compiler
 echo \$ cd \<module\/path\>
 echo \$ cml \<task_name\>
 echo
-echo If successfull, run: snapshot-version
+echo If successful, run: snapshot-version
 echo In order to update the snapshot version on the master\'s branch.
 echo
