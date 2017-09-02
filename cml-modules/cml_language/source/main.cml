@@ -1,0 +1,28 @@
+
+/*
+concept ModelElement
+{
+    location: Location?;
+    scope: Scope?;
+}
+
+concept Scope: ModelElement
+{
+    members: ModelElement*;
+}
+*/
+
+concept Location
+{
+    line: Integer;
+    column: Integer;
+}
+
+task cml_language_java by cmlc_java
+{
+    groupId = "cml";
+    artifactId = "cml-language-generated";
+    artifactVersion = "1.1.1-SNAPSHOT";
+    packageName = "cml.language";
+    packagePath = "cml/language";
+}
