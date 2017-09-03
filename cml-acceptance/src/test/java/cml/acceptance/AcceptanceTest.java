@@ -17,7 +17,6 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertEquals;
@@ -295,7 +294,7 @@ public class AcceptanceTest
 
         final InvocationRequest request = new DefaultInvocationRequest();
         request.setBaseDirectory(new File(baseDir));
-        request.setGoals(asList("-q", "install"));
+        request.setGoals(singletonList("install"));
         request.setInteractive(false);
 
         final Invoker invoker = new DefaultInvoker();
