@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.generated.Location;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

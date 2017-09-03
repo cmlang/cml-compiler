@@ -1,6 +1,7 @@
 package cml.language.foundation;
 
 import cml.language.features.*;
+import cml.language.generated.Location;
 import cml.language.loader.ModelVisitor;
 import org.jetbrains.annotations.Nullable;
 

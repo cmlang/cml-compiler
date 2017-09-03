@@ -1,4 +1,4 @@
-package cml.language;
+package cml.language.generated;
 
 import java.util.*;
 import java.math.*;

@@ -1,9 +1,9 @@
 package cml.language.features;
 
-import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
 import cml.language.foundation.Scope;
+import cml.language.generated.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

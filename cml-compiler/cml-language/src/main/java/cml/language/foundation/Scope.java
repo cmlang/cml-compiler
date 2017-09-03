@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.generated.Location;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import cml.language.types.TypedElement;

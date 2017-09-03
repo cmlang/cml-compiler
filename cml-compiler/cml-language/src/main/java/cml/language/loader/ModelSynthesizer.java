@@ -2,8 +2,8 @@ package cml.language.loader;
 
 import cml.language.expressions.*;
 import cml.language.features.*;
-import cml.language.foundation.Location;
 import cml.language.foundation.Property;
+import cml.language.generated.Location;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.*;

@@ -3,6 +3,7 @@ package cml.language.expressions;
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
 import cml.language.foundation.*;
+import cml.language.generated.Location;
 import cml.language.types.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

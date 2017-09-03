@@ -3,6 +3,7 @@ package cml.language.foundation;
 import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.Concept;
+import cml.language.generated.Location;
 import cml.language.loader.ModelVisitor;
 import cml.language.types.NamedType;
 import cml.language.types.Type;

@@ -1,8 +1,8 @@
 package cml.language.expressions;
 
-import cml.language.foundation.Location;
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
+import cml.language.generated.Location;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

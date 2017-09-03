@@ -15,7 +15,17 @@
     <version>1.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <properties>
+        <cml_language.path>${project.basedir}/../../cml-modules/cml_language</cml_language.path>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>cml</groupId>
+            <artifactId>cml-language-generated</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>cml</groupId>
             <artifactId>cml-io</artifactId>
@@ -66,6 +76,57 @@
                         <goals>
                             <goal>antlr4</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>cml_language_java</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>cml</executable>
+                            <workingDirectory>${cml_language.path}</workingDirectory>
+                            <arguments>
+                                <argument>cml_language_java</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>cml-language-versioned</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>mvn</executable>
+                            <workingDirectory>${cml_language.path}/targets/cml_language_java</workingDirectory>
+                            <arguments>
+                                <argument>versions:set</argument>
+                                <argument>-DnewVersion=${project.version}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>cml-language-generated</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>mvn</executable>
+                            <workingDirectory>${cml_language.path}/targets/cml_language_java</workingDirectory>
+                            <arguments>
+                                <argument>clean</argument>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

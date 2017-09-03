@@ -9,6 +9,7 @@ import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.ModelElement;
+import cml.language.generated.Location;
 import cml.language.grammar.CMLLexer;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.CompilationUnitContext;
@@ -233,7 +234,9 @@ class ModelLoaderImpl implements ModelLoader
     {
         if (element.getLocation().isPresent())
         {
-            console.println(" %s", element.getLocation().get());
+            final Location location = element.getLocation().get();
+
+            console.println(" (%d:%d)", location.getLine(), location.getColumn());
         }
         else
         {
