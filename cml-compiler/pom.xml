@@ -11,12 +11,13 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>cml-package</module>
-        <module>cml-frontend</module>
-        <module>cml-generator</module>
-        <module>cml-language</module>
-        <module>cml-templates</module>
+        <module>cml-bootstrapping</module>
         <module>cml-io</module>
+        <module>cml-templates</module>
+        <module>cml-language</module>
+        <module>cml-generator</module>
+        <module>cml-frontend</module>
+        <module>cml-package</module>
     </modules>
 
     <build>
