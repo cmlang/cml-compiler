@@ -2,7 +2,6 @@ package cml.language.expressions;
 
 import cml.language.foundation.ModelElement;
 import cml.language.foundation.Scope;
-import cml.language.loader.ModelVisitor;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
 import cml.language.types.NamedType;
@@ -14,6 +13,7 @@ import org.jooq.lambda.tuple.Tuple2;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
 import static java.lang.String.format;
@@ -45,6 +45,12 @@ public class Lambda extends ExpressionBase
         return expression;
     }
 
+    @Override
+    public Seq<Expression> getSubExpressions()
+    {
+        return Seq.of(expression);
+    }
+
     public Optional<FunctionType> getFunctionType()
     {
         return ofNullable(functionType);
@@ -70,7 +76,13 @@ public class Lambda extends ExpressionBase
         }
         else if (getParamTypeCount() == 1)
         {
-            return getParameters().zip(getParameters().map(p -> new MemberType(functionType.getSingleParamType(), p, getParameters().indexOf(p).getAsLong())))
+            final Function<String, MemberType> mapping = p -> {
+                assert getParameters().indexOf(p).isPresent();
+
+                return new MemberType(functionType.getSingleParamType(), p, getParameters().indexOf(p).getAsLong());
+            };
+
+            return getParameters().zip(getParameters().map(mapping))
                                   .collect(toMap(Tuple2::v1, Tuple2::v2));
         }
         else
@@ -98,6 +110,8 @@ public class Lambda extends ExpressionBase
 
     public Seq<Type> getParamTypes()
     {
+        assert functionType != null;
+
         return functionType.getParamTypes();
     }
 
@@ -152,14 +166,6 @@ public class Lambda extends ExpressionBase
     public void addMember(final ModelElement member)
     {
         throw new UnsupportedOperationException("Lambda should not be used as scope. The scope of its expression is provided by addExpressionToScope().");
-    }
-
-    @Override
-    public void visit(final ModelVisitor visitor)
-    {
-        visitor.visit(this);
-
-        expression.visit(visitor);
     }
 
     @Override

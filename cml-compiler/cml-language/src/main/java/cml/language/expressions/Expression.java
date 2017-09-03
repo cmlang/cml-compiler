@@ -1,7 +1,6 @@
 package cml.language.expressions;
 
 import cml.language.foundation.*;
-import cml.language.loader.ModelVisitor;
 import cml.language.types.Type;
 import org.jooq.lambda.Seq;
 
@@ -27,14 +26,6 @@ public interface Expression extends ModelElement, Scope
     default boolean evaluateInvariants()
     {
         return true;
-    }
-
-    @Override
-    default void visit(ModelVisitor visitor)
-    {
-        visitor.visit(this);
-
-        getSubExpressions().forEach(e -> e.visit(visitor));
     }
 
     static InvariantValidator<Expression> invariantValidator()

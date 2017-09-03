@@ -4,7 +4,6 @@ import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.generated.Location;
-import cml.language.loader.ModelVisitor;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import cml.language.types.TypedElement;
@@ -51,10 +50,16 @@ public interface Property extends TypedElement, Scope
     Optional<Expression> getValue();
     boolean isDerived();
 
+    @SuppressWarnings("unused")
     boolean isTypeRequired();
+
+    @SuppressWarnings("unused")
     void setTypeRequired(boolean typeRequired);
 
+    @SuppressWarnings("unused")
     boolean isTypeAllowed();
+
+    @SuppressWarnings("unused")
     void setTypeAllowed(boolean typeAllowed);
 
     default Concept getConcept()
@@ -80,21 +85,12 @@ public interface Property extends TypedElement, Scope
                          .findFirst();
     }
 
-    default void visit(ModelVisitor visitor)
-    {
-        visitor.visit(this);
-
-        if (getValue().isPresent())
-        {
-            getValue().get().visit(visitor);
-        }
-    }
-
     static Property create(String name, @Nullable NamedType type)
     {
         return new PropertyImpl(name, type, null, false);
     }
 
+    @SuppressWarnings("unused")
     static Property create(String name, @Nullable Expression value)
     {
         return new PropertyImpl(name, null, value, false);
@@ -133,7 +129,7 @@ class PropertyImpl implements Property
 
     private final @Nullable Type type;
     private final @Nullable Expression value;
-    private boolean derived;
+    private final boolean derived;
 
     PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
     {

@@ -2,7 +2,6 @@ package cml.language.features;
 
 import cml.language.foundation.*;
 import cml.language.generated.Location;
-import cml.language.loader.ModelVisitor;
 import cml.language.types.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,11 +27,6 @@ public interface AssociationEnd extends ModelElement
 
     Optional<Property> getProperty();
     void setProperty(@NotNull Property property);
-
-    default void visit(ModelVisitor visitor)
-    {
-        visitor.visit(this);
-    }
 
     static AssociationEnd create(String conceptName, String propertyName)
     {

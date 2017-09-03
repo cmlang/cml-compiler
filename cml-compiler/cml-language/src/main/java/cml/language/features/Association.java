@@ -2,7 +2,6 @@ package cml.language.features;
 
 import cml.language.foundation.*;
 import cml.language.generated.Location;
-import cml.language.loader.ModelVisitor;
 import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,6 +40,7 @@ public interface Association extends NamedElement, Scope
             .collect(toList());
     }
 
+    @SuppressWarnings("unused")
     default boolean isOneToMany()
     {
         return oneToMany(getAssociationEnds().get(0), getAssociationEnds().get(1)) ||
@@ -83,13 +83,6 @@ public interface Association extends NamedElement, Scope
         assert end2.getProperty().isPresent();
 
         return !end1.getProperty().get().getType().isSequence() && end2.getProperty().get().getType().isSequence();
-    }
-
-    default void visit(ModelVisitor visitor)
-    {
-        visitor.visit(this);
-
-        getAssociationEnds().forEach(end -> end.visit(visitor));
     }
 
     static Association create(String name)

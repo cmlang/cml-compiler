@@ -12,6 +12,8 @@ import cml.templates.TemplateRepository;
 
 import java.util.Optional;
 
+import static cml.language.functions.ModelVisitorFunctions.visitModel;
+
 public interface Generator
 {
     int generate(Model model, final String targetName, final String targetDirPath);
@@ -87,7 +89,7 @@ class GeneratorImpl implements Generator
 
         final TargetGenerator targetGenerator = new TargetGenerator(targetFileRenderer, target.get(), targetDirPath);
 
-        model.visit(targetGenerator);
+        visitModel(model, targetGenerator);
 
         return SUCCESS;
     }

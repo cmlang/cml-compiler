@@ -2,7 +2,6 @@ package cml.language.foundation;
 
 import cml.language.features.Module;
 import cml.language.generated.Location;
-import cml.language.loader.ModelVisitor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -22,11 +21,6 @@ public interface ModelElement
     default String getDiagnosticIdentification()
     {
         return toString();
-    }
-
-    default void visit(ModelVisitor visitor)
-    {
-        throw new UnsupportedOperationException("visit() in: " + this);
     }
 
     static ModelElement create(ModelElement self)

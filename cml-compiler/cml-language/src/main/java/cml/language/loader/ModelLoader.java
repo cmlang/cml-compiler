@@ -22,6 +22,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
+import static cml.language.functions.ModelVisitorFunctions.visitModel;
+
 public interface ModelLoader
 {
     int loadModel(Model model, String modulePath);
@@ -184,19 +186,19 @@ class ModelLoaderImpl implements ModelLoader
 
     private void linkFunctions(final Model model)
     {
-        model.visit(new FunctionLinker());
+        visitModel(model, new FunctionLinker());
     }
 
     private void linkLambdaScope(final Model model)
     {
-        model.visit(new LambdaScopeLinker());
+        visitModel(model, new LambdaScopeLinker());
     }
 
     private int validateModel(Model model)
     {
         final ModelValidator modelValidator = new ModelValidator();
 
-        model.visit(modelValidator);
+        visitModel(model, modelValidator);
 
         if (modelValidator.getDiagnostics().size() == 0)
         {

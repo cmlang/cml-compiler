@@ -2,7 +2,6 @@ package cml.language.foundation;
 
 import cml.language.features.*;
 import cml.language.generated.Location;
-import cml.language.loader.ModelVisitor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -127,15 +126,6 @@ public interface Model extends NamedElement, Scope
         return getTemplates().stream()
                              .filter(t -> t.getName().equals(name))
                              .findFirst();
-    }
-
-    default void visit(ModelVisitor visitor)
-    {
-        visitor.visit(this);
-
-        getConcepts().forEach(c -> c.visit(visitor));
-
-        getAssociations().forEach(a -> a.visit(visitor));
     }
 
     static Model create()
