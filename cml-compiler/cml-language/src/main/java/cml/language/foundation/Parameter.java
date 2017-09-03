@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+import static cml.language.functions.ModelElementFunctions.siblingNamed;
 import static java.util.Optional.empty;
 
 public interface Parameter extends TypedElement
@@ -17,7 +18,7 @@ public interface Parameter extends TypedElement
     {
         if (getScopeName().isPresent())
         {
-            return getSiblingNamed(getScopeName().get(), Parameter.class);
+            return siblingNamed(getScopeName().get(), this, Parameter.class);
         }
         else
         {

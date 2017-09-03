@@ -5,9 +5,8 @@ import cml.language.types.Type;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Collections.unmodifiableMap;
 
 public class LambdaScope extends ScopeBase
 {
@@ -18,9 +17,8 @@ public class LambdaScope extends ScopeBase
         parameters.put(name, type);
     }
 
-    @Override
-    public Optional<Type> getTypeOfVariableNamed(final String name)
+    public Map<String, Type> getParameters()
     {
-        return ofNullable(parameters.get(name));
+        return unmodifiableMap(parameters);
     }
 }

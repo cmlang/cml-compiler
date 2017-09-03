@@ -11,6 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
+import static cml.language.functions.ScopeFunctions.scopeOfType;
+import static cml.language.functions.ScopeFunctions.typeOfMemberNamed;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -44,22 +47,6 @@ public interface Path extends Expression
     }
 
     @Override
-    default Optional<Type> getTypeOfVariableNamed(String name)
-    {
-        final Optional<Scope> scope = getScopeOfType(getType());
-        final Optional<Type> type = scope.flatMap(s -> s.getTypeOfVariableNamed(name));
-
-        if (type.isPresent())
-        {
-            return type;
-        }
-        else
-        {
-            return Expression.super.getTypeOfVariableNamed(name);
-        }
-    }
-
-    @Override
     default Type getType()
     {
         assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
@@ -70,7 +57,7 @@ public interface Path extends Expression
         if (isSelf()) return scope.getSelfType();
 
         final String variableName = getNames().get(0);
-        final Optional<Type> variableType = scope.getTypeOfVariableNamed(variableName);
+        final Optional<Type> variableType = typeOfVariableNamed(variableName, scope);
 
         StringBuilder intermediatePath = new StringBuilder(variableName);
 
@@ -82,13 +69,13 @@ public interface Path extends Expression
             {
                 intermediatePath.append(".").append(memberName);
 
-                final Optional<Scope> optionalScope = scope.getScopeOfType(type);
+                final Optional<Scope> optionalScope = scopeOfType(type, scope);
 
                 if (optionalScope.isPresent())
                 {
                     scope = optionalScope.get();
 
-                    final Optional<Type> memberType = scope.getTypeOfMemberNamed(memberName);
+                    final Optional<Type> memberType = typeOfMemberNamed(memberName, scope);
 
                     if (memberType.isPresent())
                     {

@@ -2,115 +2,18 @@ package cml.language.foundation;
 
 import cml.language.generated.Location;
 import cml.language.types.NamedType;
-import cml.language.types.Type;
-import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
-import static java.util.Optional.empty;
-import static java.util.stream.Collectors.toList;
 
 public interface Scope extends ModelElement
 {
     void addMember(ModelElement member);
 
     List<ModelElement> getMembers();
-
-    default <T> List<T> getMembers(Class<T> clazz)
-    {
-        //noinspection unchecked
-        return getMembers().stream()
-                           .filter(e -> clazz.isAssignableFrom(e.getClass()))
-                           .map(e -> (T)e)
-                           .collect(toList());
-    }
-
-    default <T> Optional<T> getMemberNamed(String name, Class<T> clazz)
-    {
-        //noinspection unchecked
-        return getMembers(NamedElement.class)
-                    .stream()
-                    .filter(e -> name.equals(e.getName()))
-                    .filter(e -> clazz.isAssignableFrom(e.getClass()))
-                    .map(e -> (T)e)
-                    .findFirst();
-    }
-
-    default <T> Optional<T> getElementNamed(String name, Class<T> clazz)
-    {
-        final Optional<T> member = getMemberNamed(name, clazz);
-
-        if (member.isPresent())
-        {
-            return member;
-        }
-        else if (getParentScope().isPresent())
-        {
-            return getParentScope().get().getElementNamed(name, clazz);
-        }
-
-        return empty();
-    }
-
-    default Optional<Type> getTypeOfMemberNamed(String name)
-    {
-        final Optional<TypedElement> typedElement = getMemberNamed(name, TypedElement.class);
-
-        return typedElement.map(TypedElement::getType);
-    }
-
-    default Optional<Type> getTypeOfElementNamed(String name)
-    {
-        final Optional<Type> memberType = getTypeOfMemberNamed(name);
-        if (memberType.isPresent()) return memberType;
-
-        final Optional<TypedElement> typedElement = getElementNamed(name, TypedElement.class);
-
-        return typedElement.map(TypedElement::getType);
-    }
-
-    default Optional<Type> getTypeOfVariableNamed(String name)
-    {
-        final Optional<Type> type = getTypeOfElementNamed(name);
-
-        if (type.isPresent()) return type;
-
-        return getParentScope().flatMap(scope -> scope.getTypeOfVariableNamed(name));
-    }
-
-    default Optional<Scope> getScopeOfType(final Type type)
-    {
-        if (type instanceof NamedType)
-        {
-            final NamedType namedType = (NamedType)type;
-            return getElementNamed(namedType.getName(), Scope.class);
-        }
-
-        return empty();
-    }
-
-    default <T> Optional<T> getParentScope(Class<T> clazz)
-    {
-        if (getParentScope().isPresent())
-        {
-            final Scope scope = getParentScope().get();
-
-            if (clazz.isAssignableFrom(scope.getClass()))
-            {
-                //noinspection unchecked
-                return (Optional<T>) getParentScope();
-            }
-            else
-            {
-                return scope.getParentScope(clazz);
-            }
-        }
-
-        return empty();
-    }
 
     default NamedType getSelfType()
     {

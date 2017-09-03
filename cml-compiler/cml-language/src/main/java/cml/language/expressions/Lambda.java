@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
 import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.*;
@@ -177,7 +178,7 @@ public class Lambda extends ExpressionBase
 
     private String stringOf(final String parameter)
     {
-        final Optional<Type> actualType = expression.getTypeOfVariableNamed(parameter);
+        final Optional<Type> actualType = typeOfVariableNamed(parameter, expression);
         final Type formalType = getTypedParameters().get(parameter);
 
         return actualType.map(t -> parameter + ": " + t)

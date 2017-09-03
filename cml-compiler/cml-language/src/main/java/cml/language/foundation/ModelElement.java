@@ -7,26 +7,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-import static java.util.Optional.empty;
-
 public interface ModelElement
 {
     Optional<Location> getLocation();
     void setLocation(@Nullable Location location);
     
     Optional<Scope> getParentScope();
-
-    default <T> Optional<T> getSiblingNamed(String name, Class<T> clazz)
-    {
-        if (getParentScope().isPresent())
-        {
-            return getParentScope().get().getMemberNamed(name, clazz);
-        }
-        else
-        {
-            return empty();
-        }
-    }
 
     default Optional<Module> getModule()
     {
