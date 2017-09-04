@@ -1,7 +1,7 @@
 
 import "/lang/common/structure.stg"
 
-association_class(association) ::= <<
+association_class(association, class_name_suffix) ::= <<
 <modifier("public")><\\>
 <structure(
     keyword="class",

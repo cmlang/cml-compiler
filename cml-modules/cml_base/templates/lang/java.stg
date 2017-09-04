@@ -211,7 +211,7 @@ association_init_param() ::= "Class\<?> cls"
 association_init_statement(association_end, association) ::= <<
 if (<type_name(association_end.concept)>.class.isAssignableFrom(cls))
 {
-<indent()><type_name(association_end.concept)>.set<type_name(association)>(singleton);
+<indent()><type_name(association_end.concept)><class_name_suffix>.set<type_name(association)>(singleton);
 }
 >>
 

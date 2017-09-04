@@ -6,7 +6,7 @@ concept_file(concept) ::= <<
 >>
 
 association_file(association) ::= <<
-<association_class(association)>
+<association_class(association, "")>
 >>
 
 
