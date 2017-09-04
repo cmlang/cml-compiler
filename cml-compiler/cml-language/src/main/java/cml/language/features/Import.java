@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface Import extends NamedElement
 {
+    Optional<Module> getModule();
     void setModule(@NotNull Module module);
 
     static Import create(String name)

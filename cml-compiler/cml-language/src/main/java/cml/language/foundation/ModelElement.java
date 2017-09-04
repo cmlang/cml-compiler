@@ -1,6 +1,5 @@
 package cml.language.foundation;
 
-import cml.language.features.Module;
 import cml.language.generated.Location;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,11 +11,6 @@ public interface ModelElement
     void setLocation(@Nullable Location location);
     
     Optional<Scope> getParentScope();
-
-    default Optional<Module> getModule()
-    {
-        return getParentScope().flatMap(ModelElement::getModule);
-    }
 
     static ModelElement create(ModelElement self)
     {

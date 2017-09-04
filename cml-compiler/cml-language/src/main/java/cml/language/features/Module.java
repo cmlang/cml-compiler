@@ -1,6 +1,9 @@
 package cml.language.features;
 
-import cml.language.foundation.*;
+import cml.language.foundation.Model;
+import cml.language.foundation.ModelElement;
+import cml.language.foundation.NamedElement;
+import cml.language.foundation.Scope;
 import cml.language.generated.Location;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,12 +21,6 @@ public interface Module extends NamedElement, Scope
         assert getParentScope().get() instanceof Model;
 
         return (Model) getParentScope().get();
-    }
-
-    @Override
-    default Optional<Module> getModule()
-    {
-        return Optional.of(this);
     }
 
     default List<Import> getImports()

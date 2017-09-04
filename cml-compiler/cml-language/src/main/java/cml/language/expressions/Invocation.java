@@ -15,6 +15,7 @@ import org.jooq.lambda.tuple.Tuple2;
 
 import java.util.*;
 
+import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
@@ -157,7 +158,7 @@ public interface Invocation extends Expression, NamedElement
     {
         final LambdaScope lambdaScope = new LambdaScope();
 
-        getModule().ifPresent(m -> m.addMember(lambdaScope));
+        moduleOf(this).ifPresent(m -> m.addMember(lambdaScope));
 
         return lambdaScope;
     }

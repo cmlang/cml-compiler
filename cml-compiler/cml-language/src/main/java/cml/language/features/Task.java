@@ -1,6 +1,9 @@
 package cml.language.features;
 
-import cml.language.foundation.*;
+import cml.language.foundation.ModelElement;
+import cml.language.foundation.NamedElement;
+import cml.language.foundation.PropertyList;
+import cml.language.foundation.Scope;
 import cml.language.generated.Location;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,11 +14,6 @@ public interface Task extends NamedElement, PropertyList
 {
     Optional<String> getConstructor();
     void setConstructor(String constructor);
-
-    default Optional<Module> getModule()
-    {
-        return getParentScope().map(scope -> (Module) scope);
-    }
 
     static Task create(String name)
     {

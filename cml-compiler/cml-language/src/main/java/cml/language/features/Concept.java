@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
@@ -281,9 +282,9 @@ public interface Concept extends NamedElement, PropertyList
 
     default Model getModel()
     {
-        assert getModule().isPresent();
+        assert moduleOf(this).isPresent();
 
-        return getModule().get().getModel();
+        return moduleOf(this).get().getModel();
     }
 
     default List<Association> getAssociations()

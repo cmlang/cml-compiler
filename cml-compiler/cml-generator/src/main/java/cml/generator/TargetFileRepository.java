@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -57,10 +58,10 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     {
         final Optional<TemplateFile> fileTemplates = findFilesTemplateForTask(task);
 
-        if (fileTemplates.isPresent() && task.getModule().isPresent())
+        if (fileTemplates.isPresent() && moduleOf(task).isPresent())
         {
             final String moduleName = fileTemplates.get().getModuleName();
-            final Optional<Module> module = task.getModule().get().getSelfOrImportedModule(moduleName);
+            final Optional<Module> module = moduleOf(task).get().getSelfOrImportedModule(moduleName);
 
             if (module.isPresent() && task.getConstructor().isPresent())
             {
@@ -84,9 +85,9 @@ class TargetFileRepositoryImpl implements TargetFileRepository
 
     private Optional<TemplateFile> findFilesTemplateForTask(Task task)
     {
-        if (task.getModule().isPresent() & task.getConstructor().isPresent())
+        if (moduleOf(task).isPresent() & task.getConstructor().isPresent())
         {
-            final Module module = task.getModule().get();
+            final Module module = moduleOf(task).get();
             final String constructorName = task.getConstructor().get();
 
             return findTemplateFile(module, constructorName, GROUP_FILES);
