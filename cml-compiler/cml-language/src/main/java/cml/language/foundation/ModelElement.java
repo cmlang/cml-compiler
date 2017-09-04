@@ -18,11 +18,6 @@ public interface ModelElement
         return getParentScope().flatMap(ModelElement::getModule);
     }
 
-    default String getDiagnosticIdentification()
-    {
-        return toString();
-    }
-
     static ModelElement create(ModelElement self)
     {
         return new ModelElementImpl(self);

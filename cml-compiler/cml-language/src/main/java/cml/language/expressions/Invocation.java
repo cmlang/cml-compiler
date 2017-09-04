@@ -2,7 +2,10 @@ package cml.language.expressions;
 
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
-import cml.language.foundation.*;
+import cml.language.foundation.Diagnostic;
+import cml.language.foundation.ModelElement;
+import cml.language.foundation.NamedElement;
+import cml.language.foundation.Scope;
 import cml.language.generated.Location;
 import cml.language.types.*;
 import org.jetbrains.annotations.NotNull;
@@ -240,12 +243,6 @@ public interface Invocation extends Expression, NamedElement
         }
 
         return emptyList();
-    }
-
-    @Override
-    default String getDiagnosticIdentification()
-    {
-        return format("%s -> %s", toString(), getType());
     }
 
     static Invocation create(String name, List<Expression> arguments)

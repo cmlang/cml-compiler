@@ -4,10 +4,10 @@ import cml.io.Console;
 import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.io.SourceFile;
-import cml.language.foundation.Model;
 import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.foundation.Diagnostic;
+import cml.language.foundation.Model;
 import cml.language.foundation.ModelElement;
 import cml.language.generated.Location;
 import cml.language.grammar.CMLLexer;
@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
+import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
 import static cml.language.functions.ModelVisitorFunctions.visitModel;
 
 public interface ModelLoader
@@ -211,7 +212,7 @@ class ModelLoaderImpl implements ModelLoader
                 console.print(
                     "\nFailed validation: required %s: in %s",
                     diagnostic.getCode(),
-                    diagnostic.getElement().getDiagnosticIdentification());
+                    diagnosticIdentificationOf(diagnostic.getElement()));
 
                 printLocation(diagnostic.getElement());
 
@@ -222,7 +223,7 @@ class ModelLoaderImpl implements ModelLoader
 
                 for(ModelElement element: diagnostic.getParticipants())
                 {
-                    console.print("- %s", element.getDiagnosticIdentification());
+                    console.print("- %s", diagnosticIdentificationOf(element));
 
                     printLocation(element);
                 }

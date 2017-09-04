@@ -227,19 +227,6 @@ class NamedTypeImpl implements NamedType
     }
 
     @Override
-    public String getDiagnosticIdentification()
-    {
-        if (getErrorMessage().isPresent())
-        {
-            return toString() + " - " + getErrorMessage().get();
-        }
-        else
-        {
-            return toString();
-        }
-    }
-
-    @Override
     public String toString()
     {
         return isUndefined() ? getName() : getName() + (getCardinality().isPresent() ? getCardinality().get() : "");

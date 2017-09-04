@@ -169,12 +169,6 @@ public class Lambda extends ExpressionBase
     }
 
     @Override
-    public String getDiagnosticIdentification()
-    {
-        return toString() + " - inferred result type: " + getMatchingResultType();
-    }
-
-    @Override
     public String toString()
     {
         return parameters.isEmpty() ?
