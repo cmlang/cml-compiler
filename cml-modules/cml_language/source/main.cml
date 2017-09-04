@@ -2,7 +2,7 @@
 concept ModelElement
 {
     location: Location?;
-    scope: Scope?;
+    parent: Scope?;
 }
 
 concept Scope: ModelElement
@@ -18,7 +18,7 @@ concept Location
 
 association Membership
 {
-    ModelElement.scope;
+    ModelElement.parent;
     Scope.members;
 }
 

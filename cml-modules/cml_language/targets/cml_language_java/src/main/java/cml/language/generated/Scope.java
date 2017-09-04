@@ -12,9 +12,9 @@ public interface Scope extends ModelElement
 {
     List<ModelElement> getMembers();
 
-    static Scope createScope(List<ModelElement> members, @Nullable Location location, @Nullable Scope scope)
+    static Scope createScope(List<ModelElement> members, @Nullable Location location, @Nullable Scope parent)
     {
-        ModelElement modelElement = ModelElement.extendModelElement(location, scope);
+        ModelElement modelElement = ModelElement.extendModelElement(location, parent);
         return new ScopeImpl(modelElement, members);
     }
 
@@ -47,9 +47,9 @@ class ScopeImpl implements Scope
         return this.modelElement.getLocation();
     }
 
-    public Optional<Scope> getScope()
+    public Optional<Scope> getParent()
     {
-        return this.modelElement.getScope();
+        return this.modelElement.getParent();
     }
 
     public String toString()

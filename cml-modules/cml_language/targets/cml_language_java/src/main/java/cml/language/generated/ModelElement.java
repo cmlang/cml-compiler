@@ -12,16 +12,16 @@ public interface ModelElement
 {
     Optional<Location> getLocation();
 
-    Optional<Scope> getScope();
+    Optional<Scope> getParent();
 
-    static ModelElement createModelElement(@Nullable Location location, @Nullable Scope scope)
+    static ModelElement createModelElement(@Nullable Location location, @Nullable Scope parent)
     {
-        return new ModelElementImpl(location, scope);
+        return new ModelElementImpl(location, parent);
     }
 
-    static ModelElement extendModelElement(@Nullable Location location, @Nullable Scope scope)
+    static ModelElement extendModelElement(@Nullable Location location, @Nullable Scope parent)
     {
-        return new ModelElementImpl(location, scope);
+        return new ModelElementImpl(location, parent);
     }
 }
 
@@ -31,11 +31,11 @@ class ModelElementImpl implements ModelElement
 
     private final @Nullable Location location;
 
-    public ModelElementImpl(@Nullable Location location, @Nullable Scope scope)
+    public ModelElementImpl(@Nullable Location location, @Nullable Scope parent)
     {
         this.location = location;
 
-        membership.link(scope, this);
+        membership.link(parent, this);
     }
 
     public Optional<Location> getLocation()
@@ -43,9 +43,9 @@ class ModelElementImpl implements ModelElement
         return Optional.ofNullable(this.location);
     }
 
-    public Optional<Scope> getScope()
+    public Optional<Scope> getParent()
     {
-        return membership.scopeOf(this);
+        return membership.parentOf(this);
     }
 
     public String toString()

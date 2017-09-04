@@ -20,17 +20,17 @@ public class Membership
         }
     }
 
-    private final Map<ModelElement, @Nullable Scope> scope = new HashMap<>();
+    private final Map<ModelElement, @Nullable Scope> parent = new HashMap<>();
     private final Map<Scope, List<ModelElement>> members = new HashMap<>();
 
-    synchronized void linkMany(@Nullable Scope scope, List<ModelElement> members)
+    synchronized void linkMany(@Nullable Scope parent, List<ModelElement> members)
     {
-        for (ModelElement modelElement: members) link(scope, modelElement);
+        for (ModelElement modelElement: members) link(parent, modelElement);
     }
 
     synchronized void link(Scope scope, ModelElement modelElement)
     {
-        this.scope.put(modelElement, scope);
+        this.parent.put(modelElement, scope);
 
         final List<ModelElement> modelElementList = this.members.computeIfAbsent(scope, key -> new ArrayList<>());
         if (!modelElementList.contains(modelElement))
@@ -39,9 +39,9 @@ public class Membership
         }
     }
 
-    synchronized Optional<Scope> scopeOf(ModelElement modelElement)
+    synchronized Optional<Scope> parentOf(ModelElement modelElement)
     {
-        return Optional.ofNullable(this.scope.get(modelElement));
+        return Optional.ofNullable(this.parent.get(modelElement));
     }
 
     synchronized List<ModelElement> membersOf(Scope scope)
