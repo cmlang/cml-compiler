@@ -1,5 +1,4 @@
 
-/*
 concept ModelElement
 {
     location: Location?;
@@ -10,12 +9,17 @@ concept Scope: ModelElement
 {
     members: ModelElement*;
 }
-*/
 
 concept Location
 {
     line: Integer;
     column: Integer;
+}
+
+association Membership
+{
+    ModelElement.scope;
+    Scope.members;
 }
 
 task cml_language_java by cmlc_java
