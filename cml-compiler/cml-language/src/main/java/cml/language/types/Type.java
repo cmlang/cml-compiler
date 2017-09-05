@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 
+import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static java.util.Optional.empty;
 
 public interface Type extends ModelElement
@@ -130,7 +131,7 @@ public interface Type extends ModelElement
                         .get()
                         .getAllGeneralizations()
                         .stream()
-                        .anyMatch(c -> c.getSelfType().equals(getElementType()));
+                        .anyMatch(c -> selfTypeOf(c).equals(getElementType()));
         }
         else
         {

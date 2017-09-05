@@ -2,6 +2,7 @@ package cml.language.functions;
 
 import cml.language.expressions.Invocation;
 import cml.language.expressions.Lambda;
+import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.foundation.ModelElement;
@@ -13,6 +14,7 @@ import static cml.language.functions.ScopeFunctions.memberNamed;
 import static java.lang.String.format;
 import static java.util.Optional.empty;
 
+@SuppressWarnings("WeakerAccess")
 public class ModelElementFunctions
 {
     public static Optional<Module> moduleOf(ModelElement element)
@@ -33,6 +35,25 @@ public class ModelElementFunctions
         {
             //noinspection Convert2MethodRef
             return element.getParentScope().flatMap(s -> moduleOf(s));
+        }
+    }
+
+    public static NamedType selfTypeOf(ModelElement element)
+    {
+        if (element instanceof Concept)
+        {
+            final Concept concept = (Concept) element;
+            final NamedType namedType = NamedType.create(concept.getName());
+
+            namedType.setConcept(concept);
+
+            return namedType;
+        }
+        else
+        {
+            assert element.getParentScope().isPresent(): "Parent scope required in order to determine self's type.";
+
+            return selfTypeOf(element.getParentScope().get());
         }
     }
 

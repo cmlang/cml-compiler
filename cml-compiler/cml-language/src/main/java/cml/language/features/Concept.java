@@ -2,7 +2,6 @@ package cml.language.features;
 
 import cml.language.foundation.*;
 import cml.language.generated.Location;
-import cml.language.types.NamedType;
 import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,16 +21,6 @@ import static java.util.stream.Stream.concat;
 public interface Concept extends NamedElement, PropertyList
 {
     boolean isAbstract();
-
-    @Override
-    default NamedType getSelfType()
-    {
-        final NamedType namedType = NamedType.create(getName());
-
-        namedType.setConcept(this);
-
-        return namedType;
-    }
 
     default List<String> getDependencies()
     {

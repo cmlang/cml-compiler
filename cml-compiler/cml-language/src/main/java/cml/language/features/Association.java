@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
@@ -208,7 +209,7 @@ class AssociationEndTypesMustMatch implements Invariant<Association>
 
     private static boolean typesMatch(Concept concept, Property property)
     {
-        return concept.getSelfType().equals(property.getType().getElementType());
+        return selfTypeOf(concept).equals(property.getType().getElementType());
     }
 
     @Override

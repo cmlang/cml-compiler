@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
 import static cml.language.functions.ScopeFunctions.scopeOfType;
 import static cml.language.functions.ScopeFunctions.typeOfMemberNamed;
@@ -54,7 +55,7 @@ public interface Path extends Expression
 
         Scope scope = getParentScope().get();
 
-        if (isSelf()) return scope.getSelfType();
+        if (isSelf()) return selfTypeOf(scope);
 
         final String variableName = getNames().get(0);
         final Optional<Type> variableType = typeOfVariableNamed(variableName, scope);

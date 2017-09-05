@@ -1,7 +1,6 @@
 package cml.language.foundation;
 
 import cml.language.generated.Location;
-import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -14,13 +13,6 @@ public interface Scope extends ModelElement
     void addMember(ModelElement member);
 
     List<ModelElement> getMembers();
-
-    default NamedType getSelfType()
-    {
-        assert getParentScope().isPresent(): "Parent scope required in order to determine self's type.";
-        
-        return getParentScope().get().getSelfType();
-    }
 
     static Scope create(Scope self, ModelElement modelElement)
     {
