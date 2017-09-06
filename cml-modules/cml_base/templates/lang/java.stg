@@ -324,6 +324,10 @@ type_hint_name(name) ::=<<
 
 // Literal
 
+literal_expr_boolean(text) ::= <<
+<text>
+>>
+
 literal_expr_string(text) ::= <<
 "<text>"
 >>
