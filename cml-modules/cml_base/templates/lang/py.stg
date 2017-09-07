@@ -316,6 +316,10 @@ type_hint_name(name) ::=<<
 
 // Literal
 
+literal_expr_boolean(text) ::= <<
+<text; format="pascal-case">
+>>
+
 literal_expr_string(text) ::= <<
 "<text>"
 >>

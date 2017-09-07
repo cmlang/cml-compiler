@@ -17,3 +17,9 @@ task poj by poj
     packageName = "literals";
     packagePath = "literals";
 }
+
+task pop by pop
+{
+    moduleName = "expressions";
+    moduleVersion = "1.0";
+}
