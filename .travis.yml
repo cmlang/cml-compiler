@@ -21,6 +21,10 @@ before_install:
   - test -d $PYTHON_HOME
   - test -d $M2_HOME || ls /usr/local
   - test -d $M2_HOME
+  # Unsetting _JAVA_OPTIONS
+  - unset _JAVA_OPTIONS
+  - test -w $HOME/.bash_profile && echo 'unset _JAVA_OPTIONS' >> $HOME/.bash_profile || true
+  - echo 'unset _JAVA_OPTIONS' >> $HOME/.profile
   # Configure Python
   - export PATH="$PYTHON_HOME/bin:$PATH"
   - test -w $HOME/.bash_profile && echo 'export PATH="$PYTHON_HOME/bin:$PATH"' >> $HOME/.bash_profile || true
