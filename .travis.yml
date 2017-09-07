@@ -21,10 +21,11 @@ before_install:
   - python3 -m pip install -U mypy
   # Install Linuxbrew
   - ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
-  - test -d ~/.linuxbrew && PATH="$HOME/.linuxbrew/bin:$PATH"
-  - test -d /home/linuxbrew/.linuxbrew && PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-  - test -r ~/.bash_profile && echo 'export PATH="$(brew --prefix)/bin:$PATH"' >>~/.bash_profile
-  - echo 'export PATH="$(brew --prefix)/bin:$PATH"' >>~/.profile
+  - test -d $HOME/.linuxbrew && PATH="$HOME/.linuxbrew/bin:$PATH" || true
+  - test -d /home/linuxbrew/.linuxbrew && PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" || true
+  - test -d $HOME/.linuxbrew || test -d /home/linuxbrew/.linuxbrew
+  - test -w $HOME/.bash_profile && echo 'export PATH="$(brew --prefix)/bin:$PATH"' >> $HOME/.bash_profile
+  - echo 'export PATH="$(brew --prefix)/bin:$PATH"' >> $HOME/.profile
   - brew --version
   - brew update
   # Install CML
