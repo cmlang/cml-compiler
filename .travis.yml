@@ -26,6 +26,7 @@ before_install:
   - export MANPATH="$(brew --prefix)/share/man:$MANPATH"
   - export INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
   - brew --version
+  - brew update
   # Install CML
   - brew tap cmlang/cml
   - brew install cml-compiler
