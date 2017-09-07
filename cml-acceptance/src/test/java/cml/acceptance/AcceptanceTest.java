@@ -5,6 +5,8 @@ import org.apache.maven.shared.invoker.*;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.WriterStreamConsumer;
+import org.jetbrains.annotations.NotNull;
+import org.jooq.lambda.Seq;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
@@ -17,6 +19,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertEquals;
@@ -24,6 +27,7 @@ import static org.codehaus.plexus.util.FileUtils.*;
 import static org.codehaus.plexus.util.cli.CommandLineUtils.executeCommandLine;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.jooq.lambda.Seq.seq;
 
 @RunWith(Theories.class)
 public class AcceptanceTest
@@ -102,6 +106,44 @@ public class AcceptanceTest
 
         final File targetDir = new File(FRONTEND_TARGET_DIR);
         assertThat("Target dir must exist: " + targetDir, targetDir.exists(), is(true));
+    }
+
+    @Test
+    public void cml_modules()
+    {
+        moduleDirs().forEach(this::testModule);
+    }
+
+    @NotNull
+    private Seq<File> moduleDirs()
+    {
+        final File[] subDirs = new File(CML_MODULES_BASE_DIR).listFiles(File::isDirectory);
+
+        return seq(asList(subDirs == null ? new File[0] : subDirs)).filter(AcceptanceTest::isModuleDir);
+    }
+
+    private static boolean isModuleDir(File subDir)
+    {
+        return new File(subDir, "source").isDirectory() || new File(subDir, "templates").isDirectory();
+    }
+
+    private void testModule(File moduleDir)
+    {
+        try
+        {
+            System.out.println("--------");
+            System.out.println("Testing module: " + moduleDir.getName());
+
+            executeJar(moduleDir.getCanonicalPath(), COMPILER_JAR, singletonList("test"), SUCCESS);
+        }
+        catch (IOException exception)
+        {
+            throw new RuntimeException("IOException: " + exception.getMessage(), exception);
+        }
+        catch (CommandLineException exception)
+        {
+            throw new RuntimeException("CommandLineException: " + exception.getMessage(), exception);
+        }
     }
 
     @Theory

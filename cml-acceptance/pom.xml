@@ -41,6 +41,12 @@
             <version>21.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jool</artifactId>
+            <version>0.9.12</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
