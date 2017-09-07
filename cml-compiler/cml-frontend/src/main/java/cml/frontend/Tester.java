@@ -19,7 +19,6 @@ class Tester
     int test()
     {
         ModuleTest.compiler = compiler;
-        ModuleTest.basePath = "tests/expressions";
 
         final JUnitCore junit = new JUnitCore();
 

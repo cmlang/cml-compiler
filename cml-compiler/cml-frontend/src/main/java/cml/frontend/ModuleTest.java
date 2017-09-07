@@ -1,5 +1,6 @@
 package cml.frontend;
 
+import org.jooq.lambda.Seq;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -7,24 +8,31 @@ import org.junit.runners.Parameterized;
 import java.io.File;
 import java.util.List;
 
-import static java.util.Arrays.stream;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.seq;
 
 @RunWith(Parameterized.class)
 public class ModuleTest
 {
     static Compiler compiler;
-    static String basePath;
+
+    private static final String basePath = "tests";
 
     @Parameterized.Parameters(name = "{0}")
     public static List<Object[]> modulePaths()
     {
-        final File file = new File(basePath);
-        final File[] files = file.listFiles(File::isDirectory);
-
-        return stream(files == null ? new File[0] : files)
+        return subDirsOf(new File(basePath))
+            .flatMap(dir -> subDirsOf(dir))
             .map(f -> new Object[] { f.getName(), f })
             .collect(toList());
+    }
+
+    private static Seq<File> subDirsOf(File baseDir)
+    {
+        final File[] files = baseDir.listFiles(File::isDirectory);
+
+        return seq(asList(files == null ? new File[0] : files));
     }
 
     private final String moduleName;
