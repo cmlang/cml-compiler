@@ -44,6 +44,9 @@ public class ModuleTest
 
     private static final String COMPILER_OUTPUT_TXT = "cml-compiler-output.txt";
 
+    static String selectedTestName;
+    static String selectedTaskName;
+
     @Parameterized.Parameters(name = "{0}")
     public static List<Object[]> modulePaths()
     {
@@ -57,6 +60,8 @@ public class ModuleTest
                 moduleDirOf(expectedDir),
                 expectedDir
             })
+            .filter(properties -> selectedTestName == null || properties[0].equals(selectedTestName) || ((String)properties[0]).startsWith(selectedTestName + "/"))
+            .filter(properties -> selectedTaskName == null || properties[1].equals(selectedTaskName))
             .collect(toList());
     }
 

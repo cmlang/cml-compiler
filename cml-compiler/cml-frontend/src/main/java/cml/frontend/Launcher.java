@@ -9,15 +9,17 @@ public final class Launcher
 
     public static void main(final String... args)
     {
-        if (args.length == 1)
+        if (args.length >= 1)
         {
             final String targetName = args[0];
 
             if (targetName.equalsIgnoreCase(TEST_TASK_NAME))
             {
                 final Tester tester = new Tester();
+                final String testName = args.length > 1 ? args[1] : null;
+                final String taskName = args.length > 2 ? args[2] : null;
 
-                final int exitCode = tester.test();
+                final int exitCode = tester.test(testName, taskName);
 
                 System.exit(exitCode);
             }

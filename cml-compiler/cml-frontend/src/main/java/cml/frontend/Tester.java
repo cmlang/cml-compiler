@@ -1,5 +1,6 @@
 package cml.frontend;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.TextListener;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
@@ -11,7 +12,7 @@ class Tester
     private static final int EXIT_CODE__SUCCESS = 0;
     private static final int EXIT_CODE__TESTS_FAILED = 52;
 
-    int test()
+    int test(final @Nullable String testName, final @Nullable String taskName)
     {
         final JUnitCore junit = new JUnitCore();
 
@@ -26,6 +27,9 @@ class Tester
                 System.out.println(each.getMessage());
             }
         });
+
+        ModuleTest.selectedTestName = testName;
+        ModuleTest.selectedTaskName = taskName;
 
         final Result result = junit.run(ModuleTest.class);
 
