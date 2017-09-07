@@ -35,6 +35,7 @@ import static org.junit.Assume.assumeThat;
 public class ModuleTest
 {
     private static final Charset FILE_ENCODING = Charset.forName("UTF-8");
+    private static final int PROCESS_TIMEOUT_IN_SECONDS = 60;
 
     private static final String SOURCE_PATH = "source";
     private static final String TARGETS_PATH = "targets";
@@ -105,6 +106,7 @@ public class ModuleTest
         verifyTargetFiles();
         buildMavenModule();
         checkPythonTypes();
+        installPythonPackage();
     }
 
     private void compileTestModule() throws IOException
@@ -142,6 +144,14 @@ public class ModuleTest
         if (isPythonModule())
         {
             subDirsOf(targetDir.getAbsolutePath()).forEach(ModuleTest::checkPythonTypes);
+        }
+    }
+
+    private void installPythonPackage()
+    {
+        if (isPythonModule())
+        {
+            installPythonPackage(targetDir);
         }
     }
 
@@ -344,7 +354,7 @@ public class ModuleTest
 
             try
             {
-                final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+                final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
 
                 assertThat(
                     "mypy's exit code: " + exitCode + "\nmypy's output: \n---\n" + stringOf(outputStream) + "---\n",
@@ -356,7 +366,56 @@ public class ModuleTest
             {
                 System.out.println();
                 System.out.println("--------");
-                System.out.println("Error running MyPy:");
+                System.out.println("Error running mypy:");
+                System.out.println(stringOf(outputStream));
+
+                throw new RuntimeException("CommandLineException: " + exception.getMessage(), exception);
+            }
+        }
+        catch (IOException exception)
+        {
+            System.out.println();
+
+            throw new RuntimeException("IOException: " + exception.getMessage(), exception);
+        }
+    }
+
+    private static void installPythonPackage(final File packageDir)
+    {
+        System.out.print("- Installing Python package: " + packageDir.getName());
+
+        assertThat(
+            "In order to install the generated Python package, pip should be installed.",
+            new File(pythonCmd("pip3")).isFile());
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
+        {
+            // --upgrade: overwriting previous installation - https://packaging.python.org/installing
+            final Commandline commandLine = new Commandline();
+            commandLine.setExecutable(pythonCmd("pip3"));
+            commandLine.createArg().setValue("install");
+            commandLine.createArg().setValue("--upgrade");
+            commandLine.createArg().setValue(packageDir.getCanonicalPath());
+
+            final Writer writer = new OutputStreamWriter(outputStream);
+            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
+            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
+
+            try
+            {
+                final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
+
+                assertThat(
+                    "pip's exit code: " + exitCode + "\npip's output: \n---\n" + stringOf(outputStream) + "---\n",
+                    exitCode, is(0));
+
+                System.out.println();
+            }
+            catch (CommandLineException exception)
+            {
+                System.out.println();
+                System.out.println("--------");
+                System.out.println("Error running pip:");
                 System.out.println(stringOf(outputStream));
 
                 throw new RuntimeException("CommandLineException: " + exception.getMessage(), exception);

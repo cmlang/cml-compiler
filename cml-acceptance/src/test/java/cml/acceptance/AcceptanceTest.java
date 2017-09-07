@@ -33,6 +33,7 @@ import static org.jooq.lambda.Seq.seq;
 public class AcceptanceTest
 {
     private static final Charset OUTPUT_FILE_ENCODING = Charset.forName("UTF-8");
+    private static final int PROCESS_TIMEOUT_IN_SECONDS = 120;
 
     private static final String BASE_DIR = "..";
 
@@ -362,7 +363,7 @@ public class AcceptanceTest
 
             System.out.println("Checking types of Python module: " + commandLine);
 
-            final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+            final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
 
             System.out.println("mypy's exit code: " + exitCode);
             System.out.println(
@@ -389,7 +390,7 @@ public class AcceptanceTest
 
             System.out.println("Installing Python package: " + commandLine);
 
-            final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+            final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
 
             System.out.println("pip's exit code: " + exitCode);
             System.out.println(
@@ -448,7 +449,7 @@ public class AcceptanceTest
 
             System.out.println("Launching Python client: " + commandLine);
 
-            int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+            int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
 
             System.out.println("Python client's exit code: " + exitCode);
             System.out.println("Output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
@@ -514,7 +515,7 @@ public class AcceptanceTest
 
         System.out.println("Launching jar: " + commandLine);
 
-        final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+        final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
 
         System.out.println("Jar's exit code: " + exitCode);
         System.out.println("Output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
