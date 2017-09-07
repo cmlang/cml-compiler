@@ -2,6 +2,7 @@ package cml.frontend;
 
 import cml.io.Console;
 import com.google.common.io.Files;
+import org.apache.maven.shared.invoker.*;
 import org.jooq.lambda.Seq;
 import org.junit.After;
 import org.junit.Before;
@@ -54,9 +55,7 @@ public class ModuleTest
             .collect(toList());
     }
 
-    private static String currentTestName;
-    private static String currentTaskName;
-
+    private final String testName;
     private final String taskName;
     private final File moduleDir;
     private final File expectedDir;
@@ -66,18 +65,11 @@ public class ModuleTest
 
     public ModuleTest(String testName, String taskName, File moduleDir, File expectedDir)
     {
+        this.testName = testName;
         this.taskName = taskName;
         this.moduleDir = moduleDir;
         this.expectedDir = expectedDir;
         this.targetDir = new File(moduleDir, TARGETS_PATH + "/" + taskName);
-
-        if (!testName.equals(currentTestName) || !taskName.equals(currentTaskName))
-        {
-            System.out.println("\nTesting " + testName + " with task " + taskName + ":");
-
-            currentTestName = testName;
-            currentTaskName = taskName;
-        }
     }
 
     @Before
@@ -101,7 +93,16 @@ public class ModuleTest
     }
 
     @Test
-    public void verifyCompilerOutput() throws IOException
+    public void verify() throws IOException
+    {
+        System.out.println("\nTesting " + testName + " with task " + taskName + ":");
+
+        compileTestModule();
+        verifyTargetFiles();
+        buildMavenModule();
+    }
+
+    private void compileTestModule() throws IOException
     {
         final File expectedOutputFile = new File(expectedDir, COMPILER_OUTPUT_TXT);
 
@@ -112,8 +113,7 @@ public class ModuleTest
         System.out.println("- Verified the compiler's output.");
     }
 
-    @Test
-    public void verifyTargetFiles()
+    private void verifyTargetFiles()
     {
         assertThat(
             "Should have found all expected files, but missing: " + missingFiles().toString("/n"),
@@ -122,6 +122,13 @@ public class ModuleTest
         verifiedFiles().forEach(this::verifyTargetFile);
 
         ignoredFiles().forEach(ignoredFile -> System.out.println("- Ignored target file: " + relativePathOfTargetFile(ignoredFile)));
+    }
+
+    private void buildMavenModule()
+    {
+        assumeThat(new File(targetDir, "pom.xml").isFile(), is(true));
+
+        buildMavenModule(targetDir);
     }
 
     private void verifyTargetFile(final File expectedFile)
@@ -243,6 +250,45 @@ public class ModuleTest
         final Seq<File> subFiles = subDirsOf(basePath).flatMap(subDir -> filesOf(subDir.getAbsolutePath()));
 
         return seq(fileList).concat(subFiles);
+    }
+
+    private static void buildMavenModule(final File moduleDir)
+    {
+        System.out.print("- Building: " + moduleDir.getName() + " ");
+
+        System.setProperty("maven.home", System.getenv("M2_HOME"));
+
+        final InvocationRequest request = new DefaultInvocationRequest();
+        request.setBaseDirectory(moduleDir);
+        request.setGoals(asList("clean", "install"));
+        request.setInteractive(false);
+
+        final Console console = createStringConsole();
+        final Invoker invoker = new DefaultInvoker();
+        invoker.setOutputHandler(line -> {
+            System.out.print(".");
+            console.println(line);
+        });
+
+        try
+        {
+            final InvocationResult result = invoker.execute(request);
+
+            assertThat(
+                "Maven failure - exit code: " + result.getExitCode() + "\n" + console.toString(),
+                result.getExitCode(), is(equalTo(0)));
+
+            System.out.println();
+        }
+        catch (MavenInvocationException exception)
+        {
+            System.out.println();
+            System.out.println("--------");
+            System.out.println("Error running Maven:");
+            System.out.println(console.toString());
+
+            throw new RuntimeException("MavenInvocationException: " + exception.getMessage());
+        }
     }
 
     private static void assertThatOutputMatches(
