@@ -35,7 +35,7 @@ public final class Launcher
         }
         else
         {
-            System.out.println("Expected one argument: target name or 'test'");
+            System.out.println("Expected arguments. Usage: cml [<task_name> | test [<test_module>] [<task_name>]]");
 
             System.exit(EXIT_CODE__EXPECTED_ARGUMENTS);
         }
