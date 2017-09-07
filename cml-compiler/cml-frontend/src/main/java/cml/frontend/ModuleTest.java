@@ -116,7 +116,7 @@ public class ModuleTest
     }
 
     @Before
-    public void compile() throws Exception
+    public void compileTestModule() throws Exception
     {
         final Console console = createStringConsole();
         final Compiler compiler = createCompiler(console);
@@ -127,7 +127,7 @@ public class ModuleTest
     }
 
     @After
-    public void clean() throws Exception
+    public void cleanTargetDir() throws Exception
     {
         if (targetDir.isDirectory())
         {
@@ -136,12 +136,12 @@ public class ModuleTest
     }
 
     @Test
-    public void verify() throws IOException
+    public void verifyTestModule() throws IOException
     {
         System.out.println("\n\nTesting " + testName + " with task " + taskName + ":");
 
         // Compiling test module:
-        compileTestModule();
+        verifyCompilerOutput();
         verifyTargetFiles();
 
         // Building generated target:
@@ -154,15 +154,17 @@ public class ModuleTest
         executePythonClient();
     }
 
-    private void compileTestModule() throws IOException
+    private void verifyCompilerOutput() throws IOException
     {
         final File expectedOutputFile = new File(expectedDir, COMPILER_OUTPUT_TXT);
 
         if (expectedOutputFile.isFile())
         {
+            System.out.print("- Verifying the compiler's output ...");
+
             assertThatOutputMatches("Compiler's output", expectedOutputFile, compilerOutput);
 
-            System.out.println("- Verified the compiler's output.");
+            System.out.println();
         }
         else
         {
