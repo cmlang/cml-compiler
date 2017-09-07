@@ -399,7 +399,7 @@ public class ModuleTest
                 }
                 else
                 {
-                    System.out.println("- Ignored the client's output.");
+                    System.out.println("\n- Ignored the Java client's output.");
                 }
 
                 assertThat(
@@ -614,7 +614,7 @@ public class ModuleTest
                 }
                 else
                 {
-                    System.out.println("\n- Ignored the client's output.");
+                    System.out.println("\n- Ignored the Python client's output.");
                 }
 
                 assertThat(

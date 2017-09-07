@@ -1,0 +1,6 @@
+Unidirectional Associations
+
+Employee: Employee(name="John")
+Organization: Organization(name="Acme")
+Organization's Employees: [Employee(name="John")]
+Vehicle: Vehicle(plate="ABC12345", driver="Optional[Employee(name="John")]", owner="Organization(name="Acme")")

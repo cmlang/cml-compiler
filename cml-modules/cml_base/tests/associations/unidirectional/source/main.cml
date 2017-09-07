@@ -19,31 +19,31 @@ concept Employee
 
 task vehicles_poj by poj
 {
-    groupId = "vehicles";
+    groupId = "cml-associations-unidirectional";
     artifactId = "vehicles-poj";
     artifactVersion = "1.0-SNAPSHOT";
-    packageName = "vehicles";
-    packagePath = "vehicles";
+    packageName = "vehicles.poj";
+    packagePath = "vehicles/poj";
 }
 
 task vehicles_pop by pop
 {
-    moduleName = "vehicles_pop";
+    moduleName = "cml_associations_unidirectional_vehicles_pop";
     moduleVersion = "1.0";
 }
 
 task vehicles_cmlc_java by cmlc_java
 {
-    groupId = "vehicles";
+    groupId = "cml-associations-unidirectional";
     artifactId = "vehicles-cmlc";
     artifactVersion = "1.0-SNAPSHOT";
-    packageName = "vehicles";
-    packagePath = "vehicles";
+    packageName = "vehicles.cmlc";
+    packagePath = "vehicles/cmlc";
 }
 
 task vehicles_cmlc_py by cmlc_py
 {
-    moduleName = "vehicles_cmlc";
+    moduleName = "cml_associations_unidirectional_vehicles_cmlc";
     moduleVersion = "1.0";
 }
 
