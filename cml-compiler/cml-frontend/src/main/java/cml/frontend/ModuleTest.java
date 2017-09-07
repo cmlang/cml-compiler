@@ -34,7 +34,7 @@ public class ModuleTest
     private static final String TESTS_PATH = "tests";
     private static final String EXPECTED_PATH = "expected";
 
-    private static final String COMPILER_OUTPUT_TXT = "compiler-output.txt";
+    private static final String COMPILER_OUTPUT_TXT = "cml-compiler-output.txt";
 
     @Parameterized.Parameters(name = "{0}")
     public static List<Object[]> modulePaths()
