@@ -16,6 +16,11 @@ env:
     - M2_HOME="/usr/local/maven-3.3.9"
 
 before_install:
+  # Checking Prerequisites:
+  - test -d $PYTHON_HOME
+  - test -d $PYTHON_HOME || ls /opt/python
+  - test -d $M2_HOME
+  - test -d $M2_HOME || ls /usr/local/maven-*
   # Configure Python
   - export PATH="$PYTHON_HOME/bin:$PATH"
   - test -w $HOME/.bash_profile && echo 'export PATH="$PYTHON_HOME/bin:$PATH"' >> $HOME/.bash_profile || true
