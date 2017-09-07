@@ -13,13 +13,13 @@ jdk:
 env:
   global:
     - PYTHON_HOME="/opt/python/3.5.3"
-    - M2_HOME="/usr/local/maven-3.3.9"
+    - M2_HOME="/usr/local/maven-3.5.0"
 
 before_install:
   # Checking Prerequisites:
   - test -d $PYTHON_HOME || ls /opt/python
   - test -d $PYTHON_HOME
-  - test -d $M2_HOME || ls /usr/local/maven-*
+  - test -d $M2_HOME || ls /usr/local
   - test -d $M2_HOME
   # Configure Python
   - export PATH="$PYTHON_HOME/bin:$PATH"
