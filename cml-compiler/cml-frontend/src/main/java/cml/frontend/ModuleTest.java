@@ -17,10 +17,12 @@ import org.junit.runners.Parameterized;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Optional;
 
 import static cml.frontend.Compiler.createCompiler;
 import static cml.io.Console.createStringConsole;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static junit.framework.TestCase.assertEquals;
 import static org.apache.commons.io.FileUtils.cleanDirectory;
@@ -29,7 +31,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jooq.lambda.Seq.seq;
-import static org.junit.Assume.assumeThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class ModuleTest
@@ -43,6 +45,8 @@ public class ModuleTest
     private static final String EXPECTED_PATH = "expected";
 
     private static final String COMPILER_OUTPUT_TXT = "cml-compiler-output.txt";
+    private static final String CLIENT_OUTPUT_TXT = "expected-client-output.txt";
+    private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
 
     static String selectedTestName;
     static String selectedTaskName;
@@ -134,24 +138,30 @@ public class ModuleTest
     @Test
     public void verify() throws IOException
     {
-        System.out.println("\nTesting " + testName + " with task " + taskName + ":");
+        System.out.println("\n\nTesting " + testName + " with task " + taskName + ":");
 
         compileTestModule();
         verifyTargetFiles();
         buildMavenModule();
         checkPythonTypes();
         installPythonPackage();
+        executeJavaClient();
     }
 
     private void compileTestModule() throws IOException
     {
         final File expectedOutputFile = new File(expectedDir, COMPILER_OUTPUT_TXT);
 
-        assumeThat(expectedOutputFile.isFile(), is(true));
+        if (expectedOutputFile.isFile())
+        {
+            assertThatOutputMatches("Compiler's output", expectedOutputFile, compilerOutput);
 
-        assertThatOutputMatches("Compiler's output", expectedOutputFile, compilerOutput);
-
-        System.out.println("- Verified the compiler's output.");
+            System.out.println("- Verified the compiler's output.");
+        }
+        else
+        {
+            System.out.println("- Ignored the compiler's output.");
+        }
     }
 
     private void verifyTargetFiles()
@@ -169,7 +179,11 @@ public class ModuleTest
     {
         if (isMavenModule())
         {
+            System.out.print("- Building test Maven module: " + targetDir.getName() + " ");
+
             buildMavenModule(targetDir);
+
+            System.out.println();
         }
     }
 
@@ -186,6 +200,18 @@ public class ModuleTest
         if (isPythonModule())
         {
             installPythonPackage(targetDir);
+        }
+    }
+
+    private void executeJavaClient()
+    {
+        final File clientModuleDir = new File(moduleDir, "clients/" + taskName);
+
+        if (clientModuleDir.isDirectory())
+        {
+            System.out.print("- Running client: " + clientModuleDir.getName() + " ");
+
+            executeJavaClient(clientModuleDir);
         }
     }
 
@@ -320,10 +346,95 @@ public class ModuleTest
         return seq(fileList).concat(subFiles);
     }
 
+    private static void executeJavaClient(File clientModuleDir)
+    {
+        buildMavenModule(clientModuleDir);
+
+        final File clientTargetDir = new File(clientModuleDir, "target");
+        assertThat("Client target dir must exist: " + clientTargetDir, clientTargetDir.exists(), Is.is(true));
+
+        final Optional<File> clientJarPath = filesOf(clientTargetDir.getAbsolutePath()).filter(file -> file.getAbsolutePath().endsWith(CLIENT_JAR_SUFFIX)).findSingle();
+
+        assertTrue("Client jar should have been found at: " + clientTargetDir, clientJarPath.isPresent());
+
+        executeJar(clientTargetDir, clientJarPath.get().getAbsolutePath());
+    }
+
+    private static void executeJar(final File clientTargetDir, final String jarPath)
+    {
+        try (final ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
+        {
+            try
+            {
+                final int exitCode = executeJar(clientTargetDir.getPath(), jarPath, emptyList(), outputStream);
+
+                final String actualClientOutput = stringOf(outputStream);
+                final File expectedOutputFile = new File(clientTargetDir.getParentFile(), CLIENT_OUTPUT_TXT);
+
+                if (expectedOutputFile.isFile())
+                {
+                    assertThatOutputMatches("Client's output", expectedOutputFile, actualClientOutput);
+                }
+                else
+                {
+                    System.out.println("- Ignored the client's output.");
+                }
+
+                assertThat(
+                    clientTargetDir.getName() + "'s exit code" + exitCode + "\n output:\n" + actualClientOutput,
+                    exitCode, is(0));
+            }
+            catch (CommandLineException exception)
+            {
+                System.out.println();
+                System.out.println("--------");
+                System.out.println("Error running client: " + clientTargetDir.getName());
+                System.out.println(stringOf(outputStream));
+
+                throw new RuntimeException("CommandLineException: " + exception.getMessage(), exception);
+            }
+        }
+        catch (IOException exception)
+        {
+            System.out.println();
+
+            throw new RuntimeException("IOException: " + exception.getMessage(), exception);
+        }
+    }
+
+    private static int executeJar(
+        final String currentDirPath,
+        final String jarPath,
+        final List<String> args,
+        final ByteArrayOutputStream outputStream) throws CommandLineException, IOException
+    {
+        final File jarFile = new File(jarPath);
+        assertThat("Jar file must exit: " + jarFile, jarFile.exists(), is(true));
+
+        final File javaBinDir = new File(System.getProperty("java.home"), "bin");
+        assertThat("Java bin dir must exit: " + javaBinDir, javaBinDir.exists(), is(true));
+
+        final File javaExecFile = new File(javaBinDir, "java");
+        assertThat("Java exec file must exit: " + javaExecFile, javaExecFile.exists(), is(true));
+
+        final Commandline commandLine = new Commandline();
+        commandLine.setWorkingDirectory(currentDirPath);
+        commandLine.setExecutable(javaExecFile.getAbsolutePath());
+
+        commandLine.createArg().setValue("-jar");
+        commandLine.createArg().setValue(jarFile.getAbsolutePath());
+
+        for (final String arg : args) commandLine.createArg().setValue(arg);
+
+        final Writer writer = new OutputStreamWriter(outputStream);
+        final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
+        final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
+
+        return executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
+    }
+
     private static void buildMavenModule(final File moduleDir)
     {
-        System.out.print("- Building: " + moduleDir.getName() + " ");
-
         final String m2_home = System.getenv("M2_HOME");
 
         assertThat(
@@ -351,8 +462,6 @@ public class ModuleTest
             assertThat(
                 "Maven failure - exit code: " + result.getExitCode() + "\n" + console.toString(),
                 result.getExitCode(), is(equalTo(0)));
-
-            System.out.println();
         }
         catch (MavenInvocationException exception)
         {
@@ -367,7 +476,7 @@ public class ModuleTest
 
     private static void checkPythonTypes(final File moduleDir)
     {
-        System.out.print("- Checking types of Python module: " + moduleDir.getName());
+        System.out.println("- Checking types of Python module: " + moduleDir.getName());
 
         assertThat(
             "In order to check types of the generated module, Python 3 should be installed and PYTHON_HOME set.",
@@ -393,12 +502,9 @@ public class ModuleTest
                 assertThat(
                     "mypy's exit code: " + exitCode + "\nmypy's output: \n---\n" + stringOf(outputStream) + "---\n",
                     exitCode, Is.is(0));
-
-                System.out.println();
             }
             catch (CommandLineException exception)
             {
-                System.out.println();
                 System.out.println("--------");
                 System.out.println("Error running mypy:");
                 System.out.println(stringOf(outputStream));
@@ -408,15 +514,13 @@ public class ModuleTest
         }
         catch (IOException exception)
         {
-            System.out.println();
-
             throw new RuntimeException("IOException: " + exception.getMessage(), exception);
         }
     }
 
     private static void installPythonPackage(final File packageDir)
     {
-        System.out.print("- Installing Python package: " + packageDir.getName());
+        System.out.println("- Installing Python package: " + packageDir.getName());
 
         assertThat(
             "In order to install the generated Python package, pip should be installed.",
@@ -442,12 +546,9 @@ public class ModuleTest
                 assertThat(
                     "pip's exit code: " + exitCode + "\npip's output: \n---\n" + stringOf(outputStream) + "---\n",
                     exitCode, is(0));
-
-                System.out.println();
             }
             catch (CommandLineException exception)
             {
-                System.out.println();
                 System.out.println("--------");
                 System.out.println("Error running pip:");
                 System.out.println(stringOf(outputStream));
@@ -457,8 +558,6 @@ public class ModuleTest
         }
         catch (IOException exception)
         {
-            System.out.println();
-
             throw new RuntimeException("IOException: " + exception.getMessage(), exception);
         }
     }

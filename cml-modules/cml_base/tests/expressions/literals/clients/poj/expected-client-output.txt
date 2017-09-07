@@ -1,0 +1,9 @@
+Literal Expressions
+
+LiteralTrueBoolean = true
+LiteralFalseBoolean = false
+LiteralStringInit = 	Some "String"
+
+LiteralIntegerInit = 123
+LiteralDecimalInit = 123.456
+LiteralDecimalInit2 = 0.456
