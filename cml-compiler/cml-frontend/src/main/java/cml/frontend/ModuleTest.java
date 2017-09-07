@@ -20,7 +20,9 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static junit.framework.TestCase.assertEquals;
 import static org.apache.commons.io.FileUtils.cleanDirectory;
+import static org.hamcrest.CoreMatchers.is;
 import static org.jooq.lambda.Seq.seq;
+import static org.junit.Assume.assumeThat;
 
 @RunWith(Parameterized.class)
 public class ModuleTest
@@ -64,7 +66,7 @@ public class ModuleTest
         this.expectedDir = expectedDir;
         this.targetDir = new File(moduleDir, TARGETS_PATH + "/" + taskName);
 
-        System.out.println("\nTesting: " + testName);
+        System.out.println("\nTesting " + testName + ":");
     }
 
     @Before
@@ -92,7 +94,11 @@ public class ModuleTest
     {
         final File expectedOutputFile = new File(expectedDir, COMPILER_OUTPUT_TXT);
 
+        assumeThat(expectedOutputFile.isFile(), is(true));
+
         assertThatOutputMatches("Compiler's output", expectedOutputFile, compilerOutput);
+
+        System.out.println("- Verified the compiler's output.");
     }
 
     private static String testNameOf(final File expectedDir)

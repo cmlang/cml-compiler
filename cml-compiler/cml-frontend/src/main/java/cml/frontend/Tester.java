@@ -1,6 +1,7 @@
 package cml.frontend;
 
 import org.junit.internal.TextListener;
+import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
@@ -13,7 +14,11 @@ class Tester
     {
         final JUnitCore junit = new JUnitCore();
 
-        junit.addListener(new TextListener(System.out));
+        junit.addListener(new TextListener(System.out)
+        {
+            @Override
+            public void testStarted(final Description description) {}
+        });
 
         final Result result = junit.run(ModuleTest.class);
 
