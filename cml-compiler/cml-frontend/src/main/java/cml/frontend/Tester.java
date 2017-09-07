@@ -33,6 +33,24 @@ class Tester
 
         final Result result = junit.run(ModuleTest.class);
 
-        return result.wasSuccessful() ? EXIT_CODE__SUCCESS : EXIT_CODE__TESTS_FAILED;
+        if (result.getRunCount() == 0)
+        {
+            if (testName != null && ModuleTest.selectedTestNames().count() == 0)
+            {
+                System.out.println("Test module not found: " + testName);
+            }
+
+            if (taskName != null && ModuleTest.selectedTaskNames().count() == 0)
+            {
+                System.out.println("Task not found: " + taskName);
+            }
+        }
+
+        return testsExecuted(result, testName, taskName) && result.wasSuccessful() ? EXIT_CODE__SUCCESS : EXIT_CODE__TESTS_FAILED;
+    }
+
+    private boolean testsExecuted(final Result result, String testName, String taskName)
+    {
+        return (testName == null && taskName == null) || result.getRunCount() > 0;
     }
 }

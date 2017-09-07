@@ -48,21 +48,50 @@ public class ModuleTest
     static String selectedTaskName;
 
     @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> modulePaths()
+    public static List<Object[]> testProperties()
     {
-        return subDirsOf(TESTS_PATH)
-            .flatMap(moduleDir -> subDirsOf(moduleDir.getAbsolutePath()))
-            .filter(moduleDir -> sourceDirOf(moduleDir).isDirectory())
-            .flatMap(moduleDir -> subDirsOf(expectedPathOf(moduleDir)))
+        return expectedDirs()
             .map(expectedDir -> new Object[] {
                 testNameOf(expectedDir),
                 taskNameOf(expectedDir),
                 moduleDirOf(expectedDir),
                 expectedDir
             })
-            .filter(properties -> selectedTestName == null || properties[0].equals(selectedTestName) || ((String)properties[0]).startsWith(selectedTestName + "/"))
-            .filter(properties -> selectedTaskName == null || properties[1].equals(selectedTaskName))
+            .filter(properties -> isSelectedTestModule(properties[0]))
+            .filter(properties -> isSelectedTask(properties[1]))
             .collect(toList());
+    }
+
+    static boolean isSelectedTestModule(final Object property)
+    {
+        return selectedTestName == null || property.equals(selectedTestName) || ((String) property).startsWith(selectedTestName + "/");
+    }
+
+    static boolean isSelectedTask(final Object property)
+    {
+        return selectedTaskName == null || property.equals(selectedTaskName);
+    }
+
+    static Seq<String> selectedTestNames()
+    {
+        return expectedDirs().map(dir -> testNameOf(dir)).filter(testName -> isSelectedTestModule(testName));
+    }
+
+    static Seq<String> selectedTaskNames()
+    {
+        return expectedDirs().map(dir -> taskNameOf(dir)).filter(testName -> isSelectedTestModule(testName));
+    }
+
+    static Seq<File> expectedDirs()
+    {
+        return testModules().flatMap(moduleDir -> subDirsOf(expectedPathOf(moduleDir)));
+    }
+
+    static Seq<File> testModules()
+    {
+        return subDirsOf(TESTS_PATH)
+            .flatMap(moduleDir -> subDirsOf(moduleDir.getAbsolutePath()))
+            .filter(moduleDir -> sourceDirOf(moduleDir).isDirectory());
     }
 
     private final String testName;
