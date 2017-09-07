@@ -4,6 +4,7 @@ import org.junit.internal.TextListener;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
 
 class Tester
 {
@@ -18,6 +19,12 @@ class Tester
         {
             @Override
             public void testStarted(final Description description) {}
+
+            @Override
+            protected void printFailure(Failure each, String prefix) {
+                System.out.println(prefix + ") " + each.getTestHeader());
+                System.out.println(each.getMessage());
+            }
         });
 
         final Result result = junit.run(ModuleTest.class);

@@ -3,6 +3,10 @@ package cml.frontend;
 import cml.io.Console;
 import com.google.common.io.Files;
 import org.apache.maven.shared.invoker.*;
+import org.codehaus.plexus.util.cli.CommandLineException;
+import org.codehaus.plexus.util.cli.Commandline;
+import org.codehaus.plexus.util.cli.WriterStreamConsumer;
+import org.hamcrest.core.Is;
 import org.jooq.lambda.Seq;
 import org.junit.After;
 import org.junit.Before;
@@ -10,8 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -21,6 +24,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static junit.framework.TestCase.assertEquals;
 import static org.apache.commons.io.FileUtils.cleanDirectory;
+import static org.codehaus.plexus.util.cli.CommandLineUtils.executeCommandLine;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -100,6 +104,7 @@ public class ModuleTest
         compileTestModule();
         verifyTargetFiles();
         buildMavenModule();
+        checkPythonTypes();
     }
 
     private void compileTestModule() throws IOException
@@ -126,9 +131,18 @@ public class ModuleTest
 
     private void buildMavenModule()
     {
-        assumeThat(new File(targetDir, "pom.xml").isFile(), is(true));
+        if (isMavenModule())
+        {
+            buildMavenModule(targetDir);
+        }
+    }
 
-        buildMavenModule(targetDir);
+    private void checkPythonTypes()
+    {
+        if (isPythonModule())
+        {
+            subDirsOf(targetDir.getAbsolutePath()).forEach(ModuleTest::checkPythonTypes);
+        }
     }
 
     private void verifyTargetFile(final File expectedFile)
@@ -139,6 +153,16 @@ public class ModuleTest
         assertThatOutputMatches("Target file: " + relativePath, expectedFile, targetFile);
 
         System.out.println("- Verified target file: " + relativePath);
+    }
+
+    private boolean isPythonModule()
+    {
+        return new File(targetDir, "setup.py").isFile();
+    }
+
+    private boolean isMavenModule()
+    {
+        return new File(targetDir, "pom.xml").isFile();
     }
 
     private String relativePathOfExpectedFile(File expectedFile)
@@ -256,7 +280,13 @@ public class ModuleTest
     {
         System.out.print("- Building: " + moduleDir.getName() + " ");
 
-        System.setProperty("maven.home", System.getenv("M2_HOME"));
+        final String m2_home = System.getenv("M2_HOME");
+
+        assertThat(
+            "In order to build the generated module, Maven should be installed and M2_HOME set.",
+            new File(m2_home).isDirectory());
+
+        System.setProperty("maven.home", m2_home);
 
         final InvocationRequest request = new DefaultInvocationRequest();
         request.setBaseDirectory(moduleDir);
@@ -287,8 +317,68 @@ public class ModuleTest
             System.out.println("Error running Maven:");
             System.out.println(console.toString());
 
-            throw new RuntimeException("MavenInvocationException: " + exception.getMessage());
+            throw new RuntimeException("MavenInvocationException: " + exception.getMessage(), exception);
         }
+    }
+
+    private static void checkPythonTypes(final File moduleDir)
+    {
+        System.out.print("- Checking types of Python module: " + moduleDir.getName());
+
+        assertThat(
+            "In order to check types of the generated module, Python 3 should be installed and PYTHON_HOME set.",
+            new File(pythonCmd("python3")).isFile());
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
+        {
+            // https://github.com/python/mypy
+            final Commandline commandLine = new Commandline();
+            commandLine.setExecutable(pythonCmd("python3"));
+            commandLine.createArg().setValue("-m");
+            commandLine.createArg().setValue("mypy");
+            commandLine.createArg().setValue(moduleDir.getCanonicalPath());
+
+            final Writer writer = new OutputStreamWriter(outputStream);
+            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
+            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
+
+            try
+            {
+                final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, 10);
+
+                assertThat(
+                    "mypy's exit code: " + exitCode + "\nmypy's output: \n---\n" + stringOf(outputStream) + "---\n",
+                    exitCode, Is.is(0));
+
+                System.out.println();
+            }
+            catch (CommandLineException exception)
+            {
+                System.out.println();
+                System.out.println("--------");
+                System.out.println("Error running MyPy:");
+                System.out.println(stringOf(outputStream));
+
+                throw new RuntimeException("CommandLineException: " + exception.getMessage(), exception);
+            }
+        }
+        catch (IOException exception)
+        {
+            System.out.println();
+
+            throw new RuntimeException("IOException: " + exception.getMessage(), exception);
+        }
+    }
+
+    private static String stringOf(final ByteArrayOutputStream outputStream)
+    {
+        return new String(outputStream.toByteArray(), FILE_ENCODING);
+    }
+
+    private static String pythonCmd(String cmd)
+    {
+        final String pythonHomeDir = System.getenv("PYTHON_HOME");
+        return pythonHomeDir + "/bin/" + cmd;
     }
 
     private static void assertThatOutputMatches(
