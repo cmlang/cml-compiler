@@ -1,23 +1,24 @@
-sudo: required
-
 dist: trusty
+sudo: required
 
 language: java
 
 cache:
   directories:
-  - $HOME/.m2
+    - $HOME/.m2
+    - $HOME/.linuxbrew
 
 jdk:
   - oraclejdk8
 
 env:
   global:
-  - PYTHON_HOME="/opt/python/3.5.3"
-  - M2_HOME="/usr/local/maven-3.3.9"
+    - PYTHON_HOME="/opt/python/3.5.3"
+    - M2_HOME="/usr/local/maven-3.3.9"
 
 before_install:
   # Install MyPy
+  - ls /opt/python
   - python3 -m pip install -U mypy
   # Install Linuxbrew
   - ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
