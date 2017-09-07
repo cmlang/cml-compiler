@@ -24,7 +24,7 @@ before_install:
   - test -d $HOME/.linuxbrew && PATH="$HOME/.linuxbrew/bin:$PATH" || true
   - test -d /home/linuxbrew/.linuxbrew && PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" || true
   - test -d $HOME/.linuxbrew || test -d /home/linuxbrew/.linuxbrew
-  - test -w $HOME/.bash_profile && echo 'export PATH="$(brew --prefix)/bin:$PATH"' >> $HOME/.bash_profile
+  - test -w $HOME/.bash_profile && echo 'export PATH="$(brew --prefix)/bin:$PATH"' >> $HOME/.bash_profile || true
   - echo 'export PATH="$(brew --prefix)/bin:$PATH"' >> $HOME/.profile
   - brew --version
   - brew update
