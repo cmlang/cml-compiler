@@ -11,14 +11,19 @@ public interface Compiler
 {
     int compile(String modulePath, String targetName);
 
-    static Compiler create()
+    static Compiler createCompiler()
     {
-        final Console console = Console.create();
+        final Console console = Console.createSystemConsole();
+        return createCompiler(console);
+    }
+
+    static Compiler createCompiler(final Console console)
+    {
         final FileSystem fileSystem = FileSystem.create(console);
         final ModelLoader modelLoader = ModelLoader.create(console, fileSystem);
         final ModuleManager moduleManager = ModuleManager.create(console, fileSystem);
         final Generator generator = Generator.create(console, fileSystem, moduleManager);
-        
+
         return new CompilerImpl(fileSystem, moduleManager, modelLoader, generator);
     }
 }

@@ -9,7 +9,7 @@ concept Expressions
     LiteralDecimalInit2 = .456;
 }
 
-task result by poj
+task poj by poj
 {
     groupId = "cml-base-expressions";
     artifactId = "cml-base-expressions-literals";

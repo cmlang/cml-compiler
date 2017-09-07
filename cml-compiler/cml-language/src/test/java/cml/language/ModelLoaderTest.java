@@ -32,8 +32,8 @@ public class ModelLoaderTest
     @Before
     public void setUp()
     {
-        fileSystem = FileSystem.create(Console.create());
-        modelLoader = ModelLoader.create(Console.create(), fileSystem);
+        fileSystem = FileSystem.create(Console.createSystemConsole());
+        modelLoader = ModelLoader.create(Console.createSystemConsole(), fileSystem);
     }
 
     @Test

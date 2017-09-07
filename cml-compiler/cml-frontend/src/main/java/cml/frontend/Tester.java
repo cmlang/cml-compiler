@@ -9,17 +9,8 @@ class Tester
     private static final int EXIT_CODE__SUCCESS = 0;
     private static final int EXIT_CODE__TESTS_FAILED = 52;
 
-    private final Compiler compiler;
-
-    Tester(final Compiler compiler)
-    {
-        this.compiler = compiler;
-    }
-
     int test()
     {
-        ModuleTest.compiler = compiler;
-
         final JUnitCore junit = new JUnitCore();
 
         junit.addListener(new TextListener(System.out));

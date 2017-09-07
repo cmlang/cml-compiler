@@ -54,8 +54,8 @@ public class ExpressionTest
     public ExpressionTest(@SuppressWarnings("unused") String moduleName, File modulePath)
     {
         this.modulePath = modulePath;
-        this.fileSystem = FileSystem.create(Console.create());
-        this.modelLoader = ModelLoader.create(Console.create(), fileSystem);
+        this.fileSystem = FileSystem.create(Console.createSystemConsole());
+        this.modelLoader = ModelLoader.create(Console.createSystemConsole(), fileSystem);
         this.groupFile = getOclTemplateGroup();
     }
 

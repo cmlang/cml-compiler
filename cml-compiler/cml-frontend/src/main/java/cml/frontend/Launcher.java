@@ -2,6 +2,7 @@ package cml.frontend;
 
 public final class Launcher
 {
+    private static final String TEST_TASK_NAME = "test";
     private static final int EXIT_CODE__EXPECTED_ARGUMENTS = 51;
 
     private Launcher() {}
@@ -11,11 +12,10 @@ public final class Launcher
         if (args.length == 1)
         {
             final String targetName = args[0];
-            final Compiler compiler = Compiler.create();
 
-            if (targetName.equalsIgnoreCase("test"))
+            if (targetName.equalsIgnoreCase(TEST_TASK_NAME))
             {
-                final Tester tester = new Tester(compiler);
+                final Tester tester = new Tester();
 
                 final int exitCode = tester.test();
 
@@ -23,6 +23,7 @@ public final class Launcher
             }
             else
             {
+                final Compiler compiler = Compiler.createCompiler();
                 final String modulePath = ".";
 
                 final int exitCode = compiler.compile(modulePath, targetName);

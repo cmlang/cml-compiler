@@ -72,7 +72,7 @@ public abstract class TemplateTest
 
     static TemplateGroupFile createTemplateGroupFile(String templatePath)
     {
-        final Console console = Console.create();
+        final Console console = Console.createSystemConsole();
         final FileSystem fileSystem = FileSystem.create(console);
         final ModuleManager moduleManager = ModuleManager.create(console, fileSystem);
 

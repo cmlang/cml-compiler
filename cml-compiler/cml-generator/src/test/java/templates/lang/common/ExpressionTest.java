@@ -41,8 +41,8 @@ public class ExpressionTest extends LangTest
 
     private Model loadModel()
     {
-        final FileSystem fileSystem = FileSystem.create(Console.create());
-        final ModelLoader modelLoader = ModelLoader.create(Console.create(), fileSystem);
+        final FileSystem fileSystem = FileSystem.create(Console.createSystemConsole());
+        final ModelLoader modelLoader = ModelLoader.create(Console.createSystemConsole(), fileSystem);
 
         final Model model = Model.create();
         modelLoader.loadModel(model, MODULE_PATH);
