@@ -1,0 +1,9 @@
+Expression Literals
+
+literal_true_boolean = True
+literal_false_boolean = False
+literal_string_init = 	Some "String"
+
+literal_integer_init = 123
+literal_decimal_init = 123.456
+literal_decimal_init_2 = 0.456

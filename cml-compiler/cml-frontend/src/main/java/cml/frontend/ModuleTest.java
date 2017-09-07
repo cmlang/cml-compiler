@@ -140,12 +140,18 @@ public class ModuleTest
     {
         System.out.println("\n\nTesting " + testName + " with task " + taskName + ":");
 
+        // Compiling test module:
         compileTestModule();
         verifyTargetFiles();
+
+        // Building generated target:
         buildMavenModule();
         checkPythonTypes();
         installPythonPackage();
+
+        // Executing clients:
         executeJavaClient();
+        executePythonClient();
     }
 
     private void compileTestModule() throws IOException
@@ -205,13 +211,27 @@ public class ModuleTest
 
     private void executeJavaClient()
     {
-        final File clientModuleDir = new File(moduleDir, "clients/" + taskName);
+        final String clientPath = "clients/" + taskName;
+        final File javaClient = new File(moduleDir, clientPath);
 
-        if (clientModuleDir.isDirectory())
+        if (new File(javaClient, "pom.xml").isFile())
         {
-            System.out.print("- Running client: " + clientModuleDir.getName() + " ");
+            System.out.print("- Running Java client: " + clientPath + " ");
 
-            executeJavaClient(clientModuleDir);
+            executeJavaClient(javaClient);
+        }
+    }
+
+    private void executePythonClient()
+    {
+        final String clientPath = "clients/" + taskName + "/client.py";
+        final File pythonClient = new File(moduleDir, clientPath);
+
+        if (pythonClient.isFile())
+        {
+            System.out.print("- Running Python client: " + clientPath + " ");
+
+            executePythonClient(pythonClient);
         }
     }
 
@@ -381,7 +401,7 @@ public class ModuleTest
                 }
 
                 assertThat(
-                    clientTargetDir.getName() + "'s exit code" + exitCode + "\n output:\n" + actualClientOutput,
+                    "Client's exit code: " + exitCode + " - output:\n---\n" + actualClientOutput + "\n---",
                     exitCode, is(0));
             }
             catch (CommandLineException exception)
@@ -551,6 +571,58 @@ public class ModuleTest
             {
                 System.out.println("--------");
                 System.out.println("Error running pip:");
+                System.out.println(stringOf(outputStream));
+
+                throw new RuntimeException("CommandLineException: " + exception.getMessage(), exception);
+            }
+        }
+        catch (IOException exception)
+        {
+            throw new RuntimeException("IOException: " + exception.getMessage(), exception);
+        }
+    }
+
+    private static void executePythonClient(File client)
+    {
+        assertThat(
+            "In order to run the Python client, Python 3 should be installed and PYTHON_HOME set.",
+            new File(pythonCmd("python3")).isFile());
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
+        {
+            // Executing Python module - https://www.python.org/dev/peps/pep-0338/#current-behaviour
+            final Commandline commandLine = new Commandline();
+            commandLine.setExecutable(pythonCmd("python3"));
+            commandLine.createArg().setValue(client.getCanonicalPath());
+
+            final Writer writer = new OutputStreamWriter(outputStream);
+            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
+            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
+
+            try
+            {
+                int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
+
+                final String actualClientOutput = stringOf(outputStream);
+                final File expectedOutputFile = new File(client.getParentFile(), CLIENT_OUTPUT_TXT);
+
+                if (expectedOutputFile.isFile())
+                {
+                    assertThatOutputMatches("Client's output", expectedOutputFile, actualClientOutput);
+                }
+                else
+                {
+                    System.out.println("\n- Ignored the client's output.");
+                }
+
+                assertThat(
+                    "Client's exit code: " + exitCode + "\noutput: \n---\n" + actualClientOutput + "---\n",
+                    exitCode, is(0));
+            }
+            catch (CommandLineException exception)
+            {
+                System.out.println("--------");
+                System.out.println("Error running client:");
                 System.out.println(stringOf(outputStream));
 
                 throw new RuntimeException("CommandLineException: " + exception.getMessage(), exception);

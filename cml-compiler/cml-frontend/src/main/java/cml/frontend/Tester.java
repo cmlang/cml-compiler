@@ -22,6 +22,22 @@ class Tester
             public void testStarted(final Description description) {}
 
             @Override
+            protected void printHeader(final long runTime)
+            {
+                System.out.println();
+
+                super.printHeader(runTime);
+            }
+
+            @Override
+            protected void printFailures(final Result result)
+            {
+                System.out.println();
+
+                super.printFailures(result);
+            }
+
+            @Override
             protected void printFailure(Failure each, String prefix) {
                 System.out.println(prefix + ") " + each.getTestHeader());
                 System.out.println(each.getMessage());
