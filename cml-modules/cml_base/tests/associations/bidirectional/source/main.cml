@@ -1,0 +1,63 @@
+
+concept Vehicle
+{
+    plate: String;
+    driver: Employee?;
+    owner: Organization;
+}
+
+concept Employee
+{
+    name: String;
+    employer: Organization;
+}
+
+concept Organization
+{
+    name: String;
+    employees: Employee*;
+    fleet: Vehicle*;
+}
+
+association Employment
+{
+    Employee.employer;
+    Organization.employees;
+}
+
+association VehicleOwnership
+{
+    Vehicle.owner: Organization;
+    Organization.fleet: Vehicle*;
+}
+
+task vehicles_poj by poj
+{
+    groupId = "cml-associations-bidirectional";
+    artifactId = "vehicles-poj";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "vehicles.poj";
+    packagePath = "vehicles/poj";
+}
+
+task vehicles_pop by pop
+{
+    moduleName = "cml_associations_bidirectional_vehicles_pop";
+    moduleVersion = "1.0";
+}
+
+task vehicles_cmlc_java by cmlc_java
+{
+    groupId = "cml-associations-bidirectional";
+    artifactId = "vehicles-cmlc";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "vehicles.cmlc";
+    packagePath = "vehicles/cmlc";
+}
+
+task vehicles_cmlc_py by cmlc_py
+{
+    moduleName = "cml_associations_bidirectional_vehicles_cmlc";
+    moduleVersion = "1.0";
+}
+

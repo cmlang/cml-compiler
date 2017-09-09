@@ -8,6 +8,8 @@ concept_file(concept) ::= <<
 <class2(concept, "Impl")>
 >>
 
-association_file(association) ::= ""
+association_file(association) ::= <<
+<association_class(association, "")>
+>>
 
 

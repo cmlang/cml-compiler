@@ -1,0 +1,3 @@
+model files:
+- setup.py
+- cml_associations_bidirectional_vehicles_cmlc/__init__.py

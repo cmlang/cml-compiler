@@ -1,0 +1,17 @@
+model files:
+- pom.xml
+
+Vehicle files:
+- src/main/java/vehicles/poj/Vehicle.java
+
+Employee files:
+- src/main/java/vehicles/poj/Employee.java
+
+Organization files:
+- src/main/java/vehicles/poj/Organization.java
+
+Employment files:
+- src/main/java/vehicles/poj/Employment.java
+
+VehicleOwnership files:
+- src/main/java/vehicles/poj/VehicleOwnership.java
