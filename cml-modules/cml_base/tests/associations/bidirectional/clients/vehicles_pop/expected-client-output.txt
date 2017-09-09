@@ -1,9 +1,19 @@
 Bidirectional Associations (pop)
 
-Organization: Organization(name=Acme)
-Organization's Employees: Employee(name=John)
-Employee: Employee(name=John)
-Employee's Employer: Organization(name=Acme)
-Vehicle: Vehicle(plate=ABC12345, driver=Employee(name=John))
-Vehicle's Driver: Employee(name=John)
-Vehicle's Owner: Organization(name=Acme)
+Organization(name=Walt Disney)
+- Employees: Employee(name=Donald Duck), Employee(name=Mickey Mouse)
+- Fleet: Vehicle(plate=DUCK, driver=Employee(name=Donald Duck)), Vehicle(plate=MOUSE, driver=Employee(name=Mickey Mouse))
+
+Employee(name=Donald Duck)
+- Employer: Organization(name=Walt Disney)
+
+Employee(name=Mickey Mouse)
+- Employer: Organization(name=Walt Disney)
+
+Vehicle(plate=DUCK, driver=Employee(name=Donald Duck))
+- Owner: Organization(name=Walt Disney)
+- Driver: Employee(name=Donald Duck)
+
+Vehicle(plate=MOUSE, driver=Employee(name=Mickey Mouse))
+- Owner: Organization(name=Walt Disney)
+- Driver: Employee(name=Mickey Mouse)
