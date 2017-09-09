@@ -16,9 +16,10 @@ public class Launcher
         final Employee employee = new Employee("John", organization);
         final Vehicle vehicle = new Vehicle("ABC12345", employee, organization);
 
-        System.out.println("Employee: " + employee);
         System.out.println("Organization: " + organization);
         System.out.println("Organization's Employees: " + organization.getEmployees());
+        System.out.println("Employee: " + employee);
+        System.out.println("Employee's Employer: " + employee.getEmployer());
         System.out.println("Vehicle: " + vehicle);
         System.out.println("Vehicle's Driver: " + vehicle.getDriver());
         System.out.println("Vehicle's Owner: " + vehicle.getOwner());
