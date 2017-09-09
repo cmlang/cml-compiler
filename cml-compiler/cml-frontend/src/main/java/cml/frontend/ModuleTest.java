@@ -30,6 +30,7 @@ import static org.codehaus.plexus.util.cli.CommandLineUtils.executeCommandLine;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.jooq.lambda.Seq.empty;
 import static org.jooq.lambda.Seq.seq;
 import static org.junit.Assert.assertTrue;
 
@@ -47,6 +48,7 @@ public class ModuleTest
     private static final String COMPILER_OUTPUT_TXT = "cml-compiler-output.txt";
     private static final String CLIENT_OUTPUT_TXT = "expected-client-output.txt";
     private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
+    private static final String IGNORED_LIST_TXT = "ignored-list.txt";
 
     static String selectedTestName;
     static String selectedTaskName;
@@ -179,13 +181,17 @@ public class ModuleTest
 
     private void verifyTargetFiles()
     {
+        System.out.print("- Verifying missing target files ...");
+
         assertThat(
-            "Should have found all expected files, but missing: " + missingFiles().toString("/n"),
+            "Should have found all expected files, but missing:\n- " + missingFiles().toString("/n- "),
             missingFiles().count(), is(equalTo(0L)));
+
+        System.out.println("OK");
 
         verifiedFiles().forEach(this::verifyTargetFile);
 
-        ignoredFiles().forEach(ignoredFile -> System.out.println("- Ignored target file: " + relativePathOfTargetFile(ignoredFile)));
+        undeclaredIgnoredFiles().forEach(ignoredFile -> System.out.println("- Ignored target file: " + relativePathOfTargetFile(ignoredFile)));
     }
 
     private void buildMavenModule()
@@ -293,9 +299,41 @@ public class ModuleTest
         return targetFiles().filter(file -> !expectedContainsTargetFile(file));
     }
 
+    private Seq<File> declaredIgnoredFiles()
+    {
+        try
+        {
+            final String str = Files.toString(new File(expectedDir, IGNORED_LIST_TXT), FILE_ENCODING);
+
+            if (str.trim().equals("__ALL__"))
+            {
+                return ignoredFiles();
+            }
+            else
+            {
+                return seq(asList(str.split("\n"))).map(relativePath -> new File(targetDir, relativePath));
+            }
+        }
+        catch (IOException e)
+        {
+            return empty();
+        }
+    }
+
+    private Seq<File> undeclaredIgnoredFiles()
+    {
+        return ignoredFiles().removeAll(declaredIgnoredFiles());
+    }
+
     private Seq<File> expectedFiles()
     {
-        return filesOf(expectedDir.getAbsolutePath()).filter(file -> !file.getName().equals(COMPILER_OUTPUT_TXT));
+        return filesOf(expectedDir.getAbsolutePath()).filter(file -> !file.getName().equals(COMPILER_OUTPUT_TXT))
+                                                     .filter(file -> !isIgnoredListFile(file));
+    }
+
+    private boolean isIgnoredListFile(final File file)
+    {
+        return file.getParentFile().equals(expectedDir) && file.getName().equals(IGNORED_LIST_TXT);
     }
 
     private Seq<File> targetFiles()
