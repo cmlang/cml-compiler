@@ -1,11 +1,11 @@
 
 from cml_associations_unidirectional_vehicles_pop import *
 
-print("Unidirectional Associations\n")
+print("Unidirectional Associations (pop)\n")
 
-employee = Employee("John");
-organization = Organization("Acme", [employee]);
-vehicle = Vehicle("ABC12345", employee, organization);
+employee = Employee("John")
+organization = Organization("Acme", [employee])
+vehicle = Vehicle("ABC12345", employee, organization)
 
 print("Employee: %s" % employee)
 print("Organization: %s" % organization)
