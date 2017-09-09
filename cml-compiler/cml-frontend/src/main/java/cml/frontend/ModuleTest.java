@@ -223,9 +223,11 @@ public class ModuleTest
 
         if (new File(javaClient, "pom.xml").isFile())
         {
-            System.out.print("- Running Java client: " + clientPath + " ");
+            System.out.print("- Running Java client: " + clientPath + " ...");
 
             executeJavaClient(javaClient);
+
+            System.out.println("OK");
         }
     }
 
@@ -236,9 +238,11 @@ public class ModuleTest
 
         if (pythonClient.isFile())
         {
-            System.out.print("- Running Python client: " + clientPath + " ");
+            System.out.print("- Running Python client: " + clientPath + " ...");
 
             executePythonClient(pythonClient);
+
+            System.out.println("OK");
         }
     }
 
@@ -505,7 +509,7 @@ public class ModuleTest
 
     private static void checkPythonTypes(final File moduleDir)
     {
-        System.out.println("- Checking types of Python module: " + moduleDir.getName());
+        System.out.print("- Checking types of Python module: " + moduleDir.getName() + " ...");
 
         assertThat(
             "In order to check types of the generated module, Python 3 should be installed and PYTHON_HOME set.",
@@ -545,11 +549,13 @@ public class ModuleTest
         {
             throw new RuntimeException("IOException: " + exception.getMessage(), exception);
         }
+
+        System.out.println("OK");
     }
 
     private static void installPythonPackage(final File packageDir)
     {
-        System.out.println("- Installing Python package: " + packageDir.getName());
+        System.out.print("- Installing Python package: " + packageDir.getName() + " ...");
 
         assertThat(
             "In order to install the generated Python package, pip should be installed.",
@@ -589,6 +595,8 @@ public class ModuleTest
         {
             throw new RuntimeException("IOException: " + exception.getMessage(), exception);
         }
+
+        System.out.println("OK");
     }
 
     private static void executePythonClient(File client)
