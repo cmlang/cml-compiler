@@ -33,14 +33,23 @@ class Tester
             protected void printFailures(final Result result)
             {
                 System.out.println();
-
                 super.printFailures(result);
             }
 
             @Override
-            protected void printFailure(Failure each, String prefix) {
-                System.out.println(prefix + ") " + each.getTestHeader());
-                System.out.println(each.getMessage());
+            protected void printFailure(Failure failure, String prefix) {
+                System.out.println();
+                System.out.println(prefix + ") " + headerOf(failure));
+                System.out.println();
+                System.out.println(failure.getMessage());
+            }
+
+            private String headerOf(final Failure failure)
+            {
+                final String header = failure.getTestHeader();
+                final int start = "verifyTestModule".length() + 1;
+                final int end = header.indexOf(ModuleTest.class.getName()) - 2;
+                return header.substring(start, end);
             }
         });
 

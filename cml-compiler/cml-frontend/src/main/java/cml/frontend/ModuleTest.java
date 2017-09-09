@@ -51,7 +51,7 @@ public class ModuleTest
     static String selectedTestName;
     static String selectedTaskName;
 
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "{0} ({1})")
     public static List<Object[]> testProperties()
     {
         return expectedDirs()
