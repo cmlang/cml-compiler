@@ -10,7 +10,7 @@ public class Launcher
 {
     public static void main(final String[] args)
     {
-        System.out.println("Unidirectional Associations\n");
+        System.out.println("Unidirectional Associations (poj)\n");
 
         final Employee employee = new Employee("John");
         final Organization organization = new Organization("Acme", singletonList(employee));
