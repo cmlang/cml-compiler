@@ -1,0 +1,9 @@
+Bidirectional Associations (pop)
+
+Organization: Organization(name=Acme)
+Organization's Employees: Employee(name=John)
+Employee: Employee(name=John)
+Employee's Employer: Organization(name=Acme)
+Vehicle: Vehicle(plate=ABC12345, driver=Employee(name=John))
+Vehicle's Driver: Employee(name=John)
+Vehicle's Owner: Organization(name=Acme)
