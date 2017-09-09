@@ -105,6 +105,7 @@ public class ModuleTest
     private final File targetDir;
 
     private String compilerOutput;
+    private boolean testPassed;
 
     public ModuleTest(String testName, String taskName, File moduleDir, File expectedDir)
     {
@@ -129,7 +130,7 @@ public class ModuleTest
     @After
     public void cleanTargetDir() throws Exception
     {
-        if (targetDir.isDirectory())
+        if (testPassed & targetDir.isDirectory())
         {
             cleanDirectory(targetDir);
         }
@@ -152,6 +153,10 @@ public class ModuleTest
         // Executing clients:
         executeJavaClient();
         executePythonClient();
+
+        System.out.print("- SUCCESS");
+
+        testPassed = true;
     }
 
     private void verifyCompilerOutput() throws IOException
