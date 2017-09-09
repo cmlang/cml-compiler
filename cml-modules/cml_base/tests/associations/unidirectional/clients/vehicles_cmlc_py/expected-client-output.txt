@@ -1,4 +1,4 @@
-Unidirectional Associations (cmlc)
+Unidirectional Associations (cmlc_py)
 
 Employee: EmployeeImpl(name=John)
 Organization: OrganizationImpl(name=Acme)

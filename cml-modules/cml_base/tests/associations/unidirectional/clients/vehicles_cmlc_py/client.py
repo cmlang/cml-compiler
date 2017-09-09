@@ -1,7 +1,7 @@
 
 from cml_associations_unidirectional_vehicles_cmlc import *
 
-print("Unidirectional Associations (cmlc)\n")
+print("Unidirectional Associations (cmlc_py)\n")
 
 employee = Employee.create_employee("John")
 organization = Organization.create_organization("Acme", [employee])
