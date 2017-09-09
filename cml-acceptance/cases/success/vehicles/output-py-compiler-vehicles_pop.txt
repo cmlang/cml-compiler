@@ -1,3 +1,0 @@
-model files:
-- setup.py
-- vehicles/__init__.py
