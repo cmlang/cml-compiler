@@ -169,7 +169,7 @@ public class ModuleTest
 
             assertThatOutputMatches("Compiler's output", expectedOutputFile, compilerOutput);
 
-            System.out.println();
+            System.out.println("OK");
         }
         else
         {
@@ -196,7 +196,7 @@ public class ModuleTest
 
             buildMavenModule(targetDir);
 
-            System.out.println();
+            System.out.println("OK");
         }
     }
 
@@ -247,9 +247,11 @@ public class ModuleTest
         final String relativePath = relativePathOfExpectedFile(expectedFile);
         final File targetFile = new File(targetDir, relativePath);
 
+        System.out.print("- Verifying target file: " + relativePath + " ...");
+
         assertThatOutputMatches("Target file: " + relativePath, expectedFile, targetFile);
 
-        System.out.println("- Verified target file: " + relativePath);
+        System.out.println("OK");
     }
 
     private boolean isPythonModule()
