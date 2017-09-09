@@ -1,0 +1,8 @@
+Bidirectional Associations (poj)
+
+Employee: Employee(name="John")
+Organization: Organization(name="Acme")
+Organization's Employees: [Employee(name="John")]
+Vehicle: Vehicle(plate="ABC12345", driver="Optional[Employee(name="John")]")
+Vehicle's Driver: Optional[Employee(name="John")]
+Vehicle's Owner: Organization(name="Acme")
