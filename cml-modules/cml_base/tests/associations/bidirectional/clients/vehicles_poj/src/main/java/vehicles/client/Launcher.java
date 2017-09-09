@@ -12,16 +12,32 @@ public class Launcher
     {
         System.out.println("Bidirectional Associations (poj)\n");
 
-        final Organization organization = new Organization("Acme", emptyList(), emptyList());
-        final Employee employee = new Employee("John", organization);
-        final Vehicle vehicle = new Vehicle("ABC12345", employee, organization);
+        final Organization organization = new Organization("Walt Disney", emptyList(), emptyList());
+        final Employee donald = new Employee("Donald Duck", organization);
+        final Employee mickey = new Employee("Mickey Mouse", organization);
+        final Vehicle duck = new Vehicle("DUCK", donald, organization);
+        final Vehicle mouse = new Vehicle("MOUSE", mickey, organization);
 
-        System.out.println("Organization: " + organization);
-        System.out.println("Organization's Employees: " + organization.getEmployees());
-        System.out.println("Employee: " + employee);
-        System.out.println("Employee's Employer: " + employee.getEmployer());
-        System.out.println("Vehicle: " + vehicle);
-        System.out.println("Vehicle's Driver: " + vehicle.getDriver());
-        System.out.println("Vehicle's Owner: " + vehicle.getOwner());
+        System.out.println(organization);
+        System.out.println("- Employees: " + organization.getEmployees());
+        System.out.println("- Fleet: " + organization.getFleet());
+        System.out.println();
+
+        System.out.println(donald);
+        System.out.println("- Employer: " + donald.getEmployer());
+        System.out.println();
+
+        System.out.println(mickey);
+        System.out.println("- Employer: " + mickey.getEmployer());
+        System.out.println();
+
+        System.out.println(duck);
+        System.out.println("- Owner: " + duck.getOwner());
+        System.out.println("- Driver: " + duck.getDriver());
+        System.out.println();
+
+        System.out.println(mouse);
+        System.out.println("- Owner: " + mouse.getOwner());
+        System.out.println("- Driver: " + mouse.getDriver());
     }
 }

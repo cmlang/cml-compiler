@@ -1,9 +1,19 @@
 Bidirectional Associations (poj)
 
-Organization: Organization(name="Acme")
-Organization's Employees: [Employee(name="John")]
-Employee: Employee(name="John")
-Employee's Employer: Organization(name="Acme")
-Vehicle: Vehicle(plate="ABC12345", driver="Optional[Employee(name="John")]")
-Vehicle's Driver: Optional[Employee(name="John")]
-Vehicle's Owner: Organization(name="Acme")
+Organization(name="Walt Disney")
+- Employees: [Employee(name="Donald Duck"), Employee(name="Mickey Mouse")]
+- Fleet: [Vehicle(plate="DUCK", driver="Optional[Employee(name="Donald Duck")]"), Vehicle(plate="MOUSE", driver="Optional[Employee(name="Mickey Mouse")]")]
+
+Employee(name="Donald Duck")
+- Employer: Organization(name="Walt Disney")
+
+Employee(name="Mickey Mouse")
+- Employer: Organization(name="Walt Disney")
+
+Vehicle(plate="DUCK", driver="Optional[Employee(name="Donald Duck")]")
+- Owner: Organization(name="Walt Disney")
+- Driver: Optional[Employee(name="Donald Duck")]
+
+Vehicle(plate="MOUSE", driver="Optional[Employee(name="Mickey Mouse")]")
+- Owner: Organization(name="Walt Disney")
+- Driver: Optional[Employee(name="Mickey Mouse")]
