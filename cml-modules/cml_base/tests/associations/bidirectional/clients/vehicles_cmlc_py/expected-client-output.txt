@@ -1,0 +1,9 @@
+Bidirectional Associations (cmlc_py)
+
+Organization: OrganizationImpl(name=Acme)
+Organization's Employees: EmployeeImpl(name=John)
+Employee: EmployeeImpl(name=John)
+Employee's Employer: OrganizationImpl(name=Acme)
+Vehicle: VehicleImpl(plate=ABC12345, driver=EmployeeImpl(name=John))
+Vehicle's Driver: EmployeeImpl(name=John)
+Vehicle's Owner: OrganizationImpl(name=Acme)
