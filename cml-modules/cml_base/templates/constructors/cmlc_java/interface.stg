@@ -5,7 +5,7 @@ interface_primary_create_method_statements(concept) ::= <<
 <return(
     new_call(
         interface_impl_name(),
-        [null_value(), concept.allAncestors:{item|<null_value()>}, concept.nonDerivedProperties, concept.superProperties:keyword_arg()]
+        [null_value(), concept.superProperties, concept.nonDerivedProperties]
     )
 )><\\>
 <else><\\>
