@@ -1,19 +1,19 @@
 Bidirectional Associations (cmlc_py)
 
-OrganizationImpl(name=Walt Disney)
+CorporationImpl(stock=True, profit=True, name=Walt Disney)
 - Employees: EmployeeImpl(name=Donald Duck), EmployeeImpl(name=Mickey Mouse)
 - Fleet: VehicleImpl(plate=DUCK, driver=EmployeeImpl(name=Donald Duck)), VehicleImpl(plate=MOUSE, driver=EmployeeImpl(name=Mickey Mouse))
 
 EmployeeImpl(name=Donald Duck)
-- Employer: OrganizationImpl(name=Walt Disney)
+- Employer: CorporationImpl(stock=True, profit=True, name=Walt Disney)
 
 EmployeeImpl(name=Mickey Mouse)
-- Employer: OrganizationImpl(name=Walt Disney)
+- Employer: CorporationImpl(stock=True, profit=True, name=Walt Disney)
 
 VehicleImpl(plate=DUCK, driver=EmployeeImpl(name=Donald Duck))
-- Owner: OrganizationImpl(name=Walt Disney)
+- Owner: CorporationImpl(stock=True, profit=True, name=Walt Disney)
 - Driver: EmployeeImpl(name=Donald Duck)
 
 VehicleImpl(plate=MOUSE, driver=EmployeeImpl(name=Mickey Mouse))
-- Owner: OrganizationImpl(name=Walt Disney)
+- Owner: CorporationImpl(stock=True, profit=True, name=Walt Disney)
 - Driver: EmployeeImpl(name=Mickey Mouse)

@@ -11,9 +11,9 @@ interface(concept, class_name_suffix) ::= <<
     base_list=concept.allProperties,
     sections = [
         interface_getters(),
-        interface_secondary_create_method(),
-        interface_primary_create_method(),
-        interface_extend_method([concept.allAncestors, concept.nonDerivedProperties])
+        interface_secondary_create_method(concept),
+        interface_primary_create_method(concept),
+        interface_extend_method()
     ]
 )>
 >>
@@ -26,37 +26,43 @@ interface_getters() ::= <<
 <concept.properties:interface_getter();separator="\n\n">
 >>
 
-interface_secondary_create_method() ::= <<
-<if(concept.initProperties && class_name_suffix)><\\>
-<static_operation(
-    name=interface_create_name(interface_name()),
-    params=[concept.nonInitProperties],
-    result_type=interface_name(),
-    statements=return(init_call(interface_create_name(interface_name()), [concept.nonDerivedProperties, concept.superProperties]))
-)><\\>
-<endif>
->>
+interface_secondary_create_method(concept) ::= ""
 
-interface_primary_create_method() ::= <<
+interface_primary_create_method(concept) ::= <<
 <if(!concept.abstract && class_name_suffix)><\\>
 <static_operation(
     name=interface_create_name(interface_name()),
-    params=[concept.nonDerivedProperties, concept.superProperties],
+    params=[concept.superProperties, concept.nonDerivedProperties],
     result_type=interface_name(),
-    statements=class_client_constructor_statements()
+    statements=interface_primary_create_method_statements(concept)
 )><\\>
 <endif>
 >>
 
-interface_extend_method(params) ::= <<
+interface_primary_create_method_statements(concept) ::= ""
+
+interface_extend_method() ::= <<
 <if(class_name_suffix)><\\>
+<if(concept.associationProperties)><\\>
+<interface_extend_method_with_params_args(
+    [actual_self_decl(concept), concept.allAncestors, concept.nonDerivedProperties],
+    [actual_self(), concept.allAncestors, concept.nonDerivedProperties]
+)><\\>
+<else><\\>
+<interface_extend_method_with_params([concept.allAncestors, concept.nonDerivedProperties])><\\>
+<endif><\\>
+<endif>
+>>
+
+interface_extend_method_with_params(params) ::= "<interface_extend_method_with_params_args(params, params)>"
+
+interface_extend_method_with_params_args(params, args) ::= <<
 <static_operation(
     name=interface_extend_name(interface_name()),
     params=params,
     result_type=interface_name(),
-    statements=return(new_call(interface_impl_name(), params))
-)><\\>
-<endif>
+    statements=return(new_call(interface_impl_name(), args))
+)>
 >>
 
 interface_create_name(name) ::= <<
@@ -65,21 +71,6 @@ interface_create_name(name) ::= <<
 
 interface_extend_name(name) ::= <<
 <operation_name(({extend<name>}))>
->>
-
-class_client_constructor_statements() ::= <<
-<concept.redefinedAncestors:create_invocation();separator="\n"><\\>
-<newLineIf(concept.allAncestors)><\\>
-<return(new_call(interface_impl_name(), [concept.allAncestors, concept.nonDerivedProperties]))>
->>
-
-create_invocation(redefined) ::= <<
-<local_var_decl(redefined.concept)> = <\\>
-<type_name(redefined.concept)>.<interface_extend_name(type_name(redefined.concept))>(<\\>
-<redefined.concept.allAncestors:field_name();separator=", "><\\>
-<commaIf2(redefined.concept.allAncestors, redefined.properties)><\\>
-<redefined.properties:field_or_default_value();separator=", "><\\>
-)<statement_terminator()>
 >>
 
 interface_getter(property) ::= <<

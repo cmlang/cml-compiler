@@ -3,15 +3,15 @@ from cml_associations_bidirectional_vehicles_pop import *
 
 print("Bidirectional Associations (pop)\n")
 
-organization = Organization("Walt Disney", [], [])
-donald = Employee("Donald Duck", organization)
-mickey = Employee("Mickey Mouse", organization)
-duck = Vehicle("DUCK", donald, organization)
-mouse = Vehicle("MOUSE", mickey, organization)
+corporation = Corporation("Walt Disney", [], [])
+donald = Employee("Donald Duck", corporation)
+mickey = Employee("Mickey Mouse", corporation)
+duck = Vehicle("DUCK", donald, corporation)
+mouse = Vehicle("MOUSE", mickey, corporation)
 
-print(organization)
-print("- Employees: %s" % ', '.join(map(str, organization.employees)))
-print("- Fleet: %s" % ', '.join(map(str, organization.fleet)))
+print(corporation)
+print("- Employees: %s" % ', '.join(map(str, corporation.employees)))
+print("- Fleet: %s" % ', '.join(map(str, corporation.fleet)))
 print()
 
 print(donald)

@@ -1,7 +1,7 @@
 
 import "/constructors/python/common.stg"
 
-init(task, model) ::= <<
+init_file(task, model) ::= <<
 from typing import *
 from abc import *
 from decimal import *

@@ -36,3 +36,7 @@ field_default_value(type) ::= <<
 <elseif(type.binaryFloatingPoint)><float_zero()><\\>
 <else><null_value()><endif>
 >>
+
+field_access(element) ::= <<
+<field_access_prefix()><if(element.name)><field_name(element)><else><element><endif>
+>>

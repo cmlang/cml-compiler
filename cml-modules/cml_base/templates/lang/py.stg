@@ -73,7 +73,7 @@ operation_header_content(instance, name, params, result_type) ::= <<
 
 var_decl(object) ::= <<
 <if(object.name || object.type)><\\>
-<field_name(object)>: '<field_type(object)>'<\\>
+<param_decl(field_name(object), field_type(object))><\\>
 <if(object.value)><\\>
 <\ >=<\ ><literal_expr(object.value)><\\>
 <endif><\\>
@@ -85,6 +85,8 @@ var_decl(object) ::= <<
 local_var_decl(typed_element) ::= <<
 <field_name(typed_element)>
 >>
+
+param_decl(name, type) ::= "<name>: '<type>'"
 
 return(expression) ::= <<
 return <expression>
@@ -100,12 +102,10 @@ field_name(named_element) ::= <<
 <named_element.name; format="underscore-case">
 >>
 
-field_access(named_element) ::= <<
-self.__<field_name(named_element)>
->>
+field_access_prefix() ::= "self.__"
 
 field_type_optional(type) ::= <<
-<type_name(type)>
+Optional[<type_name(type)>]
 >>
 
 field_type_sequence(type) ::= <<
@@ -172,8 +172,6 @@ interface_operation_body() ::= <<
 <block_empty()>
 >>
 
-interface_secondary_create_method() ::= ""
-
 // Classes
 
 class_keyword() ::= "class "
@@ -184,9 +182,27 @@ class_type_name(name) ::= <<
 
 constructor_name(class_name) ::= "__init__"
 
-class_secondary_constructor(non_init_properties, super_properties) ::= ""
-
 class_static_initializer(concept) ::= ""
+
+field_init_or_extend_invocation(redefined) ::= <<
+if <field_name(redefined.concept)> is None:
+<indent()><extend_invocation(redefined)>
+else:
+<indent()><field_init(redefined.concept)>
+>>
+
+class_primary_constructor_extra_params() ::= "**kwargs"
+
+extend_invocation_extra_args(concept) ::= "**kwargs"
+
+keyword_arg(property) ::= "<field_name(property)>=<field_name(property)>"
+
+actual_self_init() ::= <<
+if <actual_self()> is None:
+<indent()><actual_self_field()> = <self()>  # type: <actual_self_type(concept)>
+else:
+<indent()><actual_self_field()> = <actual_self()>
+>>
 
 // Ancestors
 
@@ -236,7 +252,7 @@ association_constructor_statements(association) ::= <<
 >>
 
 association_field_init(association_end) ::= <<
-<field_access(association_end.property)> = {} # type: Dict[<field_type(association_end.concept)>, <field_type(association_end.property)>]
+<field_access(association_end.property)> = {}  # type: Dict[<field_type(association_end.concept)>, <field_type(association_end.property)>]
 >>
 
 association_link_statement_seq(association_end) ::= <<
@@ -285,15 +301,15 @@ for <field_name(association.manyProperty.type)> in <field_name(association.manyP
 >>
 
 association_link_call_seq(property) ::= <<
-self._<field_name(property.association)>.link_many(self, <field_name(property)>)
+self._<field_name(property.association)>.link_many(<actual_self_field()>, <field_name(property)>)
 >>
 
 association_link_call_non_seq(property) ::= <<
-self._<field_name(property.association)>.link(<field_name(property)>, self)
+self._<field_name(property.association)>.link(<field_name(property)>, <actual_self_field()>)
 >>
 
 association_class_getter_expr(property) ::= <<
-self._<field_name(property.association)>.<field_name(property)>_of(self)
+self._<field_name(property.association)>.<field_name(property)>_of(<actual_self_field()>)
 >>
 
 // Type

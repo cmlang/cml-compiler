@@ -47,9 +47,11 @@ class7(
     base_list=true,
     sections = [
         class_association_fields(concept),
-        class_fields(concept.slotProperties),
+        class_self_field(concept),
+        class_fields(field_ancestors, concept.slotProperties),
         class_secondary_constructor(concept.nonInitProperties, super_properties),
         class_primary_constructor(inherited_properties, super_properties, field_ancestors),
+        class_extension_constructor(concept),
         class_getters(),
         class_to_string(),
         class_association_setters(concept),
@@ -70,7 +72,9 @@ class_name() ::= <<
 <type_name(concept)><class_name_suffix>
 >>
 
-class_fields(properties) ::= <<
+class_self_field(concept) ::= ""
+
+class_fields(field_ancestors, properties) ::= <<
 <ancestor_fields(field_ancestors)><\\>
 <emptyLineIf2(field_ancestors, properties)><\\>
 <property_fields(properties)>
@@ -105,39 +109,20 @@ delegated_getters(properties) ::= <<
 <properties:delegate_getter();separator="\n\n">
 >>
 
-class_primary_constructor(inherited_properties, super_properties, ancestors) ::= <<
-<if(ancestors || concept.nonDerivedProperties)><\\>
-<modifier("public")><\\>
-<class_constructor([ancestors, concept.nonDerivedProperties, super_properties], class_primary_constructor_statements())><\\>
-<endif>
->>
-
-class_primary_constructor_statements() ::= <<
-<super_constructor(inherited_properties)><\\>
-<if(super_properties)><\\>
-<concept.nonDerivedProperties:field_init();separator="\n"><\\>
-<else><\\>
-<[ancestors, concept.slotProperties]:field_init();separator="\n"><\\>
-<association_link_calls(concept)><\\>
-<endif>
->>
-
 super_constructor(inherited_properties) ::= <<
 <if(inherited_properties)><\\>
 <super_constructor_call(inherited_properties)>
 <endif>
 >>
 
-class_secondary_constructor(non_init_properties, super_properties) ::= <<
-<if(!interfaces && concept.initProperties)><\\>
-<modifier("public")><\\>
-<class_constructor(non_init_properties, class_secondary_constructor_statements(concept, super_properties))><\\>
-<endif>
+extend_invocation(redefined) ::= <<
+<field_access(redefined.concept)> = <\\>
+<type_name(redefined.concept)>.<interface_extend_name(type_name(redefined.concept))>(<self()>, <extend_invocation_extra_args(redefined.concept)>)<statement_terminator()>
 >>
 
-class_secondary_constructor_statements(concept, super_properties) ::= <<
-<this_constructor_call([concept.nonDerivedProperties, super_properties])>
->>
+class_secondary_constructor(non_init_properties, super_properties) ::= ""
+
+class_extension_constructor(concept) ::= ""
 
 class_to_string() ::= <<
 <to_string(concept)>

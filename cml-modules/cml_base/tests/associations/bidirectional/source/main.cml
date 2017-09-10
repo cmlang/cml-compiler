@@ -12,11 +12,17 @@ concept Employee
     employer: Organization;
 }
 
-concept Organization
+abstract concept Organization
 {
     name: String;
     employees: Employee*;
     fleet: Vehicle*;
+}
+
+concept Corporation: Organization
+{
+    stock: Boolean = true;
+    profit: Boolean = true;
 }
 
 association Employment

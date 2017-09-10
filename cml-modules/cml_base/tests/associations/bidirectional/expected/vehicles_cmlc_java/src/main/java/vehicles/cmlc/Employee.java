@@ -16,12 +16,12 @@ public interface Employee
 
     static Employee createEmployee(String name, Organization employer)
     {
-        return new EmployeeImpl(name, employer);
+        return new EmployeeImpl(null, name, employer);
     }
 
-    static Employee extendEmployee(String name, Organization employer)
+    static Employee extendEmployee(@Nullable Employee actual_self, String name, Organization employer)
     {
-        return new EmployeeImpl(name, employer);
+        return new EmployeeImpl(actual_self, name, employer);
     }
 }
 
@@ -29,13 +29,16 @@ class EmployeeImpl implements Employee
 {
     private static Employment employment;
 
+    private final @Nullable Employee actual_self;
+
     private final String name;
 
-    public EmployeeImpl(String name, Organization employer)
+    EmployeeImpl(@Nullable Employee actual_self, String name, Organization employer)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
         this.name = name;
 
-        employment.link(employer, this);
+        employment.link(employer, this.actual_self);
     }
 
     public String getName()
@@ -45,7 +48,7 @@ class EmployeeImpl implements Employee
 
     public Organization getEmployer()
     {
-        return employment.employerOf(this).get();
+        return employment.employerOf(actual_self).get();
     }
 
     public String toString()

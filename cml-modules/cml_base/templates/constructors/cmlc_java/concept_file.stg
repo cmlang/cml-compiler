@@ -1,4 +1,8 @@
 
+import "/design/cmlc.stg"
+import "/constructors/cmlc_java/interface.stg"
+import "/constructors/cmlc_java/class.stg"
+
 concept_file(task, concept) ::= <<
 package <task.packageName>;
 

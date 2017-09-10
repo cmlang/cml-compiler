@@ -16,14 +16,9 @@ public interface Organization
 
     List<Vehicle> getFleet();
 
-    static Organization createOrganization(String name, List<Employee> employees, List<Vehicle> fleet)
+    static Organization extendOrganization(@Nullable Organization actual_self, String name, List<Employee> employees, List<Vehicle> fleet)
     {
-        return new OrganizationImpl(name, employees, fleet);
-    }
-
-    static Organization extendOrganization(String name, List<Employee> employees, List<Vehicle> fleet)
-    {
-        return new OrganizationImpl(name, employees, fleet);
+        return new OrganizationImpl(actual_self, name, employees, fleet);
     }
 }
 
@@ -32,14 +27,17 @@ class OrganizationImpl implements Organization
     private static Employment employment;
     private static VehicleOwnership vehicleOwnership;
 
+    private final @Nullable Organization actual_self;
+
     private final String name;
 
-    public OrganizationImpl(String name, List<Employee> employees, List<Vehicle> fleet)
+    OrganizationImpl(@Nullable Organization actual_self, String name, List<Employee> employees, List<Vehicle> fleet)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
         this.name = name;
 
-        employment.linkMany(this, employees);
-        vehicleOwnership.linkMany(this, fleet);
+        employment.linkMany(this.actual_self, employees);
+        vehicleOwnership.linkMany(this.actual_self, fleet);
     }
 
     public String getName()
@@ -49,12 +47,12 @@ class OrganizationImpl implements Organization
 
     public List<Employee> getEmployees()
     {
-        return employment.employeesOf(this);
+        return employment.employeesOf(actual_self);
     }
 
     public List<Vehicle> getFleet()
     {
-        return vehicleOwnership.fleetOf(this);
+        return vehicleOwnership.fleetOf(actual_self);
     }
 
     public String toString()

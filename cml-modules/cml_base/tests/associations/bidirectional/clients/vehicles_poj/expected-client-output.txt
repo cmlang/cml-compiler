@@ -1,19 +1,19 @@
 Bidirectional Associations (poj)
 
-Organization(name="Walt Disney")
+Corporation(stock="true", profit="true", name="Walt Disney")
 - Employees: [Employee(name="Donald Duck"), Employee(name="Mickey Mouse")]
 - Fleet: [Vehicle(plate="DUCK", driver="Optional[Employee(name="Donald Duck")]"), Vehicle(plate="MOUSE", driver="Optional[Employee(name="Mickey Mouse")]")]
 
 Employee(name="Donald Duck")
-- Employer: Organization(name="Walt Disney")
+- Employer: Corporation(stock="true", profit="true", name="Walt Disney")
 
 Employee(name="Mickey Mouse")
-- Employer: Organization(name="Walt Disney")
+- Employer: Corporation(stock="true", profit="true", name="Walt Disney")
 
 Vehicle(plate="DUCK", driver="Optional[Employee(name="Donald Duck")]")
-- Owner: Organization(name="Walt Disney")
+- Owner: Corporation(stock="true", profit="true", name="Walt Disney")
 - Driver: Optional[Employee(name="Donald Duck")]
 
 Vehicle(plate="MOUSE", driver="Optional[Employee(name="Mickey Mouse")]")
-- Owner: Organization(name="Walt Disney")
+- Owner: Corporation(stock="true", profit="true", name="Walt Disney")
 - Driver: Optional[Employee(name="Mickey Mouse")]

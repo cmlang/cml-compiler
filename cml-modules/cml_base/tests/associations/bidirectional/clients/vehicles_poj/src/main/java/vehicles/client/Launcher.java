@@ -1,7 +1,7 @@
 package vehicles.client;
 
+import vehicles.poj.Corporation;
 import vehicles.poj.Employee;
-import vehicles.poj.Organization;
 import vehicles.poj.Vehicle;
 
 import static java.util.Collections.emptyList;
@@ -12,15 +12,15 @@ public class Launcher
     {
         System.out.println("Bidirectional Associations (poj)\n");
 
-        final Organization organization = new Organization("Walt Disney", emptyList(), emptyList());
-        final Employee donald = new Employee("Donald Duck", organization);
-        final Employee mickey = new Employee("Mickey Mouse", organization);
-        final Vehicle duck = new Vehicle("DUCK", donald, organization);
-        final Vehicle mouse = new Vehicle("MOUSE", mickey, organization);
+        final Corporation corporation = new Corporation("Walt Disney", emptyList(), emptyList());
+        final Employee donald = new Employee("Donald Duck", corporation);
+        final Employee mickey = new Employee("Mickey Mouse", corporation);
+        final Vehicle duck = new Vehicle("DUCK", donald, corporation);
+        final Vehicle mouse = new Vehicle("MOUSE", mickey, corporation);
 
-        System.out.println(organization);
-        System.out.println("- Employees: " + organization.getEmployees());
-        System.out.println("- Fleet: " + organization.getFleet());
+        System.out.println(corporation);
+        System.out.println("- Employees: " + corporation.getEmployees());
+        System.out.println("- Fleet: " + corporation.getFleet());
         System.out.println();
 
         System.out.println(donald);

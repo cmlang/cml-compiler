@@ -1,5 +1,8 @@
 
-import "/constructors/python/init.stg"
+import "/design/cmlc.stg"
+import "/constructors/python/init_file.stg"
+import "/constructors/cmlc_py/interface.stg"
+import "/constructors/cmlc_py/class.stg"
 
 concept_file(concept) ::= <<
 <interface(concept, "Impl")>

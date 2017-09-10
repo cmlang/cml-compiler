@@ -10,6 +10,9 @@ Employee files:
 Organization files:
 - src/main/java/vehicles/cmlc/Organization.java
 
+Corporation files:
+- src/main/java/vehicles/cmlc/Corporation.java
+
 Employment files:
 - src/main/java/vehicles/cmlc/Employment.java
 

@@ -1,0 +1,5 @@
+// design/plain
+
+actual_self() ::= "<self()>"
+
+actual_self_field() ::= "<self()>"

@@ -1,0 +1,20 @@
+// constructors/cmlc_py
+
+interface_primary_create_method_statements(concept) ::= <<
+<if(concept.associationProperties)><\\>
+<return(
+    new_call(
+        interface_impl_name(),
+        [null_value(), concept.allAncestors:{item|<null_value()>}, concept.nonDerivedProperties, concept.superProperties:keyword_arg()]
+    )
+)><\\>
+<else><\\>
+<return(
+    new_call(
+        interface_impl_name(),
+        [concept.allAncestors:{item|<null_value()>}, concept.nonDerivedProperties, concept.superProperties:keyword_arg()]
+    )
+)><\\>
+<endif>
+>>
+

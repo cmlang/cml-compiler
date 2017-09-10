@@ -1,5 +1,6 @@
 
-import "/constructors/python/init.stg"
+import "/constructors/python/init_file.stg"
+import "/design/plain.stg"
 
 concept_file(concept) ::= <<
 <class(concept)>

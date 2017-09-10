@@ -8,7 +8,7 @@ import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
-public class Organization
+public abstract class Organization
 {
     private static Employment employment;
     private static VehicleOwnership vehicleOwnership;

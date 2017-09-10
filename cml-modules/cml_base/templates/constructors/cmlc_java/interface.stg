@@ -1,0 +1,30 @@
+// constructors/cmlc_java
+
+interface_primary_create_method_statements(concept) ::= <<
+<if(concept.associationProperties)><\\>
+<return(
+    new_call(
+        interface_impl_name(),
+        [null_value(), concept.allAncestors:{item|<null_value()>}, concept.nonDerivedProperties, concept.superProperties:keyword_arg()]
+    )
+)><\\>
+<else><\\>
+<return(
+    new_call(
+        interface_impl_name(),
+        [concept.superProperties, concept.nonDerivedProperties]
+    )
+)><\\>
+<endif>
+>>
+
+interface_secondary_create_method(concept) ::= <<
+<if(concept.initProperties && class_name_suffix)><\\>
+<static_operation(
+    name=interface_create_name(interface_name()),
+    params=[concept.nonInitProperties],
+    result_type=interface_name(),
+    statements=return(init_call(interface_create_name(interface_name()), [concept.superProperties, concept.nonDerivedProperties]))
+)><\\>
+<endif>
+>>

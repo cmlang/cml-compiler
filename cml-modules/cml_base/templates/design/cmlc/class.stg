@@ -1,0 +1,9 @@
+// design/cmlc
+
+class_self_field(concept) ::= <<
+<if(concept.associationProperties)><\\>
+<field_decl(actual_self_decl(concept))><\\>
+<endif>
+>>
+
+

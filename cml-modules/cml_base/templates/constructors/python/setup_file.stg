@@ -1,5 +1,5 @@
 
-setup(task, model) ::= <<
+setup_file(task, model) ::= <<
 """A setuptools based setup module.
 
 See:

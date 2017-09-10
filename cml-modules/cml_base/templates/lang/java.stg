@@ -80,7 +80,7 @@ to_string_field_value_sequence(property) ::= <<
 .append(<getter_call(property)>)
 >>
 
-// Operation
+// Operations
 
 operation_keyword() ::= ""
 
@@ -107,6 +107,8 @@ local_var_decl(typed_element) ::= <<
 <var_decl(typed_element)>
 >>
 
+param_decl(name, type) ::= "<type> <name>"
+
 return(expression) ::= <<
 return <expression; anchor>;
 >>
@@ -121,9 +123,7 @@ field_name(named_element) ::= <<
 <named_element.name; format="camel-case">
 >>
 
-field_access(named_element) ::= <<
-this.<field_name(named_element)>
->>
+field_access_prefix() ::= "this."
 
 field_type_optional(type) ::= <<
 @Nullable <type_name(type)>
@@ -189,6 +189,18 @@ class_type_name(name) ::= <<
 
 constructor_name(class_name) ::= <<
 <class_name; format="pascal-case">
+>>
+
+class_primary_constructor_extra_params() ::= "**kwargs"
+
+extend_invocation_extra_args(concept) ::= <<
+<call_arg_list(concept.nonDerivedProperties)>
+>>
+
+keyword_arg(property) ::= "<call_arg(property)>"
+
+actual_self_init() ::= <<
+<actual_self_field()> = <actual_self()> == null ? <self()> : <actual_self()>;
 >>
 
 // Ancestors
@@ -278,15 +290,15 @@ for (<type_name(association.manyProperty.type)> <field_name(association.manyProp
 >>
 
 association_link_call_seq(property) ::= <<
-<field_name(property.association)>.linkMany(this, <field_name(property)>);
+<field_name(property.association)>.linkMany(<actual_self_field()>, <field_name(property)>);
 >>
 
 association_link_call_non_seq(property) ::= <<
-<field_name(property.association)>.link(<field_name(property)>, this);
+<field_name(property.association)>.link(<field_name(property)>, <actual_self_field()>);
 >>
 
 association_class_getter_expr(property) ::= <<
-<field_name(property.association)>.<field_name(property)>Of(this)<\\>
+<field_name(property.association)>.<field_name(property)>Of(<actual_self()>)<\\>
 <if(property.type.required)><\\>
 .get()<\\>
 <endif>

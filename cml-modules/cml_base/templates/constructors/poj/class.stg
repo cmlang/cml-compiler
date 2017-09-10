@@ -1,0 +1,13 @@
+// constructors/poj
+
+class_secondary_constructor(non_init_properties, super_properties) ::= <<
+<if(!interfaces && concept.initProperties)><\\>
+<modifier("public")><\\>
+<class_constructor(non_init_properties, class_secondary_constructor_statements(concept, super_properties))><\\>
+<endif>
+>>
+
+class_secondary_constructor_statements(concept, super_properties) ::= <<
+<this_constructor_call([super_properties, concept.nonDerivedProperties])>
+>>
+

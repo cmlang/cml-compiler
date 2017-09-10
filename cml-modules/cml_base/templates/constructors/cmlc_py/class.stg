@@ -1,0 +1,32 @@
+// constructors/cmlc_py
+
+class_primary_constructor(inherited_properties, super_properties, ancestors) ::= <<
+<if(ancestors || concept.nonDerivedProperties)><\\>
+<if(concept.associationProperties)><\\>
+<class_constructor(
+    [actual_self_decl(concept), ancestors:optional_param_decl(), concept.nonDerivedProperties],
+    class_primary_constructor_statements()
+)><\\>
+<else><\\>
+<class_constructor(
+    [ancestors:optional_param_decl(), concept.nonDerivedProperties, class_primary_constructor_extra_params()],
+    class_primary_constructor_statements()
+)><\\>
+<endif><\\>
+<endif>
+>>
+
+class_primary_constructor_statements() ::= <<
+<if(super_properties)><\\>
+<concept.nonDerivedProperties:field_init();separator="\n"><\\>
+<else><\\>
+<if(concept.associationProperties)><actual_self_init()><endif><\\>
+<if(concept.redefinedAncestors)><\\>
+<concept.redefinedAncestors:field_init_or_extend_invocation();separator="\n">
+<else><\\>
+<ancestors:field_init();separator="\n">
+<endif><\\>
+<[concept.slotProperties]:field_init();separator="\n"><\\>
+<association_link_calls(concept)><\\>
+<endif>
+>>

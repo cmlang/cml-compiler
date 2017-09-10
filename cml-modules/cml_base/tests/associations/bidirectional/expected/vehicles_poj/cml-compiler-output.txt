@@ -10,6 +10,9 @@ Employee files:
 Organization files:
 - src/main/java/vehicles/poj/Organization.java
 
+Corporation files:
+- src/main/java/vehicles/poj/Corporation.java
+
 Employment files:
 - src/main/java/vehicles/poj/Employment.java
 

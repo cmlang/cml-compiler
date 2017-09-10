@@ -1,7 +1,7 @@
 package vehicles.client;
 
+import vehicles.cmlc.Corporation;
 import vehicles.cmlc.Employee;
-import vehicles.cmlc.Organization;
 import vehicles.cmlc.Vehicle;
 
 import static java.util.Collections.emptyList;
@@ -12,15 +12,15 @@ public class Launcher
     {
         System.out.println("Bidirectional Associations (cmlc_java)\n");
 
-        final Organization organization = Organization.createOrganization("Walt Disney", emptyList(), emptyList());
-        final Employee donald = Employee.createEmployee("Donald Duck", organization);
-        final Employee mickey = Employee.createEmployee("Mickey Mouse", organization);
-        final Vehicle duck = Vehicle.createVehicle("DUCK", donald, organization);
-        final Vehicle mouse = Vehicle.createVehicle("MOUSE", mickey, organization);
+        final Corporation corporation = Corporation.createCorporation("Walt Disney", emptyList(), emptyList());
+        final Employee donald = Employee.createEmployee("Donald Duck", corporation);
+        final Employee mickey = Employee.createEmployee("Mickey Mouse", corporation);
+        final Vehicle duck = Vehicle.createVehicle("DUCK", donald, corporation);
+        final Vehicle mouse = Vehicle.createVehicle("MOUSE", mickey, corporation);
 
-        System.out.println(organization);
-        System.out.println("- Employees: " + organization.getEmployees());
-        System.out.println("- Fleet: " + organization.getFleet());
+        System.out.println(corporation);
+        System.out.println("- Employees: " + corporation.getEmployees());
+        System.out.println("- Fleet: " + corporation.getFleet());
         System.out.println();
 
         System.out.println(donald);

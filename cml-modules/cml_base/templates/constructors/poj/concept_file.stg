@@ -1,4 +1,7 @@
 
+import "/design/plain.stg"
+import "/constructors/poj/class.stg"
+
 concept_file(task, concept) ::= <<
 package <task.packageName>;
 

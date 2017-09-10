@@ -12,8 +12,8 @@ class _Employment:
         return cls._singleton
 
     def __init__(self) -> 'None':
-        self.__employer = {} # type: Dict[Employee, Organization]
-        self.__employees = {} # type: Dict[Organization, List[Employee]]
+        self.__employer = {}  # type: Dict[Employee, Organization]
+        self.__employees = {}  # type: Dict[Organization, List[Employee]]
 
     def link_many(self, employer: 'Organization', employees: 'List[Employee]') -> 'None':
         for employee in employees: self.link(employer, employee)
@@ -53,8 +53,8 @@ class _VehicleOwnership:
         return cls._singleton
 
     def __init__(self) -> 'None':
-        self.__owner = {} # type: Dict[Vehicle, Organization]
-        self.__fleet = {} # type: Dict[Organization, List[Vehicle]]
+        self.__owner = {}  # type: Dict[Vehicle, Organization]
+        self.__fleet = {}  # type: Dict[Organization, List[Vehicle]]
 
     def link_many(self, owner: 'Organization', fleet: 'List[Vehicle]') -> 'None':
         for vehicle in fleet: self.link(owner, vehicle)
@@ -88,7 +88,7 @@ class Vehicle:
 
     _vehicle_ownership = _VehicleOwnership()
 
-    def __init__(self, plate: 'str', driver: 'Employee', owner: 'Organization') -> 'None':
+    def __init__(self, plate: 'str', driver: 'Optional[Employee]', owner: 'Organization') -> 'None':
         self.__plate = plate
         self.__driver = driver
 
@@ -138,7 +138,7 @@ class Employee:
         )
 
 
-class Organization:
+class Organization(ABC):
 
     _employment = _Employment()
     _vehicle_ownership = _VehicleOwnership()
@@ -164,5 +164,29 @@ class Organization:
     def __str__(self) -> 'str':
         return "%s(name=%s)" % (
             type(self).__name__,
+            self.name
+        )
+
+
+class Corporation(Organization):
+
+    def __init__(self, name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]', stock: 'bool' = True, profit: 'bool' = True) -> 'None':
+        super().__init__(name, employees, fleet)
+        self.__stock = stock
+        self.__profit = profit
+
+    @property
+    def stock(self) -> 'bool':
+        return self.__stock
+
+    @property
+    def profit(self) -> 'bool':
+        return self.__profit
+
+    def __str__(self) -> 'str':
+        return "%s(stock=%s, profit=%s, name=%s)" % (
+            type(self).__name__,
+            self.stock,
+            self.profit,
             self.name
         )

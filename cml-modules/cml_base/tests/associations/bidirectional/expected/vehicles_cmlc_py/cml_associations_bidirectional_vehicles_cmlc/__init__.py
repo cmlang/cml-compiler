@@ -12,8 +12,8 @@ class _Employment:
         return cls._singleton
 
     def __init__(self) -> 'None':
-        self.__employer = {} # type: Dict[Employee, Organization]
-        self.__employees = {} # type: Dict[Organization, List[Employee]]
+        self.__employer = {}  # type: Dict[Employee, Organization]
+        self.__employees = {}  # type: Dict[Organization, List[Employee]]
 
     def link_many(self, employer: 'Organization', employees: 'List[Employee]') -> 'None':
         for employee in employees: self.link(employer, employee)
@@ -53,8 +53,8 @@ class _VehicleOwnership:
         return cls._singleton
 
     def __init__(self) -> 'None':
-        self.__owner = {} # type: Dict[Vehicle, Organization]
-        self.__fleet = {} # type: Dict[Organization, List[Vehicle]]
+        self.__owner = {}  # type: Dict[Vehicle, Organization]
+        self.__fleet = {}  # type: Dict[Organization, List[Vehicle]]
 
     def link_many(self, owner: 'Organization', fleet: 'List[Vehicle]') -> 'None':
         for vehicle in fleet: self.link(owner, vehicle)
@@ -99,23 +99,27 @@ class Vehicle(ABC):
         pass
 
     @staticmethod
-    def create_vehicle(plate: 'str', driver: 'Employee', owner: 'Organization') -> 'Vehicle':
-        return VehicleImpl(plate, driver, owner)
+    def create_vehicle(plate: 'str', driver: 'Optional[Employee]', owner: 'Organization') -> 'Vehicle':
+        return VehicleImpl(None, plate, driver, owner)
 
     @staticmethod
-    def extend_vehicle(plate: 'str', driver: 'Employee', owner: 'Organization') -> 'Vehicle':
-        return VehicleImpl(plate, driver, owner)
+    def extend_vehicle(actual_self: 'Optional[Vehicle]', plate: 'str', driver: 'Optional[Employee]', owner: 'Organization') -> 'Vehicle':
+        return VehicleImpl(actual_self, plate, driver, owner)
 
 
 class VehicleImpl(Vehicle):
 
     _vehicle_ownership = _VehicleOwnership()
 
-    def __init__(self, plate: 'str', driver: 'Employee', owner: 'Organization') -> 'None':
+    def __init__(self, actual_self: 'Optional[Vehicle]', plate: 'str', driver: 'Optional[Employee]', owner: 'Organization') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Vehicle]
+        else:
+            self.__actual_self = actual_self
         self.__plate = plate
         self.__driver = driver
 
-        self._vehicle_ownership.link(owner, self)
+        self._vehicle_ownership.link(owner, self.__actual_self)
 
     @property
     def plate(self) -> 'str':
@@ -127,7 +131,7 @@ class VehicleImpl(Vehicle):
 
     @property
     def owner(self) -> 'Organization':
-        return self._vehicle_ownership.owner_of(self)
+        return self._vehicle_ownership.owner_of(self.__actual_self)
 
     def __str__(self) -> 'str':
         return "%s(plate=%s, driver=%s)" % (
@@ -149,21 +153,25 @@ class Employee(ABC):
 
     @staticmethod
     def create_employee(name: 'str', employer: 'Organization') -> 'Employee':
-        return EmployeeImpl(name, employer)
+        return EmployeeImpl(None, name, employer)
 
     @staticmethod
-    def extend_employee(name: 'str', employer: 'Organization') -> 'Employee':
-        return EmployeeImpl(name, employer)
+    def extend_employee(actual_self: 'Optional[Employee]', name: 'str', employer: 'Organization') -> 'Employee':
+        return EmployeeImpl(actual_self, name, employer)
 
 
 class EmployeeImpl(Employee):
 
     _employment = _Employment()
 
-    def __init__(self, name: 'str', employer: 'Organization') -> 'None':
+    def __init__(self, actual_self: 'Optional[Employee]', name: 'str', employer: 'Organization') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Employee]
+        else:
+            self.__actual_self = actual_self
         self.__name = name
 
-        self._employment.link(employer, self)
+        self._employment.link(employer, self.__actual_self)
 
     @property
     def name(self) -> 'str':
@@ -171,7 +179,7 @@ class EmployeeImpl(Employee):
 
     @property
     def employer(self) -> 'Organization':
-        return self._employment.employer_of(self)
+        return self._employment.employer_of(self.__actual_self)
 
     def __str__(self) -> 'str':
         return "%s(name=%s)" % (
@@ -195,12 +203,8 @@ class Organization(ABC):
         pass
 
     @staticmethod
-    def create_organization(name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]') -> 'Organization':
-        return OrganizationImpl(name, employees, fleet)
-
-    @staticmethod
-    def extend_organization(name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]') -> 'Organization':
-        return OrganizationImpl(name, employees, fleet)
+    def extend_organization(actual_self: 'Optional[Organization]', name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]') -> 'Organization':
+        return OrganizationImpl(actual_self, name, employees, fleet)
 
 
 class OrganizationImpl(Organization):
@@ -208,11 +212,15 @@ class OrganizationImpl(Organization):
     _employment = _Employment()
     _vehicle_ownership = _VehicleOwnership()
 
-    def __init__(self, name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]') -> 'None':
+    def __init__(self, actual_self: 'Optional[Organization]', name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Organization]
+        else:
+            self.__actual_self = actual_self
         self.__name = name
 
-        self._employment.link_many(self, employees)
-        self._vehicle_ownership.link_many(self, fleet)
+        self._employment.link_many(self.__actual_self, employees)
+        self._vehicle_ownership.link_many(self.__actual_self, fleet)
 
     @property
     def name(self) -> 'str':
@@ -220,14 +228,72 @@ class OrganizationImpl(Organization):
 
     @property
     def employees(self) -> 'List[Employee]':
-        return self._employment.employees_of(self)
+        return self._employment.employees_of(self.__actual_self)
 
     @property
     def fleet(self) -> 'List[Vehicle]':
-        return self._vehicle_ownership.fleet_of(self)
+        return self._vehicle_ownership.fleet_of(self.__actual_self)
 
     def __str__(self) -> 'str':
         return "%s(name=%s)" % (
             type(self).__name__,
+            self.name
+        )
+
+
+class Corporation(Organization, ABC):
+
+    @abstractproperty
+    def stock(self) -> 'bool':
+        pass
+
+    @abstractproperty
+    def profit(self) -> 'bool':
+        pass
+
+    @staticmethod
+    def create_corporation(name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]', stock: 'bool' = True, profit: 'bool' = True) -> 'Corporation':
+        return CorporationImpl(None, stock, profit, name=name, employees=employees, fleet=fleet)
+
+    @staticmethod
+    def extend_corporation(organization: 'Organization', stock: 'bool' = True, profit: 'bool' = True) -> 'Corporation':
+        return CorporationImpl(organization, stock, profit)
+
+
+class CorporationImpl(Corporation):
+
+    def __init__(self, organization: 'Optional[Organization]', stock: 'bool' = True, profit: 'bool' = True, **kwargs) -> 'None':
+        if organization is None:
+            self.__organization = Organization.extend_organization(self, **kwargs)
+        else:
+            self.__organization = organization
+        self.__stock = stock
+        self.__profit = profit
+
+    @property
+    def stock(self) -> 'bool':
+        return self.__stock
+
+    @property
+    def profit(self) -> 'bool':
+        return self.__profit
+
+    @property
+    def name(self) -> 'str':
+        return self.__organization.name
+
+    @property
+    def employees(self) -> 'List[Employee]':
+        return self.__organization.employees
+
+    @property
+    def fleet(self) -> 'List[Vehicle]':
+        return self.__organization.fleet
+
+    def __str__(self) -> 'str':
+        return "%s(stock=%s, profit=%s, name=%s)" % (
+            type(self).__name__,
+            self.stock,
+            self.profit,
             self.name
         )

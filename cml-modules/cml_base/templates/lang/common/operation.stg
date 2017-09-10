@@ -21,3 +21,7 @@ static_operation_header(name, params, result_type) ::= <<
 static_initializer(statements) ::= <<
 static<block(statements)>
 >>
+
+optional_param_decl(param) ::= <<
+<param_decl(field_name(param),field_type_optional(param))>
+>>

@@ -4,7 +4,19 @@ import "/lang/common/type.stg"
 import "/lang/common/statement.stg"
 
 call(name, args) ::= <<
-<name>(<args:field_name(); separator=", ">)
+<name>(<call_arg_list(args)>)
+>>
+
+call_arg_list(args) ::= <<
+<args:call_arg(); separator=", ">
+>>
+
+call_arg(arg) ::= <<
+<if(arg.name)><\\>
+<field_name(arg)><\\>
+<else><\\>
+<arg><\\>
+<endif>
 >>
 
 new_call(class_name, args) ::= <<

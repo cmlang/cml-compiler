@@ -18,12 +18,12 @@ public interface Vehicle
 
     static Vehicle createVehicle(String plate, @Nullable Employee driver, Organization owner)
     {
-        return new VehicleImpl(plate, driver, owner);
+        return new VehicleImpl(null, plate, driver, owner);
     }
 
-    static Vehicle extendVehicle(String plate, @Nullable Employee driver, Organization owner)
+    static Vehicle extendVehicle(@Nullable Vehicle actual_self, String plate, @Nullable Employee driver, Organization owner)
     {
-        return new VehicleImpl(plate, driver, owner);
+        return new VehicleImpl(actual_self, plate, driver, owner);
     }
 }
 
@@ -31,15 +31,18 @@ class VehicleImpl implements Vehicle
 {
     private static VehicleOwnership vehicleOwnership;
 
+    private final @Nullable Vehicle actual_self;
+
     private final String plate;
     private final @Nullable Employee driver;
 
-    public VehicleImpl(String plate, @Nullable Employee driver, Organization owner)
+    VehicleImpl(@Nullable Vehicle actual_self, String plate, @Nullable Employee driver, Organization owner)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
         this.plate = plate;
         this.driver = driver;
 
-        vehicleOwnership.link(owner, this);
+        vehicleOwnership.link(owner, this.actual_self);
     }
 
     public String getPlate()
@@ -54,7 +57,7 @@ class VehicleImpl implements Vehicle
 
     public Organization getOwner()
     {
-        return vehicleOwnership.ownerOf(this).get();
+        return vehicleOwnership.ownerOf(actual_self).get();
     }
 
     public String toString()
