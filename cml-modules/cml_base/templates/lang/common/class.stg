@@ -115,11 +115,6 @@ super_constructor(inherited_properties) ::= <<
 <endif>
 >>
 
-extend_invocation(redefined) ::= <<
-<field_access(redefined.concept)> = <\\>
-<type_name(redefined.concept)>.<interface_extend_name(type_name(redefined.concept))>(<self()>, <extend_invocation_extra_args(redefined.concept)>)<statement_terminator()>
->>
-
 class_secondary_constructor(non_init_properties, super_properties) ::= ""
 
 class_extension_constructor(concept) ::= ""

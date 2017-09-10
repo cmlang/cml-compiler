@@ -8,13 +8,23 @@ class_primary_constructor(inherited_properties, super_properties, ancestors) ::=
     class_primary_constructor_statements()
 )><\\>
 <else><\\>
-<class_constructor(
-    [ancestors:optional_param_decl(), concept.nonDerivedProperties, class_primary_constructor_extra_params()],
-    class_primary_constructor_statements()
-)><\\>
+<class_primary_constructor__no_assoc(concept, ancestors)><\\>
 <endif><\\>
 <endif>
 >>
+
+class_primary_constructor__no_assoc(concept, ancestors) ::= <<
+<if(concept.abstract)><\\>
+<class_constructor([ancestors, concept.nonDerivedProperties], class_primary_constructor_statements())><\\>
+<else><\\>
+<class_constructor(
+    [ancestors:optional_param_decl(), concept.nonDerivedProperties, class_primary_constructor_keyword_args(concept)],
+    class_primary_constructor_statements()
+)><\\>
+<endif><\\>
+>>
+
+class_primary_constructor_keyword_args(concept) ::= "**kwargs"
 
 class_primary_constructor_statements() ::= <<
 <if(super_properties)><\\>
@@ -29,4 +39,32 @@ class_primary_constructor_statements() ::= <<
 <[concept.slotProperties]:field_init();separator="\n"><\\>
 <association_link_calls(concept)><\\>
 <endif>
+>>
+
+field_init_or_extend_invocation(redefined) ::= <<
+<if(concept.abstract)><\\>
+<field_init(redefined.concept)><\\>
+<else><\\>
+if <field_name(redefined.concept)> is None:
+<indent()><extend_invocation(redefined)>
+else:
+<indent()><field_init(redefined.concept)><\\>
+<endif>
+>>
+
+actual_self_init() ::= <<
+if <actual_self()> is None:
+<indent()><actual_self_field(concept)> = <self()>  # type: <actual_self_type(concept)>
+else:
+<indent()><actual_self_field(concept)> = <actual_self()>
+>>
+
+extend_invocation_extra_args(concept) ::= <<
+<call_arg_list(concept.allAncestors)><\\>
+<commaIf2(concept.allAncestors, concept.nonDerivedProperties)><\\>
+<concept.nonDerivedProperties:extend_invocation_keyword_arg(); separator=", ">
+>>
+
+extend_invocation_keyword_arg(element) ::= <<
+kwargs['<field_name(element)>']
 >>

@@ -26,15 +26,15 @@ class_primary_constructor_statements() ::= <<
 >>
 
 class_extension_constructor(concept) ::= <<
-<if(concept.directAncestors)><\\>
+<if(concept.allAncestors)><\\>
 <if(concept.associationProperties)><\\>
 <class_constructor(
-    [actual_self_decl(concept), concept.directAncestors, concept.nonDerivedProperties],
+    [actual_self_decl(concept), concept.allAncestors, concept.nonDerivedProperties],
     class_extension_constructor_statements()
 )><\\>
 <else><\\>
 <class_constructor(
-    [concept.directAncestors, concept.nonDerivedProperties],
+    [concept.allAncestors, concept.nonDerivedProperties],
     class_extension_constructor_statements()
 )><\\>
 <endif><\\>
@@ -43,7 +43,15 @@ class_extension_constructor(concept) ::= <<
 
 class_extension_constructor_statements() ::= <<
 <if(concept.associationProperties)><actual_self_init()><\n><\n><endif><\\>
-<[concept.directAncestors, concept.slotProperties]:field_init();separator="\n"><\\>
+<[concept.allAncestors, concept.slotProperties]:field_init();separator="\n"><\\>
 <association_link_calls(concept)>
+>>
+
+actual_self_init() ::= <<
+<actual_self_field(concept)> = <actual_self()> == null ? <self()> : <actual_self()>;
+>>
+
+extend_invocation_extra_args(concept) ::= <<
+<call_arg_list([concept.allAncestors, concept.nonDerivedProperties])>
 >>
 

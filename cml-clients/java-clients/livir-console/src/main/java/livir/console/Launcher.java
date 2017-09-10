@@ -15,6 +15,6 @@ public class Launcher
         System.out.println("- " + BookStore.class.getName());
         System.out.println("- " + Book.class.getName());
         System.out.println();
-        System.out.println(new Book("1234", "Programming Adventures", "Programming Adventures", new BigDecimal("10.00")));
+        System.out.println(new Book(new BigDecimal("10.00"), "1234", "Programming Adventures", "Programming Adventures"));
     }
 }

@@ -2,4 +2,4 @@
 
 actual_self() ::= "<self()>"
 
-actual_self_field() ::= "<self()>"
+actual_self_field(concept) ::= "<self()>"

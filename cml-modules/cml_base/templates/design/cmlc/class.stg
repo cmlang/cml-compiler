@@ -6,4 +6,10 @@ class_self_field(concept) ::= <<
 <endif>
 >>
 
+extend_invocation(redefined) ::= <<
+<field_access(redefined.concept)> = <\\>
+<type_name(redefined.concept)>.<interface_extend_name(type_name(redefined.concept))><\\>
+(<if(redefined.concept.associationProperties)><actual_self_field(concept)>, <endif><extend_invocation_extra_args(redefined.concept)>)<statement_terminator()>
+>>
+
 

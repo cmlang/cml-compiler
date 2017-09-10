@@ -1,7 +1,7 @@
-package mcml.compiler;
+package mcml.client;
 
-import mcml.language.Concept;
-import mcml.language.Model;
+import mcml.cmlc.Concept;
+import mcml.cmlc.Model;
 
 import static java.util.Collections.emptyList;
 

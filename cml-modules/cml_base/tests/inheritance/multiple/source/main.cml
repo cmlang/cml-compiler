@@ -25,16 +25,16 @@ concept Model: ModelElement
 
 task mcml_java by cmlc_java
 {
-    groupId = "mcml";
-    artifactId = "mcml-language";
-    artifactVersion = "1.0.1-SNAPSHOT";
-    packageName = "mcml.language";
-    packagePath = "mcml/language";
+    groupId = "cml-inheritance-multiple";
+    artifactId = "mcml-cmlc";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "mcml.cmlc";
+    packagePath = "mcml/cmlc";
 }
 
 task mcml_py by cmlc_py
 {
-    moduleName = "mini_cml_language";
-    moduleVersion = "1.0.1";
+    moduleName = "cml_inheritance_multiple_mcml_cmlc";
+    moduleVersion = "1.0";
 }
 

@@ -18,3 +18,6 @@ interface_primary_create_method_statements(concept) ::= <<
 <endif>
 >>
 
+keyword_arg(property) ::= "<field_name(property)>=<field_name(property)>"
+
+

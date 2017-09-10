@@ -1,0 +1,17 @@
+model files:
+- pom.xml
+
+ModelElement files:
+- src/main/java/mcml/cmlc/ModelElement.java
+
+NamedElement files:
+- src/main/java/mcml/cmlc/NamedElement.java
+
+PropertyList files:
+- src/main/java/mcml/cmlc/PropertyList.java
+
+Concept files:
+- src/main/java/mcml/cmlc/Concept.java
+
+Model files:
+- src/main/java/mcml/cmlc/Model.java
