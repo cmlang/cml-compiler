@@ -1,9 +1,0 @@
-interface Book
-{
-    String getTitle();
-
-    static Book extendBook(String title)
-    {
-        return new BookImpl(title);
-    }
-}

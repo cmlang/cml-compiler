@@ -1,8 +1,0 @@
-interface Book
-{
-    String getTitle();
-
-    Optional<Book> getSequel();
-
-    List<Category> getCategories();
-}

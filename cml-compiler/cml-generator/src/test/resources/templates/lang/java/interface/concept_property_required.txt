@@ -1,4 +1,0 @@
-interface StringTitledBook
-{
-    String getTitle();
-}

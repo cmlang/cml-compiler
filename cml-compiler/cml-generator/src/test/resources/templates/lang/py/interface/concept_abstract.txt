@@ -1,9 +1,0 @@
-class Book(ABC):
-
-    @abstractproperty
-    def title(self) -> 'str':
-        pass
-
-    @staticmethod
-    def extend_book(title: 'str') -> 'Book':
-        return BookImpl(title)
