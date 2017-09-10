@@ -39,6 +39,7 @@ class VehicleImpl implements Vehicle
     VehicleImpl(@Nullable Vehicle actual_self, String plate, @Nullable Employee driver, Organization owner)
     {
         this.actual_self = actual_self == null ? this : actual_self;
+
         this.plate = plate;
         this.driver = driver;
 

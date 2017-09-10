@@ -34,6 +34,7 @@ class OrganizationImpl implements Organization
     OrganizationImpl(@Nullable Organization actual_self, String name, List<Employee> employees, List<Vehicle> fleet)
     {
         this.actual_self = actual_self == null ? this : actual_self;
+
         this.name = name;
 
         employment.linkMany(this.actual_self, employees);

@@ -36,6 +36,7 @@ class EmployeeImpl implements Employee
     EmployeeImpl(@Nullable Employee actual_self, String name, Organization employer)
     {
         this.actual_self = actual_self == null ? this : actual_self;
+
         this.name = name;
 
         employment.link(employer, this.actual_self);
