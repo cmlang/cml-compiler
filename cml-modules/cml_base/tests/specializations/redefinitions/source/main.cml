@@ -1,0 +1,116 @@
+
+-- Generalization of Circle and Rectangle.
+-- As an abstract concept, no direct instances of Shape are ever created.
+abstract concept Shape
+{
+    -- Abstract concepts may also have concrete properties.
+    -- Specializations below share the color attribute as-is.
+    color: String;
+
+    -- Specializations below redefine the area attribute:
+    -- A derived property without an expression is considered abstract.
+    -- Only abstract concepts may have abstract properties.
+    /area: Double;
+}
+
+// Specialization of Shape:
+concept Rectangle: Shape
+{
+    // New attributes that characterize a rectangle:
+    width: Double;
+    height: Double;
+
+    // Redefinition of the area attribute:
+    /area = width * height;
+}
+
+// Another specialization of Shape:
+concept Rhombus: Shape
+{
+    // Diagonal attributes that characterize a rhombus:
+    p: Double;
+    q: Double;
+
+    // Another redefinition of the area attribute:
+    /area = (p * q) / 2.0d;
+}
+
+// Specialization of both Rectangle and Rhombus:
+concept Square: Rectangle, Rhombus
+{
+    // Only attribute needed to characterize a square:
+    side_length: Double;
+
+    // Redefinitions of Rectangle's attributes:
+    /width = side_length;
+    /height = side_length;
+
+    // Redefinitions of Rhombus' attributes:
+    /p = side_length * 1.41421356237f; // square root of 2
+    /q = p;
+
+    // Required to redefine area in order to resolve conflict
+    // between Rectangle's area and Rhombus' area:
+    /area = side_length ^ 2.0f;
+}
+
+-- All instances of Circle are in turn instances of Shape.
+concept Circle: Shape
+{
+    radius: Double;
+
+    -- In order to be considered a concrete concept,
+    -- Circle must redefine the abstract properties
+    -- inherited from Shape.
+    /area = 3.14159d * radius ^ 2.0f;
+
+    -- Circle may also redefine concrete properties of Shape.
+    -- However, the redefinition is not required in this case.
+    color = "Blue";
+}
+
+concept UnitCircle: Circle
+{
+    -- Observe below that the redefinition of
+    -- an abstract property may be concrete;
+    -- that is, it does not have to be derived
+    -- as it was done in Circle.
+    area = 3.14159d;
+
+    -- In the case above, however,
+    -- it is desirable to redefine "area" as a derived property,
+    -- in order to guarantee area's value cannot be modified
+    -- after the instantiation of UnitCircle.
+    -- This is done with the redefinition of "radius" below.
+    -- Notice that, in Circle, radius was concrete,
+    -- but its redefinition below makes it derived.
+    -- That's allowed in CML just as the other way around,
+    -- as it was done with "area" above.
+    /radius = 1.0d;
+}
+
+concept RedUnitCircle: UnitCircle
+{
+    color = "Red";
+}
+
+task shapes_cmlc_java by cmlc_java
+{
+    groupId = "cml-specializations-redefinitions";
+    artifactId = "shapes-cmlc";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "shapes.cmlc";
+    packagePath = "shapes/cmlc";
+}
+
+task shapes_cmlc_py by cmlc_py
+{
+    moduleName = "cml_specializations_redefinitions_shapes_cmlc";
+    moduleVersion = "1.0";
+}
+
+task shapes_pop_py by pop
+{
+    moduleName = "cml_specializations_redefinitions_shapes_pop";
+    moduleVersion = "1.0";
+}

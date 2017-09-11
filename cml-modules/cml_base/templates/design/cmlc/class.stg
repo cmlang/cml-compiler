@@ -6,10 +6,15 @@ class_self_field(concept) ::= <<
 <endif>
 >>
 
-extend_invocation(redefined) ::= <<
-<field_access(redefined.concept)> = <\\>
-<type_name(redefined.concept)>.<interface_extend_name(type_name(redefined.concept))><\\>
-(<if(redefined.concept.associationProperties)><actual_self_field(concept)>, <endif><extend_invocation_extra_args(redefined.concept)>)<statement_terminator()>
+extend_invocation(conceptRedef) ::= <<
+<field_access(conceptRedef.concept)> = <\\>
+<type_name(conceptRedef.concept)>.<interface_extend_name(type_name(conceptRedef.concept))><\\>
+(<if(conceptRedef.concept.associationProperties)><actual_self_field(concept)>, <endif><extend_invocation_extra_args(conceptRedef)>)<statement_terminator()>
 >>
 
+extend_invocation_extra_args(conceptRedef) ::= <<
+<conceptRedef.concept.allAncestors:field_access(); separator=", "><\\>
+<commaIf2(conceptRedef.concept.allAncestors, conceptRedef.propertyRedefs)><\\>
+<conceptRedef.propertyRedefs:extend_invocation_arg(); separator=", ">
+>>
 

@@ -126,6 +126,7 @@ class PropertyImpl implements Property
 
     private boolean typeRequired;
     private boolean typeAllowed;
+    private boolean redefined;
 
     private final @Nullable Type type;
     private final @Nullable Expression value;

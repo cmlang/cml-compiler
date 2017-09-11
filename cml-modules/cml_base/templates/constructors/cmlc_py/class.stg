@@ -21,7 +21,7 @@ class_primary_constructor__no_assoc(concept, ancestors) ::= <<
     [ancestors:optional_param_decl(), concept.nonDerivedProperties, class_primary_constructor_keyword_args(concept)],
     class_primary_constructor_statements()
 )><\\>
-<endif><\\>
+<endif>
 >>
 
 class_primary_constructor_keyword_args(concept) ::= "**kwargs"
@@ -41,14 +41,14 @@ class_primary_constructor_statements() ::= <<
 <endif>
 >>
 
-field_init_or_extend_invocation(redefined) ::= <<
+field_init_or_extend_invocation(conceptRedef) ::= <<
 <if(concept.abstract)><\\>
-<field_init(redefined.concept)><\\>
+<field_init(conceptRedef.concept)><\\>
 <else><\\>
-if <field_name(redefined.concept)> is None:
-<indent()><extend_invocation(redefined)>
+if <field_name(conceptRedef.concept)> is None:
+<indent()><extend_invocation(conceptRedef)>
 else:
-<indent()><field_init(redefined.concept)><\\>
+<indent()><field_init(conceptRedef.concept)><\\>
 <endif>
 >>
 
@@ -59,12 +59,12 @@ else:
 <indent()><actual_self_field(concept)> = <actual_self()>
 >>
 
-extend_invocation_extra_args(concept) ::= <<
-<call_arg_list(concept.allAncestors)><\\>
-<commaIf2(concept.allAncestors, concept.nonDerivedProperties)><\\>
-<concept.nonDerivedProperties:extend_invocation_keyword_arg(); separator=", ">
->>
-
-extend_invocation_keyword_arg(element) ::= <<
-kwargs['<field_name(element)>']
+extend_invocation_arg(propertyRedef) ::= <<
+<if(propertyRedef.property.derived)><\\>
+<field_default_value(propertyRedef.property.type)><\\>
+<elseif(propertyRedef.redefined)><\\>
+<field_name(propertyRedef.property)><\\>
+<else><\\>
+kwargs['<field_name(propertyRedef.property)>']<\\>
+<endif>
 >>

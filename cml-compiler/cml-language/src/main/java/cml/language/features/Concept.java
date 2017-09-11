@@ -92,28 +92,59 @@ public interface Concept extends NamedElement, PropertyList
     }
 
     @SuppressWarnings("unused")
-    default List<ConceptRedefined> getRedefinedAncestors()
+    default List<ConceptRedef> getRedefinedAncestors()
     {
-        final Stream<ConceptRedefined> inheritedAncestors = getDirectAncestors().stream()
-                                                                                .flatMap(concept -> concept.getRedefinedAncestors().stream());
-
-        final Stream<ConceptRedefined> directAncestors = getDirectAncestors().stream()
-                                                                             .map(conceptRedefined());
-
-        return concat(inheritedAncestors, directAncestors)
-            .distinct()
-            .collect(toList());
+        return getRedefinedAncestors(this);
     }
 
-    default Function<Concept, ConceptRedefined> conceptRedefined()
+    default List<ConceptRedef> getRedefinedAncestors(Concept redefBase)
+    {
+        final List<ConceptRedef> redefinitions = getAllAncestors().stream()
+                                                                  .map(conceptRedefined(redefBase))
+                                                                  .collect(toList());
+
+        final Stream<ConceptRedef> inheritedRedefinitions = getDirectAncestors().stream()
+                                                                                .flatMap(concept -> concept.getRedefinedAncestors(redefBase).stream())
+                                                                                .map(overridden(redefinitions));
+
+        return concat(inheritedRedefinitions, redefinitions.stream())
+                .distinct()
+                .collect(toList());
+    }
+
+    default Function<ConceptRedef, ConceptRedef> overridden(List<ConceptRedef> redefinitions)
+    {
+        return conceptRedef -> {
+            final Optional<ConceptRedef> override = redefinitions.stream()
+                                                                 .filter(o -> o.getConcept() == conceptRedef.getConcept())
+                                                                 .findFirst();
+
+            if (override.isPresent())
+            {
+                final List<PropertyRedef> propertyRedefs = conceptRedef.getPropertyRedefs()
+                                                                     .stream()
+                                                                     .map(p -> override.get().getPropertyRedef(p).orElse(p))
+                                                                     .collect(toList());
+
+                return new ConceptRedef(conceptRedef.getConcept(), propertyRedefs);
+            }
+            else
+            {
+                return conceptRedef;
+            }
+        };
+    }
+
+    default Function<Concept, ConceptRedef> conceptRedefined(Concept redefBase)
     {
         return c -> {
-            final List<Property> redefinedProperties = c.getNonDerivedProperties()
+            final List<PropertyRedef> propertyRedefs = c.getNonDerivedProperties()
                                                         .stream()
                                                         .map(p -> getProperty(p.getName()).orElse(p))
+                                                        .map(p -> new PropertyRedef(p, p.getConcept() == redefBase))
                                                         .collect(toList());
 
-            return ConceptRedefined.create(c, redefinedProperties);
+            return new ConceptRedef(c, propertyRedefs);
         };
     }
 

@@ -13,7 +13,6 @@
     <modules>
         <module>expressions-console</module>
         <module>livir-console</module>
-        <module>shapes-console</module>
     </modules>
 
     <build>

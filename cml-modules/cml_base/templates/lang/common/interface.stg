@@ -7,10 +7,10 @@ import "/lang/common/call.stg"
 interface(concept, class_name_suffix) ::= <<
 <structure(
     keyword="interface",
-    header=interface_header(),
+    header=interface_header(concept),
     base_list=concept.allProperties,
     sections = [
-        interface_getters(),
+        interface_getters(concept),
         interface_secondary_create_method(concept),
         interface_primary_create_method(concept),
         interface_extend_method()
@@ -18,11 +18,11 @@ interface(concept, class_name_suffix) ::= <<
 )>
 >>
 
-interface_header() ::= <<
+interface_header(concept) ::= <<
 <type_name(concept)><ancestor_list(true, concept.directAncestors, [])>
 >>
 
-interface_getters() ::= <<
+interface_getters(concept) ::= <<
 <concept.properties:interface_getter();separator="\n\n">
 >>
 

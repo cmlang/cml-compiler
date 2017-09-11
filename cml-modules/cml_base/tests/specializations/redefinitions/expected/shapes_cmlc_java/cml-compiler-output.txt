@@ -1,0 +1,23 @@
+model files:
+- pom.xml
+
+Shape files:
+- src/main/java/shapes/cmlc/Shape.java
+
+Rectangle files:
+- src/main/java/shapes/cmlc/Rectangle.java
+
+Rhombus files:
+- src/main/java/shapes/cmlc/Rhombus.java
+
+Square files:
+- src/main/java/shapes/cmlc/Square.java
+
+Circle files:
+- src/main/java/shapes/cmlc/Circle.java
+
+UnitCircle files:
+- src/main/java/shapes/cmlc/UnitCircle.java
+
+RedUnitCircle files:
+- src/main/java/shapes/cmlc/RedUnitCircle.java

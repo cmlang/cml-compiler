@@ -1,10 +1,13 @@
 package cml.templates;
 
 import cml.io.ModuleManager;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
+import org.stringtemplate.v4.misc.ErrorManager;
 import org.stringtemplate.v4.misc.Misc;
+import org.stringtemplate.v4.misc.STLexerMessage;
 
 import java.net.URL;
 import java.util.Optional;
@@ -25,6 +28,16 @@ public class TemplateGroupFile extends STGroupFile
     public TemplateGroupFile(String path)
     {
         super(path, ENCODING, START_CHAR, STOP_CHAR);
+
+        errMgr = new ErrorManager()
+        {
+            @Override
+            public void lexerError(final String srcName, final String msg, final Token templateToken, final RecognitionException e)
+            {
+                // Overriding to display the full srcName:
+                listener.compileTimeError(new STLexerMessage(srcName, msg, templateToken, e));
+            }
+        };
 
         registerModelAdaptor(Object.class, new ModelAdaptor());
         registerRenderer(String.class, new NameRenderer());
