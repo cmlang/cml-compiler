@@ -17,7 +17,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <cml_language.path>${project.basedir}/../../cml-modules/cml_language</cml_language.path>
+        <cml_language.path>${project.basedir}/cml_language</cml_language.path>
     </properties>
 
     <build>

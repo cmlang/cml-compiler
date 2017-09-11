@@ -19,7 +19,7 @@
         <dependency>
             <groupId>cml</groupId>
             <artifactId>cml-language-generated</artifactId>
-            <version>${project.version}</version>
+            <version>master-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

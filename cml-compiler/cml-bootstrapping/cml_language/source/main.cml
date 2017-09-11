@@ -16,17 +16,19 @@ concept Location
     column: Integer;
 }
 
+/*
 association Membership
 {
     ModelElement.parent;
     Scope.members;
 }
+*/
 
 task cml_language_java by cmlc_java
 {
     groupId = "cml";
     artifactId = "cml-language-generated";
-    artifactVersion = "1.1.1-SNAPSHOT";
+    artifactVersion = "master-SNAPSHOT";
     packageName = "cml.language.generated";
     packagePath = "cml/language/generated";
 }
