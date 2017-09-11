@@ -264,7 +264,7 @@ class CorporationImpl(Corporation):
 
     def __init__(self, organization: 'Optional[Organization]', stock: 'bool' = True, profit: 'bool' = True, **kwargs) -> 'None':
         if organization is None:
-            self.__organization = Organization.extend_organization(self, **kwargs)
+            self.__organization = Organization.extend_organization(self, kwargs['name'], kwargs['employees'], kwargs['fleet'])
         else:
             self.__organization = organization
         self.__stock = stock

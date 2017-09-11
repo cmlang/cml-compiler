@@ -34,8 +34,8 @@ class ConceptImpl implements Concept
     ConceptImpl(String name, @Nullable ModelElement parent, List<ModelElement> elements, boolean abstracted)
     {
         this.modelElement = ModelElement.extendModelElement(parent, elements);
-        this.namedElement = NamedElement.extendNamedElement(modelElement, name);
-        this.propertyList = PropertyList.extendPropertyList(modelElement);
+        this.namedElement = NamedElement.extendNamedElement(this.modelElement, name);
+        this.propertyList = PropertyList.extendPropertyList(this.modelElement);
         this.abstracted = abstracted;
     }
 

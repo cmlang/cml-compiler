@@ -127,11 +127,11 @@ class ConceptImpl(Concept):
         else:
             self.__model_element = model_element
         if named_element is None:
-            self.__named_element = NamedElement.extend_named_element(model_element, kwargs['name'])
+            self.__named_element = NamedElement.extend_named_element(self.__model_element, kwargs['name'])
         else:
             self.__named_element = named_element
         if property_list is None:
-            self.__property_list = PropertyList.extend_property_list(model_element)
+            self.__property_list = PropertyList.extend_property_list(self.__model_element)
         else:
             self.__property_list = property_list
         self.__abstracted = abstracted
