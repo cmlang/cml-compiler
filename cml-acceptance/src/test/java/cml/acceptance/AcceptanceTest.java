@@ -33,7 +33,7 @@ import static org.jooq.lambda.Seq.seq;
 public class AcceptanceTest
 {
     private static final Charset OUTPUT_FILE_ENCODING = Charset.forName("UTF-8");
-    private static final int PROCESS_TIMEOUT_IN_SECONDS = 120;
+    private static final int PROCESS_TIMEOUT_IN_SECONDS = 180;
 
     private static final String BASE_DIR = "..";
 
