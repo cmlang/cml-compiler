@@ -1,3 +1,0 @@
-model files:
-- setup.py
-- shapes_cmlc/__init__.py

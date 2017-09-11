@@ -108,9 +108,3 @@ task shapes_cmlc_py by cmlc_py
     moduleName = "cml_specializations_redefinitions_shapes_cmlc";
     moduleVersion = "1.0";
 }
-
-task shapes_pop_py by pop
-{
-    moduleName = "cml_specializations_redefinitions_shapes_pop";
-    moduleVersion = "1.0";
-}

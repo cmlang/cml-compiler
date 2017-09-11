@@ -1,3 +1,0 @@
-model files:
-- setup.py
-- shapes_pop/__init__.py
