@@ -64,9 +64,7 @@ public class AcceptanceTest
     @DataPoints("success-cases")
     public static SuccessCase[] successCases = {
         new SuccessCase("expressions", "expressions-console", "expressions_poj", JAVA),
-        new SuccessCase("expressions", "expressions_console", "expressions_pop", PYTHON),
-        new SuccessCase("livir_books", "livir-console", "livir_poj", JAVA),
-        new SuccessCase("livir_books", "livir_console", "livir_pop", PYTHON)
+        new SuccessCase("expressions", "expressions_console", "expressions_pop", PYTHON)
     };
 
     @DataPoints("validation-modules")
