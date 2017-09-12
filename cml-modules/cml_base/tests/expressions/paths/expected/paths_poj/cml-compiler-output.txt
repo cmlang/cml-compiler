@@ -1,0 +1,11 @@
+model files:
+- pom.xml
+
+ExpressionCases files:
+- src/main/java/paths/poj/ExpressionCases.java
+
+SomeConcept files:
+- src/main/java/paths/poj/SomeConcept.java
+
+AnotherConcept files:
+- src/main/java/paths/poj/AnotherConcept.java

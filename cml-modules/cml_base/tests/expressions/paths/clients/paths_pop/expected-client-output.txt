@@ -1,0 +1,10 @@
+Paths Client (pop)
+
+self_var = ExpressionCases(foo=foo, some_path=SomeConcept(bar=-1, one_more_path=AnotherConcept(etc=10.0)), single_var=foo, path_var=-1, path_var_2=10.0, path_var_3=[10.0, 20.0], path_bars=[-1, 2])
+single_var = foo
+
+path_var = -1
+path_var_2 = 10.0
+
+path_var_3 = [10.0, 20.0]
+path_bars = [-1, 2]

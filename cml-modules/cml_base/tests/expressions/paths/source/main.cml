@@ -1,0 +1,42 @@
+
+concept ExpressionCases
+{
+    // Used by paths below:
+    foo: String;
+    somePath: SomeConcept;
+    somePathList: SomeConcept*;
+
+    // Path-derived properties:
+    /self_var = self;
+    /single_var = foo;
+    /path_var = somePath.bar;
+    /path_var2 = somePath.oneMorePath.etc;
+    /path_var3 = somePathList.oneMorePath.etc;
+    /path_bars = somePathList.bar;
+}
+
+concept SomeConcept
+{
+    bar: Integer;
+    oneMorePath: AnotherConcept;
+}
+
+concept AnotherConcept
+{
+    etc: Decimal;
+}
+
+task paths_poj by poj
+{
+    groupId = "cml-expressions";
+    artifactId = "cml-expressions-paths";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "paths.poj";
+    packagePath = "paths/poj";
+}
+
+task paths_pop by pop
+{
+    moduleName = "cml_expressions_paths_pop";
+    moduleVersion = "1.0";
+}

@@ -9,17 +9,17 @@ concept Expressions
     LiteralDecimalInit2 = .456;
 }
 
-task poj by poj
+task literals_poj by poj
 {
-    groupId = "cml-base-expressions";
-    artifactId = "cml-base-expressions-literals";
+    groupId = "cml-expressions";
+    artifactId = "cml-expressions-literals";
     artifactVersion = "1.0-SNAPSHOT";
-    packageName = "literals";
-    packagePath = "literals";
+    packageName = "literals.poj";
+    packagePath = "literals/poj";
 }
 
-task pop by pop
+task literals_pop by pop
 {
-    moduleName = "expressions";
+    moduleName = "cml_expressions_literals_pop";
     moduleVersion = "1.0";
 }

@@ -5,7 +5,6 @@ import org.apache.maven.shared.invoker.*;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.WriterStreamConsumer;
-import org.jetbrains.annotations.NotNull;
 import org.jooq.lambda.Seq;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -61,12 +60,6 @@ public class AcceptanceTest
     private static final int FAILURE__TASK_UNDECLARED = 103;
     private static final String SOME_TASK = "some_task";
 
-    @DataPoints("success-cases")
-    public static SuccessCase[] successCases = {
-        new SuccessCase("expressions", "expressions-console", "expressions_poj", JAVA),
-        new SuccessCase("expressions", "expressions_console", "expressions_pop", PYTHON)
-    };
-
     @DataPoints("validation-modules")
     public static String[] validationModules = {
         "abstract_property_in_abstract_concept",
@@ -106,7 +99,6 @@ public class AcceptanceTest
         moduleDirs().forEach(this::testModule);
     }
 
-    @NotNull
     private Seq<File> moduleDirs()
     {
         final File[] subDirs = new File(CML_MODULES_BASE_DIR).listFiles(File::isDirectory);
@@ -136,22 +128,6 @@ public class AcceptanceTest
         {
             throw new RuntimeException("CommandLineException: " + exception.getMessage(), exception);
         }
-    }
-
-    @Theory
-    public void success(@FromDataPoints("success-cases") final SuccessCase successCase) throws Exception
-    {
-        cleanTargetDir(successCase.getModulePath(), successCase.getTaskName());
-
-        compileAndVerifyOutput(
-            successCase.getModulePath(),
-            successCase.getTaskName(),
-            successCase.getExpectedCompilerOutputPath(),
-            SUCCESS);
-        installGeneratedModule(successCase.getTargetDirPath(), successCase);
-
-        final String actualClientOutput = executeClient(successCase);
-        assertThatOutputMatches("client's output", successCase.getExpectedClientOutputPath(), actualClientOutput);
     }
 
     @Theory
