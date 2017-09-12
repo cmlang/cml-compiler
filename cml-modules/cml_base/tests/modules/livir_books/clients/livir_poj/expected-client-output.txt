@@ -1,4 +1,4 @@
-Livir Console
+Livir Client (poj)
 
 Classes:
 - livir.books.BookStore

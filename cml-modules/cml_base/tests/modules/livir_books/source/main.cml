@@ -37,7 +37,7 @@ task livir_poj by poj
 {
     groupId = "livir";
     artifactId = "livir-books";
-    artifactVersion = "1.0.1-SNAPSHOT";
+    artifactVersion = "1.0-SNAPSHOT";
     packageName = "livir.books";
     packagePath = "livir/books";
 }
@@ -45,6 +45,6 @@ task livir_poj by poj
 task livir_pop by pop
 {
     moduleName = "livir_books";
-    moduleVersion = "1.0.1";
+    moduleVersion = "1.0";
 }
 

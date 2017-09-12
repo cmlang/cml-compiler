@@ -12,7 +12,6 @@
 
     <modules>
         <module>expressions-console</module>
-        <module>livir-console</module>
     </modules>
 
     <build>
