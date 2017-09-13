@@ -4,3 +4,4 @@
 cml-*/target/
 pom.xml.versionsBackup
 /cml-bootstrapping/cml_language/targets/
+.mypy_cache/
