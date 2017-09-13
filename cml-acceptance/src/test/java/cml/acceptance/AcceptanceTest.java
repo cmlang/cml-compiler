@@ -46,6 +46,8 @@ public class AcceptanceTest
 
     private static final String CML_MODULES_BASE_DIR = BASE_DIR + "/" + "cml-modules";
 
+    private static final String CML_BOOTSTRAPPING_BASE_DIR = COMPILER_DIR + "/" + "cml-bootstrapping";
+
     private static final String POJ = "poj"; // plain old Java
 
     private static final String JAVA = "java";
@@ -96,12 +98,18 @@ public class AcceptanceTest
     @Test
     public void cml_modules()
     {
-        moduleDirs().forEach(this::testModule);
+        moduleDirs(CML_MODULES_BASE_DIR).forEach(this::testModule);
     }
 
-    private Seq<File> moduleDirs()
+    @Test
+    public void cml_bootstrapping_modules()
     {
-        final File[] subDirs = new File(CML_MODULES_BASE_DIR).listFiles(File::isDirectory);
+        moduleDirs(CML_BOOTSTRAPPING_BASE_DIR).forEach(this::testModule);
+    }
+
+    private Seq<File> moduleDirs(String baseDir)
+    {
+        final File[] subDirs = new File(baseDir).listFiles(File::isDirectory);
 
         return seq(asList(subDirs == null ? new File[0] : subDirs)).filter(AcceptanceTest::isModuleDir);
     }
