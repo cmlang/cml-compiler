@@ -41,14 +41,18 @@ public class ModuleTest
     private static final int PROCESS_TIMEOUT_IN_SECONDS = 60;
 
     private static final String SOURCE_PATH = "source";
+    private static final String TEMPLATES_PATH = "templates";
     private static final String TARGETS_PATH = "targets";
     private static final String TESTS_PATH = "tests";
     private static final String EXPECTED_PATH = "expected";
+    private static final String CLIENTS_PATH = "clients";
 
     private static final String COMPILER_OUTPUT_TXT = "cml-compiler-output.txt";
     private static final String CLIENT_OUTPUT_TXT = "expected-client-output.txt";
     private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
     private static final String IGNORED_LIST_TXT = "ignored-list.txt";
+    private static final String CLIENT_PY = "client.py";
+    private static final String POM_XML = "pom.xml";
 
     static String selectedTestName;
     static String selectedTaskName;
@@ -60,6 +64,7 @@ public class ModuleTest
             .map(expectedDir -> new Object[] {
                 testNameOf(expectedDir),
                 taskNameOf(expectedDir),
+                testDirOf(expectedDir),
                 moduleDirOf(expectedDir),
                 expectedDir
             })
@@ -68,12 +73,12 @@ public class ModuleTest
             .collect(toList());
     }
 
-    static boolean isSelectedTestModule(final Object property)
+    private static boolean isSelectedTestModule(final Object property)
     {
         return selectedTestName == null || property.equals(selectedTestName) || ((String) property).startsWith(selectedTestName + "/");
     }
 
-    static boolean isSelectedTask(final Object property)
+    private static boolean isSelectedTask(final Object property)
     {
         return selectedTaskName == null || property.equals(selectedTaskName);
     }
@@ -88,20 +93,21 @@ public class ModuleTest
         return expectedDirs().map(dir -> taskNameOf(dir)).filter(testName -> isSelectedTestModule(testName));
     }
 
-    static Seq<File> expectedDirs()
+    private static Seq<File> expectedDirs()
     {
-        return testModules().flatMap(moduleDir -> subDirsOf(expectedPathOf(moduleDir)));
+        return testDirs().flatMap(moduleDir -> subDirsOf(expectedPathOf(moduleDir)));
     }
 
-    static Seq<File> testModules()
+    private static Seq<File> testDirs()
     {
         return subDirsOf(TESTS_PATH)
-            .flatMap(moduleDir -> subDirsOf(moduleDir.getAbsolutePath()))
-            .filter(moduleDir -> sourceDirOf(moduleDir).isDirectory());
+            .flatMap(testDir -> subDirsOf(testDir.getAbsolutePath()))
+            .filter(testDir -> sourceDirOf(testDir).isDirectory() || expectedDirOf(testDir).isDirectory());
     }
 
     private final String testName;
     private final String taskName;
+    private final File testDir;
     private final File moduleDir;
     private final File expectedDir;
     private final File targetDir;
@@ -109,10 +115,11 @@ public class ModuleTest
     private String compilerOutput;
     private boolean testPassed;
 
-    public ModuleTest(String testName, String taskName, File moduleDir, File expectedDir)
+    public ModuleTest(String testName, String taskName, File testDir, File moduleDir, File expectedDir)
     {
         this.testName = testName;
         this.taskName = taskName;
+        this.testDir = testDir;
         this.moduleDir = moduleDir;
         this.expectedDir = expectedDir;
         this.targetDir = new File(moduleDir, TARGETS_PATH + "/" + taskName);
@@ -198,7 +205,7 @@ public class ModuleTest
     {
         if (isMavenModule())
         {
-            System.out.print("- Building test Maven module: " + targetDir.getName() + " ");
+            System.out.print("- Building Maven module: " + targetDir.getName() + " ");
 
             buildMavenModule(targetDir);
 
@@ -224,14 +231,13 @@ public class ModuleTest
 
     private void executeJavaClient()
     {
-        final String clientPath = "clients/" + taskName;
-        final File javaClient = new File(moduleDir, clientPath);
+        final File javaClientDir = clientDir();
 
-        if (new File(javaClient, "pom.xml").isFile())
+        if (new File(javaClientDir, POM_XML).isFile())
         {
-            System.out.print("- Running Java client: " + clientPath + " ...");
+            System.out.print("- Running Java client: " + clientFile(POM_XML) + " ...");
 
-            executeJavaClient(javaClient);
+            executeJavaClient(javaClientDir);
 
             System.out.println("OK");
         }
@@ -239,17 +245,31 @@ public class ModuleTest
 
     private void executePythonClient()
     {
-        final String clientPath = "clients/" + taskName + "/client.py";
-        final File pythonClient = new File(moduleDir, clientPath);
+        final File pythonClient = new File(clientDir(), CLIENT_PY);
 
         if (pythonClient.isFile())
         {
-            System.out.print("- Running Python client: " + clientPath + " ...");
+            System.out.print("- Running Python client: " + clientFile(CLIENT_PY) + " ...");
 
             executePythonClient(pythonClient);
 
             System.out.println("OK");
         }
+    }
+
+    private File clientDir()
+    {
+        return new File(testDir + "/" + clientPath());
+    }
+
+    private String clientPath()
+    {
+        return CLIENTS_PATH + "/" + taskName;
+    }
+
+    private String clientFile(String fileName)
+    {
+        return clientPath() + "/" + fileName;
     }
 
     private void verifyTargetFile(final File expectedFile)
@@ -384,9 +404,27 @@ public class ModuleTest
         return expectedDir.getName();
     }
 
-    private static File moduleDirOf(final File expectedDir)
+    private static File testDirOf(final File expectedDir)
     {
         return expectedDir.getParentFile().getParentFile();
+    }
+
+    private static File moduleDirOf(final File expectedDir)
+    {
+        final File testDir = testDirOf(expectedDir);
+
+        return sourceDirOf(testDir).isDirectory() ? testDir : rootModuleDirOf(testDir);
+    }
+
+    private static File rootModuleDirOf(final File testDir)
+    {
+        final File dir = testDir.getParentFile().getParentFile().getParentFile();
+
+        assertTrue(
+            "Expected module to be found in path: " + dir.getAbsolutePath(),
+            sourceDirOf(dir).isDirectory() || templatesDirOf(dir).isDirectory());
+
+        return dir;
     }
 
     private static File sourceDirOf(final File moduleDir)
@@ -394,9 +432,19 @@ public class ModuleTest
         return new File(moduleDir, SOURCE_PATH);
     }
 
-    private static String expectedPathOf(final File moduleDir)
+    private static File templatesDirOf(final File moduleDir)
     {
-        return moduleDir.getAbsolutePath() + "/" + EXPECTED_PATH;
+        return new File(moduleDir, TEMPLATES_PATH);
+    }
+
+    private static File expectedDirOf(final File testDir)
+    {
+        return new File(expectedPathOf(testDir));
+    }
+
+    private static String expectedPathOf(final File testDir)
+    {
+        return testDir.getAbsolutePath() + "/" + EXPECTED_PATH;
     }
 
     private static Seq<File> subDirsOf(String basePath)

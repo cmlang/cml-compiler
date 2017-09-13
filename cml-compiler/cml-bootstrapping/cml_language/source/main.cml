@@ -32,3 +32,9 @@ task cml_language_java by cmlc_java
     packageName = "cml.language.generated";
     packagePath = "cml/language/generated";
 }
+
+task cml_language_py by cmlc_py
+{
+    moduleName = "cml_language";
+    moduleVersion = "master-SNAPSHOT";
+}

@@ -1,0 +1,11 @@
+model files:
+- pom.xml
+
+ModelElement files:
+- src/main/java/cml/language/generated/ModelElement.java
+
+Scope files:
+- src/main/java/cml/language/generated/Scope.java
+
+Location files:
+- src/main/java/cml/language/generated/Location.java
