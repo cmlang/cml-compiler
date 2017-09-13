@@ -19,7 +19,6 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertEquals;
 import static org.codehaus.plexus.util.FileUtils.*;
@@ -126,7 +125,7 @@ public class AcceptanceTest
             System.out.println("--------");
             System.out.println("Testing module: " + moduleDir.getName());
 
-            executeJar(moduleDir.getCanonicalPath(), COMPILER_JAR, singletonList("test"), SUCCESS);
+            executeJar(moduleDir.getCanonicalPath(), COMPILER_JAR, singletonList("test"), SUCCESS, System.out);
         }
         catch (IOException exception)
         {
@@ -290,20 +289,6 @@ public class AcceptanceTest
         assertEquals(reason, expectedOutput, actualOutput);
     }
 
-    private static void installGeneratedModule(final String baseDir, final SuccessCase successCase)
-        throws MavenInvocationException, IOException, CommandLineException
-    {
-        if (successCase.getTargetLanguageExtension().equals(JAVA))
-        {
-            buildMavenModule(baseDir);
-        }
-        else if (successCase.getTargetLanguageExtension().equals(PYTHON))
-        {
-            checkPythonTypes(successCase.getPythonModuleDir(baseDir));
-            installPythonPackage(baseDir);
-        }
-    }
-
     private static void buildMavenModule(final String baseDir) throws MavenInvocationException
     {
         System.out.println("Building: " + baseDir);
@@ -321,122 +306,6 @@ public class AcceptanceTest
         if (result.getExitCode() != 0) throw new MavenInvocationException("Exit code: " + result.getExitCode());
     }
 
-    private static void checkPythonTypes(final String moduleDir) throws IOException, CommandLineException
-    {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
-        {
-            // https://github.com/python/mypy
-            final Commandline commandLine = new Commandline();
-            commandLine.setExecutable(pythonCmd("python3"));
-            commandLine.createArg().setValue("-m");
-            commandLine.createArg().setValue("mypy");
-            commandLine.createArg().setValue(moduleDir);
-
-            final Writer writer = new OutputStreamWriter(outputStream);
-            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
-            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
-
-            System.out.println("Checking types of Python module: " + commandLine);
-
-            final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
-
-            System.out.println("mypy's exit code: " + exitCode);
-            System.out.println(
-                "mypy's output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
-
-            assertThat("mypy's exit code: ", exitCode, is(0));
-        }
-    }
-
-    private static void installPythonPackage(final String baseDir) throws IOException, CommandLineException
-    {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream())
-        {
-            // --upgrade: overwriting previous installation - https://packaging.python.org/installing
-            final Commandline commandLine = new Commandline();
-            commandLine.setExecutable(pythonCmd("pip3"));
-            commandLine.createArg().setValue("install");
-            commandLine.createArg().setValue("--upgrade");
-            commandLine.createArg().setValue(baseDir);
-
-            final Writer writer = new OutputStreamWriter(outputStream);
-            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
-            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
-
-            System.out.println("Installing Python package: " + commandLine);
-
-            final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
-
-            System.out.println("pip's exit code: " + exitCode);
-            System.out.println(
-                "pip's output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
-
-            assertThat("pip's exit code: ", exitCode, is(0));
-        }
-    }
-
-    private static String executeClient(final SuccessCase successCase)
-        throws MavenInvocationException, IOException, CommandLineException
-    {
-        switch (successCase.getTargetLanguageExtension())
-        {
-            case JAVA:
-                return executeJavaClient(successCase);
-            case PYTHON:
-                return executePythonClient(successCase);
-            default:
-                return "Unknown language: " + successCase.getTargetLanguageExtension();
-        }
-    }
-
-    private static String executeJavaClient(SuccessCase successCase)
-        throws CommandLineException, IOException, MavenInvocationException
-    {
-        final String clientModuleDir = CLIENT_BASE_DIR + successCase.getClientPath();
-        buildMavenModule(clientModuleDir);
-
-        final File clientTargetDir = new File(clientModuleDir, "target");
-        assertThat("Client target dir must exist: " + clientTargetDir, clientTargetDir.exists(), is(true));
-
-        final String clientJarPath = clientTargetDir.getPath() + "/" + successCase.getClientName() + CLIENT_JAR_SUFFIX;
-
-        return executeJar(clientTargetDir.getPath(), clientJarPath, emptyList(), SUCCESS);
-    }
-
-    private static String executePythonClient(SuccessCase successCase) throws CommandLineException, IOException
-    {
-        final String clientPath = CLIENT_BASE_DIR + successCase.getClientPath() + ".py";
-        assertThat(
-            "Client must exist: " + clientPath,
-            new File(clientPath).exists(), is(true));
-
-        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try
-        {
-            // Executing Python module - https://www.python.org/dev/peps/pep-0338/#current-behaviour
-            final Commandline commandLine = new Commandline();
-            commandLine.setExecutable(pythonCmd("python3"));
-            commandLine.createArg().setValue(clientPath);
-
-            final Writer writer = new OutputStreamWriter(outputStream);
-            final WriterStreamConsumer systemOut = new WriterStreamConsumer(writer);
-            final WriterStreamConsumer systemErr = new WriterStreamConsumer(writer);
-
-            System.out.println("Launching Python client: " + commandLine);
-
-            int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
-
-            System.out.println("Python client's exit code: " + exitCode);
-            System.out.println("Output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
-        }
-        finally
-        {
-            outputStream.close();
-        }
-
-        return new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING);
-    }
-
     private static String executeJar(
         final String currentDirPath,
         final String jarPath,
@@ -447,9 +316,7 @@ public class AcceptanceTest
 
         try
         {
-            final int actualExitCode = executeJar(currentDirPath, jarPath, args, outputStream);
-
-            assertThat("exit code", actualExitCode, is(expectedExitCode));
+            executeJar(currentDirPath, jarPath, args, expectedExitCode, outputStream);
         }
         finally
         {
@@ -459,11 +326,23 @@ public class AcceptanceTest
         return new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING);
     }
 
+    private static void executeJar(
+            final String currentDirPath,
+            final String jarPath,
+            final List<String> args,
+            final int expectedExitCode,
+            final OutputStream outputStream) throws CommandLineException, IOException
+    {
+        final int actualExitCode = executeJar(currentDirPath, jarPath, args, outputStream);
+
+        assertThat("exit code", actualExitCode, is(expectedExitCode));
+    }
+
     private static int executeJar(
         final String currentDirPath,
         final String jarPath,
         final List<String> args,
-        final ByteArrayOutputStream outputStream) throws CommandLineException, IOException
+        final OutputStream outputStream) throws CommandLineException, IOException
     {
         final File jarFile = new File(jarPath);
         assertThat("Jar file must exit: " + jarFile, jarFile.exists(), is(true));
@@ -493,15 +372,8 @@ public class AcceptanceTest
         final int exitCode = executeCommandLine(commandLine, systemOut, systemErr, PROCESS_TIMEOUT_IN_SECONDS);
 
         System.out.println("Jar's exit code: " + exitCode);
-        System.out.println("Output: \n---\n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING) + "---\n");
 
         return exitCode;
-    }
-
-    private static String pythonCmd(String cmd)
-    {
-        final String pythonHomeDir = System.getenv("PYTHON_HOME");
-        return pythonHomeDir + "/bin/" + cmd;
     }
 
     private static String getErrorModulePath(String moduleName)
