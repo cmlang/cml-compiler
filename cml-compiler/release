@@ -25,6 +25,25 @@ if [ -z "$CML_SNAPSHOT_VERSION" ]; then
 fi
 
 CML_VERSION="$1"
+
+CML_MAJOR=$(echo "${CML_VERSION}" | cut -d'.' -f 1)
+if [ -z "CML_MAJOR" ]; then
+    echo "Missing major version in: $CML_VERSION"
+    exit 1
+fi
+
+CML_MINOR=$(echo "${CML_VERSION}" | cut -d'.' -f 2)
+if [ -z "CML_MINOR" ]; then
+    echo "Missing minor version in: $CML_VERSION"
+    exit 1
+fi
+
+CML_CHANNEL=$(echo "${CML_VERSION}" | cut -d'-' -f 2)
+if [ -z "CML_CHANNEL" ]; then
+    echo "Missing channel in: $CML_VERSION"
+    exit 1
+fi
+
 CML_PKG_NAME="cml-compiler-${CML_VERSION}.zip"
 CML_RELEASE_DIR="cml-releases/cml-compiler"
 CML_ROOT="../.."
@@ -141,12 +160,6 @@ end
 EOF
 if [ $? -ne 0 ]; then exit; fi
 
-CML_MAJOR=$(echo "${CML_VERSION}" | cut -d'.' -f 1)
-if [ $? -ne 0 ]; then exit; fi
-
-CML_MINOR=$(echo "${CML_VERSION}" | cut -d'.' -f 2)
-if [ $? -ne 0 ]; then exit; fi
-
 CML_MINOR_VERSION="${CML_MAJOR}.${CML_MINOR}"
 CML_MINOR_VERSION_JOINED="${CML_MAJOR}${CML_MINOR}"
 CML_MINOR_FORMULA="cml-compiler@${CML_MINOR_VERSION}.rb"
@@ -157,6 +170,10 @@ CML_MAJOR_FORMULA="cml-compiler@${CML_MAJOR}.rb"
 sed "s/CmlCompiler/CmlCompilerAT${CML_MAJOR}/g" < ${CML_FORMULA} > "${CML_MAJOR_FORMULA}"
 if [ $? -ne 0 ]; then exit; fi
 
+CML_CHANNEL_FORMULA="cml-compiler@${CML_CHANNEL}.rb"
+sed "s/CmlCompiler/CmlCompilerAT${CML_CHANNEL}/g" < ${CML_FORMULA} > "${CML_CHANNEL_FORMULA}"
+if [ $? -ne 0 ]; then exit; fi
+
 git add ${CML_FORMULA}
 if [ $? -ne 0 ]; then exit; fi
 
@@ -164,6 +181,9 @@ git add ${CML_MAJOR_FORMULA}
 if [ $? -ne 0 ]; then exit; fi
 
 git add ${CML_MINOR_FORMULA}
+if [ $? -ne 0 ]; then exit; fi
+
+git add ${CML_CHANNEL_FORMULA}
 if [ $? -ne 0 ]; then exit; fi
 
 git commit -m "Committing version ${CML_VERSION} of CML Compiler."
