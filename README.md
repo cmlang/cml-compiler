@@ -69,7 +69,8 @@ After that, the CML compiler packages will be available to be installed.
 To find the versions of the CML compiler available to install:
 
 ```
-$ brew search cml-compiler
+$ brew update # To fetch all available versions.
+$ brew search cml-compiler # To list available versions.
 ```
 
 To read the release notes of a specific version, please go to (look for the '.zip.notes.md' files): https://github.com/cmlang/cml-releases/tree/master/cml-compiler
