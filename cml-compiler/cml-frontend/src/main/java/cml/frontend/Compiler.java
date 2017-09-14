@@ -51,8 +51,8 @@ class CompilerImpl implements Compiler
         final String modulesBaseDir = fileSystem.extractParentPath(modulePath);
         
         moduleManager.clearBaseDirs();
-        moduleManager.addBaseDir(modulesBaseDir);
         moduleManager.addBaseDir(System.getenv("CML_MODULES_PATH"));
+        moduleManager.addBaseDir(modulesBaseDir);
 
         final Model model = Model.create();
         final int exitCode = modelLoader.loadModel(model, modulePath);
