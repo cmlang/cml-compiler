@@ -191,6 +191,7 @@ if [ $? -ne 0 ]; then exit; fi
 git push --tags origin master
 if [ $? -ne 0 ]; then exit; fi
 
+cd cml-compiler
 snapshot-version ${CML_SNAPSHOT_VERSION}
 if [ $? -ne 0 ]; then exit; fi
 
