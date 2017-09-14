@@ -1,16 +1,25 @@
 #!/usr/bin/env bash
 
-if [ -z "$1" ]; then
-    echo Please specify the release version as the first argument.
-    exit 1
+git diff-index --quiet HEAD --
+if [ $? -ne 0 ]; then
+    echo "Please commit changes before doing a release."
+    exit
 fi
 
-if [ -z "$2" ]; then
-    echo Please specify the snapshot version as the second argument.
+if [ -z "$1" ]; then
+    echo Please specify the release version as the first argument.
+    echo Optionally, also specify the snapshot version to follow the release as the second argument.
     exit 1
 fi
 
 CML_SNAPSHOT_VERSION="$2"
+
+if [ -z "$CML_SNAPSHOT_VERSION" ]; then
+    CML_SNAPSHOT_VERSION="master-SNAPSHOT"
+    echo "CML_SNAPSHOT_VERSION: $CML_SNAPSHOT_VERSION"
+    exit 1
+fi
+
 CML_VERSION="$1"
 CML_PKG_NAME="cml-compiler-${CML_VERSION}.zip"
 CML_RELEASE_DIR="cml-releases/cml-compiler"
