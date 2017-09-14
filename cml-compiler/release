@@ -6,7 +6,7 @@ if [ $? -ne 0 ]; then
     exit
 fi
 
-curl -s "https://api.travis-ci.org/cmlang/cml-compiler.svg?branch=master" | grep pass
+curl -s "https://api.travis-ci.org/cmlang/cml-compiler.svg?branch=master" | grep pass > /dev/null
 if [ $? -ne 0 ]; then
     echo "Please make sure you have a successful build before doing a release."
     exit
