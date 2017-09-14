@@ -81,12 +81,14 @@ If you'd like to always have the latest version of the CML compiler,
 regardless of the channel where it was released:
 
 ```
+$ brew update # To fetch all available versions.
 $ brew install cml-compiler
 ```
 
 Later on, to upgrade to the latest version:
 
 ```
+$ brew update # To fetch all available versions.
 $ brew upgrade cml-compiler
 ```
 
@@ -99,12 +101,14 @@ but you may also get a beta or an alpha release.
 If you'd like to get the latest release of a specific channel:
 
 ```
+$ brew update # To fetch all available versions.
 $ brew install cml-compiler@CHANNEL
 ```
 
 Once you've installed it, you can upgrade to the latest release of the channel with:
 
 ```
+$ brew update # To fetch all available versions.
 $ brew upgrade cml-compiler@CHANNEL
 ```
 
@@ -113,6 +117,7 @@ $ brew upgrade cml-compiler@CHANNEL
 You can also get the release of a specific day:
 
 ```
+$ brew update # To fetch all available versions.
 $ brew install cml-compiler@YEAR.MONTH.DAY
 ```
 
@@ -121,12 +126,14 @@ $ brew install cml-compiler@YEAR.MONTH.DAY
 You can even get the latest release of a specific year:
 
 ```
+$ brew update # To fetch all available versions.
 $ brew install cml-compiler@YEAR
 ```
 
 If you've installed the current year, you can upgrade to the latest release of the current year with:
 
 ```
+$ brew update # To fetch all available versions.
 $ brew upgrade cml-compiler@CURRENT_YEAR
 ```
 
