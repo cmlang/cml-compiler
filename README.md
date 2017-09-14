@@ -16,10 +16,6 @@ One of the following is required to install the CML compiler:
 - Homebrew (on macOS - at https://brew.sh)
 - Linuxbrew (on Linux - at http://linuxbrew.sh)
 
-NOTE for Linux users: We have not yet tested the installation on Linux,
-but we expect you should be able to use Linuxbrew on Linux
-when following the installation instructions below.
-
 Please report an issue if you cannot get the CML compiler installed using Homebrew or Linuxbrew.
 
 ### Java 8
@@ -33,8 +29,8 @@ Please report an issue, otherwise.
 ## Quick, Two-Step Install with Homebrew / Linuxbrew
 
 ```
-$ brew tap cmlang/cml
-$ brew install cml-compiler
+$ brew tap cmlang/cml # To make the CML compiler packages available.
+$ brew install cml-compiler@stable # To install the latest stable release.
 ```
 
 ## Release Notes
@@ -43,16 +39,20 @@ To read the release notes of a specific version, please go to: https://github.co
 
 Look for the files ending with '.zip.notes.md'. For example: cml-compiler-1.0.zip.notes.md
 
-## Semantic Versioning
+## Release Versioning
 
-The releases of the CML compiler follow Semantic Versioning: http://semver.org
+The release version format is YEAR.MONTH.DAY-CHANNEL, where:
+- YEAR/MONTH/DAY: the year/month/day the version was released.
+- CHANNEL: which channel the release was published in:
+-- _stable_: backward-compatible, high-quality releases; low-risk upgrade.
+-- _beta_: candidate releases with increasing quality/compatibility; medium-risk upgrade.
+-- _alpha_: development releases; no quality/compatibility guarantees; high-risk upgrade.
 
-The version format is MAJOR.MINOR.PATCH, where each number is incremented as follows:
-- MAJOR: when we make an incompatible language change, or incompatible base library change.
-- MINOR: when we add functionality in a backwards-compatible manner.
-- PATCH: when we only make backwards-compatible fixes; and no new functionality is added.
+All release channels may include bug fixes and new features.
+We strive to keep releases backward-compatible and high-quality;
+especially the stable releases.
 
-## Specific Version Installation with Homebrew / Linuxbrew
+## Installing Specific Version with Homebrew / Linuxbrew
 
 ### Finding Packages
 
@@ -76,62 +76,58 @@ To read the release notes of a specific version, please go to (look for the '.zi
 
 ### The Very Latest
 
-If you'd like to always have the latest version of the CML compiler:
+If you'd like to always have the latest version of the CML compiler,
+regardless of the channel where it was released:
 
 ```
 $ brew install cml-compiler
 ```
 
-Later on, to get the latest:
+Later on, to upgrade to the latest version:
 
 ```
 $ brew upgrade cml-compiler
 ```
 
-You may get a new major version,
-and thus backward-incompatible version,
-of the CML language and compiler.
-You may also get a new minor version, or a patch.
+You may get a new stable version,
+and thus backward-compatible/high-quality version,
+but you may also get a beta or an alpha release.
 
-### Specific Major Version
+### Specific Channel
 
-If you'd like to pin your environment to a specific major version:
-
-```
-$ brew install cml-compiler@MAJOR
-```
-
-Later on, to get the latest of the specific major version:
+If you'd like to get the latest release of a specific channel:
 
 ```
-$ brew upgrade cml-compiler@MAJOR
+$ brew install cml-compiler@CHANNEL
 ```
 
-You may get a new minor version,
-which will have new features,
-but it is supposed to always be backward-compatible.
-(Please report an issue otherwise.)
-You may also get a new patch under the major version.
-
-### Specific Minor Version
-
-If you'd like to pin your environment to a specific minor version:
+Once you've installed it, you can upgrade to the latest release of the channel with:
 
 ```
-$ brew install cml-compiler@MAJOR.MINOR
+$ brew upgrade cml-compiler@CHANNEL
 ```
 
-Later on, to get the latest of the specific minor version:
+### Specific Day Version
+
+You can also get the release of a specific day:
 
 ```
-$ brew upgrade cml-compiler@MAJOR.MINOR
+$ brew install cml-compiler@YEAR.MONTH.DAY
 ```
 
-You only get patches for the specific minor version.
-Patches only have fixes.
-They should never have new functionality,
-and should always be backward-compatible.
-(Please report an issue otherwise.)
+### Specific Year Version
+
+You can even get the latest release of a specific year:
+
+```
+$ brew install cml-compiler@YEAR
+```
+
+If you've installed the current year, you can upgrade to the latest release of the current year with:
+
+```
+$ brew upgrade cml-compiler@CURRENT_YEAR
+```
 
 ## Contributing / Development
 

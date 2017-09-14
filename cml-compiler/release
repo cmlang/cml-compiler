@@ -26,19 +26,25 @@ fi
 
 CML_VERSION="$1"
 
-CML_MAJOR=$(echo "${CML_VERSION}" | cut -d'.' -f 1)
-if [ -z "CML_MAJOR" ]; then
-    echo "Missing major version in: $CML_VERSION"
+CML_YEAR=$(echo "${CML_VERSION}" | cut -s -d'.' -f 1)
+if [ -z "CML_YEAR" ]; then
+    echo "Missing year in: $CML_VERSION"
     exit 1
 fi
 
-CML_MINOR=$(echo "${CML_VERSION}" | cut -d'.' -f 2)
-if [ -z "CML_MINOR" ]; then
-    echo "Missing minor version in: $CML_VERSION"
+CML_MONTH=$(echo "${CML_VERSION}" | cut -s -d'.' -f 2)
+if [ -z "CML_MONTH" ]; then
+    echo "Missing month in: $CML_VERSION"
     exit 1
 fi
 
-CML_CHANNEL=$(echo "${CML_VERSION}" | cut -d'-' -f 2)
+CML_DAY=$(echo "${CML_VERSION}" | cut -s -d'.' -f 3 | cut -s -d'-' -f 1)
+if [ -z "CML_DAY" ]; then
+    echo "Missing day in: $CML_VERSION"
+    exit 1
+fi
+
+CML_CHANNEL=$(echo "${CML_VERSION}" | cut -s -d'-' -f 2)
 if [ -z "CML_CHANNEL" ]; then
     echo "Missing channel in: $CML_VERSION"
     exit 1
@@ -160,14 +166,14 @@ end
 EOF
 if [ $? -ne 0 ]; then exit; fi
 
-CML_MINOR_VERSION="${CML_MAJOR}.${CML_MINOR}"
-CML_MINOR_VERSION_JOINED="${CML_MAJOR}${CML_MINOR}"
+CML_MINOR_VERSION="${CML_YEAR}.${CML_MONTH}.${CML_DAY}"
+CML_MINOR_VERSION_JOINED="${CML_YEAR}${CML_MONTH}${CML_DAY}"
 CML_MINOR_FORMULA="cml-compiler@${CML_MINOR_VERSION}.rb"
 sed "s/CmlCompiler/CmlCompilerAT${CML_MINOR_VERSION_JOINED}/g" < ${CML_FORMULA} > "${CML_MINOR_FORMULA}"
 if [ $? -ne 0 ]; then exit; fi
 
-CML_MAJOR_FORMULA="cml-compiler@${CML_MAJOR}.rb"
-sed "s/CmlCompiler/CmlCompilerAT${CML_MAJOR}/g" < ${CML_FORMULA} > "${CML_MAJOR_FORMULA}"
+CML_MAJOR_FORMULA="cml-compiler@${CML_YEAR}.rb"
+sed "s/CmlCompiler/CmlCompilerAT${CML_YEAR}/g" < ${CML_FORMULA} > "${CML_MAJOR_FORMULA}"
 if [ $? -ne 0 ]; then exit; fi
 
 CML_CHANNEL_FORMULA="cml-compiler@${CML_CHANNEL}.rb"
