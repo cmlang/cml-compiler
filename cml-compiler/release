@@ -6,6 +6,12 @@ if [ $? -ne 0 ]; then
     exit
 fi
 
+curl -s "https://api.travis-ci.org/cmlang/cml-compiler.svg?branch=master" | grep pass
+if [ $? -ne 0 ]; then
+    echo "Please make sure you have a successful build before doing a release."
+    exit
+fi
+
 if [ -z "$1" ]; then
     echo Please specify the release version as the first argument.
     echo Optionally, also specify the snapshot version to follow the release as the second argument.
