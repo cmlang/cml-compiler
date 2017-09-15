@@ -1,0 +1,13 @@
+
+init_file(task, model) ::= <<
+from typing import *
+from abc import *
+from decimal import *
+
+<if(model.associations)>
+<model.associations:py_association_class();separator="\n\n\n">
+
+
+<endif>
+<model.orderedConcepts:py_concept_class();separator="\n\n\n">
+>>

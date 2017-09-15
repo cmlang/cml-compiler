@@ -1,4 +1,6 @@
 
+import "/design/poj.stg"
+
 association_file(task, association) ::= <<
 package <task.packageName>;
 

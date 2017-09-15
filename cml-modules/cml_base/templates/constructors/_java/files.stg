@@ -1,6 +1,6 @@
 
 model_files(task, model) ::= <<
-java:pom|pom.xml
+_java:pom_file|pom.xml
 >>
 
 concept_files(task, concept) ::= <<

@@ -1,6 +1,4 @@
 
-import "/lang/common/structure.stg"
-
 association_class(association, class_name_suffix) ::= <<
 <modifier("public")><\\>
 <structure(
@@ -41,7 +39,12 @@ association_link_methods(association) ::= <<
 <association_one_to_many_link_method(association)>
 
 <endif><\\>
-<association_link_method(association)>
+<association_link_method(association)><\\>
+<if(association.oneToOne)><\\>
+
+
+<association_link_method_reversed(association)><\\>
+<endif>
 >>
 
 association_one_to_many_link_method(association) ::= <<
@@ -59,6 +62,16 @@ association_link_method(association) ::= <<
 <instance_operation(
     name="link",
     params=association.propertyTypes,
+    result_type=void(),
+    statements=association_link_method_statements(association.associationEnds)
+)>
+>>
+
+association_link_method_reversed(association) ::= <<
+<modifier("synchronized")><\\>
+<instance_operation(
+    name="link",
+    params=association.reversedPropertyTypes,
     result_type=void(),
     statements=association_link_method_statements(association.associationEnds)
 )>

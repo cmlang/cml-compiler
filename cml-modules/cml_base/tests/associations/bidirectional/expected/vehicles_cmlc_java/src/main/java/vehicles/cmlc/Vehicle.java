@@ -30,19 +30,19 @@ public interface Vehicle
 class VehicleImpl implements Vehicle
 {
     private static VehicleOwnership vehicleOwnership;
+    private static VehicleAssignment vehicleAssignment;
 
     private final @Nullable Vehicle actual_self;
 
     private final String plate;
-    private final @Nullable Employee driver;
 
     VehicleImpl(@Nullable Vehicle actual_self, String plate, @Nullable Employee driver, Organization owner)
     {
         this.actual_self = actual_self == null ? this : actual_self;
 
         this.plate = plate;
-        this.driver = driver;
 
+        vehicleAssignment.link(driver, this.actual_self);
         vehicleOwnership.link(owner, this.actual_self);
     }
 
@@ -53,7 +53,7 @@ class VehicleImpl implements Vehicle
 
     public Optional<Employee> getDriver()
     {
-        return Optional.ofNullable(this.driver);
+        return vehicleAssignment.driverOf(actual_self);
     }
 
     public Organization getOwner()
@@ -65,8 +65,7 @@ class VehicleImpl implements Vehicle
     {
         return new StringBuilder(Vehicle.class.getSimpleName())
                    .append('(')
-                   .append("plate=").append(String.format("\"%s\"", getPlate())).append(", ")
-                   .append("driver=").append(getDriver().isPresent() ? String.format("\"%s\"", getDriver()) : "not present")
+                   .append("plate=").append(String.format("\"%s\"", getPlate()))
                    .append(')')
                    .toString();
     }
@@ -76,8 +75,14 @@ class VehicleImpl implements Vehicle
         vehicleOwnership = association;
     }
 
+    static void setVehicleAssignment(VehicleAssignment association)
+    {
+        vehicleAssignment = association;
+    }
+
     static
     {
         VehicleOwnership.init(Vehicle.class);
+        VehicleAssignment.init(Vehicle.class);
     }
 }

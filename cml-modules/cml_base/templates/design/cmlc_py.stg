@@ -1,0 +1,10 @@
+
+import "/design/cmlc_py/interface.stg"
+import "/design/cmlc_py/class.stg"
+
+import "/design/cmlc.stg"
+import "/design/py.stg"
+import "/design/common.stg"
+
+import "/lang/py.stg"
+

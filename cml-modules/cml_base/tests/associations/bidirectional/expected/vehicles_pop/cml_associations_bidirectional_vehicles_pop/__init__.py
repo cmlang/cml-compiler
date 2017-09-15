@@ -16,7 +16,7 @@ class _Employment:
         self.__employees = {}  # type: Dict[Organization, List[Employee]]
 
     def link_many(self, employer: 'Organization', employees: 'List[Employee]') -> 'None':
-        for employee in employees: self.link(employer, employee)
+        for employee in employees: self.link(organization=employer, employee=employee)
 
     def link(self, organization: 'Organization', employee: 'Employee') -> 'None':
         self.__employer[employee] = organization
@@ -57,7 +57,7 @@ class _VehicleOwnership:
         self.__fleet = {}  # type: Dict[Organization, List[Vehicle]]
 
     def link_many(self, owner: 'Organization', fleet: 'List[Vehicle]') -> 'None':
-        for vehicle in fleet: self.link(owner, vehicle)
+        for vehicle in fleet: self.link(organization=owner, vehicle=vehicle)
 
     def link(self, organization: 'Organization', vehicle: 'Vehicle') -> 'None':
         self.__owner[vehicle] = organization
@@ -84,15 +84,47 @@ class _VehicleOwnership:
         return list(vehicle_list)
 
 
+class _VehicleAssignment:
+
+    _singleton = None
+
+    def __new__(cls) -> '_VehicleAssignment':
+        if cls._singleton is None:
+            cls._singleton = super(_VehicleAssignment, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self) -> 'None':
+        self.__driver = {}  # type: Dict[Vehicle, Optional[Employee]]
+        self.__vehicle = {}  # type: Dict[Employee, Optional[Vehicle]]
+
+    def link(self, employee: 'Employee', vehicle: 'Vehicle') -> 'None':
+        self.__driver[vehicle] = employee
+
+        self.__vehicle[employee] = vehicle
+
+    def driver_of(self, vehicle: 'Vehicle') -> 'Employee':
+        if vehicle in self.__driver:
+            return self.__driver[vehicle]
+        else:
+            return None
+
+    def vehicle_of(self, employee: 'Employee') -> 'Vehicle':
+        if employee in self.__vehicle:
+            return self.__vehicle[employee]
+        else:
+            return None
+
+
 class Vehicle:
 
     _vehicle_ownership = _VehicleOwnership()
+    _vehicle_assignment = _VehicleAssignment()
 
     def __init__(self, plate: 'str', driver: 'Optional[Employee]', owner: 'Organization') -> 'None':
         self.__plate = plate
-        self.__driver = driver
 
-        self._vehicle_ownership.link(owner, self)
+        self._vehicle_assignment.link(employee=driver, vehicle=self)
+        self._vehicle_ownership.link(organization=owner, vehicle=self)
 
     @property
     def plate(self) -> 'str':
@@ -100,28 +132,29 @@ class Vehicle:
 
     @property
     def driver(self) -> 'Employee':
-        return self.__driver
+        return self._vehicle_assignment.driver_of(self)
 
     @property
     def owner(self) -> 'Organization':
         return self._vehicle_ownership.owner_of(self)
 
     def __str__(self) -> 'str':
-        return "%s(plate=%s, driver=%s)" % (
+        return "%s(plate=%s)" % (
             type(self).__name__,
-            self.plate,
-            self.driver
+            self.plate
         )
 
 
 class Employee:
 
     _employment = _Employment()
+    _vehicle_assignment = _VehicleAssignment()
 
-    def __init__(self, name: 'str', employer: 'Organization') -> 'None':
+    def __init__(self, name: 'str', employer: 'Organization', vehicle: 'Optional[Vehicle]') -> 'None':
         self.__name = name
 
-        self._employment.link(employer, self)
+        self._employment.link(organization=employer, employee=self)
+        self._vehicle_assignment.link(vehicle=vehicle, employee=self)
 
     @property
     def name(self) -> 'str':
@@ -130,6 +163,10 @@ class Employee:
     @property
     def employer(self) -> 'Organization':
         return self._employment.employer_of(self)
+
+    @property
+    def vehicle(self) -> 'Vehicle':
+        return self._vehicle_assignment.vehicle_of(self)
 
     def __str__(self) -> 'str':
         return "%s(name=%s)" % (

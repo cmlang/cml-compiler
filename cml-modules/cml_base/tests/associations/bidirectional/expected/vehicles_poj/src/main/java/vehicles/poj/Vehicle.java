@@ -11,15 +11,15 @@ import static java.util.stream.Collectors.*;
 public class Vehicle
 {
     private static VehicleOwnership vehicleOwnership;
+    private static VehicleAssignment vehicleAssignment;
 
     private final String plate;
-    private final @Nullable Employee driver;
 
     public Vehicle(String plate, @Nullable Employee driver, Organization owner)
     {
         this.plate = plate;
-        this.driver = driver;
 
+        vehicleAssignment.link(driver, this);
         vehicleOwnership.link(owner, this);
     }
 
@@ -30,7 +30,7 @@ public class Vehicle
 
     public Optional<Employee> getDriver()
     {
-        return Optional.ofNullable(this.driver);
+        return vehicleAssignment.driverOf(this);
     }
 
     public Organization getOwner()
@@ -42,8 +42,7 @@ public class Vehicle
     {
         return new StringBuilder(Vehicle.class.getSimpleName())
                    .append('(')
-                   .append("plate=").append(String.format("\"%s\"", getPlate())).append(", ")
-                   .append("driver=").append(getDriver().isPresent() ? String.format("\"%s\"", getDriver()) : "not present")
+                   .append("plate=").append(String.format("\"%s\"", getPlate()))
                    .append(')')
                    .toString();
     }
@@ -53,8 +52,14 @@ public class Vehicle
         vehicleOwnership = association;
     }
 
+    static void setVehicleAssignment(VehicleAssignment association)
+    {
+        vehicleAssignment = association;
+    }
+
     static
     {
         VehicleOwnership.init(Vehicle.class);
+        VehicleAssignment.init(Vehicle.class);
     }
 }

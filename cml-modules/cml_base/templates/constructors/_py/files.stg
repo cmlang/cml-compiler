@@ -1,7 +1,10 @@
 
-import "/constructors/python/common.stg"
-
 model_files(task, model) ::= <<
-python:setup_file|setup.py
+_py:setup_file|setup.py
 init_file|<python_file_name(task.moduleName)>/__init__.py
 >>
+
+python_file_name(name) ::= <<
+<name; format="underscore-case">
+>>
+

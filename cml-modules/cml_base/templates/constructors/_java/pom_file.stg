@@ -1,4 +1,5 @@
-pom(task, model) ::= <<
+
+pom_file(task, model) ::= <<
 <project_start()>
 
     \<modelVersion>4.0.0\</modelVersion>

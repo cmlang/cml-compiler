@@ -11,14 +11,16 @@ import static java.util.stream.Collectors.*;
 public class Employee
 {
     private static Employment employment;
+    private static VehicleAssignment vehicleAssignment;
 
     private final String name;
 
-    public Employee(String name, Organization employer)
+    public Employee(String name, Organization employer, @Nullable Vehicle vehicle)
     {
         this.name = name;
 
         employment.link(employer, this);
+        vehicleAssignment.link(vehicle, this);
     }
 
     public String getName()
@@ -29,6 +31,11 @@ public class Employee
     public Organization getEmployer()
     {
         return employment.employerOf(this).get();
+    }
+
+    public Optional<Vehicle> getVehicle()
+    {
+        return vehicleAssignment.vehicleOf(this);
     }
 
     public String toString()
@@ -45,8 +52,14 @@ public class Employee
         employment = association;
     }
 
+    static void setVehicleAssignment(VehicleAssignment association)
+    {
+        vehicleAssignment = association;
+    }
+
     static
     {
         Employment.init(Employee.class);
+        VehicleAssignment.init(Employee.class);
     }
 }

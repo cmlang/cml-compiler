@@ -13,9 +13,9 @@ public class Launcher
         System.out.println("Bidirectional Associations (cmlc_java)\n");
 
         final Corporation corporation = Corporation.createCorporation("Walt Disney", emptyList(), emptyList());
-        final Employee donald = Employee.createEmployee("Donald Duck", corporation);
-        final Employee mickey = Employee.createEmployee("Mickey Mouse", corporation);
-        final Vehicle duck = Vehicle.createVehicle("DUCK", donald, corporation);
+        final Vehicle duck = Vehicle.createVehicle("DUCK", null, corporation);
+        final Employee donald = Employee.createEmployee("Donald Duck", corporation, duck);
+        final Employee mickey = Employee.createEmployee("Mickey Mouse", corporation, null);
         final Vehicle mouse = Vehicle.createVehicle("MOUSE", mickey, corporation);
 
         System.out.println(corporation);
@@ -25,10 +25,12 @@ public class Launcher
 
         System.out.println(donald);
         System.out.println("- Employer: " + donald.getEmployer());
+        System.out.println("- Vehicle: " + donald.getVehicle());
         System.out.println();
 
         System.out.println(mickey);
         System.out.println("- Employer: " + mickey.getEmployer());
+        System.out.println("- Vehicle: " + mickey.getVehicle());
         System.out.println();
 
         System.out.println(duck);

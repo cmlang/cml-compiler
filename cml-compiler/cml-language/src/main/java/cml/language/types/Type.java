@@ -90,6 +90,11 @@ public interface Type extends ModelElement
         return false;
     }
 
+    default boolean isSingle()
+    {
+        return (isRequired() || isOptional()) && !isSequence();
+    }
+
     default boolean isSequence()
     {
         return false;

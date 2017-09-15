@@ -1,12 +1,13 @@
 
-import "/constructors/python/init_file.stg"
-import "/design/plain.stg"
+import "/design/pop.stg"
 
-concept_file(concept) ::= <<
+import "/constructors/_py/init_file.stg"
+
+py_concept_class(concept) ::= <<
 <class(concept)>
 >>
 
-association_file(association) ::= <<
+py_association_class(association) ::= <<
 <association_class(association, "")>
 >>
 

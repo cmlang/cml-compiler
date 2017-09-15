@@ -3,7 +3,6 @@ import "/lang/common/generic.stg"
 import "/lang/common/getter.stg"
 import "/lang/common/to_string.stg"
 import "/lang/common/interface.stg"
-import "/lang/common/association.stg"
 
 class(concept) ::= <<
 <class7(

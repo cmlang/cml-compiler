@@ -10,6 +10,7 @@ concept Employee
 {
     name: String;
     employer: Organization;
+    vehicle: Vehicle?;
 }
 
 abstract concept Organization
@@ -35,6 +36,12 @@ association VehicleOwnership
 {
     Vehicle.owner: Organization;
     Organization.fleet: Vehicle*;
+}
+
+association VehicleAssignment
+{
+    Vehicle.driver: Employee?;
+    Employee.vehicle: Vehicle?;
 }
 
 task vehicles_poj by poj

@@ -11,6 +11,7 @@ import java.util.Optional;
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.seq;
 
 public interface Association extends NamedElement, Scope
 {
@@ -41,11 +42,22 @@ public interface Association extends NamedElement, Scope
             .collect(toList());
     }
 
+    default List<Type> getReversedPropertyTypes()
+    {
+        return seq(getPropertyTypes()).reverse().toList();
+    }
+
     @SuppressWarnings("unused")
     default boolean isOneToMany()
     {
         return oneToMany(getAssociationEnds().get(0), getAssociationEnds().get(1)) ||
                oneToMany(getAssociationEnds().get(1), getAssociationEnds().get(0));
+    }
+
+    @SuppressWarnings("unused")
+    default boolean isOneToOne()
+    {
+        return oneToOne(getAssociationEnds().get(0), getAssociationEnds().get(1));
     }
 
     default Optional<Property> getOneProperty()
@@ -84,6 +96,14 @@ public interface Association extends NamedElement, Scope
         assert end2.getProperty().isPresent();
 
         return !end1.getProperty().get().getType().isSequence() && end2.getProperty().get().getType().isSequence();
+    }
+
+    static boolean oneToOne(AssociationEnd end1, AssociationEnd end2)
+    {
+        assert end1.getProperty().isPresent();
+        assert end2.getProperty().isPresent();
+
+        return end1.getProperty().get().getType().isSingle() && end2.getProperty().get().getType().isSingle();
     }
 
     static Association create(String name)

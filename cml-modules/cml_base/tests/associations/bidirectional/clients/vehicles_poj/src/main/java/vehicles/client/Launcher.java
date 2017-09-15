@@ -13,10 +13,10 @@ public class Launcher
         System.out.println("Bidirectional Associations (poj)\n");
 
         final Corporation corporation = new Corporation("Walt Disney", emptyList(), emptyList());
-        final Employee donald = new Employee("Donald Duck", corporation);
-        final Employee mickey = new Employee("Mickey Mouse", corporation);
+        final Vehicle mouse = new Vehicle("MOUSE", null, corporation);
+        final Employee donald = new Employee("Donald Duck", corporation, null);
+        final Employee mickey = new Employee("Mickey Mouse", corporation, mouse);
         final Vehicle duck = new Vehicle("DUCK", donald, corporation);
-        final Vehicle mouse = new Vehicle("MOUSE", mickey, corporation);
 
         System.out.println(corporation);
         System.out.println("- Employees: " + corporation.getEmployees());
@@ -25,10 +25,12 @@ public class Launcher
 
         System.out.println(donald);
         System.out.println("- Employer: " + donald.getEmployer());
+        System.out.println("- Vehicle: " + donald.getVehicle());
         System.out.println();
 
         System.out.println(mickey);
         System.out.println("- Employer: " + mickey.getEmployer());
+        System.out.println("- Vehicle: " + mickey.getVehicle());
         System.out.println();
 
         System.out.println(duck);

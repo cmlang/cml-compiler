@@ -1,17 +1,16 @@
 
-import "/design/cmlc.stg"
-import "/constructors/python/init_file.stg"
-import "/constructors/cmlc_py/interface.stg"
-import "/constructors/cmlc_py/class.stg"
+import "/design/cmlc_py.stg"
 
-concept_file(concept) ::= <<
+import "/constructors/_py/init_file.stg"
+
+py_concept_class(concept) ::= <<
 <interface(concept, "Impl")>
 
 
 <class2(concept, "Impl")>
 >>
 
-association_file(association) ::= <<
+py_association_class(association) ::= <<
 <association_class(association, "")>
 >>
 

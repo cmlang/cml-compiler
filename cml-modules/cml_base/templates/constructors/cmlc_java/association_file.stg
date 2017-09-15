@@ -1,4 +1,6 @@
 
+import "/design/cmlc_java.stg"
+
 association_file(task, association) ::= <<
 package <task.packageName>;
 

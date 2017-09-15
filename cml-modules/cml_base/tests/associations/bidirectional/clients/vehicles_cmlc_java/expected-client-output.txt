@@ -2,18 +2,20 @@ Bidirectional Associations (cmlc_java)
 
 Corporation(stock="true", profit="true", name="Walt Disney")
 - Employees: [Employee(name="Donald Duck"), Employee(name="Mickey Mouse")]
-- Fleet: [Vehicle(plate="DUCK", driver="Optional[Employee(name="Donald Duck")]"), Vehicle(plate="MOUSE", driver="Optional[Employee(name="Mickey Mouse")]")]
+- Fleet: [Vehicle(plate="DUCK"), Vehicle(plate="MOUSE")]
 
 Employee(name="Donald Duck")
 - Employer: Corporation(stock="true", profit="true", name="Walt Disney")
+- Vehicle: Optional[Vehicle(plate="DUCK")]
 
 Employee(name="Mickey Mouse")
 - Employer: Corporation(stock="true", profit="true", name="Walt Disney")
+- Vehicle: Optional[Vehicle(plate="MOUSE")]
 
-Vehicle(plate="DUCK", driver="Optional[Employee(name="Donald Duck")]")
+Vehicle(plate="DUCK")
 - Owner: Corporation(stock="true", profit="true", name="Walt Disney")
 - Driver: Optional[Employee(name="Donald Duck")]
 
-Vehicle(plate="MOUSE", driver="Optional[Employee(name="Mickey Mouse")]")
+Vehicle(plate="MOUSE")
 - Owner: Corporation(stock="true", profit="true", name="Walt Disney")
 - Driver: Optional[Employee(name="Mickey Mouse")]

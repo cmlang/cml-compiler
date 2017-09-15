@@ -2,18 +2,20 @@ Bidirectional Associations (pop)
 
 Corporation(stock=True, profit=True, name=Walt Disney)
 - Employees: Employee(name=Donald Duck), Employee(name=Mickey Mouse)
-- Fleet: Vehicle(plate=DUCK, driver=Employee(name=Donald Duck)), Vehicle(plate=MOUSE, driver=Employee(name=Mickey Mouse))
+- Fleet: Vehicle(plate=MOUSE), Vehicle(plate=DUCK)
 
 Employee(name=Donald Duck)
 - Employer: Corporation(stock=True, profit=True, name=Walt Disney)
+- Vehicle: Vehicle(plate=DUCK)
 
 Employee(name=Mickey Mouse)
 - Employer: Corporation(stock=True, profit=True, name=Walt Disney)
+- Vehicle: Vehicle(plate=MOUSE)
 
-Vehicle(plate=DUCK, driver=Employee(name=Donald Duck))
+Vehicle(plate=DUCK)
 - Owner: Corporation(stock=True, profit=True, name=Walt Disney)
 - Driver: Employee(name=Donald Duck)
 
-Vehicle(plate=MOUSE, driver=Employee(name=Mickey Mouse))
+Vehicle(plate=MOUSE)
 - Owner: Corporation(stock=True, profit=True, name=Walt Disney)
 - Driver: Employee(name=Mickey Mouse)

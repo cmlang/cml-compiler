@@ -1,28 +1,15 @@
 package cml.templates;
 
 import cml.io.Console;
-import org.jetbrains.annotations.Nullable;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupFile;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
-
-import static java.lang.String.format;
 
 public interface TemplateRenderer
 {
-    default String renderTemplate(TemplateFile templateFile, String templateName, Map<String, Object> args)
-    {
-        return renderTemplate(templateFile, templateName, args, null);
-    }
-
-    String renderTemplate(
-        TemplateFile templateFile,
-        String templateName,
-        Map<String, Object> args,
-        @Nullable String targetLanguageExtension);
+    String renderTemplate(TemplateFile templateFile, String templateName, Map<String, Object> args);
 
     static TemplateRenderer create(Console console)
     {
@@ -32,7 +19,6 @@ public interface TemplateRenderer
 
 class TemplateRendererImpl implements TemplateRenderer
 {
-    private static final String LANGUAGE_GROUP = "cml_base:/lang/%s.stg";
     private static final String UNABLE_TO_LOAD_TEMPLATE = "Unable to load template named '%s' from file: %s";
 
     private final Console console;
@@ -43,20 +29,9 @@ class TemplateRendererImpl implements TemplateRenderer
     }
 
     @Override
-    public String renderTemplate(
-        TemplateFile templateFile,
-        String templateName,
-        Map<String, Object> args,
-        @Nullable String targetLanguageExtension)
+    public String renderTemplate(TemplateFile templateFile, String templateName, Map<String, Object> args)
     {
         final STGroupFile groupFile = new TemplateGroupFile(templateFile.getPath());
-
-        if (targetLanguageExtension != null)
-        {
-            final Optional<TemplateGroupFile> languageTemplates = loadLanguageTemplates(targetLanguageExtension);
-
-            languageTemplates.ifPresent(groupFile::importTemplates);
-        }
 
         final ST template = groupFile.getInstanceOf(templateName);
 
@@ -73,19 +48,6 @@ class TemplateRendererImpl implements TemplateRenderer
         }
 
         return template.render();
-    }
-
-    private static Optional<TemplateGroupFile> loadLanguageTemplates(@Nullable String targetLanguageExtension)
-    {
-        try
-        {
-            return Optional.of(new TemplateGroupFile(format(LANGUAGE_GROUP, targetLanguageExtension)));
-        }
-        catch (IllegalArgumentException ignored)
-        {
-            // ignore - no language group for file type.
-            return Optional.empty();
-        }
     }
 }
 
