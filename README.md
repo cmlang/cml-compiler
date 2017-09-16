@@ -30,7 +30,7 @@ Please report an issue, otherwise.
 
 ```
 $ brew tap cmlang/cml # To make the CML compiler packages available.
-$ brew install cml-compiler@stable # To install the latest stable release.
+$ brew install cml-compiler # To install the latest release.
 ```
 
 ## Release Notes
@@ -102,14 +102,14 @@ If you'd like to get the latest release of a specific channel:
 
 ```
 $ brew update # To fetch all available versions.
-$ brew install cml-compiler@CHANNEL
+$ brew install cml-compiler-CHANNEL # where CHANNEL = alpha | beta | stable
 ```
 
 Once you've installed it, you can upgrade to the latest release of the channel with:
 
 ```
 $ brew update # To fetch all available versions.
-$ brew upgrade cml-compiler@CHANNEL
+$ brew upgrade cml-compiler-CHANNEL # where CHANNEL = alpha | beta | stable
 ```
 
 ### Specific Day Version

@@ -196,8 +196,9 @@ CML_MAJOR_FORMULA="cml-compiler@${CML_YEAR}.rb"
 sed "s/CmlCompiler/CmlCompilerAT${CML_YEAR}/g" < ${CML_FORMULA} > "${CML_MAJOR_FORMULA}"
 if [ $? -ne 0 ]; then exit; fi
 
-CML_CHANNEL_FORMULA="cml-compiler@${CML_CHANNEL}.rb"
-sed "s/CmlCompiler/CmlCompilerAT${CML_CHANNEL}/g" < ${CML_FORMULA} > "${CML_CHANNEL_FORMULA}"
+CML_CHANNEL_CLASS=$(echo ${CML_CHANNEL} | sed -e 's/^a/A/g' -e 's/^b/B/g' -e 's/^s/S/g')
+CML_CHANNEL_FORMULA="cml-compiler-${CML_CHANNEL}.rb"
+sed "s/CmlCompiler/CmlCompiler${CML_CHANNEL_CLASS}/g" < ${CML_FORMULA} > "${CML_CHANNEL_FORMULA}"
 if [ $? -ne 0 ]; then exit; fi
 
 git add ${CML_FORMULA}
