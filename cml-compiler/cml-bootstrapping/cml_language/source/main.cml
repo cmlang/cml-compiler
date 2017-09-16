@@ -23,8 +23,6 @@ concept Location
     element: ModelElement;
 }
 
-association
-
 task cml_language_java by cmlc_java
 {
     groupId = "cml";
