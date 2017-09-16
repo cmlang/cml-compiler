@@ -88,6 +88,9 @@ if [ ! -f "${CML_ROOT}/${CML_RELEASE_DIR}/${CML_RELEASE_NOTES}"  ]; then
     exit 1
 fi
 
+git pull --tags origin master
+if [ $? -ne 0 ]; then exit; fi
+
 mvn versions:set -DnewVersion=${CML_VERSION}
 if [ $? -ne 0 ]; then exit; fi
 
@@ -114,6 +117,15 @@ if [ $? -ne 0 ]; then exit; fi
 cd "${CML_ROOT}/${CML_RELEASE_DIR}"
 if [ $? -ne 0 ]; then exit; fi
 
+git diff-index --quiet HEAD --
+if [ $? -ne 0 ]; then
+    echo "Uncommitted changes in the release dir."
+    exit
+fi
+
+git pull --tags origin master
+if [ $? -ne 0 ]; then exit; fi
+
 CML_PKG_SHA_TXT="${CML_PKG_NAME}.sha256.txt"
 echo "${CML_PKG_SHA}" >> "${CML_PKG_SHA_TXT}"
 if [ $? -ne 0 ]; then exit; fi
@@ -138,6 +150,15 @@ if [ $? -ne 0 ]; then exit; fi
 
 CML_ROOT="../.."
 cd "${CML_ROOT}/homebrew-cml"
+if [ $? -ne 0 ]; then exit; fi
+
+git diff-index --quiet HEAD --
+if [ $? -ne 0 ]; then
+    echo "Uncommitted changes in the Homebrew dir."
+    exit
+fi
+
+git pull --tags origin master
 if [ $? -ne 0 ]; then exit; fi
 
 CML_FORMULA="cml-compiler.rb"
