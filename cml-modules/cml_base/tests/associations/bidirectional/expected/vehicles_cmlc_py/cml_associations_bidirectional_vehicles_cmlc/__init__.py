@@ -148,6 +148,7 @@ class VehicleImpl(Vehicle):
             self.__actual_self = self  # type: Optional[Vehicle]
         else:
             self.__actual_self = actual_self
+
         self.__plate = plate
 
         self._vehicle_assignment.link(employee=driver, vehicle=self.__actual_self)
@@ -205,6 +206,7 @@ class EmployeeImpl(Employee):
             self.__actual_self = self  # type: Optional[Employee]
         else:
             self.__actual_self = actual_self
+
         self.__name = name
 
         self._employment.link(organization=employer, employee=self.__actual_self)
@@ -258,6 +260,7 @@ class OrganizationImpl(Organization):
             self.__actual_self = self  # type: Optional[Organization]
         else:
             self.__actual_self = actual_self
+
         self.__name = name
 
         self._employment.link_many(self.__actual_self, employees)

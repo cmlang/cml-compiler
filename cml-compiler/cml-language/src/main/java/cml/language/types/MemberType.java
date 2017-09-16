@@ -27,6 +27,20 @@ public class MemberType extends NamedElementBase implements Type
     }
 
     @Override
+    public Type getElementType()
+    {
+        assert !getCardinality().isPresent();
+
+        return this;
+    }
+
+    @Override
+    public boolean isElementTypeAssignableFrom(final Type otherElementType)
+    {
+        return baseType.isElementTypeAssignableFrom(otherElementType);
+    }
+
+    @Override
     public String toString()
     {
         return format("%s.%s", baseType, getName());

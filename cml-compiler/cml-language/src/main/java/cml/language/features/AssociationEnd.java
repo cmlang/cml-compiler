@@ -1,7 +1,12 @@
 package cml.language.features;
 
-import cml.language.foundation.*;
+import cml.language.foundation.Diagnostic;
+import cml.language.foundation.Invariant;
+import cml.language.foundation.InvariantValidator;
+import cml.language.foundation.Property;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import cml.language.types.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,12 +35,12 @@ public interface AssociationEnd extends ModelElement
 
     static AssociationEnd create(String conceptName, String propertyName)
     {
-        return new AssociationEndImpl(conceptName, propertyName, null);
+        return create(conceptName, propertyName, null, null);
     }
 
-    static AssociationEnd create(String conceptName, String propertyName, @Nullable Type propertyType)
+    static AssociationEnd create(String conceptName, String propertyName, @Nullable Type propertyType, Location location)
     {
-        return new AssociationEndImpl(conceptName, propertyName, propertyType);
+        return new AssociationEndImpl(conceptName, propertyName, propertyType, location);
     }
 
     static InvariantValidator<AssociationEnd> invariantValidator()
@@ -57,9 +62,9 @@ class AssociationEndImpl implements AssociationEnd
     private @Nullable Concept concept;
     private @Nullable Property property;
 
-    AssociationEndImpl(String conceptName, String propertyName, @Nullable Type propertyType)
+    AssociationEndImpl(String conceptName, String propertyName, @Nullable Type propertyType, Location location)
     {
-        this.modelElement = ModelElement.create(this);
+        this.modelElement = ModelElement.extendModelElement(this, null, location);
         this.conceptName = conceptName;
         this.propertyName = propertyName;
         this.propertyType = propertyType;
@@ -118,15 +123,9 @@ class AssociationEndImpl implements AssociationEnd
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -171,7 +170,7 @@ class AssociationEndTypeMatchesPropertyType implements Invariant<AssociationEnd>
     {
         return !self.getPropertyType().isPresent() ||
                !self.getProperty().isPresent() ||
-               self.getPropertyType().get().equals(self.getProperty().get().getType());
+               self.getPropertyType().get().isEqualTo(self.getProperty().get().getType());
     }
 
     @Override

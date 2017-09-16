@@ -318,6 +318,12 @@ public class AcceptanceTest
         {
             executeJar(currentDirPath, jarPath, args, expectedExitCode, outputStream);
         }
+        catch (AssertionError error)
+        {
+            System.out.println("Failure in output: \n" + new String(outputStream.toByteArray(), OUTPUT_FILE_ENCODING));
+
+            throw error;
+        }
         finally
         {
             outputStream.close();

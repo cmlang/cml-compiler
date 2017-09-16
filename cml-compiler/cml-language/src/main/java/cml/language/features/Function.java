@@ -45,7 +45,7 @@ public class Function extends TypedElementBase
         int index = 0;
         for (FunctionParameter parameter: getParameters())
         {
-            if (parameter.getMatchingResultType().getElementType().equals(type.getBaseType().getElementType()))
+            if (parameter.getMatchingResultType().getElementType().isElementTypeAssignableFrom(type.getBaseType().getElementType()))
             {
                 if (index != skipIndex) break;
             }

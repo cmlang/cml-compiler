@@ -1,6 +1,8 @@
 package cml.language.foundation;
 
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import cml.language.types.NamedType;
 import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.siblingNamed;
+import static cml.language.generated.ModelElement.extendModelElement;
 import static java.util.Optional.empty;
 
 public interface Parameter extends TypedElement
@@ -42,7 +45,7 @@ class ParameterImpl implements Parameter
 
     ParameterImpl(String name, NamedType type, String scopeName)
     {
-        modelElement = ModelElement.create(this);
+        modelElement = extendModelElement(this, null, null);
         namedElement = NamedElement.create(modelElement, name);
 
         this.type = type;
@@ -74,14 +77,8 @@ class ParameterImpl implements Parameter
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 }

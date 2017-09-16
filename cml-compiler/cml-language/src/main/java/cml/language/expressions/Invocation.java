@@ -1,12 +1,14 @@
 package cml.language.expressions;
 
+import cml.language.features.Concept;
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
+import cml.language.features.Module;
 import cml.language.foundation.Diagnostic;
-import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
-import cml.language.foundation.Scope;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import cml.language.types.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +18,8 @@ import org.jooq.lambda.tuple.Tuple2;
 import java.util.*;
 
 import static cml.language.functions.ModelElementFunctions.moduleOf;
+import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.Scope.extendScope;
 import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
@@ -131,8 +135,10 @@ public interface Invocation extends Expression, NamedElement
         }
     }
 
-    default Optional<Scope> getExpressionScopeFor(final Lambda lambda)
+    default void createScopeFor(Lambda lambda)
     {
+        assert lambda.getFunctionType().isPresent() && !lambda.isInnerExpressionInSomeScope();
+
         final Optional<Type> scopeType = lambda.getExpectedScopeType();
 
         if (scopeType.isPresent())
@@ -141,26 +147,23 @@ public interface Invocation extends Expression, NamedElement
 
             assert matchingType.getConcept().isPresent(): "Expected concept but found '" + matchingType + "' for lambda: " + lambda + " - " + scopeType.get();
 
-            return Optional.of(matchingType.getConcept().get());
+            final Optional<Concept> concept = matchingType.getConcept();
+
+            assert concept.isPresent();
+
+            new LambdaScope(concept.get(), lambda);
         }
         else
         {
-            final LambdaScope lambdaScope = createLambdaScope();
+            final Optional<Module> module = moduleOf(this);
+
+            assert module.isPresent();
+
+            final LambdaScope lambdaScope = new LambdaScope(module.get(), lambda);
 
             lambda.getTypedParameters()
                   .forEach((name, type) -> lambdaScope.addParameter(name, getMatchingTypeOf(type)));
-
-            return Optional.of(lambdaScope);
         }
-    }
-
-    default LambdaScope createLambdaScope()
-    {
-        final LambdaScope lambdaScope = new LambdaScope();
-
-        moduleOf(this).ifPresent(m -> m.addMember(lambdaScope));
-
-        return lambdaScope;
     }
 
     @Override
@@ -269,13 +272,11 @@ class InvocationImpl implements Invocation
 
     InvocationImpl(String name, List<Expression> arguments)
     {
-        modelElement = ModelElement.create(this);
+        modelElement = extendModelElement(this, null, null);
         namedElement = NamedElement.create(modelElement, name);
-        scope = Scope.create(this, modelElement);
+        scope = extendScope(this, modelElement, seq(arguments).map(a -> (ModelElement)a).toList());
 
         this.arguments = new ArrayList<>(arguments);
-
-        this.arguments.forEach(this::addMember);
     }
 
     @Override
@@ -326,15 +327,9 @@ class InvocationImpl implements Invocation
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -347,12 +342,6 @@ class InvocationImpl implements Invocation
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
-    }
-
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
     }
 
     @Override
@@ -374,13 +363,11 @@ class ParameterizedInvocation implements Invocation
 
     ParameterizedInvocation(String name, LinkedHashMap<String, Expression> namedArguments)
     {
-        modelElement = ModelElement.create(this);
+        modelElement = extendModelElement(this, null, null);
         namedElement = NamedElement.create(modelElement, name);
-        scope = Scope.create(this, modelElement);
+        scope = extendScope(this, modelElement, seq(namedArguments.values()).map(a -> (ModelElement)a).toList());
 
         this.namedArguments = new LinkedHashMap<>(namedArguments);
-
-        this.namedArguments.values().forEach(this::addMember);
     }
 
     @Override
@@ -422,15 +409,9 @@ class ParameterizedInvocation implements Invocation
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -443,12 +424,6 @@ class ParameterizedInvocation implements Invocation
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
-    }
-
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
     }
 
     @Override

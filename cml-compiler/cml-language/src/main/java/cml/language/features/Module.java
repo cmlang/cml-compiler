@@ -1,15 +1,17 @@
 package cml.language.features;
 
 import cml.language.foundation.Model;
-import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
-import cml.language.foundation.Scope;
 import cml.language.generated.Location;
-import org.jetbrains.annotations.Nullable;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.Scope.extendScope;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
@@ -17,10 +19,10 @@ public interface Module extends NamedElement, Scope
 {
     default Model getModel()
     {
-        assert getParentScope().isPresent();
-        assert getParentScope().get() instanceof Model;
+        assert getParent().isPresent();
+        assert getParent().get() instanceof Model;
 
-        return (Model) getParentScope().get();
+        return (Model) getParent().get();
     }
 
     default List<Import> getImports()
@@ -34,7 +36,7 @@ public interface Module extends NamedElement, Scope
     default List<Module> getImportedModules()
     {
         return getImports().stream()
-                           .map(Import::getModule)
+                           .map(Import::getImportedModule)
                            .filter(Optional::isPresent)
                            .map(Optional::get)
                            .collect(toList());
@@ -138,9 +140,9 @@ public interface Module extends NamedElement, Scope
                                 .findFirst();
     }
 
-    static Module create(String name)
+    static Module create(Model model, String name)
     {
-        return new ModuleImpl(name);
+        return new ModuleImpl(model, name);
     }
 }
 
@@ -150,11 +152,11 @@ class ModuleImpl implements Module
     private final NamedElement namedElement;
     private final Scope scope;
 
-    ModuleImpl(String name)
+    ModuleImpl(Model model, String name)
     {
-        this.modelElement = ModelElement.create(this);
+        this.modelElement = extendModelElement(this, model, null);
         this.namedElement = NamedElement.create(modelElement, name);
-        this.scope = Scope.create(this, modelElement);
+        this.scope = extendScope(this, modelElement, emptyList());
     }
 
     @Override
@@ -164,15 +166,9 @@ class ModuleImpl implements Module
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -185,11 +181,5 @@ class ModuleImpl implements Module
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
-    }
-
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
     }
 }

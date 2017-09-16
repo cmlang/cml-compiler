@@ -1,6 +1,10 @@
 package cml.language.expressions;
 
-import cml.language.foundation.*;
+import cml.language.foundation.Diagnostic;
+import cml.language.foundation.Invariant;
+import cml.language.foundation.InvariantValidator;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import cml.language.types.Type;
 import org.jooq.lambda.Seq;
 

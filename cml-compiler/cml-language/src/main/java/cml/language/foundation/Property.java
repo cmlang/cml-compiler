@@ -4,6 +4,8 @@ import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import cml.language.types.TypedElement;
@@ -17,6 +19,7 @@ import java.util.stream.Stream;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 public interface Property extends TypedElement, Scope
 {
@@ -64,10 +67,10 @@ public interface Property extends TypedElement, Scope
 
     default Concept getConcept()
     {
-        assert getParentScope().isPresent();
-        assert getParentScope().get() instanceof Concept;
+        assert getParent().isPresent();
+        assert getParent().get() instanceof Concept;
 
-        return (Concept) getParentScope().get();
+        return (Concept) getParent().get();
     }
 
     default Model getModel()
@@ -87,23 +90,23 @@ public interface Property extends TypedElement, Scope
 
     static Property create(String name, @Nullable NamedType type)
     {
-        return new PropertyImpl(name, type, null, false);
+        return create(name, type, null, false, null);
     }
 
     @SuppressWarnings("unused")
     static Property create(String name, @Nullable Expression value)
     {
-        return new PropertyImpl(name, null, value, false);
+        return create(name, null, value, false, null);
     }
 
     static Property create(String name, @Nullable Type type, @Nullable Expression value)
     {
-        return new PropertyImpl(name, type, value, false);
+        return create(name, type, value, false, null);
     }
 
-    static Property create(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
+    static Property create(String name, @Nullable Type type, @Nullable Expression value, boolean derived, Location location)
     {
-        return new PropertyImpl(name, type, value, derived);
+        return new PropertyImpl(name, type, value, derived, location);
     }
 
     static InvariantValidator<Property> invariantValidator()
@@ -126,17 +129,16 @@ class PropertyImpl implements Property
 
     private boolean typeRequired;
     private boolean typeAllowed;
-    private boolean redefined;
 
     private final @Nullable Type type;
     private final @Nullable Expression value;
     private final boolean derived;
 
-    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived)
+    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived, Location location)
     {
-        modelElement = ModelElement.create(this);
+        modelElement = ModelElement.extendModelElement(this, null, location);
         namedElement = NamedElement.create(modelElement, name);
-        scope = Scope.create(this, modelElement);
+        scope = Scope.extendScope(this, modelElement, singletonList(value));
 
         this.type = type;
         this.value = value;
@@ -212,12 +214,6 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
-    }
-
-    @Override
     public String getName()
     {
         return namedElement.getName();
@@ -230,23 +226,17 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
     public String toString()
     {
-        if (getParentScope().isPresent() && getParentScope().get() instanceof NamedElement)
+        if (getParent().isPresent() && getParent().get() instanceof NamedElement)
         {
-            final NamedElement namedElement = (NamedElement)getParentScope().get();
+            final NamedElement namedElement = (NamedElement)getParent().get();
 
             return format("property %s.%s: %s",  namedElement.getName(), getName(), getType());
         }
@@ -277,9 +267,9 @@ class GeneralizationCompatibleRedefinition implements Invariant<Property>
 
     private Stream<Property> getRedefinedProperties(Property self)
     {
-        if (self.getParentScope().isPresent() && self.getParentScope().get() instanceof Concept)
+        if (self.getParent().isPresent() && self.getParent().get() instanceof Concept)
         {
-            final Concept concept = (Concept) self.getParentScope().get();
+            final Concept concept = (Concept) self.getParent().get();
 
             return concept.getInheritedProperties().stream()
                           .filter(p -> p.getName().equals(self.getName()));
@@ -296,9 +286,9 @@ class AbstractPropertyInAbstractConcept implements Invariant<Property>
     @Override
     public boolean evaluate(Property self)
     {
-        if (self.getParentScope().isPresent() && self.getParentScope().get() instanceof Concept)
+        if (self.getParent().isPresent() && self.getParent().get() instanceof Concept)
         {
-            final Concept concept = (Concept) self.getParentScope().get();
+            final Concept concept = (Concept) self.getParent().get();
 
             return self.isConcrete() || concept.isAbstract();
         }
@@ -333,9 +323,9 @@ class UniquePropertyName implements Invariant<Property>
 
     private Stream<Property> getConflictingProperties(Property self)
     {
-        if (self.getParentScope().isPresent() && self.getParentScope().get() instanceof Concept)
+        if (self.getParent().isPresent() && self.getParent().get() instanceof Concept)
         {
-            final Concept concept = (Concept) self.getParentScope().get();
+            final Concept concept = (Concept) self.getParent().get();
 
             return concept.getProperties()
                           .stream()

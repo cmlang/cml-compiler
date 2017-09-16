@@ -14,26 +14,36 @@ public interface Location
 
     int getColumn();
 
-    static Location createLocation(int line, int column)
+    ModelElement getElement();
+
+    static Location createLocation(int line, int column, ModelElement element)
     {
-        return new LocationImpl(line, column);
+        return new LocationImpl(null, line, column, element);
     }
 
-    static Location extendLocation(int line, int column)
+    static Location extendLocation(@Nullable Location actual_self, int line, int column, ModelElement element)
     {
-        return new LocationImpl(line, column);
+        return new LocationImpl(actual_self, line, column, element);
     }
 }
 
 class LocationImpl implements Location
 {
+    private static Localization localization;
+
+    private final @Nullable Location actual_self;
+
     private final int line;
     private final int column;
 
-    LocationImpl(int line, int column)
+    LocationImpl(@Nullable Location actual_self, int line, int column, ModelElement element)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.line = line;
         this.column = column;
+
+        localization.link(element, this.actual_self);
     }
 
     public int getLine()
@@ -46,6 +56,11 @@ class LocationImpl implements Location
         return this.column;
     }
 
+    public ModelElement getElement()
+    {
+        return localization.elementOf(actual_self).get();
+    }
+
     public String toString()
     {
         return new StringBuilder(Location.class.getSimpleName())
@@ -54,5 +69,15 @@ class LocationImpl implements Location
                    .append("column=").append(String.format("\"%s\"", getColumn()))
                    .append(')')
                    .toString();
+    }
+
+    static void setLocalization(Localization association)
+    {
+        localization = association;
+    }
+
+    static
+    {
+        Localization.init(Location.class);
     }
 }

@@ -1,23 +1,27 @@
 package cml.language.features;
 
-import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
+import cml.language.foundation.Property;
 import cml.language.foundation.PropertyList;
-import cml.language.foundation.Scope;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.Scope.extendScope;
+import static org.jooq.lambda.Seq.seq;
+
 public interface Task extends NamedElement, PropertyList
 {
     Optional<String> getConstructor();
-    void setConstructor(String constructor);
 
-    static Task create(String name)
+    static Task create(Module module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
     {
-        return new TaskImpl(name);
+        return new TaskImpl(module, name, constructor, propertyList, location);
     }
 }
 
@@ -29,11 +33,13 @@ class TaskImpl implements Task
 
     private @Nullable String constructor;
 
-    TaskImpl(String name)
+    TaskImpl(Module module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
     {
-        this.modelElement = ModelElement.create(this);
+        this.modelElement = extendModelElement(this, module, location);
         this.namedElement = NamedElement.create(modelElement, name);
-        this.scope = Scope.create(this, modelElement);
+        this.scope = extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
+
+        this.constructor = constructor;
     }
 
     @Override
@@ -43,15 +49,9 @@ class TaskImpl implements Task
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -67,21 +67,9 @@ class TaskImpl implements Task
     }
 
     @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
-    }
-
-    @Override
     public Optional<String> getConstructor()
     {
         return Optional.ofNullable(constructor);
-    }
-
-    @Override
-    public void setConstructor(@Nullable String constructor)
-    {
-        this.constructor = constructor;
     }
 }
 

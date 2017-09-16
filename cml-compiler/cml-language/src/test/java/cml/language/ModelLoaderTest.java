@@ -48,7 +48,7 @@ public class ModelLoaderTest
 
         final String anotherModuleName = "another_module";
         final Import _import = module.getImports().get(0);
-        final Module anotherModule = _import.getModule().get();
+        final Module anotherModule = _import.getImportedModule().get();
         final Concept anotherConcept = anotherModule.getConcepts().get(0);
 
         assertThat(_import.getName(), is(anotherModuleName));
@@ -172,9 +172,18 @@ public class ModelLoaderTest
     {
         final AssociationEnd associationEnd = association.getAssociationEnd(conceptName, propertyName).orElse(null);
         assertNotNull(conceptName + "." + propertyName, associationEnd);
-        assertEquals(conceptName + "." + propertyName, expectedType, associationEnd.getPropertyType().orElse(null));
         assertTrue(conceptName, associationEnd.getConcept().isPresent());
         assertTrue(conceptName + "." + propertyName, associationEnd.getProperty().isPresent());
+
+        if (expectedType == null)
+        {
+            assertFalse("Did not expect type for: " + conceptName + "." + propertyName, associationEnd.getPropertyType().isPresent());
+        }
+        else
+        {
+            assertTrue("Did expect type for: " + conceptName + "." + propertyName, associationEnd.getPropertyType().isPresent());
+            assertTrue("Expected matching type for: " + conceptName + "." + propertyName, expectedType.isEqualTo(associationEnd.getPropertyType().get()));
+        }
 
         final Concept concept = associationEnd.getConcept().get();
         assertEquals(conceptName, concept.getName(), conceptName);

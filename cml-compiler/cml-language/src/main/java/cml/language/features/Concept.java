@@ -2,8 +2,9 @@ package cml.language.features;
 
 import cml.language.foundation.*;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import cml.language.types.Type;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +14,13 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static cml.language.functions.ModelElementFunctions.moduleOf;
+import static cml.language.generated.ModelElement.extendModelElement;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
+import static org.jooq.lambda.Seq.seq;
 
 public interface Concept extends NamedElement, PropertyList
 {
@@ -317,14 +321,19 @@ public interface Concept extends NamedElement, PropertyList
                          .collect(toList());
     }
 
-    static Concept create(String name)
+    static Concept create(Module module, String name)
     {
-        return create(name, false);
+        return create(module, name, false, emptyList(), null);
     }
 
-    static Concept create(String name, boolean _abstract)
+    static Concept create(Module module, String name, List<Property> propertyList)
     {
-        return new ConceptImpl(name, _abstract);
+        return new ConceptImpl(module, name, false, propertyList, null);
+    }
+
+    static Concept create(Module module, String name, boolean _abstract, List<Property> propertyList, Location location)
+    {
+        return new ConceptImpl(module, name, _abstract, propertyList, location);
     }
 
     static InvariantValidator<Concept> invariantValidator()
@@ -346,11 +355,11 @@ class ConceptImpl implements Concept
     private final List<Concept> directAncestors = new ArrayList<>();
     private final boolean _abstract;
 
-    ConceptImpl(String name, boolean _abstract)
+    ConceptImpl(Module module, String name, boolean _abstract, final List<Property> propertyList, Location location)
     {
-        this.modelElement = ModelElement.create(this);
+        this.modelElement = extendModelElement(this, module, location);
         this.namedElement = NamedElement.create(modelElement, name);
-        this.scope = Scope.create(this, modelElement);
+        this.scope = Scope.extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
         this._abstract = _abstract;
     }
 
@@ -367,15 +376,9 @@ class ConceptImpl implements Concept
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -388,12 +391,6 @@ class ConceptImpl implements Concept
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
-    }
-
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
     }
 
     @Override

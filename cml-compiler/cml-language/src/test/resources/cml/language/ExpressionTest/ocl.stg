@@ -9,7 +9,7 @@ invocation_ocl(invocation) ::= <<
 
 lambda_ocl(lambda) ::= <<
 <if(lambda.parameters)><lambda.parameters; separator=", "> | <endif><\\>
-<ocl(lambda.expression)>
+<ocl(lambda.innerExpression)>
 >>
 
 exists(args) ::= <<
@@ -33,7 +33,7 @@ recurse(args) ::= <<
 >>
 
 reduce(args) ::= <<
-<ocl(args.seq)>->iterate(<args.expr.parameters; separator="; "> = <args.from.expression> | <ocl(args.expr.expression)>)
+<ocl(args.seq)>->iterate(<args.expr.parameters; separator="; "> = <args.from.innerExpression> | <ocl(args.expr.innerExpression)>)
 >>
 
 distinct(args) ::= <<

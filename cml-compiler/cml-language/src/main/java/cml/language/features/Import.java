@@ -1,22 +1,24 @@
 package cml.language.features;
 
-import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
-import cml.language.foundation.Scope;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+import static cml.language.generated.ModelElement.extendModelElement;
+
 public interface Import extends NamedElement
 {
-    Optional<Module> getModule();
-    void setModule(@NotNull Module module);
+    Optional<Module> getImportedModule();
+    void setImportedModule(@NotNull Module module);
 
-    static Import create(String name)
+    static Import create(Module module, String name)
     {
-        return new ImportImpl(name);
+        return new ImportImpl(module, name);
     }
 }
 
@@ -27,9 +29,9 @@ class ImportImpl implements Import
 
     private @Nullable Module module;
 
-    ImportImpl(String name)
+    ImportImpl(Module module, String name)
     {
-        this.modelElement = ModelElement.create(this);
+        this.modelElement = extendModelElement(this, module, null);
         this.namedElement = NamedElement.create(modelElement, name);
     }
 
@@ -40,15 +42,9 @@ class ImportImpl implements Import
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -58,13 +54,13 @@ class ImportImpl implements Import
     }
 
     @Override
-    public Optional<Module> getModule()
+    public Optional<Module> getImportedModule()
     {
         return Optional.ofNullable(module);
     }
 
     @Override
-    public void setModule(@NotNull Module module)
+    public void setImportedModule(@NotNull Module module)
     {
         this.module = module;
     }

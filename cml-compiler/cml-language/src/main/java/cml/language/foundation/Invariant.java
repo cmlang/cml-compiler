@@ -1,5 +1,7 @@
 package cml.language.foundation;
 
+import cml.language.generated.ModelElement;
+
 public interface Invariant<T extends ModelElement>
 {
     boolean evaluate(T self);

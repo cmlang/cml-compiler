@@ -2,6 +2,160 @@ from typing import *
 from abc import *
 from decimal import *
 
+class _Membership:
+
+    _singleton = None
+
+    def __new__(cls) -> '_Membership':
+        if cls._singleton is None:
+            cls._singleton = super(_Membership, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self) -> 'None':
+        self.__parent = {}  # type: Dict[ModelElement, Optional[Scope]]
+        self.__members = {}  # type: Dict[Scope, List[ModelElement]]
+
+    def link_many(self, parent: 'Optional[Scope]', members: 'List[ModelElement]') -> 'None':
+        for model_element in members: self.link(scope=parent, model_element=model_element)
+
+    def link(self, scope: 'Scope', model_element: 'ModelElement') -> 'None':
+        self.__parent[model_element] = scope
+
+        if scope in self.__members:
+            model_element_list = self.__members[scope]
+        else:
+            model_element_list = [model_element]
+        if not (model_element in model_element_list):
+            model_element_list.append(model_element)
+        self.__members[scope] = model_element_list
+
+    def parent_of(self, model_element: 'ModelElement') -> 'Scope':
+        if model_element in self.__parent:
+            return self.__parent[model_element]
+        else:
+            return None
+
+    def members_of(self, scope: 'Scope') -> 'List[ModelElement]':
+        if scope in self.__members:
+            model_element_list = self.__members[scope]
+        else:
+            model_element_list = []
+        return list(model_element_list)
+
+
+class _Localization:
+
+    _singleton = None
+
+    def __new__(cls) -> '_Localization':
+        if cls._singleton is None:
+            cls._singleton = super(_Localization, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self) -> 'None':
+        self.__element = {}  # type: Dict[Location, ModelElement]
+        self.__location = {}  # type: Dict[ModelElement, Optional[Location]]
+
+    def link(self, model_element: 'ModelElement', location: 'Location') -> 'None':
+        self.__element[location] = model_element
+
+        self.__location[model_element] = location
+
+    def element_of(self, location: 'Location') -> 'ModelElement':
+        if location in self.__element:
+            return self.__element[location]
+        else:
+            return None
+
+    def location_of(self, model_element: 'ModelElement') -> 'Location':
+        if model_element in self.__location:
+            return self.__location[model_element]
+        else:
+            return None
+
+
+class ModelElement(ABC):
+
+    @abstractproperty
+    def parent(self) -> 'Scope':
+        pass
+
+    @abstractproperty
+    def location(self) -> 'Location':
+        pass
+
+    @staticmethod
+    def extend_model_element(actual_self: 'Optional[ModelElement]', parent: 'Optional[Scope]', location: 'Optional[Location]') -> 'ModelElement':
+        return ModelElementImpl(actual_self, parent, location)
+
+
+class ModelElementImpl(ModelElement):
+
+    _membership = _Membership()
+    _localization = _Localization()
+
+    def __init__(self, actual_self: 'Optional[ModelElement]', parent: 'Optional[Scope]', location: 'Optional[Location]') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[ModelElement]
+        else:
+            self.__actual_self = actual_self
+
+
+        self._membership.link(scope=parent, model_element=self.__actual_self)
+        self._localization.link(location=location, model_element=self.__actual_self)
+
+    @property
+    def parent(self) -> 'Scope':
+        return self._membership.parent_of(self.__actual_self)
+
+    @property
+    def location(self) -> 'Location':
+        return self._localization.location_of(self.__actual_self)
+
+    def __str__(self) -> 'str':
+        return "%s()" % type(self).__name__
+
+
+class Scope(ModelElement, ABC):
+
+    @abstractproperty
+    def members(self) -> 'List[ModelElement]':
+        pass
+
+    @staticmethod
+    def extend_scope(actual_self: 'Optional[Scope]', model_element: 'ModelElement', members: 'List[ModelElement]') -> 'Scope':
+        return ScopeImpl(actual_self, model_element, members)
+
+
+class ScopeImpl(Scope):
+
+    _membership = _Membership()
+
+    def __init__(self, actual_self: 'Optional[Scope]', model_element: 'Optional[ModelElement]', members: 'List[ModelElement]') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Scope]
+        else:
+            self.__actual_self = actual_self
+        self.__model_element = model_element
+
+        self._membership.link_many(self.__actual_self, members)
+
+    @property
+    def members(self) -> 'List[ModelElement]':
+        return self._membership.members_of(self.__actual_self)
+
+    @property
+    def parent(self) -> 'Scope':
+        return self.__model_element.parent
+
+    @property
+    def location(self) -> 'Location':
+        return self.__model_element.location
+
+    def __str__(self) -> 'str':
+        return "%s()" % type(self).__name__
+
+
 class Location(ABC):
 
     @abstractproperty
@@ -12,21 +166,33 @@ class Location(ABC):
     def column(self) -> 'int':
         pass
 
-    @staticmethod
-    def create_location(line: 'int', column: 'int') -> 'Location':
-        return LocationImpl(line, column)
+    @abstractproperty
+    def element(self) -> 'ModelElement':
+        pass
 
     @staticmethod
-    def extend_location(line: 'int', column: 'int') -> 'Location':
-        return LocationImpl(line, column)
+    def create_location(line: 'int', column: 'int', element: 'ModelElement') -> 'Location':
+        return LocationImpl(None, line, column, element)
+
+    @staticmethod
+    def extend_location(actual_self: 'Optional[Location]', line: 'int', column: 'int', element: 'ModelElement') -> 'Location':
+        return LocationImpl(actual_self, line, column, element)
 
 
 class LocationImpl(Location):
 
-    def __init__(self, line: 'int', column: 'int', **kwargs) -> 'None':
-        
+    _localization = _Localization()
+
+    def __init__(self, actual_self: 'Optional[Location]', line: 'int', column: 'int', element: 'ModelElement') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Location]
+        else:
+            self.__actual_self = actual_self
+
         self.__line = line
         self.__column = column
+
+        self._localization.link(model_element=element, location=self.__actual_self)
 
     @property
     def line(self) -> 'int':
@@ -36,84 +202,13 @@ class LocationImpl(Location):
     def column(self) -> 'int':
         return self.__column
 
+    @property
+    def element(self) -> 'ModelElement':
+        return self._localization.element_of(self.__actual_self)
+
     def __str__(self) -> 'str':
         return "%s(line=%s, column=%s)" % (
             type(self).__name__,
             self.line,
             self.column
-        )
-
-
-class ModelElement(ABC):
-
-    @abstractproperty
-    def location(self) -> 'Location':
-        pass
-
-    @abstractproperty
-    def parent(self) -> 'Scope':
-        pass
-
-    @staticmethod
-    def extend_model_element(location: 'Optional[Location]', parent: 'Optional[Scope]') -> 'ModelElement':
-        return ModelElementImpl(location, parent)
-
-
-class ModelElementImpl(ModelElement):
-
-    def __init__(self, location: 'Optional[Location]', parent: 'Optional[Scope]') -> 'None':
-        
-        self.__location = location
-        self.__parent = parent
-
-    @property
-    def location(self) -> 'Location':
-        return self.__location
-
-    @property
-    def parent(self) -> 'Scope':
-        return self.__parent
-
-    def __str__(self) -> 'str':
-        return "%s(location=%s, parent=%s)" % (
-            type(self).__name__,
-            self.location,
-            self.parent
-        )
-
-
-class Scope(ModelElement, ABC):
-
-    @abstractproperty
-    def members(self) -> 'List[ModelElement]':
-        pass
-
-    @staticmethod
-    def extend_scope(model_element: 'ModelElement', members: 'List[ModelElement]') -> 'Scope':
-        return ScopeImpl(model_element, members)
-
-
-class ScopeImpl(Scope):
-
-    def __init__(self, model_element: 'ModelElement', members: 'List[ModelElement]') -> 'None':
-        self.__model_element = model_element
-        self.__members = members
-
-    @property
-    def members(self) -> 'List[ModelElement]':
-        return self.__members
-
-    @property
-    def location(self) -> 'Location':
-        return self.__model_element.location
-
-    @property
-    def parent(self) -> 'Scope':
-        return self.__model_element.parent
-
-    def __str__(self) -> 'str':
-        return "%s(location=%s, parent=%s)" % (
-            type(self).__name__,
-            self.location,
-            self.parent
         )

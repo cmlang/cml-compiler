@@ -1,10 +1,10 @@
 package cml.language.types;
 
 import cml.language.features.Concept;
-import cml.language.foundation.ModelElement;
 import cml.language.foundation.NamedElement;
-import cml.language.foundation.Scope;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,9 +13,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static cml.language.functions.ModelElementFunctions.selfTypeOf;
+import static cml.language.generated.ModelElement.extendModelElement;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
+import static org.jooq.lambda.Seq.seq;
 
 public interface NamedType extends Type, NamedElement
 {
@@ -144,6 +147,50 @@ public interface NamedType extends Type, NamedElement
         return namedType;
     }
 
+    @Override
+    default boolean isEqualTo(Type other)
+    {
+        if (this == other) return true;
+        if (other == null) return false;
+        if (this.getClass() != other.getClass()) return false;
+
+        final NamedType that = (NamedType) other;
+
+        return Objects.equals(this.getName(), that.getName()) &&
+               Objects.equals(this.getCardinality(), other.getCardinality());
+    }
+
+    default boolean isElementTypeAssignableFrom(Type otherElementType)
+    {
+        assert !this.getCardinality().isPresent();
+        assert !otherElementType.getCardinality().isPresent();
+
+        if (otherElementType instanceof NamedType)
+        {
+            final NamedType other = (NamedType) otherElementType;
+
+            if (getName().equals(other.getName()))
+            {
+                return true;
+            }
+            else if (this.isNumeric() && other.isNumeric())
+            {
+                return this.isNumericWiderThan(other);
+            }
+            else if (this.isBinaryFloatingPoint() && other.isBinaryFloatingPoint())
+            {
+                return this.isBinaryFloatingPointWiderThan(other);
+            }
+            else if (this.getConcept().isPresent() && other.getConcept().isPresent())
+            {
+                return seq(other.getConcept()).flatMap(c -> c.getAllGeneralizations().stream())
+                                              .anyMatch(c -> this.isElementTypeAssignableFrom(selfTypeOf(c)));
+            }
+        }
+
+        return false;
+    }
+
     static NamedType create(String name)
     {
         return new NamedTypeImpl(name, null, null);
@@ -171,7 +218,7 @@ class NamedTypeImpl implements NamedType
 
     NamedTypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
     {
-        this.modelElement = ModelElement.create(this);
+        this.modelElement = extendModelElement(this, null, null);
         this.namedElement = NamedElement.create(modelElement, name);
         this.cardinality = cardinality;
         this.errorMessage = errorMessage;
@@ -184,15 +231,9 @@ class NamedTypeImpl implements NamedType
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -230,23 +271,6 @@ class NamedTypeImpl implements NamedType
     public String toString()
     {
         return isUndefined() ? getName() : getName() + (getCardinality().isPresent() ? getCardinality().get() : "");
-    }
-
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final NamedTypeImpl other = (NamedTypeImpl) o;
-        return
-            Objects.equals(this.getName(), other.getName()) &&
-            Objects.equals(this.cardinality, other.cardinality);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(getName(), cardinality);
     }
 }
 

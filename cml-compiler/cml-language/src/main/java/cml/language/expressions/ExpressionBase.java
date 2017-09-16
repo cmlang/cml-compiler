@@ -1,12 +1,14 @@
 package cml.language.expressions;
 
-import cml.language.foundation.ModelElement;
-import cml.language.foundation.Scope;
 import cml.language.generated.Location;
-import org.jetbrains.annotations.Nullable;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Collections.emptyList;
+import static org.jooq.lambda.Seq.seq;
 
 public abstract class ExpressionBase implements Expression
 {
@@ -15,8 +17,23 @@ public abstract class ExpressionBase implements Expression
 
     ExpressionBase()
     {
-        modelElement = ModelElement.create(this);
-        scope = Scope.create(this, modelElement);
+        this(null, emptyList());
+    }
+
+    ExpressionBase(Scope scope)
+    {
+        this(scope, emptyList());
+    }
+
+    ExpressionBase(List<Expression> subExpressions)
+    {
+        this(null, subExpressions);
+    }
+
+    ExpressionBase(Scope parent, List<Expression> subExpressions)
+    {
+        modelElement = ModelElement.extendModelElement(this, parent, null);
+        scope = Scope.extendScope(this, modelElement, seq(subExpressions).map(s -> (ModelElement)s).toList());
     }
 
     @Override
@@ -26,26 +43,14 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
-    }
-
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
     }
 }

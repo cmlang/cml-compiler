@@ -4,6 +4,7 @@ import cml.language.expressions.*;
 import cml.language.features.*;
 import cml.language.foundation.Property;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.*;
@@ -43,33 +44,6 @@ class ModelSynthesizer extends CMLBaseListener
     }
 
     @Override
-    public void exitCompilationUnit(CompilationUnitContext ctx)
-    {
-        if (ctx.declarations() != null)
-        {
-            ctx.declarations()
-               .stream()
-               .filter(node -> node.conceptDeclaration() != null)
-               .forEach(node -> module.addMember(node.conceptDeclaration().concept));
-
-            ctx.declarations()
-               .stream()
-               .filter(node -> node.associationDeclaration() != null)
-               .forEach(node -> module.addMember(node.associationDeclaration().association));
-
-            ctx.declarations()
-               .stream()
-               .filter(node -> node.taskDeclaration() != null)
-               .forEach(node -> module.addMember(node.taskDeclaration().task));
-
-            ctx.declarations()
-               .stream()
-               .filter(node -> node.templateDeclaration() != null)
-               .forEach(node -> module.addMember(node.templateDeclaration().template));
-        }
-    }
-
-    @Override
     public void exitModuleDeclaration(ModuleDeclarationContext ctx)
     {
         final String name = ctx.NAME().getText();
@@ -78,12 +52,6 @@ class ModelSynthesizer extends CMLBaseListener
         {
             throw new ModelSynthesisException(format(INVALID_MODULE_NAME, name, module.getName()));
         }
-
-        if (ctx.importDeclaration() != null)
-        {
-            ctx.importDeclaration()
-               .forEach(node -> module.addMember(node._import));
-        }
     }
 
     @Override
@@ -91,7 +59,7 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final String name = ctx.NAME().getText();
 
-        ctx._import = Import.create(name);
+        ctx._import = Import.create(module, name);
     }
 
     @Override
@@ -104,17 +72,11 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final boolean _abstract = ctx.ABSTRACT() != null;
+        final List<Property> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
+            .map(node -> node.property)
+            .toList();
 
-        ctx.concept = Concept.create(name, _abstract);
-
-        if (ctx.propertyList() != null)
-        {
-            ctx.propertyList()
-               .propertyDeclaration()
-               .forEach(node -> ctx.concept.addMember(node.property));
-        }
-
-        ctx.concept.setLocation(locationOf(ctx));
+        ctx.concept = Concept.create(module, name, _abstract, propertyList, locationOf(ctx));
     }
 
     @Override
@@ -126,16 +88,11 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
+        final List<AssociationEnd> associationEnds = seq(ctx.associationEndDeclaration() == null ? empty() : ctx.associationEndDeclaration())
+            .map(node -> node.associationEnd)
+            .toList();
 
-        ctx.association = Association.create(name);
-
-        if (ctx.associationEndDeclaration() != null)
-        {
-            ctx.associationEndDeclaration()
-               .forEach(node -> ctx.association.addMember(node.associationEnd));
-        }
-
-        ctx.association.setLocation(locationOf(ctx));
+        ctx.association = Association.create(module, name, associationEnds, locationOf(ctx));
     }
 
     @Override
@@ -154,11 +111,8 @@ class ModelSynthesizer extends CMLBaseListener
         final String conceptName = ctx.conceptName.getText();
         final String propertyName = ctx.propertyName.getText();
         final @Nullable Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-        final AssociationEnd associationEnd = AssociationEnd.create(conceptName, propertyName, type);
 
-        associationEnd.setLocation(locationOf(ctx));
-
-        ctx.associationEnd = associationEnd;
+        ctx.associationEnd = AssociationEnd.create(conceptName, propertyName, type, locationOf(ctx));
     }
 
     @Override
@@ -170,28 +124,18 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
+        final String constructor = ctx.constructorDeclaration() == null ? null : ctx.constructorDeclaration().NAME().getText();
+        final List<Property> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
+            .map(node -> node.property)
+            .toList();
 
-        ctx.task = Task.create(name);
-
-        if (ctx.constructorDeclaration() != null)
-        {
-            final String constructor = ctx.constructorDeclaration().NAME().getText();
-
-            ctx.task.setConstructor(constructor);
-        }
-
-        if (ctx.propertyList() != null)
-        {
-            ctx.propertyList()
-               .propertyDeclaration()
-               .forEach(node -> ctx.task.addMember(node.property));
-        }
+        ctx.task = Task.create(module, name, constructor, propertyList, locationOf(ctx));
     }
 
     @Override
     public void exitTemplateDeclaration(final TemplateDeclarationContext ctx)
     {
-        ctx.template = new Template(ctx.functionDeclaration().function);
+        ctx.template = new Template(module, ctx.functionDeclaration().function);
     }
 
     @Override
@@ -205,16 +149,8 @@ class ModelSynthesizer extends CMLBaseListener
         final String name = ctx.NAME().getText();
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
-        final Property property = Property.create(name, type, value, ctx.DERIVED() != null);
 
-        if (value != null)
-        {
-            property.addMember(value);
-        }
-
-        property.setLocation(locationOf(ctx));
-
-        ctx.property = property;
+        ctx.property = Property.create(name, type, value, ctx.DERIVED() != null, locationOf(ctx));
     }
 
     @Override
@@ -304,21 +240,15 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
 
-        if (ctx.expr != null)
-        {
-            ctx.expr.setLocation(locationOf(ctx));
-        }
+        createLocation(ctx, ctx.expr);
     }
 
     private Unary createUnary(ExpressionContext ctx)
     {
         final String operator = ctx.operator.getText();
         final Expression expr = ctx.expression().get(0).expr;
-        final Unary unary = Unary.create(operator, expr);
 
-        unary.addMember(expr);
-        
-        return unary;
+        return new Unary(operator, expr);
     }
 
     private Infix createInfix(ExpressionContext ctx)
@@ -326,12 +256,8 @@ class ModelSynthesizer extends CMLBaseListener
         final String operator = ctx.operator.getText();
         final Expression left = ctx.expression().get(0).expr;
         final Expression right = ctx.expression().get(1).expr;
-        final Infix infix = Infix.create(operator, left, right);
 
-        infix.addMember(left);
-        infix.addMember(right);
-
-        return infix;
+        return new Infix(operator, left, right);
     }
 
     @Override
@@ -340,26 +266,19 @@ class ModelSynthesizer extends CMLBaseListener
         final Expression cond = ctx.cond.expr;
         final Expression then = ctx.then.expr;
         final Expression else_ = ctx.else_.expr;
-        final Conditional conditional = Conditional.create(cond, then, else_);
 
-        conditional.addMember(cond);
-        conditional.addMember(then);
-        conditional.addMember(else_);
-
-        ctx.conditional = conditional;
+        ctx.conditional = new Conditional(cond, then, else_);
     }
 
     @Override
     public void exitPathExpression(PathExpressionContext ctx)
     {
-        ctx.path = Path.create(pathNames(ctx));
-    }
+        final List<String> pathNames = ctx.NAME()
+                                          .stream()
+                                          .map(ParseTree::getText)
+                                          .collect(toList());
 
-    private List<String> pathNames(PathExpressionContext ctx)
-    {
-        return ctx.NAME().stream()
-                         .map(ParseTree::getText)
-                         .collect(toList());
+        ctx.path = Path.create(pathNames);
     }
 
     @Override
@@ -370,7 +289,7 @@ class ModelSynthesizer extends CMLBaseListener
         if (text != null)
         {
             final NamedType type = NamedType.create(getPrimitiveTypeName(ctx), null);
-            ctx.literal = Literal.create(text, type);
+            ctx.literal = new Literal(text, type);
         }
     }
 
@@ -509,8 +428,13 @@ class ModelSynthesizer extends CMLBaseListener
 
     private Location locationOf(ParserRuleContext ctx)
     {
+        return createLocation(ctx, null);
+    }
+
+    private Location createLocation(ParserRuleContext ctx, ModelElement element)
+    {
         final Token token = ctx.getStart();
 
-        return Location.createLocation(token.getLine(), token.getCharPositionInLine() + 1);
+        return Location.createLocation(token.getLine(), token.getCharPositionInLine() + 1, element);
     }
 }

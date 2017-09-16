@@ -1,8 +1,6 @@
 package cml.language.expressions;
 
-import cml.language.foundation.ModelElement;
-import cml.language.foundation.Scope;
-import cml.language.generated.Location;
+import cml.language.generated.Scope;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import org.jetbrains.annotations.Nullable;
@@ -12,19 +10,40 @@ import java.util.List;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
-import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
-import static cml.language.functions.ScopeFunctions.scopeOfType;
-import static cml.language.functions.ScopeFunctions.typeOfMemberNamed;
+import static cml.language.functions.ScopeFunctions.*;
+import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public interface Path extends Expression
+public class Path extends ExpressionBase
 {
-    Optional<Path> getBase();
-    String getName();
+    private final @Nullable Path base;
+    private final String name;
 
-    default List<String> getNames()
+    public static Path create(List<String> names)
+    {
+        Path path = null;
+
+        for (String name: names)
+        {
+            final Path base = path;
+
+            path = new Path(base, name);
+        }
+
+        return path;
+    }
+
+    public Path(@Nullable Path base, String name)
+    {
+        super(singletonList(base));
+
+        this.base = base;
+        this.name = name;
+    }
+
+    public List<String> getNames()
     {
         List<String> names = new LinkedList<>();
         names.add(getName());
@@ -40,7 +59,7 @@ public interface Path extends Expression
         return unmodifiableList(names);
     }
 
-    default List<String> getMemberNames()
+    public List<String> getMemberNames()
     {
         assert getNames().size() >= 1: "Path must have at least one name in order to determine its member names.";
 
@@ -48,12 +67,12 @@ public interface Path extends Expression
     }
 
     @Override
-    default Type getType()
+    public Type getType()
     {
         assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
-        assert getParentScope().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames();
+        assert getParent().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames() + " " + getLocation();
 
-        Scope scope = getParentScope().get();
+        Scope scope = getParent().get();
 
         if (isSelf()) return selfTypeOf(scope);
 
@@ -103,72 +122,21 @@ public interface Path extends Expression
         }
     }
 
-    default Type getElementType()
+    public Type getElementType()
     {
         return getType().getElementType();
     }
 
-    default boolean isSelf()
+    public boolean isSelf()
     {
         return getNames().size() == 1 && getNames().get(0).equals("self");
     }
 
-    static Path create(List<String> names)
-    {
-        Path path = null;
-
-        for (String name: names)
-        {
-            final Path base = path;
-
-            path = new PathImpl(base, name);
-
-            if (base != null)
-            {
-                path.addMember(base);
-            }
-        }
-
-        return path;
-    }
-}
-
-class PathImpl implements Path
-{
-    private final ModelElement modelElement;
-    private final Scope scope;
-
-    private final @Nullable Path base;
-    private final String name;
-
-    PathImpl(@Nullable Path base, String name)
-    {
-        modelElement = ModelElement.create(this);
-        scope = Scope.create(this, modelElement);
-
-        this.base = base;
-        this.name = name;
-    }
-
-    @Override
-    public Optional<Location> getLocation()
-    {
-        return modelElement.getLocation();
-    }
-
-    @Override
-    public void setLocation(@Nullable Location location)
-    {
-        modelElement.setLocation(location);
-    }
-
-    @Override
     public Optional<Path> getBase()
     {
         return Optional.ofNullable(base);
     }
 
-    @Override
     public String getName()
     {
         return name;
@@ -178,24 +146,6 @@ class PathImpl implements Path
     public String getKind()
     {
         return "path";
-    }
-
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
-    }
-
-    @Override
-    public List<ModelElement> getMembers()
-    {
-        return scope.getMembers();
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
     }
 
     @Override

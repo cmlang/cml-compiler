@@ -2,12 +2,14 @@ package cml.language.foundation;
 
 import cml.language.features.*;
 import cml.language.generated.Location;
-import org.jetbrains.annotations.Nullable;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public interface Model extends NamedElement, Scope
@@ -141,8 +143,8 @@ class ModelImpl implements Model
 
     ModelImpl()
     {
-        this.modelElement = ModelElement.create(this);
-        this.scope = Scope.create(this, modelElement);
+        this.modelElement = ModelElement.extendModelElement(this, null, null);
+        this.scope = Scope.extendScope(this, modelElement, emptyList());
     }
 
     @Override
@@ -152,15 +154,9 @@ class ModelImpl implements Model
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -169,10 +165,5 @@ class ModelImpl implements Model
         return scope.getMembers();
     }
 
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
-    }
 }
 

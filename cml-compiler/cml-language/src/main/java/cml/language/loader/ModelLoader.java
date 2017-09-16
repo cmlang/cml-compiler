@@ -8,14 +8,15 @@ import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Model;
-import cml.language.foundation.ModelElement;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
 import cml.language.grammar.CMLLexer;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.CompilationUnitContext;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -98,21 +99,23 @@ class ModelLoaderImpl implements ModelLoader
         }
     }
 
-    private int loadModule(Model model, String basePath, String moduleName, Import _import) throws IOException
+    private int loadModule(Model model, String basePath, String moduleName, @Nullable Import _import) throws IOException
     {
         final Optional<Module> existingModule = model.getModule(moduleName);
         if (existingModule.isPresent())
         {
-            _import.setModule(existingModule.get());
+            assert _import != null;
+
+            _import.setImportedModule(existingModule.get());
 
             return SUCCESS;
         }
 
-        final Module module = createModule(model, moduleName);
+        final Module module = Module.create(model, moduleName);
 
         if (_import != null)
         {
-            _import.setModule(module);
+            _import.setImportedModule(module);
         }
 
         final String sourceDirPath = basePath + File.separator + moduleName + File.separator + SOURCE_DIR;
@@ -156,17 +159,8 @@ class ModelLoaderImpl implements ModelLoader
     {
         if (!module.getName().equals(CML_BASE_MODULE) && !module.getImportedModule(CML_BASE_MODULE).isPresent())
         {
-            module.addMember(Import.create(CML_BASE_MODULE));
+            Import.create(module, CML_BASE_MODULE);
         }
-    }
-
-    private Module createModule(Model model, String moduleName)
-    {
-        final Module module = Module.create(moduleName);
-
-        model.addMember(module);
-
-        return module;
     }
 
     private void synthesizeModule(Module module, CompilationUnitContext compilationUnitContext)

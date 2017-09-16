@@ -55,22 +55,27 @@ public class FunctionType extends ModelElementBase implements Type
     }
 
     @Override
-    public boolean equals(final Object o)
+    public Type getElementType()
     {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        assert !getCardinality().isPresent();
 
-        final FunctionType that = (FunctionType) o;
-
-        return params.equals(that.params) && result.equals(that.result);
+        return this;
     }
 
     @Override
-    public int hashCode()
+    public boolean isElementTypeAssignableFrom(final Type otherElementType)
     {
-        int result1 = params.hashCode();
-        result1 = 31 * result1 + result.hashCode();
-        return result1;
+        assert !this.getCardinality().isPresent();
+        assert !otherElementType.getCardinality().isPresent();
+
+        if (otherElementType instanceof FunctionType)
+        {
+            final FunctionType other = (FunctionType)otherElementType;
+
+            return params.isAssignableFrom(other.params) && result.isAssignableFrom(other.result);
+        }
+
+        return false;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package cml.language.foundation;
 
-import cml.language.features.Concept;
+import cml.language.generated.Scope;
 
 import java.util.Comparator;
 import java.util.List;

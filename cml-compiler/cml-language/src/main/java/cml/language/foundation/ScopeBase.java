@@ -1,20 +1,20 @@
 package cml.language.foundation;
 
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public abstract class ScopeBase extends ModelElementBase implements Scope
 {
     protected final Scope scope;
 
-    public ScopeBase()
+    public ScopeBase(@Nullable Scope parent, List<ModelElement> members)
     {
-        this.scope = Scope.create(this, modelElement);
-    }
+        super(parent);
 
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
+        this.scope = Scope.extendScope(this, modelElement, members);
     }
 
     @Override

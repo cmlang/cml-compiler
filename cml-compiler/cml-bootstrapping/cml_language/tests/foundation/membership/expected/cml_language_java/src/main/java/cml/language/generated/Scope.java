@@ -12,38 +12,41 @@ public interface Scope extends ModelElement
 {
     List<ModelElement> getMembers();
 
-    static Scope extendScope(ModelElement modelElement, List<ModelElement> members)
+    static Scope extendScope(@Nullable Scope actual_self, ModelElement modelElement, List<ModelElement> members)
     {
-        return new ScopeImpl(modelElement, members);
+        return new ScopeImpl(actual_self, modelElement, members);
     }
 }
 
 class ScopeImpl implements Scope
 {
+    private static Membership membership;
+
+    private final @Nullable Scope actual_self;
+
     private final ModelElement modelElement;
 
-    private final List<ModelElement> members;
-
-    ScopeImpl(@Nullable Location location, @Nullable Scope parent, List<ModelElement> members)
+    ScopeImpl(@Nullable Scope actual_self, @Nullable Scope parent, @Nullable Location location, List<ModelElement> members)
     {
-        this.modelElement = ModelElement.extendModelElement(location, parent);
-        this.members = members;
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.modelElement = ModelElement.extendModelElement(this.actual_self, parent, location);
+
+        membership.linkMany(this.actual_self, members);
     }
 
-    ScopeImpl(ModelElement modelElement, List<ModelElement> members)
+    ScopeImpl(@Nullable Scope actual_self, ModelElement modelElement, List<ModelElement> members)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.modelElement = modelElement;
-        this.members = members;
+
+        membership.linkMany(this.actual_self, members);
     }
 
     public List<ModelElement> getMembers()
     {
-        return Collections.unmodifiableList(this.members);
-    }
-
-    public Optional<Location> getLocation()
-    {
-        return this.modelElement.getLocation();
+        return membership.membersOf(actual_self);
     }
 
     public Optional<Scope> getParent()
@@ -51,13 +54,26 @@ class ScopeImpl implements Scope
         return this.modelElement.getParent();
     }
 
+    public Optional<Location> getLocation()
+    {
+        return this.modelElement.getLocation();
+    }
+
     public String toString()
     {
         return new StringBuilder(Scope.class.getSimpleName())
                    .append('(')
-                   .append("location=").append(getLocation().isPresent() ? String.format("\"%s\"", getLocation()) : "not present").append(", ")
-                   .append("parent=").append(getParent().isPresent() ? String.format("\"%s\"", getParent()) : "not present")
                    .append(')')
                    .toString();
+    }
+
+    static void setMembership(Membership association)
+    {
+        membership = association;
+    }
+
+    static
+    {
+        Membership.init(Scope.class);
     }
 }

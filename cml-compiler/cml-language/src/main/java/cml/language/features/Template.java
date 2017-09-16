@@ -7,8 +7,10 @@ public class Template extends ModelElementBase implements NamedElement
 {
     private final Function function;
 
-    public Template(final Function function)
+    public Template(Module module, Function function)
     {
+        super(module);
+
         this.function = function;
     }
 

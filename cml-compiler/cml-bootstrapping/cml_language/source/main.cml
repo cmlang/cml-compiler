@@ -1,8 +1,8 @@
 
 abstract concept ModelElement
 {
-    location: Location?;
     parent: Scope?;
+    location: Location?;
 }
 
 abstract concept Scope: ModelElement
@@ -14,6 +14,19 @@ concept Location
 {
     line: Integer;
     column: Integer;
+    element: ModelElement;
+}
+
+association Membership
+{
+    ModelElement.parent;
+    Scope.members;
+}
+
+association Localization
+{
+    Location.element;
+    ModelElement.location;
 }
 
 task cml_language_java by cmlc_java

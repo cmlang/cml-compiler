@@ -1,5 +1,7 @@
 package cml.language.foundation;
 
+import cml.language.generated.ModelElement;
+
 import java.util.List;
 
 @FunctionalInterface

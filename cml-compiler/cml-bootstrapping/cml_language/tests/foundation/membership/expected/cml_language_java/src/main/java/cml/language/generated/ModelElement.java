@@ -10,44 +10,64 @@ import static java.util.stream.Collectors.*;
 
 public interface ModelElement
 {
-    Optional<Location> getLocation();
-
     Optional<Scope> getParent();
 
-    static ModelElement extendModelElement(@Nullable Location location, @Nullable Scope parent)
+    Optional<Location> getLocation();
+
+    static ModelElement extendModelElement(@Nullable ModelElement actual_self, @Nullable Scope parent, @Nullable Location location)
     {
-        return new ModelElementImpl(location, parent);
+        return new ModelElementImpl(actual_self, parent, location);
     }
 }
 
 class ModelElementImpl implements ModelElement
 {
-    private final @Nullable Location location;
-    private final @Nullable Scope parent;
+    private static Membership membership;
+    private static Localization localization;
 
-    ModelElementImpl(@Nullable Location location, @Nullable Scope parent)
-    {
-        this.location = location;
-        this.parent = parent;
-    }
+    private final @Nullable ModelElement actual_self;
 
-    public Optional<Location> getLocation()
+    ModelElementImpl(@Nullable ModelElement actual_self, @Nullable Scope parent, @Nullable Location location)
     {
-        return Optional.ofNullable(this.location);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+
+
+        membership.link(parent, this.actual_self);
+        localization.link(location, this.actual_self);
     }
 
     public Optional<Scope> getParent()
     {
-        return Optional.ofNullable(this.parent);
+        return membership.parentOf(actual_self);
+    }
+
+    public Optional<Location> getLocation()
+    {
+        return localization.locationOf(actual_self);
     }
 
     public String toString()
     {
         return new StringBuilder(ModelElement.class.getSimpleName())
                    .append('(')
-                   .append("location=").append(getLocation().isPresent() ? String.format("\"%s\"", getLocation()) : "not present").append(", ")
-                   .append("parent=").append(getParent().isPresent() ? String.format("\"%s\"", getParent()) : "not present")
                    .append(')')
                    .toString();
+    }
+
+    static void setMembership(Membership association)
+    {
+        membership = association;
+    }
+
+    static void setLocalization(Localization association)
+    {
+        localization = association;
+    }
+
+    static
+    {
+        Membership.init(ModelElement.class);
+        Localization.init(ModelElement.class);
     }
 }

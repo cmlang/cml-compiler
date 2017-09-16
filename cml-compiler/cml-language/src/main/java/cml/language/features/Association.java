@@ -2,13 +2,16 @@ package cml.language.features;
 
 import cml.language.foundation.*;
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import cml.language.types.Type;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
+import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.Scope.extendScope;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.seq;
@@ -106,9 +109,9 @@ public interface Association extends NamedElement, Scope
         return end1.getProperty().get().getType().isSingle() && end2.getProperty().get().getType().isSingle();
     }
 
-    static Association create(String name)
+    static Association create(Module module, String name, List<AssociationEnd> associationEnds, Location location)
     {
-        return new AssociationImpl(name);
+        return new AssociationImpl(module, name, associationEnds, location);
     }
 
     static InvariantValidator<Association> invariantValidator()
@@ -127,11 +130,11 @@ class AssociationImpl implements Association
     private final NamedElement namedElement;
     private final Scope scope;
 
-    AssociationImpl(String name)
+    AssociationImpl(Module module, String name, List<AssociationEnd> associationEnds, Location location)
     {
-        this.modelElement = ModelElement.create(this);
+        this.modelElement = extendModelElement(this, module, location);
         this.namedElement = NamedElement.create(modelElement, name);
-        this.scope = Scope.create(this, modelElement);
+        this.scope = extendScope(this, modelElement, seq(associationEnds).map(end -> (ModelElement)end).toList());
     }
 
     @Override
@@ -141,15 +144,9 @@ class AssociationImpl implements Association
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override
@@ -162,12 +159,6 @@ class AssociationImpl implements Association
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
-    }
-
-    @Override
-    public void addMember(ModelElement member)
-    {
-        scope.addMember(member);
     }
 
     @Override
@@ -229,7 +220,7 @@ class AssociationEndTypesMustMatch implements Invariant<Association>
 
     private static boolean typesMatch(Concept concept, Property property)
     {
-        return selfTypeOf(concept).equals(property.getType().getElementType());
+        return property.getType().getElementType().isEqualTo(selfTypeOf(concept));
     }
 
     @Override

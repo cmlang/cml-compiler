@@ -1,6 +1,8 @@
 package cml.language.foundation;
 
 import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -11,7 +13,12 @@ public abstract class ModelElementBase implements ModelElement
 
     protected ModelElementBase()
     {
-        modelElement = ModelElement.create(this);
+        this(null);
+    }
+
+    protected ModelElementBase(@Nullable Scope parent)
+    {
+        modelElement = ModelElement.extendModelElement(this, parent, null);
     }
 
     @Override
@@ -21,14 +28,8 @@ public abstract class ModelElementBase implements ModelElement
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 }

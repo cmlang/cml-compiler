@@ -3,7 +3,7 @@ package cml.language.functions;
 import cml.language.expressions.LambdaScope;
 import cml.language.expressions.Path;
 import cml.language.foundation.NamedElement;
-import cml.language.foundation.Scope;
+import cml.language.generated.Scope;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import cml.language.types.TypedElement;
@@ -54,9 +54,9 @@ public class ScopeFunctions
         {
             return member;
         }
-        else if (scope.getParentScope().isPresent())
+        else if (scope.getParent().isPresent())
         {
-            return elementNamed(name, scope.getParentScope().get(), clazz);
+            return elementNamed(name, scope.getParent().get(), clazz);
         }
 
         return empty();
@@ -88,8 +88,12 @@ public class ScopeFunctions
         if (scope instanceof LambdaScope)
         {
             final LambdaScope lambdaScope = (LambdaScope) scope;
+            final Optional<Type> type = ofNullable(lambdaScope.getParameters().get(name));
 
-            return ofNullable(lambdaScope.getParameters().get(name));
+            if (type.isPresent())
+            {
+                return type;
+            }
         }
         else if (scope instanceof Path)
         {
@@ -107,6 +111,6 @@ public class ScopeFunctions
 
         if (type.isPresent()) return type;
 
-        return scope.getParentScope().flatMap(s -> typeOfVariableNamed(name, s));
+        return scope.getParent().flatMap(s -> typeOfVariableNamed(name, s));
     }
 }

@@ -8,7 +8,7 @@ public interface TypedElement extends NamedElement
 
     default boolean matchesTypeOf(TypedElement other)
     {
-        return this.getType().equals(other.getType());
+        return this.getType().isAssignableFrom(other.getType());
     }
 }
 

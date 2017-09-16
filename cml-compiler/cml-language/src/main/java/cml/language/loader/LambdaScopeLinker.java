@@ -22,9 +22,9 @@ public class LambdaScopeLinker implements ModelVisitor
                 invocation.getTypedLambdaArguments().forEach(
                     (functionType, lambda) ->
                     {
-                        if (lambda.getFunctionType().isPresent() && !lambda.isExpressionInSomeScope())
+                        if (lambda.getFunctionType().isPresent() && !lambda.isInnerExpressionInSomeScope())
                         {
-                            invocation.getExpressionScopeFor(lambda).ifPresent(lambda::addExpressionToScope);
+                            invocation.createScopeFor(lambda);
                         }
                     });
             }

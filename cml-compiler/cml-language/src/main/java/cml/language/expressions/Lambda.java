@@ -1,7 +1,5 @@
 package cml.language.expressions;
 
-import cml.language.foundation.ModelElement;
-import cml.language.foundation.Scope;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
 import cml.language.types.NamedType;
@@ -13,6 +11,7 @@ import org.jooq.lambda.tuple.Tuple2;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalLong;
 import java.util.function.Function;
 
 import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
@@ -25,14 +24,14 @@ import static org.jooq.lambda.Seq.seq;
 public class Lambda extends ExpressionBase
 {
     private final List<String> parameters;
-    private final Expression expression;
+    private final Expression innerExpression;
 
     private @Nullable FunctionType functionType;
 
-    public Lambda(final Seq<String> parameters, final Expression expression)
+    public Lambda(final Seq<String> parameters, final Expression innerExpression)
     {
         this.parameters = parameters.toList();
-        this.expression = expression;
+        this.innerExpression = innerExpression;
     }
 
     public Seq<String> getParameters()
@@ -40,15 +39,15 @@ public class Lambda extends ExpressionBase
         return seq(parameters);
     }
 
-    public Expression getExpression()
+    public Expression getInnerExpression()
     {
-        return expression;
+        return innerExpression;
     }
 
     @Override
     public Seq<Expression> getSubExpressions()
     {
-        return Seq.of(expression);
+        return Seq.of(innerExpression);
     }
 
     public Optional<FunctionType> getFunctionType()
@@ -76,10 +75,13 @@ public class Lambda extends ExpressionBase
         }
         else if (getParamTypeCount() == 1)
         {
-            final Function<String, MemberType> mapping = p -> {
-                assert getParameters().indexOf(p).isPresent();
+            final Function<String, MemberType> mapping = paramName ->
+            {
+                final OptionalLong paramIndex = getParameters().indexOf(paramName);
 
-                return new MemberType(functionType.getSingleParamType(), p, getParameters().indexOf(p).getAsLong());
+                assert paramIndex.isPresent();
+
+                return new MemberType(functionType.getSingleParamType(), paramName, paramIndex.getAsLong());
             };
 
             return getParameters().zip(getParameters().map(mapping))
@@ -147,38 +149,25 @@ public class Lambda extends ExpressionBase
     @Override
     public Type getMatchingResultType()
     {
-        return expression.getType();
+        return innerExpression.getType();
     }
 
-    public boolean isExpressionInSomeScope()
+    public boolean isInnerExpressionInSomeScope()
     {
-        return expression.getParentScope().isPresent();
-    }
-
-    public void addExpressionToScope(final Scope scope)
-    {
-        assert !isExpressionInSomeScope();
-
-        scope.addMember(expression);
-    }
-
-    @Override
-    public void addMember(final ModelElement member)
-    {
-        throw new UnsupportedOperationException("Lambda should not be used as scope. The scope of its expression is provided by addExpressionToScope().");
+        return innerExpression.getParent().isPresent();
     }
 
     @Override
     public String toString()
     {
         return parameters.isEmpty() ?
-            format("{ %s }", expression) :
-            format("{ %s -> %s }", seq(parameters).map(this::stringOf).toString(", "), expression);
+            format("{ %s }", innerExpression) :
+            format("{ %s -> %s }", seq(parameters).map(this::stringOf).toString(", "), innerExpression);
     }
 
     private String stringOf(final String parameter)
     {
-        final Optional<Type> actualType = typeOfVariableNamed(parameter, expression);
+        final Optional<Type> actualType = typeOfVariableNamed(parameter, innerExpression);
         final Type formalType = getTypedParameters().get(parameter);
 
         return actualType.map(t -> parameter + ": " + t)

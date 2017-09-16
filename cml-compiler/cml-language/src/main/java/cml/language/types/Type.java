@@ -1,13 +1,12 @@
 package cml.language.types;
 
 import cml.language.features.Concept;
-import cml.language.foundation.ModelElement;
+import cml.language.generated.ModelElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static java.util.Optional.empty;
 
 public interface Type extends ModelElement
@@ -31,10 +30,7 @@ public interface Type extends ModelElement
         return empty();
     }
 
-    default Type getElementType()
-    {
-        return this;
-    }
+    Type getElementType();
 
     default Type getMatchingResultType()
     {
@@ -110,39 +106,18 @@ public interface Type extends ModelElement
         return false;
     }
 
-    default boolean isAssignableFrom(Type other)
+    default boolean isEqualTo(Type other)
     {
-        return this.isTypeAssignableFrom(other) && this.isCardinalityAssignableFrom(other);
+        return false;
     }
 
-    @SuppressWarnings("SimplifiableIfStatement")
-    default boolean isTypeAssignableFrom(Type other)
+    default boolean isAssignableFrom(Type other)
     {
-        if (getElementType().equals(other.getElementType()))
-        {
-            return true;
-        }
-        else if (this.isNumeric() && other.isNumeric())
-        {
-            return this.isNumericWiderThan(other);
-        }
-        else if (this.isBinaryFloatingPoint() && other.isBinaryFloatingPoint())
-        {
-            return this.isBinaryFloatingPointWiderThan(other);
-        }
-        else if (this.getConcept().isPresent() && other.getConcept().isPresent())
-        {
-            return other.getConcept()
-                        .get()
-                        .getAllGeneralizations()
-                        .stream()
-                        .anyMatch(c -> selfTypeOf(c).equals(getElementType()));
-        }
-        else
-        {
-            return false;
-        }
+        return this.getElementType().isElementTypeAssignableFrom(other.getElementType()) &&
+               this.isCardinalityAssignableFrom(other);
     }
+
+    boolean isElementTypeAssignableFrom(Type otherElementType);
 
     default boolean isCardinalityAssignableFrom(Type other)
     {

@@ -30,7 +30,7 @@ class_primary_constructor_statements() ::= <<
 <if(super_properties)><\\>
 <concept.nonDerivedProperties:field_init();separator="\n"><\\>
 <else><\\>
-<if(concept.associationProperties)><actual_self_init()><endif><\\>
+<if(concept.associationProperties)><actual_self_init()><\n><endif><\\>
 <if(concept.redefinedAncestors)><\\>
 <concept.redefinedAncestors:field_init_or_extend_invocation();separator="\n">
 <else><\\>

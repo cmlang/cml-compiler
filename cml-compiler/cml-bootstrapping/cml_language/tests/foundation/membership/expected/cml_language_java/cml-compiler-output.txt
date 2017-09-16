@@ -9,3 +9,9 @@ Scope files:
 
 Location files:
 - src/main/java/cml/language/generated/Location.java
+
+Membership files:
+- src/main/java/cml/language/generated/Membership.java
+
+Localization files:
+- src/main/java/cml/language/generated/Localization.java

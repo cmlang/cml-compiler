@@ -5,7 +5,7 @@ import cml.language.expressions.Lambda;
 import cml.language.features.Concept;
 import cml.language.features.Import;
 import cml.language.features.Module;
-import cml.language.foundation.ModelElement;
+import cml.language.generated.ModelElement;
 import cml.language.types.NamedType;
 
 import java.util.Optional;
@@ -23,7 +23,7 @@ public class ModelElementFunctions
         {
             final Import _import = (Import) element;
 
-            return _import.getModule();
+            return _import.getImportedModule();
         }
         else if (element instanceof Module)
         {
@@ -34,7 +34,7 @@ public class ModelElementFunctions
         else
         {
             //noinspection Convert2MethodRef
-            return element.getParentScope().flatMap(s -> moduleOf(s));
+            return element.getParent().flatMap(s -> moduleOf(s));
         }
     }
 
@@ -51,17 +51,17 @@ public class ModelElementFunctions
         }
         else
         {
-            assert element.getParentScope().isPresent(): "Parent scope required in order to determine self's type.";
+            assert element.getParent().isPresent(): "Parent scope required in order to determine self's type.";
 
-            return selfTypeOf(element.getParentScope().get());
+            return selfTypeOf(element.getParent().get());
         }
     }
 
     public static <T> Optional<T> siblingNamed(String name, ModelElement element, Class<T> clazz)
     {
-        if (element.getParentScope().isPresent())
+        if (element.getParent().isPresent())
         {
-            return memberNamed(name, element.getParentScope().get(), clazz);
+            return memberNamed(name, element.getParent().get(), clazz);
         }
         else
         {

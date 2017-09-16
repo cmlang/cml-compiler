@@ -1,7 +1,8 @@
 package cml.language.foundation;
 
 import cml.language.generated.Location;
-import org.jetbrains.annotations.Nullable;
+import cml.language.generated.ModelElement;
+import cml.language.generated.Scope;
 
 import java.util.Optional;
 
@@ -33,15 +34,9 @@ class NamedElementImpl implements NamedElement
     }
 
     @Override
-    public void setLocation(@Nullable Location location)
+    public Optional<Scope> getParent()
     {
-        modelElement.setLocation(location);
-    }
-
-    @Override
-    public Optional<Scope> getParentScope()
-    {
-        return modelElement.getParentScope();
+        return modelElement.getParent();
     }
 
     @Override

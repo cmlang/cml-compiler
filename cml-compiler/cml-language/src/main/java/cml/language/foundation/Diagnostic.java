@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.generated.ModelElement;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

@@ -1,13 +1,16 @@
 package templates.lang.common;
 
-import cml.language.foundation.Model;
 import cml.language.features.Concept;
 import cml.language.features.Module;
+import cml.language.foundation.Model;
 import cml.language.foundation.Property;
 import cml.language.types.NamedType;
 import org.junit.Test;
 
 import java.io.IOException;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 public class ToStringTest  extends LangTest
 {
@@ -25,10 +28,8 @@ public class ToStringTest  extends LangTest
     @Test
     public void to_string__empty() throws IOException
     {
-        final Concept concept = Concept.create("SomeConcept");
-
         final Module module = createModule();
-        module.addMember(concept);
+        final Concept concept = Concept.create(module, "SomeConcept");
 
         to_string(concept, "empty.txt");
     }
@@ -36,12 +37,9 @@ public class ToStringTest  extends LangTest
     @Test
     public void to_string__required() throws IOException
     {
-        final Concept concept = Concept.create("SomeConcept");
-
-        concept.addMember(Property.create("someProperty", NamedType.create("SomeType", null)));
-
         final Module module = createModule();
-        module.addMember(concept);
+        final Property property = Property.create("someProperty", NamedType.create("SomeType", null));
+        final Concept concept = Concept.create(module, "SomeConcept", singletonList(property));
 
         to_string(concept, "required.txt");
     }
@@ -49,13 +47,10 @@ public class ToStringTest  extends LangTest
     @Test
     public void to_string__optional() throws IOException
     {
-        final Concept concept = Concept.create("SomeConcept");
-
-        concept.addMember(Property.create("someProperty", NamedType.create("SomeType", null)));
-        concept.addMember(Property.create("optionalProperty", NamedType.create("AnotherType", "?")));
-
         final Module module = createModule();
-        module.addMember(concept);
+        final Property someProperty = Property.create("someProperty", NamedType.create("SomeType", null));
+        final Property optionalProperty = Property.create("optionalProperty", NamedType.create("AnotherType", "?"));
+        final Concept concept = Concept.create(module, "SomeConcept", asList(someProperty, optionalProperty));
 
         to_string(concept, "optional.txt");
     }
@@ -63,14 +58,11 @@ public class ToStringTest  extends LangTest
     @Test
     public void to_string__sequence() throws IOException
     {
-        final Concept concept = Concept.create("SomeConcept");
-
-        concept.addMember(Property.create("someProperty", NamedType.create("SomeType", null)));
-        concept.addMember(Property.create("optionalProperty", NamedType.create("AnotherType", "?")));
-        concept.addMember(Property.create("sequenceProperty", NamedType.create("String", "*")));
-
         final Module module = createModule();
-        module.addMember(concept);
+        final Property someProperty = Property.create("someProperty", NamedType.create("SomeType", null));
+        final Property optionalProperty = Property.create("optionalProperty", NamedType.create("AnotherType", "?"));
+        final Property sequenceProperty = Property.create("sequenceProperty", NamedType.create("String", "*"));
+        final Concept concept = Concept.create(module, "SomeConcept", asList(someProperty, optionalProperty, sequenceProperty));
 
         to_string(concept, "sequence.txt");
     }
@@ -82,9 +74,6 @@ public class ToStringTest  extends LangTest
 
     private static Module createModule()
     {
-        final Model model = Model.create();
-        final Module module = Module.create("some_module");
-        model.addMember(module);
-        return module;
+        return Module.create(Model.create(), "some_module");
     }
 }
