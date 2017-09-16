@@ -3,6 +3,7 @@ package cml.language.foundation;
 import cml.language.features.*;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 
 import java.util.Comparator;

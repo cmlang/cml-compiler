@@ -3,6 +3,7 @@ package cml.language.features;
 import cml.language.foundation.*;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import cml.language.types.Type;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -133,7 +135,7 @@ class AssociationImpl implements Association
     AssociationImpl(Module module, String name, List<AssociationEnd> associationEnds, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
-        this.namedElement = NamedElement.create(modelElement, name);
+        this.namedElement = extendNamedElement(modelElement, name);
         this.scope = extendScope(this, modelElement, seq(associationEnds).map(end -> (ModelElement)end).toList());
     }
 

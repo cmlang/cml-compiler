@@ -4,7 +4,7 @@ import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.features.Task;
 import cml.language.foundation.Model;
-import cml.language.foundation.NamedElement;
+import cml.language.generated.NamedElement;
 import cml.language.loader.ModelVisitor;
 
 class TargetGenerator implements ModelVisitor

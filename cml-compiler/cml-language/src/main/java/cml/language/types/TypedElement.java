@@ -1,6 +1,6 @@
 package cml.language.types;
 
-import cml.language.foundation.NamedElement;
+import cml.language.generated.NamedElement;
 
 public interface TypedElement extends NamedElement
 {

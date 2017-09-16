@@ -10,6 +10,9 @@ Scope files:
 Location files:
 - src/main/java/cml/language/generated/Location.java
 
+NamedElement files:
+- src/main/java/cml/language/generated/NamedElement.java
+
 Membership files:
 - src/main/java/cml/language/generated/Membership.java
 

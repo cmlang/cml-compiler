@@ -2,7 +2,7 @@ package cml.language.functions;
 
 import cml.language.expressions.LambdaScope;
 import cml.language.expressions.Path;
-import cml.language.foundation.NamedElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import cml.language.types.NamedType;
 import cml.language.types.Type;

@@ -1,8 +1,8 @@
 package cml.language.features;
 
-import cml.language.foundation.NamedElement;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.NamedElement.extendNamedElement;
 
 public interface Import extends NamedElement
 {
@@ -32,7 +33,7 @@ class ImportImpl implements Import
     ImportImpl(Module module, String name)
     {
         this.modelElement = extendModelElement(this, module, null);
-        this.namedElement = NamedElement.create(modelElement, name);
+        this.namedElement = extendNamedElement(modelElement, name);
     }
 
     @Override

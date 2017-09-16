@@ -3,7 +3,7 @@ package cml.generator;
 import cml.io.Console;
 import cml.io.FileSystem;
 import cml.language.features.Task;
-import cml.language.foundation.NamedElement;
+import cml.language.generated.NamedElement;
 import cml.templates.TemplateRenderer;
 
 import java.io.File;

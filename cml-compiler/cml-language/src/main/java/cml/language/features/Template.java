@@ -1,15 +1,14 @@
 package cml.language.features;
 
-import cml.language.foundation.ModelElementBase;
-import cml.language.foundation.NamedElement;
+import cml.language.foundation.NamedElementBase;
 
-public class Template extends ModelElementBase implements NamedElement
+public class Template extends NamedElementBase
 {
     private final Function function;
 
     public Template(Module module, Function function)
     {
-        super(module);
+        super(module, function.getName());
 
         this.function = function;
     }
@@ -17,11 +16,5 @@ public class Template extends ModelElementBase implements NamedElement
     public Function getFunction()
     {
         return function;
-    }
-
-    @Override
-    public String getName()
-    {
-        return function.getName();
     }
 }

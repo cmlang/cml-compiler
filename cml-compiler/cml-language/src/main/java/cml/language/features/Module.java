@@ -1,15 +1,16 @@
 package cml.language.features;
 
 import cml.language.foundation.Model;
-import cml.language.foundation.NamedElement;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 
 import java.util.List;
 import java.util.Optional;
 
 import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -155,7 +156,7 @@ class ModuleImpl implements Module
     ModuleImpl(Model model, String name)
     {
         this.modelElement = extendModelElement(this, model, null);
-        this.namedElement = NamedElement.create(modelElement, name);
+        this.namedElement = extendNamedElement(modelElement, name);
         this.scope = extendScope(this, modelElement, emptyList());
     }
 

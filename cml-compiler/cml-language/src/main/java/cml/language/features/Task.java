@@ -1,10 +1,10 @@
 package cml.language.features;
 
-import cml.language.foundation.NamedElement;
 import cml.language.foundation.Property;
 import cml.language.foundation.PropertyList;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static org.jooq.lambda.Seq.seq;
 
@@ -36,7 +37,7 @@ class TaskImpl implements Task
     TaskImpl(Module module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
-        this.namedElement = NamedElement.create(modelElement, name);
+        this.namedElement = extendNamedElement(modelElement, name);
         this.scope = extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
 
         this.constructor = constructor;

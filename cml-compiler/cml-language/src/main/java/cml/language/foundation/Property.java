@@ -5,6 +5,7 @@ import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
@@ -137,7 +138,7 @@ class PropertyImpl implements Property
     PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived, Location location)
     {
         modelElement = ModelElement.extendModelElement(this, null, location);
-        namedElement = NamedElement.create(modelElement, name);
+        namedElement = NamedElement.extendNamedElement(modelElement, name);
         scope = Scope.extendScope(this, modelElement, singletonList(value));
 
         this.type = type;

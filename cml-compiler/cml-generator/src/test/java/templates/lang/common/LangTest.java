@@ -2,8 +2,8 @@ package templates.lang.common;
 
 import cml.language.features.Association;
 import cml.language.features.Concept;
-import cml.language.foundation.NamedElement;
 import cml.language.foundation.Property;
+import cml.language.generated.NamedElement;
 import cml.language.types.NamedType;
 import com.google.common.io.Resources;
 import org.junit.runner.RunWith;

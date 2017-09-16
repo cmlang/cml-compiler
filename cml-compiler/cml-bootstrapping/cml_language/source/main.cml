@@ -29,6 +29,11 @@ association Localization
     ModelElement.location;
 }
 
+abstract concept NamedElement: ModelElement
+{
+    name: String;
+}
+
 task cml_language_java by cmlc_java
 {
     groupId = "cml";

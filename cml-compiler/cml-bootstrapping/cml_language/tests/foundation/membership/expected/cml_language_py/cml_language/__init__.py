@@ -212,3 +212,39 @@ class LocationImpl(Location):
             self.line,
             self.column
         )
+
+
+class NamedElement(ModelElement, ABC):
+
+    @abstractproperty
+    def name(self) -> 'str':
+        pass
+
+    @staticmethod
+    def extend_named_element(model_element: 'ModelElement', name: 'str') -> 'NamedElement':
+        return NamedElementImpl(model_element, name)
+
+
+class NamedElementImpl(NamedElement):
+
+    def __init__(self, model_element: 'ModelElement', name: 'str') -> 'None':
+        self.__model_element = model_element
+        self.__name = name
+
+    @property
+    def name(self) -> 'str':
+        return self.__name
+
+    @property
+    def parent(self) -> 'Scope':
+        return self.__model_element.parent
+
+    @property
+    def location(self) -> 'Location':
+        return self.__model_element.location
+
+    def __str__(self) -> 'str':
+        return "%s(name=%s)" % (
+            type(self).__name__,
+            self.name
+        )

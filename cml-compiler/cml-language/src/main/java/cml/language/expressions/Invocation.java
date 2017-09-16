@@ -5,9 +5,9 @@ import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
 import cml.language.features.Module;
 import cml.language.foundation.Diagnostic;
-import cml.language.foundation.NamedElement;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import cml.language.types.*;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +19,7 @@ import java.util.*;
 
 import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static java.lang.String.format;
 import static java.util.Collections.*;
@@ -273,7 +274,7 @@ class InvocationImpl implements Invocation
     InvocationImpl(String name, List<Expression> arguments)
     {
         modelElement = extendModelElement(this, null, null);
-        namedElement = NamedElement.create(modelElement, name);
+        namedElement = extendNamedElement(modelElement, name);
         scope = extendScope(this, modelElement, seq(arguments).map(a -> (ModelElement)a).toList());
 
         this.arguments = new ArrayList<>(arguments);
@@ -364,7 +365,7 @@ class ParameterizedInvocation implements Invocation
     ParameterizedInvocation(String name, LinkedHashMap<String, Expression> namedArguments)
     {
         modelElement = extendModelElement(this, null, null);
-        namedElement = NamedElement.create(modelElement, name);
+        namedElement = extendNamedElement(modelElement, name);
         scope = extendScope(this, modelElement, seq(namedArguments.values()).map(a -> (ModelElement)a).toList());
 
         this.namedArguments = new LinkedHashMap<>(namedArguments);

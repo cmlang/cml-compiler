@@ -3,7 +3,7 @@ package cml.language.loader;
 import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
 import cml.language.features.Module;
-import cml.language.foundation.NamedElement;
+import cml.language.generated.NamedElement;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;

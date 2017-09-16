@@ -3,6 +3,7 @@ package cml.language.features;
 import cml.language.foundation.*;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import cml.language.types.Type;
 
@@ -15,6 +16,8 @@ import java.util.stream.Stream;
 
 import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.NamedElement.extendNamedElement;
+import static cml.language.generated.Scope.extendScope;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
@@ -358,8 +361,8 @@ class ConceptImpl implements Concept
     ConceptImpl(Module module, String name, boolean _abstract, final List<Property> propertyList, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
-        this.namedElement = NamedElement.create(modelElement, name);
-        this.scope = Scope.extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
+        this.namedElement = extendNamedElement(modelElement, name);
+        this.scope = extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
         this._abstract = _abstract;
     }
 

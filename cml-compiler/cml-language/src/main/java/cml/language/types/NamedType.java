@@ -1,9 +1,9 @@
 package cml.language.types;
 
 import cml.language.features.Concept;
-import cml.language.foundation.NamedElement;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.NamedElement.extendNamedElement;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
@@ -219,7 +220,7 @@ class NamedTypeImpl implements NamedType
     NamedTypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
     {
         this.modelElement = extendModelElement(this, null, null);
-        this.namedElement = NamedElement.create(modelElement, name);
+        this.namedElement = extendNamedElement(modelElement, name);
         this.cardinality = cardinality;
         this.errorMessage = errorMessage;
     }
