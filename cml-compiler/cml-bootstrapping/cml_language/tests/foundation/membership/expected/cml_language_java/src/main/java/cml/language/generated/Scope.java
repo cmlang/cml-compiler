@@ -12,11 +12,6 @@ public interface Scope extends ModelElement
 {
     List<ModelElement> getMembers();
 
-    static Scope createScope(@Nullable Location location, @Nullable Scope parent, List<ModelElement> members)
-    {
-        return new ScopeImpl(location, parent, members);
-    }
-
     static Scope extendScope(ModelElement modelElement, List<ModelElement> members)
     {
         return new ScopeImpl(modelElement, members);

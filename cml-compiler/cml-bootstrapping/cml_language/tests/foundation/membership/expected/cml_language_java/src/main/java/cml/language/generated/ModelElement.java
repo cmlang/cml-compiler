@@ -14,11 +14,6 @@ public interface ModelElement
 
     Optional<Scope> getParent();
 
-    static ModelElement createModelElement(@Nullable Location location, @Nullable Scope parent)
-    {
-        return new ModelElementImpl(location, parent);
-    }
-
     static ModelElement extendModelElement(@Nullable Location location, @Nullable Scope parent)
     {
         return new ModelElementImpl(location, parent);

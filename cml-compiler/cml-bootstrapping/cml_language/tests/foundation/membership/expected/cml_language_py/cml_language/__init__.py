@@ -55,17 +55,13 @@ class ModelElement(ABC):
         pass
 
     @staticmethod
-    def create_model_element(location: 'Optional[Location]', parent: 'Optional[Scope]') -> 'ModelElement':
-        return ModelElementImpl(location, parent)
-
-    @staticmethod
     def extend_model_element(location: 'Optional[Location]', parent: 'Optional[Scope]') -> 'ModelElement':
         return ModelElementImpl(location, parent)
 
 
 class ModelElementImpl(ModelElement):
 
-    def __init__(self, location: 'Optional[Location]', parent: 'Optional[Scope]', **kwargs) -> 'None':
+    def __init__(self, location: 'Optional[Location]', parent: 'Optional[Scope]') -> 'None':
         
         self.__location = location
         self.__parent = parent
@@ -93,21 +89,14 @@ class Scope(ModelElement, ABC):
         pass
 
     @staticmethod
-    def create_scope(location: 'Optional[Location]', parent: 'Optional[Scope]', members: 'List[ModelElement]') -> 'Scope':
-        return ScopeImpl(None, members, location=location, parent=parent)
-
-    @staticmethod
     def extend_scope(model_element: 'ModelElement', members: 'List[ModelElement]') -> 'Scope':
         return ScopeImpl(model_element, members)
 
 
 class ScopeImpl(Scope):
 
-    def __init__(self, model_element: 'Optional[ModelElement]', members: 'List[ModelElement]', **kwargs) -> 'None':
-        if model_element is None:
-            self.__model_element = ModelElement.extend_model_element(kwargs['location'], kwargs['parent'])
-        else:
-            self.__model_element = model_element
+    def __init__(self, model_element: 'ModelElement', members: 'List[ModelElement]') -> 'None':
+        self.__model_element = model_element
         self.__members = members
 
     @property
