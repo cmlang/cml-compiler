@@ -10,17 +10,10 @@ abstract concept Scope: ModelElement
     members: ModelElement*;
 }
 
-association Membership
-{
-    ModelElement.parent;
-    Scope.members;
-}
-
 concept Location
 {
     line: Integer;
     column: Integer;
-    element: ModelElement;
 }
 
 task cml_language_java by cmlc_java
