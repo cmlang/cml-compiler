@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
+import static cml.language.functions.TypeFunctions.isEqualTo;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
@@ -222,7 +223,7 @@ class AssociationEndTypesMustMatch implements Invariant<Association>
 
     private static boolean typesMatch(Concept concept, Property property)
     {
-        return property.getType().getElementType().isEqualTo(selfTypeOf(concept));
+        return isEqualTo(property.getType().getElementType(), selfTypeOf(concept));
     }
 
     @Override

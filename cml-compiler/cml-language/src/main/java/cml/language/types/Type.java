@@ -4,7 +4,6 @@ import cml.language.features.Concept;
 import cml.language.generated.ModelElement;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
@@ -40,11 +39,6 @@ public interface Type extends ModelElement
     default Type getBaseType()
     {
         return this;
-    }
-
-    default Type withCardinality(String cardinality)
-    {
-        throw new UnsupportedOperationException(this + "withCardinality(" + cardinality + ")");
     }
 
     default boolean isParameter() { return isDefined() && !isPrimitive() && !isConcept(); }
@@ -94,36 +88,6 @@ public interface Type extends ModelElement
     default boolean isSequence()
     {
         return false;
-    }
-
-    default boolean isNumericWiderThan(Type other)
-    {
-        return false;
-    }
-
-    default boolean isBinaryFloatingPointWiderThan(Type other)
-    {
-        return false;
-    }
-
-    default boolean isEqualTo(Type other)
-    {
-        return false;
-    }
-
-    default boolean isAssignableFrom(Type other)
-    {
-        return this.getElementType().isElementTypeAssignableFrom(other.getElementType()) &&
-               this.isCardinalityAssignableFrom(other);
-    }
-
-    boolean isElementTypeAssignableFrom(Type otherElementType);
-
-    default boolean isCardinalityAssignableFrom(Type other)
-    {
-        return Objects.equals(this.getCardinality(), other.getCardinality()) ||
-            (this.isOptional() && other.isRequired()) ||
-            (this.isSequence());
     }
 
     default Optional<Concept> getConcept()

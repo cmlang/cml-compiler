@@ -18,6 +18,8 @@ import org.jooq.lambda.tuple.Tuple2;
 import java.util.*;
 
 import static cml.language.functions.ModelElementFunctions.moduleOf;
+import static cml.language.functions.TypeFunctions.isAssignableFrom;
+import static cml.language.functions.TypeFunctions.withCardinality;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
@@ -118,7 +120,7 @@ public interface Invocation extends Expression, NamedElement
                                              .orElse(NamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
                     }
 
-                    return paramType.withCardinality(type.getCardinality().orElse(null));
+                    return withCardinality(paramType, type.getCardinality().orElse(null));
                 }
                 else
                 {
@@ -188,7 +190,7 @@ public interface Invocation extends Expression, NamedElement
         final Type paramType = param.getMatchingResultType();
         final Type argumentType = argument.getMatchingResultType();
 
-        return !argumentType.isUndefined() && getMatchingTypeOf(paramType).isAssignableFrom(argumentType);
+        return !argumentType.isUndefined() && isAssignableFrom(getMatchingTypeOf(paramType), argumentType);
     }
 
     @Override

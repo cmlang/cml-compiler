@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.functions.TypeFunctions.isEqualTo;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -170,7 +171,7 @@ class AssociationEndTypeMatchesPropertyType implements Invariant<AssociationEnd>
     {
         return !self.getPropertyType().isPresent() ||
                !self.getProperty().isPresent() ||
-               self.getPropertyType().get().isEqualTo(self.getProperty().get().getType());
+               isEqualTo(self.getPropertyType().get(), self.getProperty().get().getType());
     }
 
     @Override

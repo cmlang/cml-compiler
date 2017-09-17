@@ -3,6 +3,7 @@ package cml.language.expressions;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 
+import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.util.Arrays.asList;
 
 public class Conditional extends ExpressionBase
@@ -47,11 +48,11 @@ public class Conditional extends ExpressionBase
         final Type thenType = then.getType();
         final Type elseType = else_.getType();
 
-        if (thenType.isAssignableFrom(elseType))
+        if (isAssignableFrom(thenType, elseType))
         {
             return thenType;
         }
-        else if (elseType.isAssignableFrom(thenType))
+        else if (isAssignableFrom(elseType, thenType))
         {
             return elseType;
         }

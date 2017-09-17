@@ -14,13 +14,12 @@ import org.junit.Test;
 
 import java.util.Optional;
 
+import static cml.language.functions.TypeFunctions.isEqualTo;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ModelLoaderTest
 {
@@ -182,7 +181,7 @@ public class ModelLoaderTest
         else
         {
             assertTrue("Did expect type for: " + conceptName + "." + propertyName, associationEnd.getPropertyType().isPresent());
-            assertTrue("Expected matching type for: " + conceptName + "." + propertyName, expectedType.isEqualTo(associationEnd.getPropertyType().get()));
+            assertTrue("Expected matching type for: " + conceptName + "." + propertyName, isEqualTo(expectedType, associationEnd.getPropertyType().get()));
         }
 
         final Concept concept = associationEnd.getConcept().get();

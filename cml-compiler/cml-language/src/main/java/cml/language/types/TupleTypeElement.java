@@ -1,6 +1,7 @@
 package cml.language.types;
 
 import cml.language.foundation.ModelElementBase;
+import cml.language.functions.TypeFunctions;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -31,7 +32,8 @@ public class TupleTypeElement extends ModelElementBase
 
     public boolean isAssignableFrom(final TupleTypeElement that)
     {
-        return this.type.isAssignableFrom(that.type) && (name != null ? name.equals(that.name) : that.name == null);
+        return TypeFunctions.isAssignableFrom(this.type, that.type) &&
+               (name != null ? name.equals(that.name) : that.name == null);
     }
 
     @Override

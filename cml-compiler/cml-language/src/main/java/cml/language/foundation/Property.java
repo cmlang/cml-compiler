@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -364,7 +365,7 @@ class PropertyTypeAssignableFromExpressionType implements Invariant<Property>
     public boolean evaluate(Property self)
     {
         return !(self.getDeclaredType().isPresent() && self.getValue().isPresent()) ||
-               self.getDeclaredType().get().isAssignableFrom(self.getValue().get().getType());
+               isAssignableFrom(self.getDeclaredType().get(), self.getValue().get().getType());
     }
 
     @Override

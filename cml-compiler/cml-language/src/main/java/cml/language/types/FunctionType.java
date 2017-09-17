@@ -63,22 +63,6 @@ public class FunctionType extends ModelElementBase implements Type
     }
 
     @Override
-    public boolean isElementTypeAssignableFrom(final Type otherElementType)
-    {
-        assert !this.getCardinality().isPresent();
-        assert !otherElementType.getCardinality().isPresent();
-
-        if (otherElementType instanceof FunctionType)
-        {
-            final FunctionType other = (FunctionType)otherElementType;
-
-            return params.isAssignableFrom(other.params) && result.isAssignableFrom(other.result);
-        }
-
-        return false;
-    }
-
-    @Override
     public String toString()
     {
         return format("%s -> %s", params, result);

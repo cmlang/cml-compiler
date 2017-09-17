@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static cml.language.functions.ScopeFunctions.*;
+import static cml.language.functions.TypeFunctions.withCardinality;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
@@ -101,7 +102,7 @@ public class Path extends ExpressionBase
                     {
                         final String cardinality = memberType.get().getCardinality().orElse(null);
 
-                        type = memberType.get().withCardinality(type.isSequence() ? "*" : cardinality);
+                        type = withCardinality(memberType.get(), type.isSequence() ? "*" : cardinality);
                     }
                     else
                     {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static cml.language.functions.TypeFunctions.isElementTypeAssignableFrom;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static org.jooq.lambda.Seq.seq;
@@ -45,7 +46,7 @@ public class Function extends TypedElementBase
         int index = 0;
         for (FunctionParameter parameter: getParameters())
         {
-            if (parameter.getMatchingResultType().getElementType().isElementTypeAssignableFrom(type.getBaseType().getElementType()))
+            if (isElementTypeAssignableFrom(parameter.getMatchingResultType().getElementType(), type.getBaseType().getElementType()))
             {
                 if (index != skipIndex) break;
             }

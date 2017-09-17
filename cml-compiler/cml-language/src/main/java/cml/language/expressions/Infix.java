@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static cml.language.functions.TypeFunctions.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
@@ -105,17 +106,17 @@ public class Infix extends ExpressionBase
         }
         else if (MATH_OPERATORS.contains(operator) && leftType.isNumeric() && rightType.isNumeric())
         {
-            return leftType.isNumericWiderThan(rightType) ? leftType : rightType;
+            return isNumericWiderThan(leftType, rightType) ? leftType : rightType;
         }
         else if (MATH_OPERATORS.contains(operator) && leftType.isBinaryFloatingPoint() && rightType.isBinaryFloatingPoint())
         {
-            return leftType.isBinaryFloatingPointWiderThan(rightType) ? leftType : rightType;
+            return isBinaryFloatingPointWiderThan(leftType, rightType) ? leftType : rightType;
         }
-        else if (leftType.isAssignableFrom(rightType))
+        else if (isAssignableFrom(leftType, rightType))
         {
             return leftType;
         }
-        else if (rightType.isAssignableFrom(leftType))
+        else if (isAssignableFrom(rightType, leftType))
         {
             return rightType;
         }
