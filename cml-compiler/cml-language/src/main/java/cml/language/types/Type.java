@@ -14,11 +14,6 @@ public interface Type extends ModelElement
     String OPTIONAL = "optional";
     String SEQUENCE = "sequence";
 
-    default String getKind()
-    {
-        return REQUIRED;
-    }
-
     default Optional<String> getCardinality()
     {
         return empty();
@@ -70,24 +65,43 @@ public interface Type extends ModelElement
         return false;
     }
 
-    default boolean isOptional()
-    {
-        return false;
-    }
-
-    default boolean isRequired()
-    {
-        return false;
-    }
-
     default boolean isSingle()
     {
         return (isRequired() || isOptional()) && !isSequence();
     }
 
+    default boolean isOptional()
+    {
+        return getKind().equals(OPTIONAL);
+    }
+
+    default boolean isRequired()
+    {
+        return getKind().equals(REQUIRED);
+    }
+
     default boolean isSequence()
     {
-        return false;
+        return getKind().equals(SEQUENCE);
+    }
+
+    default String getKind()
+    {
+        if (getCardinality().isPresent())
+        {
+            final String cardinality = getCardinality().get();
+
+            if (cardinality.equals("?"))
+            {
+                return OPTIONAL;
+            }
+            else if (cardinality.equals("*"))
+            {
+                return SEQUENCE;
+            }
+        }
+
+        return REQUIRED;
     }
 
     default Optional<Concept> getConcept()

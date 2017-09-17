@@ -62,40 +62,6 @@ public interface NamedType extends Type, NamedElement
         return getName().equals(UNDEFINED.getName());
     }
 
-    default boolean isOptional()
-    {
-        return getKind().equals(OPTIONAL);
-    }
-
-    default boolean isRequired()
-    {
-        return getKind().equals(REQUIRED);
-    }
-
-    default boolean isSequence()
-    {
-        return getKind().equals(SEQUENCE);
-    }
-
-    default String getKind()
-    {
-        if (getCardinality().isPresent())
-        {
-            final String cardinality = getCardinality().get();
-
-            if (cardinality.matches("\\?"))
-            {
-                return OPTIONAL;
-            }
-            else if (cardinality.matches("([*+])"))
-            {
-                return SEQUENCE;
-            }
-        }
-
-        return REQUIRED;
-    }
-
     default NamedType getElementType()
     {
         final NamedType elementType = NamedType.create(getName());
