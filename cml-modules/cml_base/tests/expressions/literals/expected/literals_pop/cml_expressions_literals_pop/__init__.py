@@ -2,7 +2,7 @@ from typing import *
 from abc import *
 from decimal import *
 
-class Expressions:
+class LiteralExpressions:
 
     def __init__(self, literal_true_boolean: 'bool' = True, literal_false_boolean: 'bool' = False, literal_string_init: 'str' = "\tSome \"String\"\n", literal_integer_init: 'int' = 123, literal_decimal_init: 'Decimal' = Decimal("123.456"), literal_decimal_init_2: 'Decimal' = Decimal(".456")) -> 'None':
         self.__literal_true_boolean = literal_true_boolean

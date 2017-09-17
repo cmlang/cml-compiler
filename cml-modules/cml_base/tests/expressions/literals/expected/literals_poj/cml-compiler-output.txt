@@ -1,5 +1,5 @@
 model files:
 - pom.xml
 
-Expressions files:
-- src/main/java/literals/poj/Expressions.java
+LITERAL_EXPRESSIONS files:
+- src/main/java/literals/poj/LiteralExpressions.java

@@ -8,7 +8,7 @@ import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
-public class Expressions
+public class LiteralExpressions
 {
     private final boolean literalTrueBoolean;
     private final boolean literalFalseBoolean;
@@ -17,12 +17,12 @@ public class Expressions
     private final BigDecimal literalDecimalInit;
     private final BigDecimal literalDecimalInit2;
 
-    public Expressions()
+    public LiteralExpressions()
     {
         this(true, false, "\tSome \"String\"\n", 123, new BigDecimal("123.456"), new BigDecimal(".456"));
     }
 
-    public Expressions(boolean literalTrueBoolean, boolean literalFalseBoolean, String literalStringInit, int literalIntegerInit, BigDecimal literalDecimalInit, BigDecimal literalDecimalInit2)
+    public LiteralExpressions(boolean literalTrueBoolean, boolean literalFalseBoolean, String literalStringInit, int literalIntegerInit, BigDecimal literalDecimalInit, BigDecimal literalDecimalInit2)
     {
         this.literalTrueBoolean = literalTrueBoolean;
         this.literalFalseBoolean = literalFalseBoolean;
@@ -64,7 +64,7 @@ public class Expressions
 
     public String toString()
     {
-        return new StringBuilder(Expressions.class.getSimpleName())
+        return new StringBuilder(LiteralExpressions.class.getSimpleName())
                    .append('(')
                    .append("literalTrueBoolean=").append(String.format("\"%s\"", getLiteralTrueBoolean())).append(", ")
                    .append("literalFalseBoolean=").append(String.format("\"%s\"", getLiteralFalseBoolean())).append(", ")

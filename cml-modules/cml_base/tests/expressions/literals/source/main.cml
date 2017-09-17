@@ -1,5 +1,5 @@
 
-concept Expressions
+concept LITERAL_EXPRESSIONS
 {
     LiteralTrueBoolean = true;
     LiteralFalseBoolean = false;

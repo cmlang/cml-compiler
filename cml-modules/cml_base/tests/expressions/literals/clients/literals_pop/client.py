@@ -1,7 +1,7 @@
 
 from cml_expressions_literals_pop import *
 
-expressions = Expressions()
+expressions = LiteralExpressions()
 
 print("Expression Literals\n")
 

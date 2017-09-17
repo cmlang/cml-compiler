@@ -1,20 +1,20 @@
 
-concept Vehicle
+concept VEHICLE
 {
-    plate: String;
-    driver: Employee?;
-    owner: Organization;
+    plate: STRING;
+    driver: EMPLOYEE?;
+    owner: ORGANIZATION;
 }
 
-concept Organization
+concept ORGANIZATION
 {
-    name: String;
-    employees: Employee*;
+    name: STRING;
+    employees: EMPLOYEE*;
 }
 
-concept Employee
+concept EMPLOYEE
 {
-    name: String;
+    name: STRING;
 }
 
 task vehicles_poj by poj

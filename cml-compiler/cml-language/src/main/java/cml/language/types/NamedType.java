@@ -20,36 +20,35 @@ import static java.util.Collections.unmodifiableList;
 
 public interface NamedType extends Type, NamedElement
 {
-    NamedType UNDEFINED = NamedType.create("Undefined");
-    NamedType BOOLEAN = NamedType.create("Boolean");
-    NamedType STRING = NamedType.create("String");
+    NamedType UNDEFINED = NamedType.create("UNDEFINED");
+    NamedType BOOLEAN = NamedType.create("BOOLEAN");
 
     Collection<String> PRIMITIVE_TYPE_NAMES = unmodifiableCollection(asList(
-        "Boolean", "Integer", "Decimal", "String", "Regex", // main primitive types
-        "Byte", "Short", "Long", "Float", "Double", "Char" // remaining primitive types
+        "BOOLEAN", "INTEGER", "DECIMAL", "STRING", "REGEX", // main primitive types
+        "BYTE", "SHORT", "LONG", "FLOAT", "DOUBLE", "CHAR" // remaining primitive types
     ));
 
     List<String> NUMERIC_TYPE_NAMES = unmodifiableList(asList(
-        "Byte", "Short", "Integer", "Long", "Decimal" // from narrower to wider
+        "BYTE", "SHORT", "INTEGER", "LONG", "DECIMAL" // from narrower to wider
     ));
 
     List<String> BINARY_FLOATING_POINT_TYPE_NAMES = unmodifiableList(asList(
-        "Float", "Double" // from narrower to wider
+        "FLOAT", "DOUBLE" // from narrower to wider
     ));
 
     default boolean isPrimitive()
     {
-        return PRIMITIVE_TYPE_NAMES.contains(getName());
+        return PRIMITIVE_TYPE_NAMES.contains(getName().toUpperCase());
     }
 
     default boolean isNumeric()
     {
-        return NUMERIC_TYPE_NAMES.contains(getName());
+        return NUMERIC_TYPE_NAMES.contains(getName().toUpperCase());
     }
 
     default boolean isBinaryFloatingPoint()
     {
-        return BINARY_FLOATING_POINT_TYPE_NAMES.contains(getName());
+        return BINARY_FLOATING_POINT_TYPE_NAMES.contains(getName().toUpperCase());
     }
 
     default boolean isDefined()
@@ -59,7 +58,7 @@ public interface NamedType extends Type, NamedElement
 
     default boolean isUndefined()
     {
-        return getName().equals(UNDEFINED.getName());
+        return getName().toUpperCase().equals(UNDEFINED.getName());
     }
 
     default NamedType getElementType()

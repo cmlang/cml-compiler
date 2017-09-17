@@ -1,6 +1,6 @@
 package literals.client;
 
-import literals.poj.Expressions;
+import literals.poj.LiteralExpressions;
 
 public class Launcher
 {
@@ -9,7 +9,7 @@ public class Launcher
         System.out.println("Literal Expressions");
         System.out.println();
 
-        final Expressions expressions = new Expressions();
+        final LiteralExpressions expressions = new LiteralExpressions();
         
         System.out.println("LiteralTrueBoolean = " + expressions.getLiteralTrueBoolean());
         System.out.println("LiteralFalseBoolean = " + expressions.getLiteralFalseBoolean());
