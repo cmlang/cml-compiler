@@ -22,7 +22,7 @@ public class TypeFunctions
 
             namedType.getConcept().ifPresent(newType::setConcept);
 
-            return namedType;
+            return newType;
         }
         else if (type instanceof TupleType)
         {
@@ -31,7 +31,7 @@ public class TypeFunctions
 
             tupleType.getConcept().ifPresent(newType::setConcept);
 
-            return tupleType;
+            return newType;
         }
         else
         {
