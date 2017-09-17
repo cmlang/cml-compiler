@@ -43,29 +43,6 @@ public interface Module extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default Optional<Module> getImportedModule(final String name)
-    {
-        for (final Module module: getImportedModules())
-        {
-            if (module.getName().equals(name))
-            {
-                return Optional.of(module);
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    default Optional<Module> getSelfOrImportedModule(final String name)
-    {
-        if (getName().equals(name))
-        {
-            return Optional.of(this);
-        }
-
-        return getImportedModule(name);
-    }
-
     default List<Concept> getConcepts()
     {
         return getMembers().stream()
@@ -88,13 +65,6 @@ public interface Module extends NamedElement, Scope
             getConcepts().stream(),
             getImportedConcepts().stream())
             .collect(toList());
-    }
-
-    default Optional<Concept> getConcept(String name)
-    {
-        return getAllConcepts().stream()
-                               .filter(concept -> concept.getName().equals(name))
-                               .findFirst();
     }
 
     default List<Association> getAssociations()
@@ -132,13 +102,6 @@ public interface Module extends NamedElement, Scope
     default List<Template> getAllTemplates()
     {
         return concat(getTemplates().stream(), getImportedTemplates().stream()).collect(toList());
-    }
-
-    default Optional<Template> getTemplate(String name)
-    {
-        return getAllTemplates().stream()
-                                .filter(t -> t.getName().equals(name))
-                                .findFirst();
     }
 
     static Module create(Model model, String name)

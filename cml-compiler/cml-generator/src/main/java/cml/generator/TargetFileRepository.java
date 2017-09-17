@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.moduleOf;
+import static cml.language.functions.ModuleFunctions.selfOrImportedModuleOf;
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -61,7 +62,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
         if (fileTemplates.isPresent() && moduleOf(task).isPresent())
         {
             final String moduleName = fileTemplates.get().getModuleName();
-            final Optional<Module> module = moduleOf(task).get().getSelfOrImportedModule(moduleName);
+            final Optional<Module> module = selfOrImportedModuleOf(moduleOf(task).get(), moduleName);
 
             if (module.isPresent() && task.getConstructor().isPresent())
             {

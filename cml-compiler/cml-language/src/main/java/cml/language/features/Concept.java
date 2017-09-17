@@ -1,6 +1,7 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
+import cml.language.functions.ConceptFunctions;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
 import cml.language.generated.NamedElement;
@@ -10,13 +11,10 @@ import cml.language.types.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static cml.language.functions.ConceptFunctions.conceptRedefined;
-import static cml.language.functions.ConceptFunctions.overridden;
-import static cml.language.functions.ConceptFunctions.redefinedAncestors;
+import static cml.language.functions.ConceptFunctions.*;
 import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
@@ -137,11 +135,7 @@ public interface Concept extends NamedElement, PropertyList
     @SuppressWarnings("unused")
     default List<Property> getRedefinedInheritedConcreteProperties()
     {
-        return getInheritedProperties()
-            .stream()
-            .filter(Property::isConcrete)
-            .map(p -> getProperty(p.getName()).orElse(p))
-            .collect(toList());
+        return redefinedInheritedConcreteProperties(this);
     }
 
     @SuppressWarnings("unused")

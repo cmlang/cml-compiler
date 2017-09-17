@@ -14,6 +14,8 @@ import org.junit.Test;
 
 import java.util.Optional;
 
+import static cml.language.functions.ConceptFunctions.propertyOf;
+import static cml.language.functions.ModelFunctions.associationOf;
 import static cml.language.functions.TypeFunctions.isEqualTo;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
@@ -82,8 +84,8 @@ public class ModelLoaderTest
         final Concept concept = loadConcept("derived_property");
 
         assertThat(concept.getName(), is("SomeConcept"));
-        assertTrue("derivedProperty should be derived.", concept.getProperty("derivedProperty").get().isDerived());
-        assertFalse("nonDerivedProperty should not be derived.", concept.getProperty("nonDerivedProperty").get().isDerived());
+        assertTrue("derivedProperty should be derived.", propertyOf(concept, "derivedProperty").get().isDerived());
+        assertFalse("nonDerivedProperty should not be derived.", propertyOf(concept,"nonDerivedProperty").get().isDerived());
     }
 
     @Test
@@ -131,7 +133,7 @@ public class ModelLoaderTest
 
     private Association loadAssociation(String name)
     {
-        final Optional<Association> association = loadModel("associations").getAssociation(name);
+        final Optional<Association> association = associationOf(loadModel("associations"), name);
 
         assert association.isPresent();
         
@@ -150,7 +152,7 @@ public class ModelLoaderTest
 
     private void assertPropertyFound(Concept concept, String propertyName, String propertyValue)
     {
-        final Property str = concept.getProperty(propertyName).orElse(null);
+        final Property str = propertyOf(concept, propertyName).orElse(null);
         assertNotNull(propertyName, str);
 
         final Literal literal = (Literal)str.getValue().orElse(null);

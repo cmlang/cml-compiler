@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.features.Concept;
 import cml.language.generated.Scope;
 
 import java.util.Comparator;
@@ -40,13 +41,6 @@ public interface PropertyList extends Scope
                            .filter(e -> e instanceof Property)
                            .map(e -> (Property)e)
                            .collect(toList());
-    }
-
-    default Optional<Property> getProperty(String propertyName)
-    {
-        return getProperties().stream()
-                              .filter(p -> p.getName().equals(propertyName))
-                              .findFirst();
     }
 }
 

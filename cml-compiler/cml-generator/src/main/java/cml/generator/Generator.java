@@ -12,6 +12,7 @@ import cml.templates.TemplateRepository;
 
 import java.util.Optional;
 
+import static cml.language.functions.ModelFunctions.targetOf;
 import static cml.language.functions.ModelVisitorFunctions.visitModel;
 
 public interface Generator
@@ -64,7 +65,7 @@ class GeneratorImpl implements Generator
     {
         TemplateGroupFile.setModuleManager(moduleManager);
 
-        final Optional<Task> target = model.getTarget(targetName);
+        final Optional<Task> target = targetOf(model, targetName);
         if (!target.isPresent())
         {
             console.error(NO_SOURCE_FILE_HAS_DECLARED_TASK, targetName);

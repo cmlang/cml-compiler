@@ -4,6 +4,7 @@ import cml.language.expressions.Expression;
 import cml.language.expressions.Invocation;
 import cml.language.foundation.Model;
 
+import static cml.language.functions.ModelFunctions.templateOf;
 import static org.jooq.lambda.Seq.seq;
 
 public class FunctionLinker implements ModelVisitor
@@ -25,7 +26,7 @@ public class FunctionLinker implements ModelVisitor
 
             if (!invocation.getFunction().isPresent())
             {
-                model.getTemplate(invocation.getName()).ifPresent(t -> invocation.setFunction(t.getFunction()));
+                templateOf(model, invocation.getName()).ifPresent(t -> invocation.setFunction(t.getFunction()));
 
                 if (invocation.getFunction().isPresent())
                 {

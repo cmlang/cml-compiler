@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+import static cml.language.functions.ModelFunctions.moduleOf;
+import static cml.language.functions.ModuleFunctions.conceptOf;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
@@ -89,10 +91,10 @@ public class ExpressionTest
         modelLoader.loadModel(model, modulePath.getPath());
 
         final String moduleName = modulePath.getName();
-        final Optional<Module> module = model.getModule(moduleName);
+        final Optional<Module> module = moduleOf(model, moduleName);
         assertTrue("Module should be found: " + moduleName, module.isPresent());
 
-        final Optional<Concept> concept = module.get().getConcept("Expressions");
+        final Optional<Concept> concept = conceptOf(module.get(), "Expressions");
         assertTrue("The Expressions concept should be found in module: " + moduleName, concept.isPresent());
 
         return concept.get();

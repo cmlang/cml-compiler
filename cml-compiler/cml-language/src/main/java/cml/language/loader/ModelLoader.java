@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
+import static cml.language.functions.ModelFunctions.moduleOf;
 import static cml.language.functions.ModelVisitorFunctions.visitModel;
+import static cml.language.functions.ModuleFunctions.importedModuleOf;
 
 public interface ModelLoader
 {
@@ -101,7 +103,7 @@ class ModelLoaderImpl implements ModelLoader
 
     private int loadModule(Model model, String basePath, String moduleName, @Nullable Import _import) throws IOException
     {
-        final Optional<Module> existingModule = model.getModule(moduleName);
+        final Optional<Module> existingModule = moduleOf(model, moduleName);
         if (existingModule.isPresent())
         {
             assert _import != null;
@@ -157,7 +159,7 @@ class ModelLoaderImpl implements ModelLoader
 
     private void addBaseModule(Module module)
     {
-        if (!module.getName().equals(CML_BASE_MODULE) && !module.getImportedModule(CML_BASE_MODULE).isPresent())
+        if (!module.getName().equals(CML_BASE_MODULE) && !importedModuleOf(module, CML_BASE_MODULE).isPresent())
         {
             Import.create(module, CML_BASE_MODULE);
         }

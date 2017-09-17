@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static cml.language.functions.ModuleFunctions.conceptOf;
+
 class ModelAugmenter extends CMLBaseListener
 {
     private final Module module;
@@ -35,7 +37,7 @@ class ModelAugmenter extends CMLBaseListener
                                                   .collect(Collectors.toList());
 
             final List<Concept> foundAncestors = ancestorNames.stream()
-                                                         .map(module::getConcept)
+                                                         .map(name -> conceptOf(module, name))
                                                          .filter(Optional::isPresent)
                                                          .map(Optional::get)
                                                          .collect(Collectors.toList());
@@ -65,7 +67,7 @@ class ModelAugmenter extends CMLBaseListener
     {
         final AssociationEnd associationEnd = ctx.associationEnd;
 
-        module.getConcept(associationEnd.getConceptName())
+        conceptOf(module, associationEnd.getConceptName())
               .ifPresent(associationEnd::setConcept);
 
         if (associationEnd.getConcept().isPresent())
@@ -87,7 +89,7 @@ class ModelAugmenter extends CMLBaseListener
         {
             final NamedType namedType = (NamedType)type;
 
-            module.getConcept(namedType.getName()).ifPresent(type::setConcept);
+            conceptOf(module, namedType.getName()).ifPresent(type::setConcept);
         }
     }
 }

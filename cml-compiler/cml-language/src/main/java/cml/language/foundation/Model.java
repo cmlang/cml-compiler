@@ -28,19 +28,6 @@ public interface Model extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default Optional<Module> getModule(final String name)
-    {
-        for (final Module module: getModules())
-        {
-            if (module.getName().equals(name))
-            {
-                return Optional.of(module);
-            }
-        }
-
-        return Optional.empty();
-    }
-
     default List<Concept> getOrderedConcepts()
     {
         return getConcepts().stream()
@@ -82,25 +69,11 @@ public interface Model extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default Optional<Concept> getConcept(String name)
-    {
-        return getConcepts().stream()
-                            .filter(concept -> concept.getName().equals(name))
-                            .findFirst();
-    }
-
     default List<Association> getAssociations()
     {
         return getModules().stream()
                            .flatMap(m -> m.getAssociations().stream())
                            .collect(toList());
-    }
-
-    default Optional<Association> getAssociation(String name)
-    {
-        return getAssociations().stream()
-                                .filter(association -> association.getName().equals(name))
-                                .findFirst();
     }
 
     default List<Task> getTasks()
@@ -110,25 +83,11 @@ public interface Model extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default Optional<Task> getTarget(String name)
-    {
-        return getTasks().stream()
-                         .filter(target -> target.getName().equals(name))
-                         .findFirst();
-    }
-
     default List<Template> getTemplates()
     {
         return getModules().stream()
                            .flatMap(m -> m.getTemplates().stream())
                            .collect(toList());
-    }
-
-    default Optional<Template> getTemplate(String name)
-    {
-        return getTemplates().stream()
-                             .filter(t -> t.getName().equals(name))
-                             .findFirst();
     }
 
     static Model create()

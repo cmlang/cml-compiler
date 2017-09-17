@@ -1,8 +1,97 @@
+/*
+concept MODEL: SCOPE
+{
+    /model = self;
+    /module = first(modules);
 
+    /modules = for m in members | select: m is MODULE;
+
+    /concepts = modules.concepts;
+    /associations = modules.associations;
+    /templates = modules.templates;
+    /tasks = modules.tasks;
+
+    /ordered_concepts = concepts | sort: c1, c2 ->
+        if (c1.dependencies | includes: c2.name) and (c2.dependencies | includes: c1.name) then (
+            // If concepts depend on each other, the more general one is listed first:
+            if c1.inherited_dependencies | includes: c2.name then +1
+            else if c2.inherited_dependencies | includes c1.name then -1
+            else 0
+         )
+         else if c1.dependencies | includes: c2.name then +1
+         else if c2.dependencies | includes: c1.name then -1
+         else 0;
+
+}
+
+concept MODULE: NAMED_ELEMENT, SCOPE
+{
+    /module = self;
+
+    /imports = for m in members | select: m is IMPORT;
+    /concepts = for m in members | select: m is CONCEPT;
+    /associations = for m in members | select: m is ASSOCIATION;
+    /templates = for m in members | select: m is TEMPLATE;
+    /tasks = for m in members | select: m is TASK;
+
+    /all_concepts = concat(concepts, imported_concepts);
+    /all_templates = concat(templates, imported_templates);
+
+    /imported_concepts = imported_modules | yield: concepts;
+    /imported_templates = imported_modules | yield: templates;
+    /imported_modules = imports | yield: imported_module;
+}
+
+abstract concept CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
+{
+    abstract: BOOLEAN;
+
+    generalizations: INHERITANCE*;
+    specializations: INHERITANCE*;
+
+    ancestors = generalizations.ancestor;
+    descendants = specializations.descendant;
+
+    /associations = model.associations | select: (association_ends | exists: concept == self);
+
+    /slot_properties = properties | select: slot;
+    /association_properties = properties | select: present(association);
+
+    /init_properties = all_properties | select: init;
+    /non_init_properties = all_properties | select: non_init;
+    /printable_properties = all_properties | select: printable;
+
+    /all_properties = concat(properties, non_redefined_properties);
+    /non_redefined_properties = for p1 in inherited_properties, p2 in properties
+                                    | reject: p1.name == p2.name
+                                    | yield: p1
+                                    | distinct;
+    /inherited_properties = ancestors | yield: all_properties | distinct;
+    /super_properties = non_redefined_properties | select: not derived;
+
+    /dependencies = distinct(concat(inherited_dependencies, property_dependencies));
+    /property_dependencies = distinct(concat(
+                                transitive_property_concepts | yield: inherited_dependencies,
+                                transitive_property_concepts | yield: name));
+    /inherited_dependencies = all_ancestors | select: name | distinct;
+
+    /transitive_property_concepts = self | recurse_depth: property_concepts;
+    /property_concepts = property_types | reject: primitive | yield: concept | distinct;
+    /property_types = all_properties | yield: type;
+
+    /all_ancestors = self | recurse_depth: ancestors | distinct;
+
+    /redefined_ancestors: CONCEPT_REDEF*;
+    /redefined_inherited_concrete_properties: PROPERTY*;
+}
+*/
 abstract concept ModelElement
 {
     parent: Scope?;
     location: Location?;
+
+//    /model = parent.model;
+//    /module = parent.module;
 }
 
 abstract concept Scope: ModelElement
@@ -33,7 +122,102 @@ abstract concept NamedElement: ModelElement
 {
     name: String;
 }
+/*
+concept TYPED_ELEMENT: NAMED_ELEMENT
+{
+    type: TYPE;
+}
 
+concept PROPERTY: TYPED_ELEMENT, SCOPE
+{
+    value: EXPRESSION?;
+    declared_type: TYPE?;
+    derived: BOOLEAN;
+    type_required: BOOLEAN;
+    type_allowed: BOOLEAN;
+
+    /model = concept.model;
+    /concept = for p in parent | select: p is CONCEPT;
+    /association = model.associations | select: (association_ends | exists: property == self) | first;
+
+    /concrete = not abstract;
+    /abstract = derived and empty(value);
+    /init = present(value) and not derived;
+    /non_init = empty(value) and not derived;
+    /slot = not (derived or associationEnd);
+    /association_end = present(association);
+    /printable = (slot and not type.sequence) or type.primitive;
+}
+
+concept PROPERTY_LIST: SCOPE
+{
+    /properties = for m in members | select: m is PROPERTY;
+
+    /derivedProperties = properties | select: derived;
+
+    /nonDerivedProperties = properties
+        | select: not derived
+        | sort: p1, p2 ->
+            if present(p1) and empty(p2) then +1
+            else if empty(p1) and present(p2) then -1
+            else 0;
+}
+
+concept INHERITANCE: MODEL_ELEMENT
+{
+    ancestor: CONCEPT;
+    descendant: CONCEPT;
+}
+
+association GENERALIZATION
+{
+    CONCEPT.generalizations;
+    INHERITANCE.descendant;
+}
+
+association SPECIALIZATION
+{
+    CONCEPT.specializations;
+    INHERITANCE.ancestor;
+}
+
+concept CONCEPT_REDEF
+{
+    concept: CONCEPT;
+    propertyRedefs: PROPERTY_REDEF*;
+}
+
+concept PROPERTY_REDEF
+{
+    property: PROPERTY;
+    redefined: BOOLEAN;
+}
+
+abstract concept TYPE: MODEL_ELEMENT
+{
+    concept: CONCEPT?;
+    cardinality: STRING?;
+    kind: STRING;
+    error_message: STRING?;
+
+    /element_type: TYPE;
+    /matching_result_type = self;
+    /base_type = self;
+
+    /parameter = defined and not primitive and empty(concept);
+    /defined = not undefined;
+    /undefined = false;
+
+    /primitive = false;
+    /numeric = false;
+    /binary_floating_point = false;
+
+    /single = (required or optional) and not sequence;
+    /required = kind == "required";
+    /optional = kind == "optional";
+    /sequence = kind == "sequence";
+}
+*/
 task cml_language_java by cmlc_java
 {
     groupId = "cml";
