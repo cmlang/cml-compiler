@@ -14,6 +14,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static cml.language.functions.ConceptFunctions.conceptRedefined;
+import static cml.language.functions.ConceptFunctions.overridden;
+import static cml.language.functions.ConceptFunctions.redefinedAncestors;
 import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
@@ -101,58 +104,7 @@ public interface Concept extends NamedElement, PropertyList
     @SuppressWarnings("unused")
     default List<ConceptRedef> getRedefinedAncestors()
     {
-        return getRedefinedAncestors(this);
-    }
-
-    default List<ConceptRedef> getRedefinedAncestors(Concept redefBase)
-    {
-        final List<ConceptRedef> redefinitions = getAllAncestors().stream()
-                                                                  .map(conceptRedefined(redefBase))
-                                                                  .collect(toList());
-
-        final Stream<ConceptRedef> inheritedRedefinitions = getDirectAncestors().stream()
-                                                                                .flatMap(concept -> concept.getRedefinedAncestors(redefBase).stream())
-                                                                                .map(overridden(redefinitions));
-
-        return concat(inheritedRedefinitions, redefinitions.stream())
-                .distinct()
-                .collect(toList());
-    }
-
-    default Function<ConceptRedef, ConceptRedef> overridden(List<ConceptRedef> redefinitions)
-    {
-        return conceptRedef -> {
-            final Optional<ConceptRedef> override = redefinitions.stream()
-                                                                 .filter(o -> o.getConcept() == conceptRedef.getConcept())
-                                                                 .findFirst();
-
-            if (override.isPresent())
-            {
-                final List<PropertyRedef> propertyRedefs = conceptRedef.getPropertyRedefs()
-                                                                     .stream()
-                                                                     .map(p -> override.get().getPropertyRedef(p).orElse(p))
-                                                                     .collect(toList());
-
-                return new ConceptRedef(conceptRedef.getConcept(), propertyRedefs);
-            }
-            else
-            {
-                return conceptRedef;
-            }
-        };
-    }
-
-    default Function<Concept, ConceptRedef> conceptRedefined(Concept redefBase)
-    {
-        return c -> {
-            final List<PropertyRedef> propertyRedefs = c.getNonDerivedProperties()
-                                                        .stream()
-                                                        .map(p -> getProperty(p.getName()).orElse(p))
-                                                        .map(p -> new PropertyRedef(p, p.getConcept() == redefBase))
-                                                        .collect(toList());
-
-            return new ConceptRedef(c, propertyRedefs);
-        };
+        return redefinedAncestors(this, this);
     }
 
     default List<Concept> getAllAncestors()

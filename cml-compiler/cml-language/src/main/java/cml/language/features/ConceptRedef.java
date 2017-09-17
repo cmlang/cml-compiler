@@ -10,7 +10,7 @@ public class ConceptRedef
     private final Concept concept;
     private final List<PropertyRedef> propertyRedefs;
 
-    ConceptRedef(Concept concept, List<PropertyRedef> properties)
+    public ConceptRedef(Concept concept, List<PropertyRedef> properties)
     {
         this.concept = concept;
         this.propertyRedefs = new ArrayList<>(properties);
