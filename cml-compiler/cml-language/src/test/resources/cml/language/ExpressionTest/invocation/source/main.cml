@@ -1,5 +1,5 @@
 
-template function exists<T>(seq: T*, expr: (T) -> Boolean) -> Boolean;
+template function exists<T>(seq: T*, expr: (T) -> Boolean) -> BOOLEAN;
 
 template function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 template function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
@@ -44,18 +44,18 @@ concept Order
 {
     customer: Customer;
     items: Item*;
-    total: Decimal;
+    total: DECIMAL;
 }
 
 concept Item
 {
-    name: String;
+    name: STRING;
     product: Product;
 }
 
 concept Customer
 {
-    name: String;
+    name: STRING;
 }
 
 concept Product;
@@ -64,6 +64,6 @@ concept Class
 {
     ancestors: Class*;
     children: Class*;
-    ranking: Integer;
+    ranking: INTEGER;
 }
 

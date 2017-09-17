@@ -1,65 +1,65 @@
 concept Base
 {
-    a: String;
+    a: STRING;
 }
 
 concept A: Base
 {
-    p1: Integer = 0;
-    p2: String;
-    q1: String;
-    r1: Decimal = 1.0;
-    s1: Decimal;
-    t1: String = "A";
-    t2: String = "A";
+    p1: INTEGER = 0;
+    p2: STRING;
+    q1: STRING;
+    r1: DECIMAL = 1.0;
+    s1: DECIMAL;
+    t1: STRING = "A";
+    t2: STRING = "A";
 }
 
 concept B: Base
 {
-    p1: Integer = 1;
-    q2: String;
+    p1: INTEGER = 1;
+    q2: STRING;
 }
 
-// Property "p1" should have been redefined as Integer
+// Property "p1" should have been redefined as INTEGER
 // in order to resolve definition conflict between A and B:
 concept C: A, B
 {
-    p1: String;
-    q3: String;
-    r1: Decimal = 2.0;
-    s1: Decimal;
-    t1: String = "D";
+    p1: STRING;
+    q3: STRING;
+    r1: DECIMAL = 2.0;
+    s1: DECIMAL;
+    t1: STRING = "D";
 }
 
 // Redefinition as expected:
 concept D: A, B
 {
-    p1: Integer = 2;
-    p2: Integer; // Incompatible with A
-    q3: String;
-    r1: Decimal = 2.0;
-    s1: Decimal;
-    t1: String = "D";
-    t2: String = "D";
+    p1: INTEGER = 2;
+    p2: INTEGER; // Incompatible with A
+    q3: STRING;
+    r1: DECIMAL = 2.0;
+    s1: DECIMAL;
+    t1: STRING = "D";
+    t2: STRING = "D";
 }
 
 // Incorrect type in redefinition of "p1" and "r1":
 concept E: A, D
 {
-    p1: String;
-    q4: String;
-    r1: String;
-    t1: String = "E";
-    t2: String = "E";
+    p1: STRING;
+    q4: STRING;
+    r1: STRING;
+    t1: STRING = "E";
+    t2: STRING = "E";
 }
 
-// Redefinitions as expected (except for "t1", which should be "String"):
+// Redefinitions as expected (except for "t1", which should be "STRING"):
 concept F: A, D, Base
 {
-    p1: Integer = 3;
-    q4: String;
-    r1: Decimal;
-    t1: Boolean;
+    p1: INTEGER = 3;
+    q4: STRING;
+    r1: DECIMAL;
+    t1: BOOLEAN;
 
     // Also missing "t2" redefinition.
 }

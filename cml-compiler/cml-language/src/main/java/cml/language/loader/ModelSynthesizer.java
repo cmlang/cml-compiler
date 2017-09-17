@@ -399,15 +399,15 @@ class ModelSynthesizer extends CMLBaseListener
 
     private static String getPrimitiveTypeName(LiteralExpressionContext ctx)
     {
-        if (ctx.BOOLEAN() != null) return "Boolean";
-        else if (ctx.STRING() != null) return "String";
-        else if (ctx.INTEGER() != null) return "Integer";
-        else if (ctx.LONG() != null) return "Long";
-        else if (ctx.SHORT() != null) return "Short";
-        else if (ctx.BYTE() != null) return "Byte";
-        else if (ctx.DECIMAL() != null) return "Decimal";
-        else if (ctx.FLOAT() != null) return "Float";
-        else if (ctx.DOUBLE() != null) return "Double";
+        if (ctx.BOOLEAN() != null) return "BOOLEAN";
+        else if (ctx.STRING() != null) return "STRING";
+        else if (ctx.INTEGER() != null) return "INTEGER";
+        else if (ctx.LONG() != null) return "LONG";
+        else if (ctx.SHORT() != null) return "SHORT";
+        else if (ctx.BYTE() != null) return "BYTE";
+        else if (ctx.DECIMAL() != null) return "DECIMAL";
+        else if (ctx.FLOAT() != null) return "FLOAT";
+        else if (ctx.DOUBLE() != null) return "DOUBLE";
         else return null;
     }
 

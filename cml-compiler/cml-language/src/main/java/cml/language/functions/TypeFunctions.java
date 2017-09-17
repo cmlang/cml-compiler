@@ -52,7 +52,7 @@ public class TypeFunctions
             {
                 final NamedType thatNamedType = (NamedType) thatElementType;
 
-                if (thisNamedType.getName().equals(thatNamedType.getName()))
+                if (isNameEquals(thisNamedType, thatNamedType))
                 {
                     return true;
                 }
@@ -131,11 +131,30 @@ public class TypeFunctions
             final NamedType thisNamedType = (NamedType) thisType;
             final NamedType thatNamedType = (NamedType) thatType;
 
-            return Objects.equals(thisNamedType.getName(), thatNamedType.getName()) &&
-                   Objects.equals(thisNamedType.getCardinality(), thatNamedType.getCardinality());
+            return isNameEquals(thisNamedType, thatNamedType) && isCardinalityEquals(thisNamedType, thatNamedType);
         }
 
         return false;
+    }
+
+    public static boolean isNameEquals(final NamedType thisType, final NamedType thatType)
+    {
+        assert thisType.getName() != null;
+        assert thatType.getName() != null;
+
+        if (thisType.isPrimitive() && thatType.isPrimitive())
+        {
+            return thisType.getName().equalsIgnoreCase(thatType.getName());
+        }
+        else
+        {
+            return thisType.getName().equals(thatType.getName());
+        }
+    }
+
+    public static boolean isCardinalityEquals(final NamedType thisType, final NamedType thatType)
+    {
+        return Objects.equals(thisType.getCardinality(), thatType.getCardinality());
     }
 
     public static boolean isNumericWiderThan(Type thisType, Type thatType)

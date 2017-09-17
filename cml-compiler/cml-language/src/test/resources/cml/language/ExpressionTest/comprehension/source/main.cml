@@ -1,13 +1,13 @@
 
-template function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
+template function select<T>(seq: T*, expr: (T) -> BOOLEAN) -> T*;
 
-template function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
+template function reject<T>(seq: T*, expr: (T) -> BOOLEAN) -> T*;
 
 template function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
 
 template function distinct<T>(seq: T*) -> T*;
 
-template function exists<T>(seq: T*, expr: (T) -> Boolean) -> Boolean;
+template function exists<T>(seq: T*, expr: (T) -> BOOLEAN) -> BOOLEAN;
 
 template function recurse<T,S>(seq: T*, expr: (T) -> S*) -> S*;
 
@@ -68,19 +68,19 @@ concept Order
 {
     customer: Customer;
     items: Item*;
-    total: Decimal;
+    total: DECIMAL;
 }
 
 concept Item
 {
-    name: String;
+    name: STRING;
     product: Product;
-    qty: Integer;
+    qty: INTEGER;
 }
 
 concept Customer
 {
-    name: String;
+    name: STRING;
 }
 
 concept Product;
@@ -89,6 +89,6 @@ concept Class
 {
     ancestors: Class*;
     children: Class*;
-    ranking: Integer;
+    ranking: INTEGER;
 }
 

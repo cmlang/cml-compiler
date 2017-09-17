@@ -1,12 +1,12 @@
 
 concept A
 {
-    number: Integer;
+    number: INTEGER;
 }
 
 concept B
 {
-    number: Decimal;
+    number: DECIMAL;
 }
 
 // The "number" property has incompatible types in A and B:

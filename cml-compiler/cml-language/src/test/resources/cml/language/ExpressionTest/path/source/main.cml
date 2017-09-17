@@ -1,7 +1,7 @@
 
 concept Expressions
 {
-    foo: String;
+    foo: STRING;
     somePath: SomeConcept;
     somePathList: SomeConcept*;
 
@@ -14,12 +14,12 @@ concept Expressions
 
 concept SomeConcept
 {
-    bar: Integer;
+    bar: INTEGER;
     oneMorePath: AnotherConcept;
 }
 
 concept AnotherConcept
 {
-    etc: Decimal;
+    etc: DECIMAL;
 }
 

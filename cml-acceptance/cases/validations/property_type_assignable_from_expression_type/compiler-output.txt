@@ -1,21 +1,21 @@
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.bad_prop1: Integer (12:5)
-Declared type is Integer but type inferred from expression is String.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.bad_prop1: INTEGER (12:5)
+Declared type is INTEGER but type inferred from expression is STRING.
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.bad_prop2: String (13:5)
-Declared type is String but type inferred from expression is Integer.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.bad_prop2: STRING (13:5)
+Declared type is STRING but type inferred from expression is INTEGER.
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.bad_prop3: Double (14:5)
-Declared type is Double but type inferred from expression is Decimal.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.bad_prop3: DOUBLE (14:5)
+Declared type is DOUBLE but type inferred from expression is DECIMAL.
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.decimal_to_double: Double (25:5)
-Declared type is Double but type inferred from expression is Decimal.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.decimal_to_double: DOUBLE (25:5)
+Declared type is DOUBLE but type inferred from expression is DECIMAL.
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.double_to_decimal: Decimal (26:5)
-Declared type is Decimal but type inferred from expression is Double.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.double_to_decimal: DECIMAL (26:5)
+Declared type is DECIMAL but type inferred from expression is DOUBLE.
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.decimal_to_byte: Byte (27:5)
-Declared type is Byte but type inferred from expression is Decimal.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.decimal_to_byte: BYTE (27:5)
+Declared type is BYTE but type inferred from expression is DECIMAL.
 
 Failed validation: required property_type_assignable_from_expression_type: in property Attributes.a_to_b: B (28:5)
 Declared type is B but type inferred from expression is A.
@@ -38,11 +38,11 @@ Declared type is A? but type inferred from expression is A*.
 Failed validation: required property_type_assignable_from_expression_type: in property Attributes.ab9: A (56:5)
 Declared type is A but type inferred from expression is A?.
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.d4: Decimal (57:5)
-Declared type is Decimal but type inferred from expression is Decimal*.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.d4: DECIMAL (57:5)
+Declared type is DECIMAL but type inferred from expression is DECIMAL*.
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.d5: Decimal? (58:5)
-Declared type is Decimal? but type inferred from expression is Decimal*.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.d5: DECIMAL? (58:5)
+Declared type is DECIMAL? but type inferred from expression is DECIMAL*.
 
-Failed validation: required property_type_assignable_from_expression_type: in property Attributes.d6: Decimal (59:5)
-Declared type is Decimal but type inferred from expression is Decimal?.
+Failed validation: required property_type_assignable_from_expression_type: in property Attributes.d6: DECIMAL (59:5)
+Declared type is DECIMAL but type inferred from expression is DECIMAL?.

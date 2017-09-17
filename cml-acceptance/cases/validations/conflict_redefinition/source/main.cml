@@ -1,22 +1,22 @@
 concept Base
 {
-    a: String;
+    a: STRING;
 }
 
 concept A: Base
 {
-    p1: Integer = 0;
-    q1: String;
-    r1: Decimal = 1.0;
-    s1: Decimal;
-    s2: Decimal;
-    t1: String = "A";
+    p1: INTEGER = 0;
+    q1: STRING;
+    r1: DECIMAL = 1.0;
+    s1: DECIMAL;
+    s2: DECIMAL;
+    t1: STRING = "A";
 }
 
 concept B: Base
 {
-    p1: Integer = 1;
-    q2: String;
+    p1: INTEGER = 1;
+    q2: STRING;
 }
 
 // Property "p1" should have been redefined
@@ -26,26 +26,26 @@ concept C: A, B;
 // Redefinition as expected:
 concept D: A, B
 {
-    p1: Integer = 2;
-    q3: String;
-    r1: Decimal = 2.0;
-    s1: Decimal;
+    p1: INTEGER = 2;
+    q3: STRING;
+    r1: DECIMAL = 2.0;
+    s1: DECIMAL;
     /s2 = 3.0;
-    t1: String = "D";
+    t1: STRING = "D";
 }
 
 // Missing redefinition of "p1" and "r1":
 concept E: A, D
 {
-    t1: String = "E";
+    t1: STRING = "E";
 }
 
 // Redefinitions as expected (except for "t1"):
 concept F: A, D, Base
 {
-    p1: Integer = 3;
-    q4: String;
-    r1: Decimal;
+    p1: INTEGER = 3;
+    q4: STRING;
+    r1: DECIMAL;
 
     // No need to redefine "s1" because no expression has been defined for it in A and D.
 

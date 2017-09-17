@@ -9,29 +9,29 @@ abstract concept Attributes
     b3: B*;
 
     // Type and expression mismatch:
-    bad_prop1: Integer = "String"; // type is Integer but expression is String
-    /bad_prop2: String = 0; // type is String but expression is Integer
-    /bad_prop3: Double = 2.0; // type is Double but expression is Decimal
+    bad_prop1: INTEGER = "STRING"; // type is INTEGER but expression is STRING
+    /bad_prop2: STRING = 0; // type is STRING but expression is INTEGER
+    /bad_prop3: DOUBLE = 2.0; // type is DOUBLE but expression is DECIMAL
 
     // Assignable Types:
-    byte_to_short: Short = 1b;
-    short_to_int: Integer = 1s;
-    int_to_long: Long = 1;
-    long_to_decimal: Decimal = 1l;
-    float_to_double: Double = 1.0f;
+    byte_to_short: SHORT = 1b;
+    short_to_int: INTEGER = 1s;
+    int_to_long: LONG = 1;
+    long_to_decimal: DECIMAL = 1l;
+    float_to_double: DOUBLE = 1.0f;
     b_to_a: A = b;
 
     // Non-Assignable Types:
-    decimal_to_double: Double = 1.0;
-    double_to_decimal: Decimal = 1.0d;
-    decimal_to_byte: Byte = 1.0;
+    decimal_to_double: DOUBLE = 1.0;
+    double_to_decimal: DECIMAL = 1.0d;
+    decimal_to_byte: BYTE = 1.0;
     a_to_b: B = a;
 
     // Valid cases where either the type is specified or an expression is provided:
-    prop1: String; // type specified
+    prop1: STRING; // type specified
     prop2 = 0; // init expression specified - type inferred
     /prop3 = 1.0; // derived expression specified - type inferred
-    /prop4: Boolean; // type specified for abstract property
+    /prop4: BOOLEAN; // type specified for abstract property
 
     // Cardinality - Assignable:
     a2: A = a;
@@ -43,9 +43,9 @@ abstract concept Attributes
     ab4: A* = b;
     ab5: A* = b2;
     ab6: A* = b3;
-    d1: Decimal? = long_to_decimal;
-    d2: Decimal* = long_to_decimal;
-    d3: Decimal* = d1;
+    d1: DECIMAL? = long_to_decimal;
+    d2: DECIMAL* = long_to_decimal;
+    d3: DECIMAL* = d1;
 
     // Cardinality - Non-Assignable:
     a6: A = a4;
@@ -54,7 +54,7 @@ abstract concept Attributes
     ab7: A = ab4;
     ab8: A? = ab5;
     ab9: A = ab3;
-    d4: Decimal = d2;
-    d5: Decimal? = d3;
-    d6: Decimal = d1;
+    d4: DECIMAL = d2;
+    d5: DECIMAL? = d3;
+    d6: DECIMAL = d1;
 }

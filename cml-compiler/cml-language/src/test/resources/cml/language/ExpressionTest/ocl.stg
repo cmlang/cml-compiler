@@ -100,27 +100,27 @@ literal_ocl(literal) ::= <<
 <({literal_<literal.type.name>})(literal.text)>
 >>
 
-literal_Boolean(text) ::= <<
+literal_BOOLEAN(text) ::= <<
 <text>
 >>
 
-literal_String(text) ::= <<
+literal_STRING(text) ::= <<
 "<text>"
 >>
 
-literal_Integer(text) ::= <<
+literal_INTEGER(text) ::= <<
 <text>
 >>
 
-literal_Decimal(text) ::= <<
+literal_DECIMAL(text) ::= <<
 <text>
 >>
 
-literal_Float(text) ::= <<
+literal_FLOAT(text) ::= <<
 <text>f
 >>
 
-literal_Double(text) ::= <<
+literal_DOUBLE(text) ::= <<
 <text>d
 >>
 

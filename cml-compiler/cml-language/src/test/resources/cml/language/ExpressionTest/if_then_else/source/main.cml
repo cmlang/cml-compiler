@@ -1,8 +1,8 @@
 
 concept Expressions
 {
-    b: Integer;
-    c: String;
+    b: INTEGER;
+    c: STRING;
 
     if_then_else = if a then b else c;
 
