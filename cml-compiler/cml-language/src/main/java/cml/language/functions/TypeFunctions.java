@@ -167,7 +167,10 @@ public class TypeFunctions
             assert thisNamedType.isNumeric() && thatNamedType.isNumeric()
                 : "Both types must be numeric in order to be compared: " + thisNamedType.getName() + " & " + thatNamedType.getName();
 
-            return NUMERIC_TYPE_NAMES.indexOf(thisNamedType.getName()) > NUMERIC_TYPE_NAMES.indexOf(thatNamedType.getName());
+            final int i = NUMERIC_TYPE_NAMES.indexOf(thisNamedType.getName().toUpperCase());
+            final int j = NUMERIC_TYPE_NAMES.indexOf(thatNamedType.getName().toUpperCase());
+
+            return i > j;
         }
 
         return false;
@@ -183,7 +186,10 @@ public class TypeFunctions
             assert thisNamedType.isBinaryFloatingPoint() && thatNamedType.isBinaryFloatingPoint()
                 : "Both types must be binary floating-point in order to be compared: " + thisNamedType.getName() + " & " + thatNamedType.getName();
 
-            return BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(thisNamedType.getName()) > BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(thatNamedType.getName());
+            final int i = BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(thisNamedType.getName().toUpperCase());
+            final int j = BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(thatNamedType.getName().toUpperCase());
+
+            return i > j;
         }
 
         return false;
