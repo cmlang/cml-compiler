@@ -11,8 +11,8 @@ public class Launcher
 
         final LiteralExpressions expressions = new LiteralExpressions();
         
-        System.out.println("LiteralTrueBoolean = " + expressions.getLiteralTrueBoolean());
-        System.out.println("LiteralFalseBoolean = " + expressions.getLiteralFalseBoolean());
+        System.out.println("LiteralTrueBoolean = " + expressions.isLiteralTrueBoolean());
+        System.out.println("LiteralFalseBoolean = " + expressions.isLiteralFalseBoolean());
         System.out.println("LiteralStringInit = " + expressions.getLiteralStringInit());
         System.out.println("LiteralIntegerInit = " + expressions.getLiteralIntegerInit());
         System.out.println("LiteralDecimalInit = " + expressions.getLiteralDecimalInit());

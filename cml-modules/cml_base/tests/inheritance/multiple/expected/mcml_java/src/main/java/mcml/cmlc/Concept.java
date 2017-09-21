@@ -10,7 +10,7 @@ import static java.util.stream.Collectors.*;
 
 public interface Concept extends NamedElement, PropertyList
 {
-    boolean getAbstracted();
+    boolean isAbstracted();
 
     static Concept createConcept(String name, @Nullable ModelElement parent, List<ModelElement> elements, boolean abstracted)
     {
@@ -47,7 +47,7 @@ class ConceptImpl implements Concept
         this.abstracted = abstracted;
     }
 
-    public boolean getAbstracted()
+    public boolean isAbstracted()
     {
         return this.abstracted;
     }
@@ -71,7 +71,7 @@ class ConceptImpl implements Concept
     {
         return new StringBuilder(Concept.class.getSimpleName())
                    .append('(')
-                   .append("abstracted=").append(String.format("\"%s\"", getAbstracted())).append(", ")
+                   .append("abstracted=").append(String.format("\"%s\"", isAbstracted())).append(", ")
                    .append("name=").append(String.format("\"%s\"", getName())).append(", ")
                    .append("parent=").append(getParent().isPresent() ? String.format("\"%s\"", getParent()) : "not present")
                    .append(')')
