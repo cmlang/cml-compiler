@@ -1,0 +1,3 @@
+
+template function empty<T>(seq: T*) -> boolean;
+template function present<T>(seq: T*) -> boolean;

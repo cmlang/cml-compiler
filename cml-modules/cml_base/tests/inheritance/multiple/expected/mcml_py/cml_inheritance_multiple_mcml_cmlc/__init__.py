@@ -5,7 +5,7 @@ from decimal import *
 class ModelElement(ABC):
 
     @abstractproperty
-    def parent(self) -> 'ModelElement':
+    def parent(self) -> 'Optional[ModelElement]':
         pass
 
     @abstractproperty
@@ -25,7 +25,7 @@ class ModelElementImpl(ModelElement):
         self.__elements = elements
 
     @property
-    def parent(self) -> 'ModelElement':
+    def parent(self) -> 'Optional[ModelElement]':
         return self.__parent
 
     @property
@@ -61,7 +61,7 @@ class NamedElementImpl(NamedElement):
         return self.__name
 
     @property
-    def parent(self) -> 'ModelElement':
+    def parent(self) -> 'Optional[ModelElement]':
         return self.__model_element.parent
 
     @property
@@ -90,7 +90,7 @@ class PropertyListImpl(PropertyList):
 
 
     @property
-    def parent(self) -> 'ModelElement':
+    def parent(self) -> 'Optional[ModelElement]':
         return self.__model_element.parent
 
     @property
@@ -145,7 +145,7 @@ class ConceptImpl(Concept):
         return self.__named_element.name
 
     @property
-    def parent(self) -> 'ModelElement':
+    def parent(self) -> 'Optional[ModelElement]':
         return self.__model_element.parent
 
     @property
@@ -182,7 +182,7 @@ class ModelImpl(Model):
 
 
     @property
-    def parent(self) -> 'ModelElement':
+    def parent(self) -> 'Optional[ModelElement]':
         return self.__model_element.parent
 
     @property

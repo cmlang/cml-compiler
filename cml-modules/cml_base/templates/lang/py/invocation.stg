@@ -1,0 +1,24 @@
+
+invocation_sequence_empty(args) ::= <<
+!<expression(args.seq)>
+>>
+
+invocation_optional_empty(args) ::= <<
+<expression(args.seq)> is None
+>>
+
+invocation_required_empty(args) ::= <<
+<invocation_optional_empty(args)>
+>>
+
+invocation_sequence_present(args) ::= <<
+<expression(args.seq)>
+>>
+
+invocation_optional_present(args) ::= <<
+<expression(args.seq)> is not None
+>>
+
+invocation_required_present(args) ::= <<
+<invocation_optional_present(args)>
+>>

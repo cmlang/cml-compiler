@@ -1,0 +1,24 @@
+
+invocation_sequence_empty(args) ::= <<
+<expression(args.seq)>.isEmpty()
+>>
+
+invocation_optional_empty(args) ::= <<
+!<expression(args.seq)>.isPresent()
+>>
+
+invocation_required_empty(args) ::= <<
+<expression(args.seq)> == null
+>>
+
+invocation_sequence_present(args) ::= <<
+!<expression(args.seq)>.isEmpty()
+>>
+
+invocation_optional_present(args) ::= <<
+<expression(args.seq)>.isPresent()
+>>
+
+invocation_required_present(args) ::= <<
+<expression(args.seq)> != null
+>>

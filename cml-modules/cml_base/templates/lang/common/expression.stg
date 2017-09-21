@@ -30,3 +30,11 @@ expression_infix(expr) ::= <<
 expression_literal(literal) ::= <<
 <({literal_expr_<literal.type.name; format="lower-case">})(literal.text)>
 >>
+
+expression_invocation(invocation) ::= <<
+<if(invocation.namedArguments.seq)><\\>
+<({invocation_<invocation.namedArguments.seq.type.kind>_<invocation.name>})(invocation.namedArguments)><\\>
+<else>
+<({invocation_<invocation.name>})(invocation.namedArguments)>
+<endif>
+>>

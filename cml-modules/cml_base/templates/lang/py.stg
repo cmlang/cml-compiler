@@ -1,4 +1,5 @@
 
+import "/lang/py/invocation.stg"
 import "/lang/common.stg"
 
 // Language
@@ -133,7 +134,7 @@ getter_type_required(type) ::= <<
 >>
 
 getter_type_optional(type) ::= <<
-<type_name(type)>
+Optional[<type_name(type)>]
 >>
 
 getter_type_sequence(type) ::= <<

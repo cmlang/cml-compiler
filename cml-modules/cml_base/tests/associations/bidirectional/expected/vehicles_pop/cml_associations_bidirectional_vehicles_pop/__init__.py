@@ -29,7 +29,7 @@ class _Employment:
             employee_list.append(employee)
         self.__employees[organization] = employee_list
 
-    def employer_of(self, employee: 'Employee') -> 'Organization':
+    def employer_of(self, employee: 'Employee') -> 'Optional[Organization]':
         if employee in self.__employer:
             return self.__employer[employee]
         else:
@@ -70,7 +70,7 @@ class _VehicleOwnership:
             vehicle_list.append(vehicle)
         self.__fleet[organization] = vehicle_list
 
-    def owner_of(self, vehicle: 'Vehicle') -> 'Organization':
+    def owner_of(self, vehicle: 'Vehicle') -> 'Optional[Organization]':
         if vehicle in self.__owner:
             return self.__owner[vehicle]
         else:
@@ -102,13 +102,13 @@ class _VehicleAssignment:
 
         self.__vehicle[employee] = vehicle
 
-    def driver_of(self, vehicle: 'Vehicle') -> 'Employee':
+    def driver_of(self, vehicle: 'Vehicle') -> 'Optional[Employee]':
         if vehicle in self.__driver:
             return self.__driver[vehicle]
         else:
             return None
 
-    def vehicle_of(self, employee: 'Employee') -> 'Vehicle':
+    def vehicle_of(self, employee: 'Employee') -> 'Optional[Vehicle]':
         if employee in self.__vehicle:
             return self.__vehicle[employee]
         else:
@@ -131,7 +131,7 @@ class Vehicle:
         return self.__plate
 
     @property
-    def driver(self) -> 'Employee':
+    def driver(self) -> 'Optional[Employee]':
         return self._vehicle_assignment.driver_of(self)
 
     @property
@@ -165,7 +165,7 @@ class Employee:
         return self._employment.employer_of(self)
 
     @property
-    def vehicle(self) -> 'Vehicle':
+    def vehicle(self) -> 'Optional[Vehicle]':
         return self._vehicle_assignment.vehicle_of(self)
 
     def __str__(self) -> 'str':

@@ -1,4 +1,5 @@
 
+import "/lang/java/invocation.stg"
 import "/lang/common.stg"
 
 // Language
