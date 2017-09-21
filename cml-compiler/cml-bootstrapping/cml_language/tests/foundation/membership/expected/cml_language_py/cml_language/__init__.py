@@ -29,7 +29,7 @@ class _Membership:
             model_element_list.append(model_element)
         self.__members[scope] = model_element_list
 
-    def parent_of(self, model_element: 'ModelElement') -> 'Scope':
+    def parent_of(self, model_element: 'ModelElement') -> 'Optional[Scope]':
         if model_element in self.__parent:
             return self.__parent[model_element]
         else:
@@ -61,13 +61,13 @@ class _Localization:
 
         self.__location[model_element] = location
 
-    def element_of(self, location: 'Location') -> 'ModelElement':
+    def element_of(self, location: 'Location') -> 'Optional[ModelElement]':
         if location in self.__element:
             return self.__element[location]
         else:
             return None
 
-    def location_of(self, model_element: 'ModelElement') -> 'Location':
+    def location_of(self, model_element: 'ModelElement') -> 'Optional[Location]':
         if model_element in self.__location:
             return self.__location[model_element]
         else:
@@ -77,11 +77,11 @@ class _Localization:
 class ModelElement(ABC):
 
     @abstractproperty
-    def parent(self) -> 'Scope':
+    def parent(self) -> 'Optional[Scope]':
         pass
 
     @abstractproperty
-    def location(self) -> 'Location':
+    def location(self) -> 'Optional[Location]':
         pass
 
     @staticmethod
@@ -105,11 +105,11 @@ class ModelElementImpl(ModelElement):
         self._localization.link(location=location, model_element=self.__actual_self)
 
     @property
-    def parent(self) -> 'Scope':
+    def parent(self) -> 'Optional[Scope]':
         return self._membership.parent_of(self.__actual_self)
 
     @property
-    def location(self) -> 'Location':
+    def location(self) -> 'Optional[Location]':
         return self._localization.location_of(self.__actual_self)
 
     def __str__(self) -> 'str':
@@ -145,11 +145,11 @@ class ScopeImpl(Scope):
         return self._membership.members_of(self.__actual_self)
 
     @property
-    def parent(self) -> 'Scope':
+    def parent(self) -> 'Optional[Scope]':
         return self.__model_element.parent
 
     @property
-    def location(self) -> 'Location':
+    def location(self) -> 'Optional[Location]':
         return self.__model_element.location
 
     def __str__(self) -> 'str':
@@ -236,11 +236,11 @@ class NamedElementImpl(NamedElement):
         return self.__name
 
     @property
-    def parent(self) -> 'Scope':
+    def parent(self) -> 'Optional[Scope]':
         return self.__model_element.parent
 
     @property
-    def location(self) -> 'Location':
+    def location(self) -> 'Optional[Location]':
         return self.__model_element.location
 
     def __str__(self) -> 'str':
