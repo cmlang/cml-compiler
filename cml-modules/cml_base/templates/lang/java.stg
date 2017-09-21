@@ -139,8 +139,12 @@ private final <var_decl(typed_element)>;
 
 // Getters
 
-getter_name(property) ::= <<
-get<property.name; format="pascal-case">
+getter_name(element) ::= <<
+<if(element.type.boolean)><\\>
+is<element.name; format="pascal-case"><\\>
+<else><\\>
+get<element.name; format="pascal-case"><\\>
+<endif>
 >>
 
 interface_getter_annotations(property) ::= ""
@@ -172,7 +176,7 @@ Collections.unmodifiableList(<field_access(property)>)
 >>
 
 getter_call(property) ::= <<
-get<property.name; format="pascal-case">()
+<getter_name(property)>()
 >>
 
 // Interfaces
@@ -307,7 +311,7 @@ path_expr(path) ::= <<
 >>
 
 path_getter_call(path) ::= <<
-get<path.name; format="pascal-case">()
+<getter_name(path)>()
 >>
 
 path_base_call(path) ::= <<

@@ -26,14 +26,14 @@ public class Unary extends ExpressionBase
         }};
 
     private final String operator;
-    private final Expression expr;
+    private final Expression subExpr;
 
-    public Unary(String operator, Expression expr)
+    public Unary(String operator, Expression subExpr)
     {
-        super(singletonList(expr));
+        super(singletonList(subExpr));
 
         this.operator = operator;
-        this.expr = expr;
+        this.subExpr = subExpr;
     }
 
     public String getOperator()
@@ -48,9 +48,9 @@ public class Unary extends ExpressionBase
         return Optional.ofNullable(operation);
     }
 
-    public Expression getExpr()
+    public Expression getSubExpr()
     {
-        return expr;
+        return subExpr;
     }
 
     @Override
@@ -62,6 +62,6 @@ public class Unary extends ExpressionBase
     @Override
     public Type getType()
     {
-        return LOGIC_OPERATORS.contains(getOperator()) ? NamedType.BOOLEAN : expr.getType();
+        return LOGIC_OPERATORS.contains(getOperator()) ? NamedType.BOOLEAN : subExpr.getType();
     }
 }

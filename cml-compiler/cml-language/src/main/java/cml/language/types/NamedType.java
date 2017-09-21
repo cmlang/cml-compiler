@@ -36,31 +36,43 @@ public interface NamedType extends Type, NamedElement
         "FLOAT", "DOUBLE" // from narrower to wider
     ));
 
+    @Override
     default boolean isPrimitive()
     {
         return PRIMITIVE_TYPE_NAMES.contains(getName().toUpperCase());
     }
 
+    @Override
+    default boolean isBoolean()
+    {
+        return BOOLEAN.getName().endsWith(getName().toUpperCase());
+    }
+
+    @Override
     default boolean isNumeric()
     {
         return NUMERIC_TYPE_NAMES.contains(getName().toUpperCase());
     }
 
+    @Override
     default boolean isBinaryFloatingPoint()
     {
         return BINARY_FLOATING_POINT_TYPE_NAMES.contains(getName().toUpperCase());
     }
 
+    @Override
     default boolean isDefined()
     {
         return !isUndefined();
     }
 
+    @Override
     default boolean isUndefined()
     {
         return getName().toUpperCase().equals(UNDEFINED.getName());
     }
 
+    @Override
     default NamedType getElementType()
     {
         final NamedType elementType = NamedType.create(getName());

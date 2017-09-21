@@ -45,6 +45,11 @@ public interface Type extends ModelElement
         return false;
     }
 
+    default boolean isBoolean()
+    {
+        return false;
+    }
+
     default boolean isNumeric()
     {
         return false;

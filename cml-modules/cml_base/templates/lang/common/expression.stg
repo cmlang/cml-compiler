@@ -11,15 +11,20 @@ expression_path(path) ::= <<
 <endif>
 >>
 
-expression_infix(infix) ::= <<
+expression_unary(expr) ::= <<
 <if(expr.operation)><\\>
-(<({operation_<expr.operation>})(expression(infix.left), expression(infix.right))>)<\\>
+(<({operation_<expr.operation>})(expression(expr.subExpr))>)<\\>
 <else><\\>
-(<expression(infix.left)> <expr.operator> <expression(infix.right)>)<\\>
+<expression_operator(expr)> <expression(expr.subExpr)>
 <endif>
 >>
 
-expression_operator(expr) ::= <<
+expression_infix(expr) ::= <<
+<if(expr.operation)><\\>
+(<({operation_<expr.operation>})(expression(expr.left), expression(expr.right))>)<\\>
+<else><\\>
+(<expression(expr.left)> <expr.operator> <expression(expr.right)>)<\\>
+<endif>
 >>
 
 expression_literal(literal) ::= <<
