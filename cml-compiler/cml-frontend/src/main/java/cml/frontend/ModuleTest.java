@@ -395,7 +395,7 @@ public class ModuleTest
 
     private static String testNameOf(final File expectedDir)
     {
-        final File moduleDir = moduleDirOf(expectedDir);
+        final File moduleDir = testDirOf(expectedDir);
         return moduleDir.getParentFile().getName() + "/" + moduleDir.getName();
     }
 
