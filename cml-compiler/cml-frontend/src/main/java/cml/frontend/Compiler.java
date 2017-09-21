@@ -20,8 +20,8 @@ public interface Compiler
     static Compiler createCompiler(final Console console)
     {
         final FileSystem fileSystem = FileSystem.create(console);
-        final ModelLoader modelLoader = ModelLoader.create(console, fileSystem);
         final ModuleManager moduleManager = ModuleManager.create(console, fileSystem);
+        final ModelLoader modelLoader = ModelLoader.create(console, moduleManager);
         final Generator generator = Generator.create(console, fileSystem, moduleManager);
 
         return new CompilerImpl(fileSystem, moduleManager, modelLoader, generator);
@@ -48,14 +48,15 @@ class CompilerImpl implements Compiler
     @Override
     public int compile(final String modulePath, final String targetName)
     {
+        final String moduleName = fileSystem.extractName(modulePath);
         final String modulesBaseDir = fileSystem.extractParentPath(modulePath);
-        
+
         moduleManager.clearBaseDirs();
         moduleManager.addBaseDir(System.getenv("CML_MODULES_PATH"));
         moduleManager.addBaseDir(modulesBaseDir);
 
         final Model model = Model.create();
-        final int exitCode = modelLoader.loadModel(model, modulePath);
+        final int exitCode = modelLoader.loadModel(model, moduleName);
 
         if (exitCode == 0)
         {

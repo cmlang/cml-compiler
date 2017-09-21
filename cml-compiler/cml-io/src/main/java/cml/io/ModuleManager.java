@@ -13,6 +13,9 @@ public interface ModuleManager
 
     Optional<Directory> findModuleDir(String moduleName);
 
+    Optional<Directory> findSourceDir(String moduleName);
+    Optional<SourceFile> findSourceFile(String path, String name);
+
     Optional<URL> findTemplateFile(String path);
 
     String getModuleName(String path);
@@ -29,9 +32,11 @@ class ModuleManagerImpl implements ModuleManager
 {
     private static final String MODULE_BASE_DIR_NOT_FOUND = "module base dir not found: %s";
     private static final String UNABLE_TO_FIND_MODULE = "unable to find module: %s";
+
     private static final String NO_TEMPLATES_DIR = "no templates dir for module: %s";
 
     private static final String MODULE_NAME_SEPARATOR = ":";
+    private static final String SOURCE_DIR = "source";
     private static final String TEMPLATES_DIR = "templates";
 
     private final List<Directory> baseDirList = new ArrayList<>();
@@ -80,6 +85,39 @@ class ModuleManagerImpl implements ModuleManager
         }
 
         return Optional.empty();
+    }
+
+    public Optional<Directory> findSourceDir(String moduleName)
+    {
+        final Optional<Directory> moduleDir = findModuleDir(moduleName);
+
+        if (moduleDir.isPresent())
+        {
+            return fileSystem.findDirectory(moduleDir.get(), SOURCE_DIR);
+        }
+        else
+        {
+            console.error(UNABLE_TO_FIND_MODULE, moduleName);
+
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<SourceFile> findSourceFile(String moduleName, String sourceFileName)
+    {
+        final Optional<Directory> sourceDir = findSourceDir(moduleName);
+
+        if (sourceDir.isPresent())
+        {
+            return fileSystem.findSourceFile(sourceDir.get(), sourceFileName);
+        }
+        else
+        {
+            console.error(UNABLE_TO_FIND_MODULE, moduleName);
+
+            return Optional.empty();
+        }
     }
 
     @Override

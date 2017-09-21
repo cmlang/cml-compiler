@@ -2,6 +2,7 @@ package cml.language;
 
 import cml.io.Console;
 import cml.io.FileSystem;
+import cml.io.ModuleManager;
 import cml.language.expressions.Expression;
 import cml.language.features.Concept;
 import cml.language.features.Module;
@@ -48,16 +49,20 @@ public class ExpressionTest
                 .collect(toList());
     }
 
-    private final File modulePath;
+    private final File moduleDir;
     private final FileSystem fileSystem;
+    private final ModuleManager moduleManager;
     private final ModelLoader modelLoader;
     private final STGroupFile groupFile;
 
-    public ExpressionTest(@SuppressWarnings("unused") String moduleName, File modulePath)
+    public ExpressionTest(@SuppressWarnings("unused") String moduleName, File moduleDir)
     {
-        this.modulePath = modulePath;
-        this.fileSystem = FileSystem.create(Console.createSystemConsole());
-        this.modelLoader = ModelLoader.create(Console.createSystemConsole(), fileSystem);
+        final Console console = Console.createSystemConsole();
+
+        this.moduleDir = moduleDir;
+        this.fileSystem = FileSystem.create(console);
+        this.moduleManager = ModuleManager.create(console, fileSystem);
+        this.modelLoader = ModelLoader.create(console, moduleManager);
         this.groupFile = getOclTemplateGroup();
     }
 
@@ -87,10 +92,15 @@ public class ExpressionTest
 
     private Concept loadExpressions()
     {
-        final Model model = Model.create();
-        modelLoader.loadModel(model, modulePath.getPath());
+        final String modulesBaseDir = fileSystem.extractParentPath(moduleDir.getPath());
 
-        final String moduleName = modulePath.getName();
+        moduleManager.clearBaseDirs();
+        moduleManager.addBaseDir(modulesBaseDir);
+
+        final Model model = Model.create();
+        modelLoader.loadModel(model, moduleDir.getName());
+
+        final String moduleName = moduleDir.getName();
         final Optional<Module> module = moduleOf(model, moduleName);
         assertTrue("Module should be found: " + moduleName, module.isPresent());
 
@@ -103,7 +113,7 @@ public class ExpressionTest
     private Properties loadProperties(String fileName) throws IOException
     {
         final Properties properties = new Properties();
-        final File propertiesFile = new File(modulePath, fileName);
+        final File propertiesFile = new File(moduleDir, fileName);
 
         try (final FileInputStream fileInputStream = new FileInputStream(propertiesFile))
         {

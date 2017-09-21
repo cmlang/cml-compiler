@@ -2,7 +2,7 @@ package cml.language.loader;
 
 import cml.io.Console;
 import cml.io.Directory;
-import cml.io.FileSystem;
+import cml.io.ModuleManager;
 import cml.io.SourceFile;
 import cml.language.features.Import;
 import cml.language.features.Module;
@@ -18,7 +18,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Optional;
@@ -30,17 +29,16 @@ import static cml.language.functions.ModuleFunctions.importedModuleOf;
 
 public interface ModelLoader
 {
-    int loadModel(Model model, String modulePath);
+    int loadModel(Model model, String moduleName);
 
-    static ModelLoader create(Console console, FileSystem fileSystem)
+    static ModelLoader create(Console console, ModuleManager moduleManager)
     {
-        return new ModelLoaderImpl(console, fileSystem);
+        return new ModelLoaderImpl(console, moduleManager);
     }
 }
 
 class ModelLoaderImpl implements ModelLoader
 {
-    private static final String SOURCE_DIR = "/source";
     private static final String MAIN_SOURCE = "main.cml";
     private static final String CML_BASE_MODULE = "cml_base";
 
@@ -53,23 +51,20 @@ class ModelLoaderImpl implements ModelLoader
     private static final String NO_SOURCE_DIR_IN_MODULE = "no source dir in module: %s";
 
     private final Console console;
-    private final FileSystem fileSystem;
+    private final ModuleManager moduleManager;
 
-    ModelLoaderImpl(final Console console, final FileSystem fileSystem)
+    ModelLoaderImpl(final Console console, final ModuleManager moduleManager)
     {
         this.console = console;
-        this.fileSystem = fileSystem;
+        this.moduleManager = moduleManager;
     }
 
     @Override
-    public int loadModel(Model model, String modulePath)
+    public int loadModel(Model model, String moduleName)
     {
         try
         {
-            final String basePath = fileSystem.extractParentPath(modulePath);
-            final String moduleName = fileSystem.extractName(modulePath);
-
-            final int exitCode = loadModule(model, basePath, moduleName, null);
+            final int exitCode = loadModule(model, moduleName, null);
 
             if (exitCode == SUCCESS)
             {
@@ -101,7 +96,7 @@ class ModelLoaderImpl implements ModelLoader
         }
     }
 
-    private int loadModule(Model model, String basePath, String moduleName, @Nullable Import _import) throws IOException
+    private int loadModule(Model model, String moduleName, @Nullable Import _import) throws IOException
     {
         final Optional<Module> existingModule = moduleOf(model, moduleName);
         if (existingModule.isPresent())
@@ -120,11 +115,10 @@ class ModelLoaderImpl implements ModelLoader
             _import.setImportedModule(module);
         }
 
-        final String sourceDirPath = basePath + File.separator + moduleName + File.separator + SOURCE_DIR;
-        final Optional<Directory> sourceDir = fileSystem.findDirectory(sourceDirPath);
+        final Optional<Directory> sourceDir = moduleManager.findSourceDir(moduleName);
         if (sourceDir.isPresent())
         {
-            final Optional<SourceFile> sourceFile = fileSystem.findSourceFile(sourceDir.get(), MAIN_SOURCE);
+            final Optional<SourceFile> sourceFile = moduleManager.findSourceFile(moduleName, MAIN_SOURCE);
             if (!sourceFile.isPresent())
             {
                 console.error(NO_MAIN_SOURCE_FILE_IN_MODULE, moduleName);
@@ -139,7 +133,7 @@ class ModelLoaderImpl implements ModelLoader
 
             for (Import i: module.getImports())
             {
-                int exitCode = loadModule(model, basePath, i.getName(), i);
+                int exitCode = loadModule(model, i.getName(), i);
 
                 if (exitCode != SUCCESS)
                 {

@@ -2,6 +2,7 @@ package cml.language;
 
 import cml.io.Console;
 import cml.io.FileSystem;
+import cml.io.ModuleManager;
 import cml.language.expressions.Literal;
 import cml.language.features.*;
 import cml.language.foundation.Model;
@@ -28,13 +29,17 @@ public class ModelLoaderTest
     private static final String BASE_PATH = "src/test/resources/cml/language/ModelLoader/";
 
     private FileSystem fileSystem;
+    private ModuleManager moduleManager;
     private ModelLoader modelLoader;
 
     @Before
     public void setUp()
     {
-        fileSystem = FileSystem.create(Console.createSystemConsole());
-        modelLoader = ModelLoader.create(Console.createSystemConsole(), fileSystem);
+        final Console systemConsole = Console.createSystemConsole();
+
+        fileSystem = FileSystem.create(systemConsole);
+        moduleManager = ModuleManager.create(systemConsole, fileSystem);
+        modelLoader = ModelLoader.create(systemConsole, moduleManager);
     }
 
     @Test
@@ -61,10 +66,15 @@ public class ModelLoaderTest
     @Test
     public void invalid_module_name()
     {
-        final Model model = Model.create();
-        final String modulePath = BASE_PATH + "invalid_module_name";
+        final String moduleName = "invalid_module_name";
+        final String modulePath = BASE_PATH + moduleName;
+        final String modulesBaseDir = fileSystem.extractParentPath(modulePath);
 
-        final int result = modelLoader.loadModel(model, modulePath);
+        moduleManager.clearBaseDirs();
+        moduleManager.addBaseDir(modulesBaseDir);
+
+        final Model model = Model.create();
+        final int result = modelLoader.loadModel(model, moduleName);
 
         assertThat(result, is(3));
     }
@@ -142,10 +152,15 @@ public class ModelLoaderTest
 
     private Model loadModel(String moduleName)
     {
-        final Model model = Model.create();
         final String modulePath = BASE_PATH + moduleName;
+        final String modulesBaseDir = fileSystem.extractParentPath(modulePath);
 
-        modelLoader.loadModel(model, modulePath);
+        moduleManager.clearBaseDirs();
+        moduleManager.addBaseDir(modulesBaseDir);
+
+        final Model model = Model.create();
+
+        modelLoader.loadModel(model, moduleName);
 
         return model;
     }
