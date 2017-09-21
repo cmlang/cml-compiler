@@ -57,7 +57,7 @@ path_ocl(path) ::= <<
 >>
 
 unary_ocl(unary) ::= <<
-(<expr_operator(unary)> <ocl(unary.expr)>)
+(<expr_operator(unary)> <ocl(unary.subExpr)>)
 >>
 
 infix_ocl(infix) ::= <<
