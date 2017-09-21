@@ -25,12 +25,12 @@ public class Corporation extends Organization
         this.profit = profit;
     }
 
-    public boolean getStock()
+    public boolean isStock()
     {
         return this.stock;
     }
 
-    public boolean getProfit()
+    public boolean isProfit()
     {
         return this.profit;
     }
@@ -39,8 +39,8 @@ public class Corporation extends Organization
     {
         return new StringBuilder(Corporation.class.getSimpleName())
                    .append('(')
-                   .append("stock=").append(String.format("\"%s\"", getStock())).append(", ")
-                   .append("profit=").append(String.format("\"%s\"", getProfit())).append(", ")
+                   .append("stock=").append(String.format("\"%s\"", isStock())).append(", ")
+                   .append("profit=").append(String.format("\"%s\"", isProfit())).append(", ")
                    .append("name=").append(String.format("\"%s\"", getName()))
                    .append(')')
                    .toString();

@@ -32,12 +32,12 @@ public class LiteralExpressions
         this.literalDecimalInit2 = literalDecimalInit2;
     }
 
-    public boolean getLiteralTrueBoolean()
+    public boolean isLiteralTrueBoolean()
     {
         return this.literalTrueBoolean;
     }
 
-    public boolean getLiteralFalseBoolean()
+    public boolean isLiteralFalseBoolean()
     {
         return this.literalFalseBoolean;
     }
@@ -66,8 +66,8 @@ public class LiteralExpressions
     {
         return new StringBuilder(LiteralExpressions.class.getSimpleName())
                    .append('(')
-                   .append("literalTrueBoolean=").append(String.format("\"%s\"", getLiteralTrueBoolean())).append(", ")
-                   .append("literalFalseBoolean=").append(String.format("\"%s\"", getLiteralFalseBoolean())).append(", ")
+                   .append("literalTrueBoolean=").append(String.format("\"%s\"", isLiteralTrueBoolean())).append(", ")
+                   .append("literalFalseBoolean=").append(String.format("\"%s\"", isLiteralFalseBoolean())).append(", ")
                    .append("literalStringInit=").append(String.format("\"%s\"", getLiteralStringInit())).append(", ")
                    .append("literalIntegerInit=").append(String.format("\"%s\"", getLiteralIntegerInit())).append(", ")
                    .append("literalDecimalInit=").append(String.format("\"%s\"", getLiteralDecimalInit())).append(", ")
