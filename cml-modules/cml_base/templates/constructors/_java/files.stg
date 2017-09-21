@@ -8,5 +8,5 @@ concept_file|src/main/java/<task.packagePath>/<concept.name; format="pascal-case
 >>
 
 association_files(task, association) ::= <<
-association_file|src/main/java/<task.packagePath>/<association.name>.java
+association_file|src/main/java/<task.packagePath>/<association.name; format="pascal-case">.java
 >>
