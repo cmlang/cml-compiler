@@ -44,13 +44,10 @@ Look for the files ending with '.zip.notes.md'. For example: cml-compiler-1.0.zi
 The release version format is YEAR.MONTH.DAY-CHANNEL, where:
 - YEAR/MONTH/DAY: the year/month/day the version was released.
 - CHANNEL: which channel the release was published in:
--- _stable_: backward-compatible, high-quality releases; low-risk upgrade.
--- _beta_: candidate releases with increasing quality/compatibility; medium-risk upgrade.
+-- _gold_: backward-compatible, high-quality releases; low-risk upgrade.
 -- _alpha_: development releases; no quality/compatibility guarantees; high-risk upgrade.
 
-All release channels may include bug fixes and new features.
-We strive to keep releases backward-compatible and high-quality;
-especially the stable releases.
+Either release channel may include bug fixes and new features.
 
 ## Installing Specific Version with Homebrew / Linuxbrew
 
@@ -92,9 +89,9 @@ $ brew update # To fetch all available versions.
 $ brew upgrade cml-compiler
 ```
 
-You may get a new stable version,
-and thus backward-compatible/high-quality version,
-but you may also get a beta or an alpha release.
+You may get a new gold version
+(and thus backward-compatible/high-quality version),
+but you may also get an alpha release.
 
 ### Specific Channel
 
@@ -102,14 +99,14 @@ If you'd like to get the latest release of a specific channel:
 
 ```
 $ brew update # To fetch all available versions.
-$ brew install cml-compiler-CHANNEL # where CHANNEL = alpha | beta | stable
+$ brew install cml-compiler-CHANNEL # where CHANNEL = alpha or gold
 ```
 
 Once you've installed it, you can upgrade to the latest release of the channel with:
 
 ```
 $ brew update # To fetch all available versions.
-$ brew upgrade cml-compiler-CHANNEL # where CHANNEL = alpha | beta | stable
+$ brew upgrade cml-compiler-CHANNEL # where CHANNEL = alpha or gold
 ```
 
 ### Specific Day Version
