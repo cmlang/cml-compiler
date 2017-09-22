@@ -1,16 +1,16 @@
 
-abstract concept ModelElement
+abstraction ModelElement
 {
     parent: ModelElement?;
     elements: ModelElement*;
 }
 
-abstract concept NamedElement: ModelElement
+abstraction NamedElement: ModelElement
 {
     name: String;
 }
 
-abstract concept PropertyList: ModelElement
+abstraction PropertyList: ModelElement
 {
 }
 

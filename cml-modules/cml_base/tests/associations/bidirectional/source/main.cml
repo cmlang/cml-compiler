@@ -13,7 +13,7 @@ concept Employee
     vehicle: Vehicle?;
 }
 
-abstract concept Organization
+abstraction Organization
 {
     name: String;
     employees: Employee*;

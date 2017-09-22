@@ -1,15 +1,15 @@
 
 -- Generalization of Circle and Rectangle.
--- As an abstract concept, no direct instances of Shape are ever created.
-abstract concept Shape
+-- As an abstraction, no direct instances of Shape are ever created.
+abstraction Shape
 {
-    -- Abstract concepts may also have concrete properties.
+    -- Abstractions may also have concrete properties.
     -- Specializations below share the color attribute as-is.
     color: String;
 
     -- Specializations below redefine the area attribute:
     -- A derived property without an expression is considered abstract.
-    -- Only abstract concepts may have abstract properties.
+    -- Only abstractions may have abstract properties.
     /area: Double;
 }
 
