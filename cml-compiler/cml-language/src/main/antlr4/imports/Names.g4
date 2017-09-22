@@ -44,6 +44,12 @@ TEMPLATE:
 FUNCTION:
     'function';
 
+ABSTRACTION:
+    'abstraction';
+
+CONCEPT:
+    'concept';
+
 NAME:
     ('A'..'Z' | 'a'..'z')
     ( 'A'..'Z' | 'a'..'z' | '0'..'9' | '_' )*;

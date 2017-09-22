@@ -1,1 +1,1 @@
-abstract concept ModelElement;
+abstraction ModelElement;
