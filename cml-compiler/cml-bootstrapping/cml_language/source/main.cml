@@ -42,7 +42,7 @@ concept MODULE: NAMED_ELEMENT, SCOPE
     /imported_modules = imports | yield: imported_module;
 }
 
-abstract concept CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
+abstraction CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
 {
     abstract: BOOLEAN;
 
@@ -85,7 +85,7 @@ abstract concept CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
     /redefined_inherited_concrete_properties: PROPERTY*;
 }
 */
-abstract concept ModelElement
+abstraction ModelElement
 {
     parent: Scope?;
     location: Location?;
@@ -94,7 +94,7 @@ abstract concept ModelElement
 //    /module = parent.module;
 }
 
-abstract concept Scope: ModelElement
+abstraction Scope: ModelElement
 {
     members: ModelElement*;
 }
@@ -118,7 +118,7 @@ association Localization
     ModelElement.location;
 }
 
-abstract concept NamedElement: ModelElement
+abstraction NamedElement: ModelElement
 {
     name: String;
 }
@@ -193,7 +193,7 @@ concept PROPERTY_REDEF
     redefined: BOOLEAN;
 }
 
-abstract concept TYPE: MODEL_ELEMENT
+abstraction TYPE: MODEL_ELEMENT
 {
     concept: CONCEPT?;
     cardinality: STRING?;
