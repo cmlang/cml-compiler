@@ -14,8 +14,8 @@ concept CircleB: Shape
     area = 4.0d;
 }
 
--- OK to miss redefinition in this specialization because it is an abstract concept:
-abstract concept CircleC: Shape;
+-- OK to miss redefinition in this specialization because it is an abstraction:
+abstraction CircleC: Shape;
 
 -- Properly redefined "area" as a derived property:
 concept UnitCircle: CircleA

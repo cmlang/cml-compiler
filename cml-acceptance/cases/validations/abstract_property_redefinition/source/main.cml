@@ -1,4 +1,4 @@
-abstract concept Shape
+abstraction Shape
 {
     -- A derived property without an expression is considered abstract:
     /area: Double;
@@ -22,8 +22,8 @@ concept UnitCircleC: Circle
     area = 1.0d;
 }
 
--- OK to miss redefinition in this specialization because it is an abstract concept:
-abstract concept UnitCircleD: Circle;
+-- OK to miss redefinition in this specialization because it is an abstraction:
+abstraction UnitCircleD: Circle;
 
 
 

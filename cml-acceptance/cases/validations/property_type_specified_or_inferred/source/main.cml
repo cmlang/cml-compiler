@@ -1,4 +1,4 @@
-abstract concept Attributes
+abstraction Attributes
 {
     // Missing type and expression:
     bad_prop1;

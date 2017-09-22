@@ -1,7 +1,7 @@
 concept A;
 concept B: A;
 
-abstract concept Attributes
+abstraction Attributes
 {
     a: A;
     b: B;

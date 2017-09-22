@@ -1,4 +1,4 @@
-abstract concept Attributes
+abstraction Attributes
 {
     prop_name: STRING;
     prop_name = 0;
