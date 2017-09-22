@@ -71,7 +71,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final boolean _abstract = ctx.ABSTRACT() != null;
+        final boolean _abstract = ctx.abstract_ != null;
         final List<Property> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
             .map(node -> node.property)
             .toList();

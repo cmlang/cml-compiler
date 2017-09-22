@@ -38,9 +38,6 @@ IMPLIES:
 NOT:
     'not';
 
-ABSTRACT:
-    'abstract';
-
 TEMPLATE:
     'template';
 
