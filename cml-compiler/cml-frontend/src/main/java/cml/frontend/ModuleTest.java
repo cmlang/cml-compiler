@@ -48,6 +48,7 @@ public class ModuleTest
     private static final String CLIENTS_PATH = "clients";
 
     private static final String COMPILER_OUTPUT_TXT = "cml-compiler-output.txt";
+    private static final String COMPILER_ERROR_TXT = "cml-compiler-errors.txt";
     private static final String CLIENT_OUTPUT_TXT = "expected-client-output.txt";
     private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
     private static final String IGNORED_LIST_TXT = "ignored-list.txt";
@@ -150,27 +151,29 @@ public class ModuleTest
     {
         System.out.println("\n\nTesting " + testName + " with task " + taskName + ":");
 
-        // Compiling test module:
-        verifyCompilerOutput();
-        verifyTargetFiles();
+        if (verifyCompilerOutput())
+        {
+            verifyTargetFiles();
 
-        // Building generated target:
-        buildMavenModule();
-        checkPythonTypes();
-        installPythonPackage();
+            // Building generated target:
+            buildMavenModule();
+            checkPythonTypes();
+            installPythonPackage();
 
-        // Executing clients:
-        executeJavaClient();
-        executePythonClient();
+            // Executing clients:
+            executeJavaClient();
+            executePythonClient();
+        }
 
         System.out.print("- SUCCESS");
 
         testPassed = true;
     }
 
-    private void verifyCompilerOutput() throws IOException
+    private boolean verifyCompilerOutput() throws IOException
     {
         final File expectedOutputFile = new File(expectedDir, COMPILER_OUTPUT_TXT);
+        final File expectedErrorFile = new File(expectedDir, COMPILER_ERROR_TXT);
 
         if (expectedOutputFile.isFile())
         {
@@ -180,10 +183,20 @@ public class ModuleTest
 
             System.out.println("OK");
         }
+        else if (expectedErrorFile.isFile())
+        {
+            System.out.print("- Verifying the expected errors from compiler ...");
+
+            assertThatOutputMatches("Compiler's output", expectedErrorFile, compilerOutput);
+
+            System.out.println("OK");
+        }
         else
         {
             System.out.println("- Ignored the compiler's output.");
         }
+
+        return expectedOutputFile.isFile() || !expectedErrorFile.isFile(); // should continue?
     }
 
     private void verifyTargetFiles()
