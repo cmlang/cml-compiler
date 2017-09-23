@@ -1,2 +1,2 @@
-line 7:0 mismatched input '<EOF>' expecting NAME
+Syntax Error: mismatched input '<EOF>' expecting NAME (7:1)
 Error: No name provided for concept.
