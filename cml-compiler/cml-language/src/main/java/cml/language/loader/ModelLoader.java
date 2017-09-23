@@ -245,7 +245,11 @@ class ModelLoaderImpl implements ModelLoader
             final CMLLexer lexer = new CMLLexer(input);
             final CommonTokenStream tokens = new CommonTokenStream(lexer);
             final CMLParser parser = new CMLParser(tokens);
-            
+            final SyntaxErrorListener syntaxErrorListener = new SyntaxErrorListener(console);
+
+            parser.getErrorListeners().clear();
+            parser.addErrorListener(syntaxErrorListener);
+
             return parser.compilationUnit();
         }
     }
