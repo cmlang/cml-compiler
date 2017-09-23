@@ -3,10 +3,12 @@ package livir.books;
 import java.util.*;
 import java.math.*;
 import org.jetbrains.annotations.*;
+import org.jooq.lambda.*;
 
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
+import static org.jooq.lambda.Seq.*;
 
 public class BookStore
 {
