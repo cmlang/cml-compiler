@@ -46,3 +46,12 @@ Failed validation: required property_type_specified_or_inferred: in property Inf
 Incompatible operand(s) for operator '!==':
 - left operand is 'flag: boolean'
 - right operand is 'flag: boolean'
+
+Failed validation: required property_type_specified_or_inferred: in property UnaryValidations.derived_flag: UNDEFINED (30:5)
+Unable to find type of member: some.unknown
+
+Failed validation: required property_type_specified_or_inferred: in property UnaryValidations.invalid_flag: UNDEFINED (34:5)
+Incompatible operand 'number' of type 'integer' for operator 'not'.
+
+Failed validation: required property_type_specified_or_inferred: in property UnaryValidations.invalid_number: UNDEFINED (38:5)
+Incompatible operand 'flag' of type 'boolean' for operator '-'.

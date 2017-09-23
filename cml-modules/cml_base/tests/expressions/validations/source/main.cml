@@ -4,7 +4,7 @@ concept InfixValidations
     flag: boolean;
     some: Something;
 
-    /derived_flag = flag or some.unknown; // the type of 'derived' should be: UNDEFINED
+    /derived_flag = flag or some.unknown; // the type of 'derived_flag' should be: UNDEFINED
 
     number: integer;
 
@@ -21,6 +21,21 @@ concept InfixValidations
 
     /bool_ref_equality = flag === flag;
     /bool_ref_inequality = flag !== flag;
+}
+
+concept UnaryValidations
+{
+    some: Something;
+
+    /derived_flag = not some.unknown; // the type of 'derived_flag' should be: UNDEFINED
+
+    number: integer;
+
+    /invalid_flag = not number;
+
+    flag: boolean;
+
+    /invalid_number = - flag;
 }
 
 concept Something {}

@@ -8,13 +8,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableCollection;
 
 public class Unary extends ExpressionBase
 {
     private final Collection<String> LOGIC_OPERATORS = unmodifiableCollection(singletonList(
-        "not" // boolean operators
+        "not"
+    ));
+
+    private final Collection<String> NUMERIC_OPERATORS = unmodifiableCollection(asList(
+        "+", "-"
     ));
 
     private static Map<String, String> OPERATIONS =
@@ -62,6 +68,26 @@ public class Unary extends ExpressionBase
     @Override
     public Type getType()
     {
-        return LOGIC_OPERATORS.contains(getOperator()) ? NamedType.BOOLEAN : subExpr.getType();
+        final Type subExprType = subExpr.getType();
+
+        if (subExprType.isUndefined())
+        {
+            return subExprType;
+        }
+        else if (LOGIC_OPERATORS.contains(operator) && subExprType.isBoolean())
+        {
+            return NamedType.BOOLEAN;
+        }
+        else if (NUMERIC_OPERATORS.contains(operator) && (subExprType.isNumeric() || subExprType.isBinaryFloatingPoint()))
+        {
+            return subExprType;
+        }
+        else
+        {
+            return NamedType.createUndefined(
+                format(
+                    "Incompatible operand '%s' of type '%s' for operator '%s'.",
+                    getSubExpr(), subExprType, getOperator()));
+        }
     }
 }

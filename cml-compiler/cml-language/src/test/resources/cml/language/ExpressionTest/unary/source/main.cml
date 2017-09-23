@@ -1,6 +1,8 @@
 
 concept Expressions
 {
+    p: BOOLEAN;
+
     // Unary operators:
     plus = +1;
     minus = -2;
