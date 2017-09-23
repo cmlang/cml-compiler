@@ -14,7 +14,7 @@ expression returns [Expression expr]
     | expression operator=('*' | '/' | '%') expression
     | expression operator=('+' | '-') expression
     | expression operator=('<' | '<=' | '>' | '>=') expression
-    | expression operator=('==' | '!=') expression
+    | expression operator=('===' | '!==' | '==' | '!=') expression
     | expression operator=AND expression
     | expression operator=OR expression
     | expression operator=XOR expression

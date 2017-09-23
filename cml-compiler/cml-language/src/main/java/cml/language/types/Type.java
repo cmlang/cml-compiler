@@ -50,6 +50,11 @@ public interface Type extends ModelElement
         return false;
     }
 
+    default boolean isString()
+    {
+        return false;
+    }
+
     default boolean isNumeric()
     {
         return false;
@@ -58,6 +63,16 @@ public interface Type extends ModelElement
     default boolean isBinaryFloatingPoint()
     {
         return false;
+    }
+
+    default boolean isRelational()
+    {
+        return isString() || isNumeric() || isBinaryFloatingPoint();
+    }
+
+    default boolean isReferential()
+    {
+        return isConcept() && !isSequence();
     }
 
     default boolean isDefined()

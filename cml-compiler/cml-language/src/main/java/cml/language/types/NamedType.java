@@ -22,6 +22,7 @@ public interface NamedType extends Type, NamedElement
 {
     NamedType UNDEFINED = NamedType.create("UNDEFINED");
     NamedType BOOLEAN = NamedType.create("BOOLEAN");
+    NamedType STRING = NamedType.create("STRING");
 
     Collection<String> PRIMITIVE_TYPE_NAMES = unmodifiableCollection(asList(
         "BOOLEAN", "INTEGER", "DECIMAL", "STRING", "REGEX", // main primitive types
@@ -45,7 +46,13 @@ public interface NamedType extends Type, NamedElement
     @Override
     default boolean isBoolean()
     {
-        return BOOLEAN.getName().endsWith(getName().toUpperCase());
+        return BOOLEAN.getName().equalsIgnoreCase(getName());
+    }
+
+    @Override
+    default boolean isString()
+    {
+        return STRING.getName().equalsIgnoreCase(getName());
     }
 
     @Override

@@ -51,6 +51,7 @@ concept Item
 {
     name: STRING;
     product: Product;
+    qty: INTEGER;
 }
 
 concept Customer

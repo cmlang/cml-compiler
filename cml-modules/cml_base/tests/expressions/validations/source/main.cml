@@ -1,0 +1,16 @@
+
+concept InfixValidations
+{
+    flag: boolean;
+    some: Something;
+
+    /derived_flag = flag or some.unknown; // the type of 'derived' should be: UNDEFINED
+
+    number: integer;
+
+    /invalid_flag = flag or number;
+}
+
+concept Something {}
+
+task expressions_validations by poj {}

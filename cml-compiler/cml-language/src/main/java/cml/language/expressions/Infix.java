@@ -15,13 +15,23 @@ import static java.util.Collections.unmodifiableCollection;
 
 public class Infix extends ExpressionBase
 {
-    private final Collection<String> MATH_OPERATORS = unmodifiableCollection(asList(
-        "+", "-", "*", "/", "%", "^" // arithmetic operators
+    private static final String REFERENTIAL_EQUALITY = "===";
+    private static final String REFERENTIAL_INEQUALITY = "!==";
+
+    private static final Collection<String> ARITHMETIC_OPERATORS = unmodifiableCollection(asList(
+        "+", "-", "*", "/", "%", "^"
     ));
 
-    private final Collection<String> LOGIC_OPERATORS = unmodifiableCollection(asList(
-        "==", "!=", ">", ">=", "<", "<=", // relational operators
-        "and", "or", "xor", "implies" // boolean operators
+    private static final Collection<String> RELATIONAL_OPERATORS = unmodifiableCollection(asList(
+        "==", "!=", ">", ">=", "<", "<="
+    ));
+
+    private static final Collection<String> BOOLEAN_OPERATORS = unmodifiableCollection(asList(
+        "and", "or", "xor", "implies"
+    ));
+
+    private static final Collection<String> REFERENTIAL_OPERATORS = unmodifiableCollection(asList(
+        REFERENTIAL_EQUALITY, REFERENTIAL_INEQUALITY
     ));
 
     private static Map<String, String> OPERATIONS =
@@ -37,7 +47,7 @@ public class Infix extends ExpressionBase
 
             // Relational Operators:
             put("==", "eq");
-            put("!=", "ineq");
+            put("!=", "not_eq");
             put(">", "gt");
             put(">=", "gte");
             put("<", "lt");
@@ -48,6 +58,10 @@ public class Infix extends ExpressionBase
             put("or", "or");
             put("xor", "xor");
             put("implies", "implies");
+
+            // Referential Operators:
+            put(REFERENTIAL_EQUALITY, "ref_eq");
+            put(REFERENTIAL_INEQUALITY, "not_ref_eq");
         }};
 
     private final String operator;
@@ -100,15 +114,31 @@ public class Infix extends ExpressionBase
         assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + left.getKind();
         assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + right.getKind();
 
-        if (LOGIC_OPERATORS.contains(operator))
+        if (leftType.isUndefined())
+        {
+            return leftType;
+        }
+        else if (rightType.isUndefined())
+        {
+            return rightType;
+        }
+        else if (BOOLEAN_OPERATORS.contains(operator) && leftType.isBoolean() && rightType.isBoolean())
         {
             return NamedType.BOOLEAN;
         }
-        else if (MATH_OPERATORS.contains(operator) && leftType.isNumeric() && rightType.isNumeric())
+        else if (RELATIONAL_OPERATORS.contains(operator) && leftType.isRelational() && rightType.isRelational())
+        {
+            return NamedType.BOOLEAN;
+        }
+        else if (REFERENTIAL_OPERATORS.contains(operator) && leftType.isReferential() && rightType.isReferential())
+        {
+            return NamedType.BOOLEAN;
+        }
+        else if (ARITHMETIC_OPERATORS.contains(operator) && leftType.isNumeric() && rightType.isNumeric())
         {
             return isNumericWiderThan(leftType, rightType) ? leftType : rightType;
         }
-        else if (MATH_OPERATORS.contains(operator) && leftType.isBinaryFloatingPoint() && rightType.isBinaryFloatingPoint())
+        else if (ARITHMETIC_OPERATORS.contains(operator) && leftType.isBinaryFloatingPoint() && rightType.isBinaryFloatingPoint())
         {
             return isBinaryFloatingPointWiderThan(leftType, rightType) ? leftType : rightType;
         }
@@ -122,7 +152,10 @@ public class Infix extends ExpressionBase
         }
         else
         {
-            return NamedType.createUndefined(format("Unsupported operands for operator '%s'.", getOperator()));
+            return NamedType.createUndefined(
+                format(
+                    "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'.\n- right operand is '%s: %s'.",
+                    getOperator(), getLeft(), leftType, getRight(), rightType));
         }
     }
 

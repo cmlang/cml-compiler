@@ -1,0 +1,8 @@
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.derived_flag: UNDEFINED (7:5)
+Unable to find type of member: some.unknown
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.invalid_flag: UNDEFINED (11:5)
+Incompatible operand(s) for operator 'or':
+- left operand is 'flag: boolean'.
+- right operand is 'number: integer'.
