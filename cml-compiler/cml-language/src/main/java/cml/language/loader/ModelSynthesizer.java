@@ -16,6 +16,7 @@ import org.jooq.lambda.Seq;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static cml.language.transforms.InvocationTransforms.invocationOf;
@@ -313,11 +314,18 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final String name = ctx.NAME().getText();
         final Optional<Lambda> lambda = ofNullable(ctx.lambdaExpression()).map(c -> c.lambda);
-        final List<Expression> arguments = seq(ctx.expression()).map(e -> e.expr)
-                                                                .concat(seq(lambda))
-                                                                .toList();
+        final List<Expression> arguments = expressionsOf(ctx).concat(seq(lambda)).toList();
 
         ctx.invocation = Invocation.create(name, arguments);
+    }
+
+    private Seq<Expression> expressionsOf(final InvocationExpressionContext ctx)
+    {
+        final AtomicInteger index = new AtomicInteger(2);
+        return seq(ctx.expression()).map(e -> {
+            final int i = index.incrementAndGet();
+            return e.expr == null ? new InvalidExpression(ctx.getChild(i).getText()) : e.expr;
+        });
     }
 
     @Override
