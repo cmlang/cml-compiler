@@ -12,6 +12,11 @@ public interface NamedElement extends ModelElement
 {
     String getName();
 
+    static NamedElement createNamedElement(@Nullable Scope parent, @Nullable Location location, String name)
+    {
+        return new NamedElementImpl(parent, location, name);
+    }
+
     static NamedElement extendNamedElement(ModelElement modelElement, String name)
     {
         return new NamedElementImpl(modelElement, name);

@@ -85,6 +85,10 @@ class ModelElement(ABC):
         pass
 
     @staticmethod
+    def create_model_element(parent: 'Optional[Scope]', location: 'Optional[Location]') -> 'ModelElement':
+        return ModelElementImpl(None, parent, location)
+
+    @staticmethod
     def extend_model_element(actual_self: 'Optional[ModelElement]', parent: 'Optional[Scope]', location: 'Optional[Location]') -> 'ModelElement':
         return ModelElementImpl(actual_self, parent, location)
 
@@ -123,6 +127,10 @@ class Scope(ModelElement, ABC):
         pass
 
     @staticmethod
+    def create_scope(parent: 'Optional[Scope]', location: 'Optional[Location]', members: 'List[ModelElement]') -> 'Scope':
+        return ScopeImpl(None, None, members, parent=parent, location=location)
+
+    @staticmethod
     def extend_scope(actual_self: 'Optional[Scope]', model_element: 'ModelElement', members: 'List[ModelElement]') -> 'Scope':
         return ScopeImpl(actual_self, model_element, members)
 
@@ -131,12 +139,15 @@ class ScopeImpl(Scope):
 
     _membership = _Membership()
 
-    def __init__(self, actual_self: 'Optional[Scope]', model_element: 'Optional[ModelElement]', members: 'List[ModelElement]') -> 'None':
+    def __init__(self, actual_self: 'Optional[Scope]', model_element: 'Optional[ModelElement]', members: 'List[ModelElement]', **kwargs) -> 'None':
         if actual_self is None:
             self.__actual_self = self  # type: Optional[Scope]
         else:
             self.__actual_self = actual_self
-        self.__model_element = model_element
+        if model_element is None:
+            self.__model_element = ModelElement.extend_model_element(self.__actual_self, kwargs['parent'], kwargs['location'])
+        else:
+            self.__model_element = model_element
 
         self._membership.link_many(self.__actual_self, members)
 
@@ -221,14 +232,21 @@ class NamedElement(ModelElement, ABC):
         pass
 
     @staticmethod
+    def create_named_element(parent: 'Optional[Scope]', location: 'Optional[Location]', name: 'str') -> 'NamedElement':
+        return NamedElementImpl(None, name, parent=parent, location=location)
+
+    @staticmethod
     def extend_named_element(model_element: 'ModelElement', name: 'str') -> 'NamedElement':
         return NamedElementImpl(model_element, name)
 
 
 class NamedElementImpl(NamedElement):
 
-    def __init__(self, model_element: 'ModelElement', name: 'str') -> 'None':
-        self.__model_element = model_element
+    def __init__(self, model_element: 'Optional[ModelElement]', name: 'str', **kwargs) -> 'None':
+        if model_element is None:
+            self.__model_element = ModelElement.extend_model_element(self, kwargs['parent'], kwargs['location'])
+        else:
+            self.__model_element = model_element
         self.__name = name
 
     @property

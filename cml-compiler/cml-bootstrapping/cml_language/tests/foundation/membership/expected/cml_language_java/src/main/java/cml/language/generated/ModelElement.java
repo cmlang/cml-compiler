@@ -14,6 +14,11 @@ public interface ModelElement
 
     Optional<Location> getLocation();
 
+    static ModelElement createModelElement(@Nullable Scope parent, @Nullable Location location)
+    {
+        return new ModelElementImpl(null, parent, location);
+    }
+
     static ModelElement extendModelElement(@Nullable ModelElement actual_self, @Nullable Scope parent, @Nullable Location location)
     {
         return new ModelElementImpl(actual_self, parent, location);

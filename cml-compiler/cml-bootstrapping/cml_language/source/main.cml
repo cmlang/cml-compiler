@@ -85,7 +85,7 @@ abstraction CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
     /redefined_inherited_concrete_properties: PROPERTY*;
 }
 */
-abstraction ModelElement
+concept ModelElement
 {
     parent: Scope?;
     location: Location?;
@@ -94,7 +94,7 @@ abstraction ModelElement
 //    /module = parent.module;
 }
 
-abstraction Scope: ModelElement
+concept Scope: ModelElement
 {
     members: ModelElement*;
 }
@@ -118,7 +118,7 @@ association Localization
     ModelElement.location;
 }
 
-abstraction NamedElement: ModelElement
+concept NamedElement: ModelElement
 {
     name: String;
 }

@@ -275,7 +275,7 @@ class Circle(Shape, ABC):
 
 class CircleImpl(Circle):
 
-    def __init__(self, shape: 'Optional[Shape]', radius: 'float', color: 'str' = "Blue", **kwargs) -> 'None':
+    def __init__(self, shape: 'Shape', radius: 'float', color: 'str' = "Blue") -> 'None':
         if shape is None:
             self.__shape = Shape.extend_shape(color)
         else:
