@@ -4,5 +4,45 @@ Unable to find type of member: some.unknown
 
 Failed validation: required property_type_specified_or_inferred: in property InfixValidations.invalid_flag: UNDEFINED (11:5)
 Incompatible operand(s) for operator 'or':
-- left operand is 'flag: boolean'.
-- right operand is 'number: integer'.
+- left operand is 'flag: boolean'
+- right operand is 'number: integer'
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.rel_equality: UNDEFINED (13:5)
+Incompatible operand(s) for operator '==':
+- left operand is 'some: Something'
+- right operand is 'number: integer'
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.rel_inequality: UNDEFINED (14:5)
+Incompatible operand(s) for operator '!=':
+- left operand is 'some: Something'
+- right operand is 'number: integer'
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.ref_equality: UNDEFINED (16:5)
+Incompatible operand(s) for operator '===':
+- left operand is 'some: Something'
+- right operand is 'number: integer'
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.ref_inequality: UNDEFINED (17:5)
+Incompatible operand(s) for operator '!==':
+- left operand is 'some: Something'
+- right operand is 'number: integer'
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.bool_rel_equality: UNDEFINED (19:5)
+Incompatible operand(s) for operator '==':
+- left operand is 'flag: boolean'
+- right operand is 'flag: boolean'
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.bool_rel_inequality: UNDEFINED (20:5)
+Incompatible operand(s) for operator '!=':
+- left operand is 'flag: boolean'
+- right operand is 'flag: boolean'
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.bool_ref_equality: UNDEFINED (22:5)
+Incompatible operand(s) for operator '===':
+- left operand is 'flag: boolean'
+- right operand is 'flag: boolean'
+
+Failed validation: required property_type_specified_or_inferred: in property InfixValidations.bool_ref_inequality: UNDEFINED (23:5)
+Incompatible operand(s) for operator '!==':
+- left operand is 'flag: boolean'
+- right operand is 'flag: boolean'

@@ -9,6 +9,18 @@ concept InfixValidations
     number: integer;
 
     /invalid_flag = flag or number;
+
+    /rel_equality = some == number;
+    /rel_inequality = some != number;
+
+    /ref_equality = some === number;
+    /ref_inequality = some !== number;
+
+    /bool_rel_equality = flag == flag;
+    /bool_rel_inequality = flag != flag;
+
+    /bool_ref_equality = flag === flag;
+    /bool_ref_inequality = flag !== flag;
 }
 
 concept Something {}

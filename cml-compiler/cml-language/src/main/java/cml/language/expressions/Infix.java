@@ -142,19 +142,11 @@ public class Infix extends ExpressionBase
         {
             return isBinaryFloatingPointWiderThan(leftType, rightType) ? leftType : rightType;
         }
-        else if (isAssignableFrom(leftType, rightType))
-        {
-            return leftType;
-        }
-        else if (isAssignableFrom(rightType, leftType))
-        {
-            return rightType;
-        }
         else
         {
             return NamedType.createUndefined(
                 format(
-                    "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'.\n- right operand is '%s: %s'.",
+                    "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s: %s'",
                     getOperator(), getLeft(), leftType, getRight(), rightType));
         }
     }
