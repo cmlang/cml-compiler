@@ -316,11 +316,11 @@ path_getter_call(path) ::= <<
 >>
 
 path_base_call(path) ::= <<
-<path_expr(path.base)>
+<path_expr(path.base)><\\>
 <if(path.base.type.sequence)><\\>
-<indent()><path_map_call(path); anchor><\\>
+<\n><indent()><path_map_call(path); anchor><\\>
 <else><\\>
-<indent()>.<path_getter_call(path)><\\>
+.<path_getter_call(path)><\\>
 <endif>
 >>
 
