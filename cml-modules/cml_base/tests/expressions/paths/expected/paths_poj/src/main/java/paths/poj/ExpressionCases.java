@@ -3,10 +3,12 @@ package paths.poj;
 import java.util.*;
 import java.math.*;
 import org.jetbrains.annotations.*;
+import org.jooq.lambda.*;
 
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
+import static org.jooq.lambda.Seq.*;
 
 public class ExpressionCases
 {
@@ -58,19 +60,12 @@ public class ExpressionCases
 
     public List<BigDecimal> getPathVar3()
     {
-        return getSomePathList()
-                   .stream()
-                   .map(someConcept -> someConcept.getOneMorePath())
-                   .map(anotherConcept -> anotherConcept.getEtc())
-                   .collect(toList());
+        return seq(getSomePathList()).map(someConcept -> someConcept.getOneMorePath()).map(anotherConcept -> anotherConcept.getEtc()).toList();
     }
 
     public List<Integer> getPathBars()
     {
-        return getSomePathList()
-                   .stream()
-                   .map(someConcept -> someConcept.getBar())
-                   .collect(toList());
+        return seq(getSomePathList()).map(someConcept -> someConcept.getBar()).toList();
     }
 
     public String toString()

@@ -22,3 +22,11 @@ invocation_optional_present(args) ::= <<
 invocation_required_present(args) ::= <<
 <expression(args.seq)> != null
 >>
+
+invocation_sequence_first(args) ::= <<
+seq(<expression(args.seq)>).findFirst()
+>>
+
+invocation_sequence_last(args) ::= <<
+seq(<expression(args.seq)>).findLast()
+>>

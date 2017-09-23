@@ -57,6 +57,12 @@ dependencies() ::= <<
     \<artifactId>annotations\</artifactId>
     \<version>15.0\</version>
 \</dependency>
+\<dependency>
+    \<groupId>org.jooq\</groupId>
+    \<artifactId>jool\</artifactId>
+    \<version>0.9.12\</version>
+    \<scope>compile\</scope>
+\</dependency>
 >>
 
 plugins() ::= <<

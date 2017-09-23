@@ -16,6 +16,7 @@ import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.seq;
 
 public class Path extends ExpressionBase
 {
@@ -65,6 +66,16 @@ public class Path extends ExpressionBase
         assert getNames().size() >= 1: "Path must have at least one name in order to determine its member names.";
 
         return getNames().stream().skip(1).collect(toList());
+    }
+
+    public boolean isFirst()
+    {
+        return !getBase().isPresent();
+    }
+
+    public boolean isLast()
+    {
+        return !getParent().isPresent() || !(getParent().get() instanceof Path);
     }
 
     @Override

@@ -45,9 +45,9 @@ public class Lambda extends ExpressionBase
     }
 
     @Override
-    public Seq<Expression> getSubExpressions()
+    public List<Expression> getSubExpressions()
     {
-        return Seq.of(innerExpression);
+        return Seq.of(innerExpression).toList();
     }
 
     public Optional<FunctionType> getFunctionType()

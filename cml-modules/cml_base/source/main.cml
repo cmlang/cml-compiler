@@ -1,3 +1,6 @@
 
 template function empty<T>(seq: T*) -> boolean;
 template function present<T>(seq: T*) -> boolean;
+
+template function first<T>(seq: T*) -> T?;
+template function last<T>(seq: T*) -> T?;

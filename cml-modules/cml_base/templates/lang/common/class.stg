@@ -144,11 +144,19 @@ field_getter(property) ::= <<
 
 derived_getter(property) ::= <<
 <if(property.value)><\\>
-<derived_concrete_getter(property, expression(property.value))><\\>
+<derived_concrete_getter(property, derived_getter_expression(property.value))><\\>
 <elseif(abstract)><\\>
 <derived_abstract_getter(property)><\\>
 <else><\\>
 <derived_concrete_getter(property, field_or_default_value(property))><\\>
+<endif>
+>>
+
+derived_getter_expression(expr) ::= <<
+<if(expr.type.sequence)><\\>
+<to_list(expression(expr))><\\>
+<else><\\>
+<expression(expr)><\\>
 <endif>
 >>
 

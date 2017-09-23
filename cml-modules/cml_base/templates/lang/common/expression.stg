@@ -7,7 +7,7 @@ expression_path(path) ::= <<
 <if(path.self)><\\>
 <self()><\\>
 <else><\\>
-<path_start(path)><path_expr(path)><path_end(path)><\\>
+<path_expr(path)><\\>
 <endif>
 >>
 

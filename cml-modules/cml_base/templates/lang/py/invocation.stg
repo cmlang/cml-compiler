@@ -22,3 +22,11 @@ invocation_optional_present(args) ::= <<
 invocation_required_present(args) ::= <<
 <invocation_optional_present(args)>
 >>
+
+invocation_sequence_first(args) ::= <<
+((<expression(args.seq)>) or [None])[0]
+>>
+
+invocation_sequence_last(args) ::= <<
+((<expression(args.seq)>) or [None])[-1]
+>>

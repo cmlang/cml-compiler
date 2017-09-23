@@ -6,7 +6,8 @@ import cml.language.foundation.InvariantValidator;
 import cml.language.generated.ModelElement;
 import cml.language.generated.Scope;
 import cml.language.types.Type;
-import org.jooq.lambda.Seq;
+
+import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.jooq.lambda.Seq.seq;
@@ -21,10 +22,11 @@ public interface Expression extends ModelElement, Scope
         return getType();
     }
 
-    default Seq<Expression> getSubExpressions()
+    default List<Expression> getSubExpressions()
     {
         return seq(getMembers()).filter(m -> m instanceof Expression)
-                                .map(m -> (Expression)m);
+                                .map(m -> (Expression)m)
+                                .toList();
     }
 
     default boolean evaluateInvariants()

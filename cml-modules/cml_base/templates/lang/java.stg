@@ -301,37 +301,37 @@ operation_not(expr) ::= "!<expr>"
 
 // Paths
 
-path_start(path) ::= ""
-
 path_expr(path) ::= <<
 <if(path.base)><\\>
 <path_base_call(path)><\\>
 <else><\\>
-<path_getter_call(path)><\\>
+<path_getter_call([], path)><\\>
 <endif>
 >>
 
-path_getter_call(path) ::= <<
-<getter_name(path)>()
+path_getter_call(prefix, path) ::= <<
+<if(prefix)><\\>
+<prefix><getter_name(path)>()<\\>
+<elseif(path.type.sequence)><\\>
+seq(<getter_name(path)>())<\\>
+<else><\\>
+<getter_name(path)>()<\\>
+<endif>
 >>
 
 path_base_call(path) ::= <<
 <path_expr(path.base)><\\>
 <if(path.base.type.sequence)><\\>
-<\n><indent()><path_map_call(path); anchor><\\>
+<path_map_call(path)><\\>
 <else><\\>
-.<path_getter_call(path)><\\>
+.<path_getter_call("", path)><\\>
 <endif>
 >>
 
 path_map_call(path) ::= <<
-<if(!path.base.base)><\\>
-.stream()
-<endif><\\>
-.map(<field_name(path.base.type)> -> <field_name(path.base.type)>.<path_getter_call(path)>)
+.map(<field_name(path.base.type)> -> <path_getter_call([{<field_name(path.base.type)>.}], path)>)
 >>
 
-path_end(path) ::= <<
-<if(path.type.sequence)><\n><indent()>.collect(toList())<endif>
+to_list(expr) ::= <<
+<expr>.toList()
 >>
-
