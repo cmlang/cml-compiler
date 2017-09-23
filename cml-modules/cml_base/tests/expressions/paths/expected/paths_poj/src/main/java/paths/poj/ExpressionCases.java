@@ -48,15 +48,12 @@ public class ExpressionCases
 
     public int getPathVar()
     {
-        return getSomePath()
-                   .getBar();
+        return getSomePath().getBar();
     }
 
     public BigDecimal getPathVar2()
     {
-        return getSomePath()
-                   .getOneMorePath()
-                   .getEtc();
+        return getSomePath().getOneMorePath().getEtc();
     }
 
     public List<BigDecimal> getPathVar3()
