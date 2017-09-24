@@ -24,9 +24,49 @@ invocation_required_present(args) ::= <<
 >>
 
 invocation_sequence_first(args) ::= <<
+<expression(args.seq)>.findFirst()
+>>
+
+invocation_optional_first(args) ::= <<
 seq(<expression(args.seq)>).findFirst()
 >>
 
+invocation_required_first(args) ::= <<
+seq(asList(<expression(args.seq)>)).findFirst()
+>>
+
 invocation_sequence_last(args) ::= <<
+<expression(args.seq)>.findLast()
+>>
+
+invocation_optional_last(args) ::= <<
 seq(<expression(args.seq)>).findLast()
+>>
+
+invocation_required_last(args) ::= <<
+seq(asList(<expression(args.seq)>)).findLast()
+>>
+
+invocation_sequence_exists(args) ::= <<
+<expression(args.seq)>.anyMatch(<expression(args.expr)>)
+>>
+
+invocation_optional_exists(args) ::= <<
+seq(<expression(args.seq)>).anyMatch(<expression(args.expr)>)
+>>
+
+invocation_required_exists(args) ::= <<
+seq(asList(<expression(args.seq)>)).anyMatch(<expression(args.expr)>)
+>>
+
+invocation_sequence_all(args) ::= <<
+<expression(args.seq)>.allMatch(<expression(args.expr)>)
+>>
+
+invocation_optional_all(args) ::= <<
+seq(<expression(args.seq)>).allMatch(<expression(args.expr)>)
+>>
+
+invocation_required_all(args) ::= <<
+seq(asList(<expression(args.seq)>)).allMatch(<expression(args.expr)>)
 >>

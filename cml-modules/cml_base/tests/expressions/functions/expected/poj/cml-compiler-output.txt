@@ -1,0 +1,8 @@
+model files:
+- pom.xml
+
+Functions files:
+- src/main/java/functions/poj/Functions.java
+
+Item files:
+- src/main/java/functions/poj/Item.java

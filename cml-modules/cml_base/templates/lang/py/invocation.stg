@@ -1,6 +1,6 @@
 
 invocation_sequence_empty(args) ::= <<
-!<expression(args.seq)>
+(len(<expression(args.seq)>) == 0)
 >>
 
 invocation_optional_empty(args) ::= <<
@@ -12,7 +12,7 @@ invocation_required_empty(args) ::= <<
 >>
 
 invocation_sequence_present(args) ::= <<
-<expression(args.seq)>
+(len(<expression(args.seq)>) > 0)
 >>
 
 invocation_optional_present(args) ::= <<
@@ -27,6 +27,46 @@ invocation_sequence_first(args) ::= <<
 ((<expression(args.seq)>) or [None])[0]
 >>
 
+invocation_optional_first(args) ::= <<
+<expression(args.seq)>
+>>
+
+invocation_required_first(args) ::= <<
+<expression(args.seq)>
+>>
+
 invocation_sequence_last(args) ::= <<
 ((<expression(args.seq)>) or [None])[-1]
+>>
+
+invocation_optional_last(args) ::= <<
+<expression(args.seq)>
+>>
+
+invocation_required_last(args) ::= <<
+<expression(args.seq)>
+>>
+
+invocation_sequence_exists(args) ::= <<
+any(map(<expression(args.expr)>, <expression(args.seq)>))
+>>
+
+invocation_optional_exists(args) ::= <<
+any(map(<expression(args.expr)>, [] if <expression(args.seq)> is None else [<expression(args.seq)>]))
+>>
+
+invocation_required_exists(args) ::= <<
+any(map(<expression(args.expr)>, [<expression(args.seq)>]))
+>>
+
+invocation_sequence_all(args) ::= <<
+all(map(<expression(args.expr)>, <expression(args.seq)>))
+>>
+
+invocation_optional_all(args) ::= <<
+all(map(<expression(args.expr)>, [] if <expression(args.seq)> is None else [<expression(args.seq)>]))
+>>
+
+invocation_required_all(args) ::= <<
+all(map(<expression(args.expr)>, [<expression(args.seq)>]))
 >>

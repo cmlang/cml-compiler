@@ -1,5 +1,6 @@
 
 import "/lang/java/invocation.stg"
+import "/lang/java/lambda.stg"
 import "/lang/common.stg"
 
 // Language
@@ -304,6 +305,8 @@ operation_not(expr) ::= "!<expr>"
 path_expr(path) ::= <<
 <if(path.base)><\\>
 <path_base_call(path)><\\>
+<elseif(!lambda.parameters && lambda.innerExpression)><\\>
+item.<path_getter_call([], path)><\\>
 <else><\\>
 <path_getter_call([], path)><\\>
 <endif>

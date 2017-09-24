@@ -1,0 +1,54 @@
+
+concept Functions
+{
+    required_item: Item;
+    single_item: Item?;
+    items: Item*;
+
+    /empty_items = empty(items);
+    /present_items = present(items);
+
+    /empty_single_item = empty(single_item);
+    /present_single_item = present(single_item);
+
+    /required_empty_single_item = empty(required_item);
+    /required_present_single_item = present(required_item);
+
+    /items_first = first(items);
+    /items_last = last(items);
+
+    /single_item_first = first(single_item);
+    /single_item_last = last(single_item);
+
+    /required_item_first = first(required_item);
+    /required_item_last = last(required_item);
+
+    /at_least_one_large_item = items | exists: size > 100;
+    /all_large_items = items | all: size > 100;
+
+    /large_item_exists = single_item | exists: size > 100;
+    /large_item_all = single_item | all: size > 100;
+
+    /required_item_exists = required_item | exists: size > 100;
+    /required_item_all = required_item | all: size > 100;
+}
+
+concept Item
+{
+    size: integer;
+}
+
+task poj by poj
+{
+    groupId = "cml-expressions";
+    artifactId = "cml-expressions-functions";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "functions.poj";
+    packagePath = "functions/poj";
+}
+
+task pop by pop
+{
+    moduleName = "cml_expressions_functions_pop";
+    moduleVersion = "1.0";
+}

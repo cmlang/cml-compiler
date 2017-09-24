@@ -4,3 +4,6 @@ template function present<T>(seq: T*) -> boolean;
 
 template function first<T>(seq: T*) -> T?;
 template function last<T>(seq: T*) -> T?;
+
+template function exists<T>(seq: T*, expr: (T) -> boolean) -> boolean;
+template function all<T>(seq: T*, expr: (T) -> boolean) -> boolean;

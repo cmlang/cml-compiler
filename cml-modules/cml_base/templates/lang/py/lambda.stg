@@ -1,0 +1,6 @@
+
+expression_lambda(lambda) ::= <<
+lambda<\ ><\\>
+<if(lambda.parameters)><lambda.parameters; separator=", "><else>item<endif><\\>
+:<\ ><expression(lambda.innerExpression)>
+>>

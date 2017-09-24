@@ -1,5 +1,6 @@
 
 import "/lang/py/invocation.stg"
+import "/lang/py/lambda.stg"
 import "/lang/common.stg"
 
 // Language
@@ -287,6 +288,8 @@ operation_not(expr) ::= "not <expr>"
 path_expr(path) ::= <<
 <if(path.base)><\\>
 <path_base_call(path)><\\>
+<elseif(!lambda.parameters && lambda.innerExpression)><\\>
+item.<path_property(path)><\\>
 <else><\\>
 <path_getter_call(path)><\\>
 <endif>
