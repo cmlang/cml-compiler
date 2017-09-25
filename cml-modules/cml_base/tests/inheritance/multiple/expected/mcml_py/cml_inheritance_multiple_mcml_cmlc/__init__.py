@@ -2,6 +2,8 @@ from typing import *
 from abc import *
 from decimal import *
 
+import itertools
+
 class ModelElement(ABC):
 
     @abstractproperty

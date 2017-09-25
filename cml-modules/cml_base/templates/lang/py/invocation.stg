@@ -52,7 +52,7 @@ any(map(<expression(args.expr)>, <expression(args.seq)>))
 >>
 
 invocation_optional_exists(args) ::= <<
-any(map(<expression(args.expr)>, [] if <expression(args.seq)> is None else [<expression(args.seq)>]))
+any(map(<expression(args.expr)>, <optional_list(args)>))
 >>
 
 invocation_required_exists(args) ::= <<
@@ -64,9 +64,37 @@ all(map(<expression(args.expr)>, <expression(args.seq)>))
 >>
 
 invocation_optional_all(args) ::= <<
-all(map(<expression(args.expr)>, [] if <expression(args.seq)> is None else [<expression(args.seq)>]))
+all(map(<expression(args.expr)>, <optional_list(args)>))
 >>
 
 invocation_required_all(args) ::= <<
 all(map(<expression(args.expr)>, [<expression(args.seq)>]))
+>>
+
+invocation_sequence_select(args) ::= <<
+filter(<expression(args.expr)>, <expression(args.seq)>)
+>>
+
+invocation_optional_select(args) ::= <<
+filter(<expression(args.expr)>, <optional_list(args)>)
+>>
+
+invocation_required_select(args) ::= <<
+filter(<expression(args.expr)>, [<expression(args.seq)>])
+>>
+
+invocation_sequence_reject(args) ::= <<
+itertools.filterfalse(<expression(args.expr)>, <expression(args.seq)>)
+>>
+
+invocation_optional_reject(args) ::= <<
+itertools.filterfalse(<expression(args.expr)>, <optional_list(args)>)
+>>
+
+invocation_required_reject(args) ::= <<
+itertools.filterfalse(<expression(args.expr)>, [<expression(args.seq)>])
+>>
+
+optional_list(args) ::= <<
+[] if <expression(args.seq)> is None else [<expression(args.seq)>]
 >>

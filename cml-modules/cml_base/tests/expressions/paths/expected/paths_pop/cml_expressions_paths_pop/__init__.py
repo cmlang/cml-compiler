@@ -2,6 +2,8 @@ from typing import *
 from abc import *
 from decimal import *
 
+import itertools
+
 class AnotherConcept:
 
     def __init__(self, etc: 'Decimal') -> 'None':

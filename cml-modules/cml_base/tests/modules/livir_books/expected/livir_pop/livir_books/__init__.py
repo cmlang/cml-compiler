@@ -2,6 +2,8 @@ from typing import *
 from abc import *
 from decimal import *
 
+import itertools
+
 class Product:
 
     def __init__(self, name: 'str', price: 'Decimal' = Decimal("0.00")) -> 'None':

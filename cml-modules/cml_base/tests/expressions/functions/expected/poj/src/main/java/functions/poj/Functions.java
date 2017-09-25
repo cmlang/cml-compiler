@@ -128,6 +128,36 @@ public class Functions
         return seq(asList(getRequiredItem())).allMatch(item -> (item.getSize() > 100));
     }
 
+    public List<Item> getItemsSelect()
+    {
+        return seq(getItems()).filter(item -> (item.getSize() > 100)).toList();
+    }
+
+    public List<Item> getItemsReject()
+    {
+        return seq(getItems()).removeAll(seq(getItems()).filter(item -> (item.getSize() > 100))).toList();
+    }
+
+    public List<Item> getSingleItemSelect()
+    {
+        return seq(getSingleItem()).filter(item -> (item.getSize() > 100)).toList();
+    }
+
+    public List<Item> getSingleItemReject()
+    {
+        return seq(getSingleItem()).removeAll(seq(getSingleItem()).filter(item -> (item.getSize() > 100))).toList();
+    }
+
+    public List<Item> getRequiredItemSelect()
+    {
+        return seq(asList(getRequiredItem())).filter(item -> (item.getSize() > 100)).toList();
+    }
+
+    public List<Item> getRequiredItemReject()
+    {
+        return seq(asList(getRequiredItem())).removeAll(seq(asList(getRequiredItem())).filter(item -> (item.getSize() > 100))).toList();
+    }
+
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())

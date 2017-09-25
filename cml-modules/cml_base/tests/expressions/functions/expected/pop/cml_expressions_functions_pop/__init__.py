@@ -2,6 +2,8 @@ from typing import *
 from abc import *
 from decimal import *
 
+import itertools
+
 class Item:
 
     def __init__(self, size: 'int') -> 'None':
@@ -108,6 +110,42 @@ class Functions:
     @property
     def required_item_all(self) -> 'bool':
         return all(map(lambda item: (item.size > 100), [self.required_item]))
+
+    @property
+    def items_select(self) -> 'List[Item]':
+        return list(
+            filter(lambda item: (item.size > 100), self.items)
+        )
+
+    @property
+    def items_reject(self) -> 'List[Item]':
+        return list(
+            itertools.filterfalse(lambda item: (item.size > 100), self.items)
+        )
+
+    @property
+    def single_item_select(self) -> 'List[Item]':
+        return list(
+            filter(lambda item: (item.size > 100), [] if self.single_item is None else [self.single_item])
+        )
+
+    @property
+    def single_item_reject(self) -> 'List[Item]':
+        return list(
+            itertools.filterfalse(lambda item: (item.size > 100), [] if self.single_item is None else [self.single_item])
+        )
+
+    @property
+    def required_item_select(self) -> 'List[Item]':
+        return list(
+            filter(lambda item: (item.size > 100), [self.required_item])
+        )
+
+    @property
+    def required_item_reject(self) -> 'List[Item]':
+        return list(
+            itertools.filterfalse(lambda item: (item.size > 100), [self.required_item])
+        )
 
     def __str__(self) -> 'str':
         return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, large_item_exists=%s, large_item_all=%s, required_item_exists=%s, required_item_all=%s)" % (

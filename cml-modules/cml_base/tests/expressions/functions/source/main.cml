@@ -31,6 +31,15 @@ concept Functions
 
     /required_item_exists = required_item | exists: size > 100;
     /required_item_all = required_item | all: size > 100;
+
+    /items_select = items | select: size > 100;
+    /items_reject = items | reject: size > 100;
+
+    /single_item_select = single_item | select: size > 100;
+    /single_item_reject = single_item | reject: size > 100;
+
+    /required_item_select = required_item | select: size > 100;
+    /required_item_reject = required_item | reject: size > 100;
 }
 
 concept Item

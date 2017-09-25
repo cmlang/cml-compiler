@@ -70,3 +70,27 @@ seq(<expression(args.seq)>).allMatch(<expression(args.expr)>)
 invocation_required_all(args) ::= <<
 seq(asList(<expression(args.seq)>)).allMatch(<expression(args.expr)>)
 >>
+
+invocation_sequence_select(args) ::= <<
+<expression(args.seq)>.filter(<expression(args.expr)>)
+>>
+
+invocation_optional_select(args) ::= <<
+seq(<expression(args.seq)>).filter(<expression(args.expr)>)
+>>
+
+invocation_required_select(args) ::= <<
+seq(asList(<expression(args.seq)>)).filter(<expression(args.expr)>)
+>>
+
+invocation_sequence_reject(args) ::= <<
+<expression(args.seq)>.removeAll(<expression(args.seq)>.filter(<expression(args.expr)>))
+>>
+
+invocation_optional_reject(args) ::= <<
+seq(<expression(args.seq)>).removeAll(seq(<expression(args.seq)>).filter(<expression(args.expr)>))
+>>
+
+invocation_required_reject(args) ::= <<
+seq(asList(<expression(args.seq)>)).removeAll(seq(asList(<expression(args.seq)>)).filter(<expression(args.expr)>))
+>>
