@@ -1,0 +1,8 @@
+
+type_check_is(expr, type) ::= <<
+isinstance(<expression(expr)>, <type_name(type)>)
+>>
+
+type_check_isnt(expr, type) ::= <<
+(not isinstance(<expression(expr)>, <type_name(type)>))
+>>

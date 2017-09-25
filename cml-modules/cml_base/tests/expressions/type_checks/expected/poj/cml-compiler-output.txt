@@ -1,0 +1,5 @@
+model files:
+- pom.xml
+
+TypeChecks files:
+- src/main/java/type_checks/poj/TypeChecks.java

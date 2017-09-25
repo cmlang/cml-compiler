@@ -38,3 +38,7 @@ expression_invocation(invocation) ::= <<
 <({invocation_<invocation.name>})(invocation.namedArguments)>
 <endif>
 >>
+
+expression_type_check(type_check) ::= <<
+<({type_check_<type_check.operator>})(type_check.expr, type_check.checkedType)>
+>>

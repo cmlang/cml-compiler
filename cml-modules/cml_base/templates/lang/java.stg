@@ -1,6 +1,7 @@
 
 import "/lang/java/invocation.stg"
 import "/lang/java/lambda.stg"
+import "/lang/java/type_check.stg"
 import "/lang/common.stg"
 
 // Language

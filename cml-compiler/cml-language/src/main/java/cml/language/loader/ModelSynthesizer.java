@@ -237,11 +237,23 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.lambdaExpression() != null) ctx.expr = ctx.lambdaExpression().lambda;
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.comprehensionExpression() != null) ctx.expr = invocationOf(ctx.comprehensionExpression().comprehension);
+        else if (ctx.operator != null && ctx.type != null) ctx.expr = createTypeCheck(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
 
         createLocation(ctx, ctx.expr);
+    }
+
+    private Expression createTypeCheck(final ExpressionContext ctx)
+    {
+        assert ctx.expression().size() == 1;
+
+        final Expression expr = ctx.expression().get(0).expr;
+        final String operator = ctx.operator.getText();
+        final Type checkedType = ctx.type.type;
+
+        return new TypeCheck(expr, operator, checkedType);
     }
 
     private Unary createUnary(ExpressionContext ctx)

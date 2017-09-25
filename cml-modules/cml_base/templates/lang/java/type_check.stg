@@ -1,0 +1,8 @@
+
+type_check_is(expr, type) ::= <<
+<expression(expr)> instanceof <type_name(type)>
+>>
+
+type_check_isnt(expr, type) ::= <<
+!(<expression(expr)> instanceof <type_name(type)>)
+>>
