@@ -12,6 +12,18 @@ import static org.jooq.lambda.Seq.*;
 
 public class TypeChecks
 {
+    private final List<Ancestor> ancestors;
+
+    public TypeChecks(List<Ancestor> ancestors)
+    {
+        this.ancestors = ancestors;
+    }
+
+    public List<Ancestor> getAncestors()
+    {
+        return Collections.unmodifiableList(this.ancestors);
+    }
+
     public boolean isTypeCheckIs()
     {
         return this instanceof TypeChecks;
@@ -20,6 +32,11 @@ public class TypeChecks
     public boolean isTypeCheckIsNot()
     {
         return !(this instanceof TypeChecks);
+    }
+
+    public List<Ancestor> getDescendants()
+    {
+        return seq(getAncestors()).filter(a -> a instanceof Descendant).toList();
     }
 
     public String toString()

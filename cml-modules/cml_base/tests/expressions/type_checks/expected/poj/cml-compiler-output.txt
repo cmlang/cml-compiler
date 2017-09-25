@@ -3,3 +3,9 @@ model files:
 
 TypeChecks files:
 - src/main/java/type_checks/poj/TypeChecks.java
+
+Ancestor files:
+- src/main/java/type_checks/poj/Ancestor.java
+
+Descendant files:
+- src/main/java/type_checks/poj/Descendant.java

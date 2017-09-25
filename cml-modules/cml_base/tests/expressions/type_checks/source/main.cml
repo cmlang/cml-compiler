@@ -3,7 +3,15 @@ concept TypeChecks
 {
     /type_check_is = self is TypeChecks;
     /type_check_is_not = self isnt TypeChecks;
+
+    ancestors: Ancestor*;
+
+    /descendants = for a in ancestors | select: a is Descendant;
 }
+
+concept Ancestor;
+
+concept Descendant: Ancestor;
 
 task poj by poj
 {
