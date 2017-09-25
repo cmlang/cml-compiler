@@ -94,3 +94,15 @@ seq(<expression(args.seq)>).removeAll(seq(<expression(args.seq)>).filter(<expres
 invocation_required_reject(args) ::= <<
 seq(asList(<expression(args.seq)>)).removeAll(seq(asList(<expression(args.seq)>)).filter(<expression(args.expr)>))
 >>
+
+invocation_sequence_collect(args) ::= <<
+<expression(args.seq)>.map(<expression(args.expr)>)
+>>
+
+invocation_optional_collect(args) ::= <<
+seq(<expression(args.seq)>).map(<expression(args.expr)>)
+>>
+
+invocation_required_collect(args) ::= <<
+seq(asList(<expression(args.seq)>)).map(<expression(args.expr)>)
+>>

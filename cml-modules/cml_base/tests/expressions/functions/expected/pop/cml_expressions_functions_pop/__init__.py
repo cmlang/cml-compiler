@@ -147,8 +147,26 @@ class Functions:
             itertools.filterfalse(lambda item: (item.size > 100), [self.required_item])
         )
 
+    @property
+    def items_collect(self) -> 'List[int]':
+        return list(
+            map(lambda item: item.size, self.items)
+        )
+
+    @property
+    def single_item_collect(self) -> 'List[int]':
+        return list(
+            map(lambda item: item.size, [] if self.single_item is None else [self.single_item])
+        )
+
+    @property
+    def required_item_collect(self) -> 'List[int]':
+        return list(
+            map(lambda item: item.size, [self.required_item])
+        )
+
     def __str__(self) -> 'str':
-        return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, large_item_exists=%s, large_item_all=%s, required_item_exists=%s, required_item_all=%s)" % (
+        return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, large_item_exists=%s, large_item_all=%s, required_item_exists=%s, required_item_all=%s, items_collect=%s, single_item_collect=%s, required_item_collect=%s)" % (
             type(self).__name__,
             self.required_item,
             self.single_item,
@@ -163,5 +181,8 @@ class Functions:
             self.large_item_exists,
             self.large_item_all,
             self.required_item_exists,
-            self.required_item_all
+            self.required_item_all,
+            self.items_collect,
+            self.single_item_collect,
+            self.required_item_collect
         )

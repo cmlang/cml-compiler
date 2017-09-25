@@ -158,6 +158,21 @@ public class Functions
         return seq(asList(getRequiredItem())).removeAll(seq(asList(getRequiredItem())).filter(item -> (item.getSize() > 100))).toList();
     }
 
+    public List<Integer> getItemsCollect()
+    {
+        return seq(getItems()).map(item -> item.getSize()).toList();
+    }
+
+    public List<Integer> getSingleItemCollect()
+    {
+        return seq(getSingleItem()).map(item -> item.getSize()).toList();
+    }
+
+    public List<Integer> getRequiredItemCollect()
+    {
+        return seq(asList(getRequiredItem())).map(item -> item.getSize()).toList();
+    }
+
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())
@@ -175,7 +190,10 @@ public class Functions
                    .append("largeItemExists=").append(String.format("\"%s\"", isLargeItemExists())).append(", ")
                    .append("largeItemAll=").append(String.format("\"%s\"", isLargeItemAll())).append(", ")
                    .append("requiredItemExists=").append(String.format("\"%s\"", isRequiredItemExists())).append(", ")
-                   .append("requiredItemAll=").append(String.format("\"%s\"", isRequiredItemAll()))
+                   .append("requiredItemAll=").append(String.format("\"%s\"", isRequiredItemAll())).append(", ")
+                   .append("itemsCollect=").append(getItemsCollect()).append(", ")
+                   .append("singleItemCollect=").append(getSingleItemCollect()).append(", ")
+                   .append("requiredItemCollect=").append(getRequiredItemCollect())
                    .append(')')
                    .toString();
     }

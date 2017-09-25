@@ -40,6 +40,10 @@ concept Functions
 
     /required_item_select = required_item | select: size > 100;
     /required_item_reject = required_item | reject: size > 100;
+
+    /items_collect = items | collect: size;
+    /single_item_collect = single_item | collect: size;
+    /required_item_collect = required_item | collect: size;
 }
 
 concept Item
