@@ -11,6 +11,12 @@ FOR:
 IN:
     'in';
 
+IS:
+    'is';
+
+ISNT:
+    'isnt';
+
 IF:
     'if';
 

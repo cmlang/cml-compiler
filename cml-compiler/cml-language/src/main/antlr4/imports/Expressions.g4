@@ -1,6 +1,6 @@
 grammar Expressions;
 
-import Literals;
+import Literals, Types;
 
 expression returns [Expression expr]
     : literalExpression
@@ -15,6 +15,7 @@ expression returns [Expression expr]
     | expression operator=('+' | '-') expression
     | expression operator=('<' | '<=' | '>' | '>=') expression
     | expression operator=('===' | '!==' | '==' | '!=') expression
+    | expression operator=(IS | ISNT) type=typeDeclaration
     | expression operator=AND expression
     | expression operator=OR expression
     | expression operator=XOR expression
