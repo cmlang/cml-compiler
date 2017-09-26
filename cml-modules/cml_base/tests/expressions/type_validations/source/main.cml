@@ -8,13 +8,13 @@ concept Types
     /type_check_is = req is Descendant;
     /type_check_is_not = req isnt Descendant;
 
-//  /req_to_req_type_cast_asq = req as? Descendant; // <- error: cannot use 'as?' to cast to required type
-//  /opt_to_req_type_cast_asq = opt as? Descendant; // <- error: cannot use 'as?' to cast to required type
-//  /seq_to_req_type_cast_asq = seq as? Descendant; // <- error: cannot use 'as?' to cast to required type
+    /req_to_req_type_cast_asq = req as? Descendant; // <- error: cannot use 'as?' to cast to required type
+    /opt_to_req_type_cast_asq = opt as? Descendant; // <- error: cannot use 'as?' to cast to required type
+    /seq_to_req_type_cast_asq = seq as? Descendant; // <- error: cannot use 'as?' to cast to required type
 
     /req_to_req_type_cast_asb = req as! Descendant;
-//  /opt_to_req_type_cast_asb = opt as! Descendant; // <- error: cannot cast from optional to required type
-//  /seq_to_req_type_cast_asb = seq as! Descendant; // <- error: cannot cast from sequence to required type
+    /opt_to_req_type_cast_asb = opt as! Descendant; // <- error: cannot cast from optional to required type
+    /seq_to_req_type_cast_asb = seq as! Descendant; // <- error: cannot cast from sequence to required type
 
     /req_to_opt_type_cast_asb = req as! Descendant?;
     /req_to_opt_type_cast_asq = req as? Descendant?;
@@ -22,8 +22,8 @@ concept Types
     /opt_to_opt_type_cast_asb = opt as! Descendant?;
     /opt_to_opt_type_cast_asq = opt as? Descendant?;
 
-//  /seq_to_opt_type_cast_asb = seq as! Descendant?; // <- error: cannot cast from sequence to optional
-//  /seq_to_opt_type_cast_asq = seq as? Descendant?; // <- error: cannot cast from sequence to optional
+    /seq_to_opt_type_cast_asb = seq as! Descendant?; // <- error: cannot cast from sequence to optional
+    /seq_to_opt_type_cast_asq = seq as? Descendant?; // <- error: cannot cast from sequence to optional
 
     /req_to_seq_type_cast_asb = req as! Descendant*;
     /opt_to_seq_type_cast_asb = opt as! Descendant*;
@@ -40,17 +40,11 @@ concept Ancestor;
 
 concept Descendant: Ancestor;
 
-task poj by poj
+task type_validations by poj
 {
     groupId = "cml-expressions";
-    artifactId = "cml-expressions-types";
+    artifactId = "cml-expressions-type-validations";
     artifactVersion = "1.0-SNAPSHOT";
     packageName = "types.poj";
     packagePath = "types/poj";
-}
-
-task pop by pop
-{
-    moduleName = "cml_expressions_types_pop";
-    moduleVersion = "1.0";
 }

@@ -11,8 +11,11 @@ FOR:
 IN:
     'in';
 
-AS:
-    'as';
+ASB:
+    'as!';
+
+ASQ:
+    'as?';
 
 IS:
     'is';

@@ -250,9 +250,9 @@ class ModelSynthesizer extends CMLBaseListener
         assert ctx.expression().size() == 1;
 
         final Expression expr = ctx.expression().get(0).expr;
-        final String operator = ctx.operator.getText();
+        final String operator = ctx.operator.getText().replace('?', 'q').replace('!', 'b');
 
-        if (operator.equals("as"))
+        if (operator.equals(TypeCast.ASB) || operator.equals(TypeCast.ASQ))
         {
             final Type castType = ctx.type.type;
             return new TypeCast(expr, operator, castType);

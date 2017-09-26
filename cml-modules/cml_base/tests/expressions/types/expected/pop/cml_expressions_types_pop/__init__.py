@@ -18,40 +18,98 @@ class Descendant(Ancestor):
 
 class Types:
 
-    def __init__(self, single_ancestor: 'Ancestor', ancestors: 'List[Ancestor]') -> 'None':
-        self.__single_ancestor = single_ancestor
-        self.__ancestors = ancestors
+    def __init__(self, req: 'Ancestor', opt: 'Optional[Ancestor]', seq: 'List[Ancestor]') -> 'None':
+        self.__req = req
+        self.__opt = opt
+        self.__seq = seq
 
     @property
-    def single_ancestor(self) -> 'Ancestor':
-        return self.__single_ancestor
+    def req(self) -> 'Ancestor':
+        return self.__req
 
     @property
-    def ancestors(self) -> 'List[Ancestor]':
-        return self.__ancestors
+    def opt(self) -> 'Optional[Ancestor]':
+        return self.__opt
+
+    @property
+    def seq(self) -> 'List[Ancestor]':
+        return self.__seq
 
     @property
     def type_check_is(self) -> 'bool':
-        return isinstance(self.single_ancestor, Descendant)
+        return isinstance(self.req, Descendant)
 
     @property
     def type_check_is_not(self) -> 'bool':
-        return (not isinstance(self.single_ancestor, Descendant))
+        return (not isinstance(self.req, Descendant))
 
     @property
-    def type_cast(self) -> 'Descendant':
-        return cast('Descendant', self.single_ancestor)
+    def req_to_req_type_cast_asb(self) -> 'Descendant':
+        return cast('Descendant', self.req)
+
+    @property
+    def req_to_opt_type_cast_asb(self) -> 'Optional[Descendant]':
+        return cast('Optional[Descendant]', self.req)
+
+    @property
+    def req_to_opt_type_cast_asq(self) -> 'Optional[Descendant]':
+        return cast('Descendant', self.req) if isinstance(self.req, Descendant) else None
+
+    @property
+    def opt_to_opt_type_cast_asb(self) -> 'Optional[Descendant]':
+        return cast('Optional[Descendant]', self.opt)
+
+    @property
+    def opt_to_opt_type_cast_asq(self) -> 'Optional[Descendant]':
+        return cast('Descendant', self.opt) if isinstance(self.opt, Descendant) else None
+
+    @property
+    def req_to_seq_type_cast_asb(self) -> 'List[Descendant]':
+        return list(
+            [cast('Descendant', self.req)]
+        )
+
+    @property
+    def opt_to_seq_type_cast_asb(self) -> 'List[Descendant]':
+        return list(
+            [] if self.opt is None else [cast('Descendant', self.opt)]
+        )
+
+    @property
+    def seq_to_seq_type_cast_asb(self) -> 'List[Descendant]':
+        return list(
+            map(lambda item: cast('Descendant', item), self.seq)
+        )
+
+    @property
+    def req_to_seq_type_cast_asq(self) -> 'List[Descendant]':
+        return list(
+            map(lambda item: cast('Descendant', item), filter(lambda item: isinstance(item, Descendant), [self.req]))
+        )
+
+    @property
+    def opt_to_seq_type_cast_asq(self) -> 'List[Descendant]':
+        return list(
+            map(lambda item: cast('Descendant', item), filter(lambda item: isinstance(item, Descendant), [self.opt]))
+        )
+
+    @property
+    def seq_to_seq_type_cast_asq(self) -> 'List[Descendant]':
+        return list(
+            map(lambda item: cast('Descendant', item), filter(lambda item: isinstance(item, Descendant), self.seq))
+        )
 
     @property
     def descendants(self) -> 'List[Ancestor]':
         return list(
-            filter(lambda a: isinstance(a, Descendant), self.ancestors)
+            filter(lambda a: isinstance(a, Descendant), self.seq)
         )
 
     def __str__(self) -> 'str':
-        return "%s(single_ancestor=%s, type_check_is=%s, type_check_is_not=%s)" % (
+        return "%s(req=%s, opt=%s, type_check_is=%s, type_check_is_not=%s)" % (
             type(self).__name__,
-            self.single_ancestor,
+            self.req,
+            self.opt,
             self.type_check_is,
             self.type_check_is_not
         )

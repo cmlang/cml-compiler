@@ -7,6 +7,50 @@ type_check_isnt(expr, type) ::= <<
 (not isinstance(<expression(expr)>, <type_name(type)>))
 >>
 
-type_cast_as(expr, type) ::= <<
+type_cast_asb_from_required_to_required(expr, type) ::= <<
 cast('<type_name(type)>', <expression(expr)>)
+>>
+
+type_cast_asb_from_required_to_optional(expr, type) ::= <<
+cast('<field_type_optional(type)>', <expression(expr)>)
+>>
+
+type_cast_asb_from_required_to_sequence(expr, type) ::= <<
+[<type_cast_asb_from_required_to_required(expr, type)>]
+>>
+
+type_cast_asb_from_optional_to_optional(expr, type) ::= <<
+<type_cast_asb_from_required_to_optional(expr, type)>
+>>
+
+type_cast_asb_from_optional_to_sequence(expr, type) ::= <<
+[] if <expression(expr)> is None else <type_cast_asb_from_required_to_sequence(expr, type)>
+>>
+
+type_cast_asb_from_sequence_to_sequence(expr, type) ::= <<
+map(lambda item: cast('<type_name(type)>', item), <expression(expr)>)
+>>
+
+type_cast_asq_from_required_to_optional(expr, type) ::= <<
+cast('<type_name(type)>', <expression(expr)>) if isinstance(<expression(expr)>, <type_name(type)>) else None
+>>
+
+type_cast_asq_from_required_to_sequence(expr, type) ::= <<
+map(lambda item: cast('<type_name(type)>', item), filter(lambda item: isinstance(item, <type_name(type)>), [<expression(expr)>]))
+>>
+
+type_cast_asq_from_optional_to_optional(expr, type) ::= <<
+<type_cast_asq_from_required_to_optional(expr, type)>
+>>
+
+type_cast_asq_from_optional_to_sequence(expr, type) ::= <<
+<type_cast_asq_from_required_to_sequence(expr, type)>
+>>
+
+type_cast_asq_from_sequence_to_sequence(expr, type) ::= <<
+map(lambda item: cast('<type_name(type)>', item), filter(lambda item: isinstance(item, <type_name(type)>), <expression(expr)>))
+>>
+
+type_cast_optional_list(expr) ::= <<
+[] if <expression(expr)> is None else [<expression(expr)>]
 >>

@@ -3,12 +3,15 @@ package cml.language.expressions;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 
-import static cml.language.functions.TypeFunctions.isAssignableFrom;
+import static cml.language.functions.TypeFunctions.isCastAllowed;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 
 public class TypeCast extends ExpressionBase
 {
+    public static final String ASB = "asb";
+    public static final String ASQ = "asq";
+
     private final Expression expr;
     private final String operator;
     private final Type castType;
@@ -47,7 +50,7 @@ public class TypeCast extends ExpressionBase
     {
         final Type exprType = expr.getType();
 
-        if (exprType.isReferential() && castType.isReferential() && isAssignableFrom(exprType, castType))
+        if (isCastAllowed(operator, exprType, castType))
         {
             return castType;
         }
@@ -55,8 +58,30 @@ public class TypeCast extends ExpressionBase
         {
             return NamedType.createUndefined(
                 format(
-                    "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s'",
-                    getOperator(), expr, exprType, castType));
+                    "%s:\n- left operand is '%s: %s'\n- right operand is '%s'",
+                    diagnosticMessage(operator, exprType, castType), expr, exprType, castType));
         }
     }
+
+    private static String diagnosticMessage(String operator, Type exprType, Type castType)
+    {
+        if (operator.equals(ASQ) && castType.isRequired())
+        {
+            return "Cannot use 'as?' to cast to required-cardinality type";
+        }
+        else if (operator.equals(ASB) && !exprType.isRequired() && castType.isRequired())
+        {
+            return "Cannot cast from optional or sequence type to required-cardinality type";
+        }
+        else if (exprType.isSequence() && castType.isOptional())
+        {
+            return "Cannot cast from sequence type to optional-cardinality type";
+        }
+        else
+        {
+            return format("Incompatible operand(s) for operator '%s'",
+                          operator.replace('q', '?').replace('b', '!'));
+        }
+    }
+
 }

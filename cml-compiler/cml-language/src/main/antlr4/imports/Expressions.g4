@@ -16,7 +16,7 @@ expression returns [Expression expr]
     | expression operator=('<' | '<=' | '>' | '>=') expression
     | expression operator=('===' | '!==' | '==' | '!=') expression
     | expression operator=(IS | ISNT) type=typeDeclaration
-    | expression operator=AS type=typeDeclaration
+    | expression operator=(ASB | ASQ) type=typeDeclaration
     | expression operator=AND expression
     | expression operator=OR expression
     | expression operator=XOR expression

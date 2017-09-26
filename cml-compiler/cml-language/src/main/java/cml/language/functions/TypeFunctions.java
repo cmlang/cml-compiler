@@ -1,5 +1,6 @@
 package cml.language.functions;
 
+import cml.language.expressions.TypeCast;
 import cml.language.types.*;
 
 import java.util.Objects;
@@ -193,5 +194,19 @@ public class TypeFunctions
         }
 
         return false;
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    public static boolean isCastAllowed(String operator, Type exprType, Type castType)
+    {
+        if (operator.equals(TypeCast.ASQ) && castType.isRequired())
+        {
+            return false;
+        }
+        else
+        {
+            return isElementTypeAssignableFrom(exprType.getElementType(), castType.getElementType()) &&
+                   isCardinalityAssignableFrom(castType, exprType);
+        }
     }
 }

@@ -7,6 +7,62 @@ type_check_isnt(expr, type) ::= <<
 !(<expression(expr)> instanceof <type_name(type)>)
 >>
 
-type_cast_as(expr, type) ::= <<
+type_cast_asb_from_required_to_required(expr, type) ::= <<
 (<type_name(type)>)<expression(expr)>
+>>
+
+type_cast_asb_from_required_to_optional(expr, type) ::= <<
+<type_cast_asb_from_required_to_sequence(expr, type)>.findFirst()
+>>
+
+type_cast_asb_from_required_to_sequence(expr, type) ::= <<
+<from_required(expr)>.<cast(type)>
+>>
+
+type_cast_asb_from_optional_to_optional(expr, type) ::= <<
+<type_cast_asb_from_optional_to_sequence(expr, type)>.findFirst()
+>>
+
+type_cast_asb_from_optional_to_sequence(expr, type) ::= <<
+<from_optional(expr)>.<cast(type)>
+>>
+
+type_cast_asb_from_sequence_to_sequence(expr, type) ::= <<
+<expression(expr)>.<cast(type)>
+>>
+
+type_cast_asq_from_required_to_optional(expr, type) ::= <<
+<type_cast_asq_from_required_to_sequence(expr, type)>.findFirst()
+>>
+
+type_cast_asq_from_required_to_sequence(expr, type) ::= <<
+<from_required(expr)>.<of_type(type)>
+>>
+
+type_cast_asq_from_optional_to_optional(expr, type) ::= <<
+<type_cast_asq_from_optional_to_sequence(expr, type)>.findFirst()
+>>
+
+type_cast_asq_from_optional_to_sequence(expr, type) ::= <<
+<from_optional(expr)>.<of_type(type)>
+>>
+
+type_cast_asq_from_sequence_to_sequence(expr, type) ::= <<
+<expression(expr)>.<of_type(type)>
+>>
+
+from_required(expr) ::= <<
+seq(asList(<expression(expr)>))
+>>
+
+from_optional(expr) ::= <<
+seq(<expression(expr)>)
+>>
+
+of_type(type) ::= <<
+ofType(<type_name(type)>.class)
+>>
+
+cast(type) ::= <<
+cast(<type_name(type)>.class)
 >>

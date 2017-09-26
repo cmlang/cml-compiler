@@ -44,5 +44,5 @@ expression_type_check(type_check) ::= <<
 >>
 
 expression_type_cast(type_cast) ::= <<
-<({type_cast_<type_cast.operator>})(type_cast.expr, type_cast.castType)>
+<({type_cast_<type_cast.operator>_from_<type_cast.expr.type.kind>_to_<type_cast.castType.kind>})(type_cast.expr, type_cast.castType)>
 >>
