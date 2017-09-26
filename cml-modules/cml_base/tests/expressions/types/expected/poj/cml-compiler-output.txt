@@ -1,0 +1,11 @@
+model files:
+- pom.xml
+
+Types files:
+- src/main/java/types/poj/Types.java
+
+Ancestor files:
+- src/main/java/types/poj/Ancestor.java
+
+Descendant files:
+- src/main/java/types/poj/Descendant.java

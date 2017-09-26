@@ -11,6 +11,9 @@ FOR:
 IN:
     'in';
 
+AS:
+    'as';
+
 IS:
     'is';
 

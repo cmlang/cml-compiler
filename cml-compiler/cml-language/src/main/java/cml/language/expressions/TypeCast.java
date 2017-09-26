@@ -7,18 +7,18 @@ import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 
-public class TypeCheck extends ExpressionBase
+public class TypeCast extends ExpressionBase
 {
     private final Expression expr;
     private final String operator;
-    private final Type checkedType;
+    private final Type castType;
 
-    public TypeCheck(Expression expr, final String operator, final Type checkedType)
+    public TypeCast(Expression expr, final String operator, final Type castType)
     {
         super(singletonList(expr));
         this.expr = expr;
         this.operator = operator;
-        this.checkedType = checkedType;
+        this.castType = castType;
     }
 
     public Expression getExpr()
@@ -31,15 +31,15 @@ public class TypeCheck extends ExpressionBase
         return operator;
     }
 
-    public Type getCheckedType()
+    public Type getCastType()
     {
-        return checkedType;
+        return castType;
     }
 
     @Override
     public String getKind()
     {
-        return "type_check";
+        return "type_cast";
     }
 
     @Override
@@ -47,16 +47,16 @@ public class TypeCheck extends ExpressionBase
     {
         final Type exprType = expr.getType();
 
-        if (exprType.isReferential() && checkedType.isReferential() && isAssignableFrom(exprType, checkedType))
+        if (exprType.isReferential() && castType.isReferential() && isAssignableFrom(exprType, castType))
         {
-            return NamedType.BOOLEAN;
+            return castType;
         }
         else
         {
             return NamedType.createUndefined(
                 format(
                     "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s'",
-                    getOperator(), expr, exprType, checkedType));
+                    getOperator(), expr, exprType, castType));
         }
     }
 }

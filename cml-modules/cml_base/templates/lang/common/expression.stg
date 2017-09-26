@@ -42,3 +42,7 @@ expression_invocation(invocation) ::= <<
 expression_type_check(type_check) ::= <<
 <({type_check_<type_check.operator>})(type_check.expr, type_check.checkedType)>
 >>
+
+expression_type_cast(type_cast) ::= <<
+<({type_cast_<type_cast.operator>})(type_cast.expr, type_cast.castType)>
+>>

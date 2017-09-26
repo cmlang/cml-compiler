@@ -1,3 +1,0 @@
-model files:
-- setup.py
-- cml_expressions_type_checks_pop/__init__.py

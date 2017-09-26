@@ -1,7 +1,7 @@
 
 import "/lang/py/invocation.stg"
 import "/lang/py/lambda.stg"
-import "/lang/py/type_check.stg"
+import "/lang/py/type.stg"
 import "/lang/common.stg"
 
 // Language

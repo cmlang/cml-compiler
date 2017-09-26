@@ -1,0 +1,32 @@
+
+concept Types
+{
+    single_ancestor: Ancestor;
+    ancestors: Ancestor*;
+
+    /type_check_is = single_ancestor is Descendant;
+    /type_check_is_not = single_ancestor isnt Descendant;
+
+    /type_cast = single_ancestor as Descendant;
+
+    /descendants = for a in ancestors | select: a is Descendant;
+}
+
+concept Ancestor;
+
+concept Descendant: Ancestor;
+
+task poj by poj
+{
+    groupId = "cml-expressions";
+    artifactId = "cml-expressions-types";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "types.poj";
+    packagePath = "types/poj";
+}
+
+task pop by pop
+{
+    moduleName = "cml_expressions_types_pop";
+    moduleVersion = "1.0";
+}

@@ -1,4 +1,4 @@
-package type_checks.poj;
+package types.poj;
 
 import java.util.*;
 import java.math.*;
@@ -10,13 +10,20 @@ import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.jooq.lambda.Seq.*;
 
-public class TypeChecks
+public class Types
 {
+    private final Ancestor singleAncestor;
     private final List<Ancestor> ancestors;
 
-    public TypeChecks(List<Ancestor> ancestors)
+    public Types(Ancestor singleAncestor, List<Ancestor> ancestors)
     {
+        this.singleAncestor = singleAncestor;
         this.ancestors = ancestors;
+    }
+
+    public Ancestor getSingleAncestor()
+    {
+        return this.singleAncestor;
     }
 
     public List<Ancestor> getAncestors()
@@ -26,12 +33,17 @@ public class TypeChecks
 
     public boolean isTypeCheckIs()
     {
-        return this instanceof TypeChecks;
+        return getSingleAncestor() instanceof Descendant;
     }
 
     public boolean isTypeCheckIsNot()
     {
-        return !(this instanceof TypeChecks);
+        return !(getSingleAncestor() instanceof Descendant);
+    }
+
+    public Descendant getTypeCast()
+    {
+        return (Descendant)getSingleAncestor();
     }
 
     public List<Ancestor> getDescendants()
@@ -41,8 +53,9 @@ public class TypeChecks
 
     public String toString()
     {
-        return new StringBuilder(TypeChecks.class.getSimpleName())
+        return new StringBuilder(Types.class.getSimpleName())
                    .append('(')
+                   .append("singleAncestor=").append(String.format("\"%s\"", getSingleAncestor())).append(", ")
                    .append("typeCheckIs=").append(String.format("\"%s\"", isTypeCheckIs())).append(", ")
                    .append("typeCheckIsNot=").append(String.format("\"%s\"", isTypeCheckIsNot()))
                    .append(')')

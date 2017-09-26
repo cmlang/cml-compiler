@@ -6,3 +6,7 @@ isinstance(<expression(expr)>, <type_name(type)>)
 type_check_isnt(expr, type) ::= <<
 (not isinstance(<expression(expr)>, <type_name(type)>))
 >>
+
+type_cast_as(expr, type) ::= <<
+cast('<type_name(type)>', <expression(expr)>)
+>>

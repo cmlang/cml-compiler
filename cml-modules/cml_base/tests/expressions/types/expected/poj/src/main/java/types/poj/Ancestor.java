@@ -1,4 +1,4 @@
-package type_checks.poj;
+package types.poj;
 
 import java.util.*;
 import java.math.*;
@@ -10,11 +10,11 @@ import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.jooq.lambda.Seq.*;
 
-public class Descendant extends Ancestor
+public class Ancestor
 {
     public String toString()
     {
-        return new StringBuilder(Descendant.class.getSimpleName())
+        return new StringBuilder(Ancestor.class.getSimpleName())
                    .append('(')
                    .append(')')
                    .toString();
