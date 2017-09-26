@@ -301,6 +301,9 @@ operation_and(left, right) ::= "<left> && <right>"
 operation_or(left, right) ::= "<left> || <right>"
 operation_not(expr) ::= "!<expr>"
 
+operation_ref_eq(left, right) ::= "<left> == <right>"
+operation_not_ref_eq(left, right) ::= "<left> != <right>"
+
 // Paths
 
 path_expr(path) ::= <<
@@ -309,19 +312,17 @@ path_expr(path) ::= <<
 <elseif(lambda.parameters)><\\>
 <field_name(path)><\\>
 <elseif(!lambda.parameters && lambda.innerExpression)><\\>
-item.<path_getter_call([], path)><\\>
+<path_getter_call("item.", path)><\\>
 <else><\\>
-<path_getter_call([], path)><\\>
+<path_getter_call("", path)><\\>
 <endif>
 >>
 
 path_getter_call(prefix, path) ::= <<
-<if(prefix)><\\>
-<prefix><getter_name(path)>()<\\>
-<elseif(path.type.sequence)><\\>
-seq(<getter_name(path)>())<\\>
+<if(path.type.sequence)><\\>
+seq(<prefix><getter_name(path)>())<\\>
 <else><\\>
-<getter_name(path)>()<\\>
+<prefix><getter_name(path)>()<\\>
 <endif>
 >>
 
@@ -329,9 +330,7 @@ path_base_call(path) ::= <<
 <if(path.base.type.sequence)><\\>
 <path_expr(path.base)>.<path_map_call(path)><\\>
 <else><\\>
-<if(path.type.sequence)>seq(<endif><\\>
-<path_expr(path.base)>.<path_getter_call("", path)><\\>
-<if(path.type.sequence)>)<endif><\\>
+<path_getter_call({<path_expr(path.base)>.}, path)><\\>
 <endif>
 >>
 
