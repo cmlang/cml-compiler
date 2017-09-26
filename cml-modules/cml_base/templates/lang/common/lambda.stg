@@ -4,3 +4,14 @@ lambda ::= [
     "innerExpression": false
 ]
 
+lambda_var ::= [
+    "name": "item"
+]
+
+lambda_new_var_name() ::= <<
+<lambda_var.name; format="inc-indexed">
+>>
+
+lambda_var_name() ::= <<
+<lambda_var.name; format="indexed">
+>>

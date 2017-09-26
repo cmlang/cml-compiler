@@ -100,77 +100,77 @@ public class Functions
 
     public boolean isAtLeastOneLargeItem()
     {
-        return seq(getItems()).anyMatch(item -> (item.getSize() > 100));
+        return seq(getItems()).anyMatch(item1 -> (item1.getSize() > 100));
     }
 
     public boolean isAllLargeItems()
     {
-        return seq(getItems()).allMatch(item -> (item.getSize() > 100));
+        return seq(getItems()).allMatch(item2 -> (item2.getSize() > 100));
     }
 
     public boolean isLargeItemExists()
     {
-        return seq(getSingleItem()).anyMatch(item -> (item.getSize() > 100));
+        return seq(getSingleItem()).anyMatch(item3 -> (item3.getSize() > 100));
     }
 
     public boolean isLargeItemAll()
     {
-        return seq(getSingleItem()).allMatch(item -> (item.getSize() > 100));
+        return seq(getSingleItem()).allMatch(item4 -> (item4.getSize() > 100));
     }
 
     public boolean isRequiredItemExists()
     {
-        return seq(asList(getRequiredItem())).anyMatch(item -> (item.getSize() > 100));
+        return seq(asList(getRequiredItem())).anyMatch(item5 -> (item5.getSize() > 100));
     }
 
     public boolean isRequiredItemAll()
     {
-        return seq(asList(getRequiredItem())).allMatch(item -> (item.getSize() > 100));
+        return seq(asList(getRequiredItem())).allMatch(item6 -> (item6.getSize() > 100));
     }
 
     public List<Item> getItemsSelect()
     {
-        return seq(getItems()).filter(item -> (item.getSize() > 100)).toList();
+        return seq(getItems()).filter(item7 -> (item7.getSize() > 100)).toList();
     }
 
     public List<Item> getItemsReject()
     {
-        return seq(getItems()).removeAll(seq(getItems()).filter(item -> (item.getSize() > 100))).toList();
+        return seq(getItems()).removeAll(seq(getItems()).filter(item8 -> (item8.getSize() > 100))).toList();
     }
 
     public List<Item> getSingleItemSelect()
     {
-        return seq(getSingleItem()).filter(item -> (item.getSize() > 100)).toList();
+        return seq(getSingleItem()).filter(item9 -> (item9.getSize() > 100)).toList();
     }
 
     public List<Item> getSingleItemReject()
     {
-        return seq(getSingleItem()).removeAll(seq(getSingleItem()).filter(item -> (item.getSize() > 100))).toList();
+        return seq(getSingleItem()).removeAll(seq(getSingleItem()).filter(item10 -> (item10.getSize() > 100))).toList();
     }
 
     public List<Item> getRequiredItemSelect()
     {
-        return seq(asList(getRequiredItem())).filter(item -> (item.getSize() > 100)).toList();
+        return seq(asList(getRequiredItem())).filter(item11 -> (item11.getSize() > 100)).toList();
     }
 
     public List<Item> getRequiredItemReject()
     {
-        return seq(asList(getRequiredItem())).removeAll(seq(asList(getRequiredItem())).filter(item -> (item.getSize() > 100))).toList();
+        return seq(asList(getRequiredItem())).removeAll(seq(asList(getRequiredItem())).filter(item12 -> (item12.getSize() > 100))).toList();
     }
 
     public List<Integer> getItemsCollect()
     {
-        return seq(getItems()).map(item -> item.getSize()).toList();
+        return seq(getItems()).map(item13 -> item13.getSize()).toList();
     }
 
     public List<Integer> getSingleItemCollect()
     {
-        return seq(getSingleItem()).map(item -> item.getSize()).toList();
+        return seq(getSingleItem()).map(item14 -> item14.getSize()).toList();
     }
 
     public List<Integer> getRequiredItemCollect()
     {
-        return seq(asList(getRequiredItem())).map(item -> item.getSize()).toList();
+        return seq(asList(getRequiredItem())).map(item15 -> item15.getSize()).toList();
     }
 
     public String toString()

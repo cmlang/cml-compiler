@@ -65,7 +65,7 @@ class Functions:
 
     @property
     def items_first(self) -> 'Optional[Item]':
-        return ((self.items) or [None])[0]
+        return (list(self.items) or [None])[0]
 
     @property
     def items_last(self) -> 'Optional[Item]':

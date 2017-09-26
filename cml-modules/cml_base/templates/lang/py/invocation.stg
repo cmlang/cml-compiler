@@ -24,7 +24,7 @@ invocation_required_present(args) ::= <<
 >>
 
 invocation_sequence_first(args) ::= <<
-((<expression(args.seq)>) or [None])[0]
+(list(<expression(args.seq)>) or [None])[0]
 >>
 
 invocation_optional_first(args) ::= <<

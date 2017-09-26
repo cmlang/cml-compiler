@@ -2,10 +2,14 @@ package cml.templates;
 
 import org.stringtemplate.v4.StringRenderer;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.Arrays.stream;
+import static java.util.Collections.synchronizedMap;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang.StringUtils.splitByCharacterTypeCamelCase;
 
@@ -16,10 +20,14 @@ public class NameRenderer extends StringRenderer
     private static final String UNDERSCORE_CASE = "underscore-case";
     private static final String LOWER_CASE = "lower-case";
     private static final String UPPER_CASE = "upper-case";
+    private static final String INDEXED = "indexed";
+    private static final String INC_INDEXED = "inc-indexed";
 
     private static final String UNDERSCORE = "_";
     private static final String DASH = "-";
     private static final String DOT = ".";
+
+    private final Map<String, AtomicInteger> indices = synchronizedMap(new HashMap<>());
 
     @Override
     public String toString(Object o, String formatString, Locale locale)
@@ -48,10 +56,32 @@ public class NameRenderer extends StringRenderer
         {
             return o.toString().toUpperCase(locale);
         }
+        else if (INC_INDEXED.equals(formatString))
+        {
+            return new_indexed(o.toString());
+        }
+        else if (INDEXED.equals(formatString))
+        {
+            return indexed(o.toString());
+        }
         else
         {
             return super.toString(o, formatString, locale);
         }
+    }
+
+    private String new_indexed(final String text)
+    {
+        indices.computeIfAbsent(text, key -> new AtomicInteger(0));
+
+        return text + indices.get(text).incrementAndGet();
+    }
+
+    private String indexed(final String text)
+    {
+        indices.computeIfAbsent(text, key -> new AtomicInteger(0));
+
+        return text + indices.get(text);
     }
 
     public static String pascalCase(Locale locale, String str)

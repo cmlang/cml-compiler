@@ -266,23 +266,26 @@ float_zero() ::= "0"
 
 // Operations
 
-operation_add(left, right) ::= "<left> + <right>"
-operation_sub(left, right) ::= "<left> - <right>"
-operation_mul(left, right) ::= "<left> * <right>"
-operation_div(left, right) ::= "<left> / <right>"
-operation_mod(left, right) ::= "<left> % <right>"
-operation_exp(left, right) ::= "<left> ** <right>"
+operation_add(left, right) ::= "<expression(left)> + <expression(right)>"
+operation_sub(left, right) ::= "<expression(left)> - <expression(right)>"
+operation_mul(left, right) ::= "<expression(left)> * <expression(right)>"
+operation_div(left, right) ::= "<expression(left)> / <expression(right)>"
+operation_mod(left, right) ::= "<expression(left)> % <expression(right)>"
+operation_exp(left, right) ::= "<expression(left)> ** <expression(right)>"
 
-operation_eq(left, right) ::= "<left> == <right>"
-operation_ineq(left, right) ::= "<left> != <right>"
-operation_gt(left, right) ::= "<left> > <right>"
-operation_gte(left, right) ::= "<left> >= <right>"
-operation_lt(left, right) ::= "<left> \< <right>"
-operation_lte(left, right) ::= "<left> \<= <right>"
+operation_eq(left, right) ::= "<expression(left)> == <expression(right)>"
+operation_ineq(left, right) ::= "<expression(left)> != <expression(right)>"
+operation_gt(left, right) ::= "<expression(left)> > <expression(right)>"
+operation_gte(left, right) ::= "<expression(left)> >= <expression(right)>"
+operation_lt(left, right) ::= "<expression(left)> \< <expression(right)>"
+operation_lte(left, right) ::= "<expression(left)> \<= <expression(right)>"
 
-operation_and(left, right) ::= "<left> and <right>"
-operation_or(left, right) ::= "<left> or <right>"
-operation_not(expr) ::= "not <expr>"
+operation_and(left, right) ::= "<expression(left)> and <expression(right)>"
+operation_or(left, right) ::= "<expression(left)> or <expression(right)>"
+operation_not(expr) ::= "not <expression(expr)>"
+
+operation_ref_eq_required_required(left, right) ::= "<expression(left)> == <expression(right)>"
+operation_not_ref_eq_required_required(left, right) ::= "<expression(left)> != <expression(right)>"
 
 // Paths
 

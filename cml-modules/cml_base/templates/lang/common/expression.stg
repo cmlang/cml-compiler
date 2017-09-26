@@ -13,7 +13,7 @@ expression_path(path) ::= <<
 
 expression_unary(expr) ::= <<
 <if(expr.operation)><\\>
-(<({operation_<expr.operation>})(expression(expr.subExpr))>)<\\>
+(<({operation_<expr.operation>})(expr.subExpr)>)<\\>
 <else><\\>
 <expression_operator(expr)> <expression(expr.subExpr)>
 <endif>
@@ -21,11 +21,27 @@ expression_unary(expr) ::= <<
 
 expression_infix(expr) ::= <<
 <if(expr.operation)><\\>
-(<({operation_<expr.operation>})(expression(expr.left), expression(expr.right))>)<\\>
+(<({operation_<expr.operation>})(expr.left, expr.right)>)<\\>
 <else><\\>
 (<expression(expr.left)> <expr.operator> <expression(expr.right)>)<\\>
 <endif>
 >>
+
+operation_ref_eq(left, right) ::= <<
+<({operation_ref_eq_<left.type.kind>_<right.type.kind>})(left, right)>
+>>
+
+operation_ref_eq_required_optional(left, right) ::= "<operation_ref_eq_required_required(left, right)>"
+operation_ref_eq_optional_required(left, right) ::= "<operation_ref_eq_required_optional(right, left)>"
+operation_ref_eq_optional_optional(left, right) ::= "<operation_ref_eq_optional_required(left, right)>"
+
+operation_not_ref_eq(left, right) ::= <<
+<({operation_not_ref_eq_<left.type.kind>_<right.type.kind>})(left, right)>
+>>
+
+operation_not_ref_eq_required_optional(left, right) ::= "<operation_not_ref_eq_required_required(left, right)>"
+operation_not_ref_eq_optional_required(left, right) ::= "<operation_not_ref_eq_required_optional(right, left)>"
+operation_not_ref_eq_optional_optional(left, right) ::= "<operation_not_ref_eq_optional_required(left, right)>"
 
 expression_literal(literal) ::= <<
 <({literal_expr_<literal.type.name; format="lower-case">})(literal.text)>
