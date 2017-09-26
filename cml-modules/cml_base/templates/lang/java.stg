@@ -326,16 +326,17 @@ seq(<getter_name(path)>())<\\>
 >>
 
 path_base_call(path) ::= <<
-<path_expr(path.base)><\\>
 <if(path.base.type.sequence)><\\>
-<path_map_call(path)><\\>
+<path_expr(path.base)>.<path_map_call(path)><\\>
 <else><\\>
-.<path_getter_call("", path)><\\>
+<if(path.type.sequence)>seq(<endif><\\>
+<path_expr(path.base)>.<path_getter_call("", path)><\\>
+<if(path.type.sequence)>)<endif><\\>
 <endif>
 >>
 
 path_map_call(path) ::= <<
-.map(<field_name(path.base.type)> -> <path_getter_call([{<field_name(path.base.type)>.}], path)>)
+map(<field_name(path.base.type)> -> <path_getter_call([{<field_name(path.base.type)>.}], path)>)
 >>
 
 to_list(expr) ::= <<
