@@ -19,7 +19,7 @@ association_name(association) ::= <<
 >>
 
 association_field_decl(association_end) ::= <<
-private final Map\<<field_type(association_end.concept)>, <field_type(association_end.property)>\> <association_end.property.name> = new HashMap\<>();
+private final Map\<<field_type(association_end.concept)>, <field_type(association_end.property)>\> <field_name(association_end.property)> = new HashMap\<>();
 >>
 
 association_constructor(association) ::= ""
