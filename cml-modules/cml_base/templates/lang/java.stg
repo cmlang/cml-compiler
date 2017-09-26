@@ -335,7 +335,7 @@ path_base_call(path) ::= <<
 >>
 
 path_map_call(path) ::= <<
-map(<field_name(path.base.type)> -> <path_getter_call([{<field_name(path.base.type)>.}], path)>)
+map(<field_name(path.base.type)> -> <field_name(path.base.type)>.<getter_name(path)>())
 >>
 
 to_list(expr) ::= <<
