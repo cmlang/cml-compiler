@@ -107,13 +107,69 @@ public class Path extends ExpressionBase
                 {
                     scope = optionalScope.get();
 
-                    final Optional<Type> memberType = typeOfMemberNamed(memberName, scope);
+                    final Optional<Type> memberType = typeOfVariableNamed(memberName, scope);
 
                     if (memberType.isPresent())
                     {
                         final String cardinality = memberType.get().getCardinality().orElse(null);
 
-                        type = withCardinality(memberType.get(), type.isSequence() ? "*" : cardinality);
+                        type = withCardinality(
+                                memberType.get(),
+                                memberType.get().isRequired() && type.isSequence() ? "*" :
+                                    (memberType.get().isRequired() && type.isOptional() ? "?" : cardinality));
+                    }
+                    else
+                    {
+                        return NamedType.createUndefined("Unable to find type of member: " + intermediatePath);
+                    }
+                }
+                else
+                {
+                    return NamedType.createUndefined("Unable to find type: " + type);
+                }
+            }
+
+            return type;
+        }
+        else
+        {
+            return NamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
+        }
+    }
+
+    public Type getOriginalType()
+    {
+        assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
+        assert getParent().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames() + " " + getLocation();
+
+        Scope scope = getParent().get();
+
+        if (isSelf()) return selfTypeOf(scope);
+
+        final String variableName = getNames().get(0);
+        final Optional<Type> variableType = typeOfVariableNamed(variableName, scope);
+
+        StringBuilder intermediatePath = new StringBuilder(variableName);
+
+        if (variableType.isPresent())
+        {
+            Type type = variableType.get();
+
+            for (final String memberName: getMemberNames())
+            {
+                intermediatePath.append(".").append(memberName);
+
+                final Optional<Scope> optionalScope = scopeOfType(type, scope);
+
+                if (optionalScope.isPresent())
+                {
+                    scope = optionalScope.get();
+
+                    final Optional<Type> memberType = typeOfVariableNamed(memberName, scope);
+
+                    if (memberType.isPresent())
+                    {
+                        type = memberType.get();
                     }
                     else
                     {
