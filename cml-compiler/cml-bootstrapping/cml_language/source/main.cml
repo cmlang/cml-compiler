@@ -84,45 +84,7 @@ abstraction CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
     /redefined_ancestors: CONCEPT_REDEF*;
     /redefined_inherited_concrete_properties: PROPERTY*;
 }
-*/
-concept ModelElement
-{
-    parent: Scope?;
-    location: Location?;
 
-//    /model = parent.model;
-//    /module = parent.module;
-}
-
-concept Scope: ModelElement
-{
-    members: ModelElement*;
-}
-
-concept Location
-{
-    line: Integer;
-    column: Integer;
-    element: ModelElement;
-}
-
-association Membership
-{
-    ModelElement.parent;
-    Scope.members;
-}
-
-association Localization
-{
-    Location.element;
-    ModelElement.location;
-}
-
-concept NamedElement: ModelElement
-{
-    name: String;
-}
-/*
 concept TYPED_ELEMENT: NAMED_ELEMENT
 {
     type: TYPE;
@@ -218,17 +180,3 @@ abstraction TYPE: MODEL_ELEMENT
     /sequence = kind == "sequence";
 }
 */
-task cml_language_java by cmlc_java
-{
-    groupId = "cml";
-    artifactId = "cml-language-generated";
-    artifactVersion = "master-SNAPSHOT";
-    packageName = "cml.language.generated";
-    packagePath = "cml/language/generated";
-}
-
-task cml_language_py by cmlc_py
-{
-    moduleName = "cml_language";
-    moduleVersion = "master-SNAPSHOT";
-}

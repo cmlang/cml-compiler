@@ -1,0 +1,35 @@
+
+concept ModelElement
+{
+    parent: Scope?;
+    location: Location?;
+}
+
+concept Scope: ModelElement
+{
+    members: ModelElement*;
+}
+
+concept Location
+{
+    line: Integer;
+    column: Integer;
+    element: ModelElement;
+}
+
+association Membership
+{
+    ModelElement.parent;
+    Scope.members;
+}
+
+association Localization
+{
+    Location.element;
+    ModelElement.location;
+}
+
+concept NamedElement: ModelElement
+{
+    name: String;
+}
