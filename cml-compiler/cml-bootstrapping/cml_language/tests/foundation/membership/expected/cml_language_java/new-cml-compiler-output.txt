@@ -1,0 +1,68 @@
+model files:
+- pom.xml
+
+MODEL files:
+- src/main/java/cml/language/generated/Model.java
+
+MODULE files:
+- src/main/java/cml/language/generated/Module.java
+
+CONCEPT files:
+- src/main/java/cml/language/generated/Concept.java
+
+MODEL_ELEMENT files:
+- src/main/java/cml/language/generated/ModelElement.java
+
+SCOPE files:
+- src/main/java/cml/language/generated/Scope.java
+
+LOCATION files:
+- src/main/java/cml/language/generated/Location.java
+
+NAMED_ELEMENT files:
+- src/main/java/cml/language/generated/NamedElement.java
+
+TYPED_ELEMENT files:
+- src/main/java/cml/language/generated/TypedElement.java
+
+PROPERTY files:
+- src/main/java/cml/language/generated/Property.java
+
+PROPERTY_LIST files:
+- src/main/java/cml/language/generated/PropertyList.java
+
+INHERITANCE files:
+- src/main/java/cml/language/generated/Inheritance.java
+
+CONCEPT_REDEF files:
+- src/main/java/cml/language/generated/ConceptRedef.java
+
+PROPERTY_REDEF files:
+- src/main/java/cml/language/generated/PropertyRedef.java
+
+TIPO files:
+- src/main/java/cml/language/generated/Tipo.java
+
+ASSOCIATION files:
+- src/main/java/cml/language/generated/Association.java
+
+ASSOCIATION_END files:
+- src/main/java/cml/language/generated/AssociationEnd.java
+
+EXPRESSION files:
+- src/main/java/cml/language/generated/Expression.java
+
+MEMBERSHIP files:
+- src/main/java/cml/language/generated/Membership.java
+
+LOCALIZATION files:
+- src/main/java/cml/language/generated/Localization.java
+
+GENERALIZATION files:
+- src/main/java/cml/language/generated/Generalization.java
+
+SPECIALIZATION files:
+- src/main/java/cml/language/generated/Specialization.java
+
+ASSOCIATION_END_PROPERTY files:
+- src/main/java/cml/language/generated/AssociationEndProperty.java
