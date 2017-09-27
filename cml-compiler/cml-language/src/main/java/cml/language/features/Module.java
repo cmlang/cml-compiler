@@ -1,6 +1,6 @@
 package cml.language.features;
 
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
 import cml.language.generated.NamedElement;
@@ -18,12 +18,12 @@ import static java.util.stream.Stream.concat;
 
 public interface Module extends NamedElement, Scope
 {
-    default Model getModel()
+    default TempModel getModel()
     {
         assert getParent().isPresent();
-        assert getParent().get() instanceof Model;
+        assert getParent().get() instanceof TempModel;
 
-        return (Model) getParent().get();
+        return (TempModel) getParent().get();
     }
 
     default List<Import> getImports()
@@ -104,7 +104,7 @@ public interface Module extends NamedElement, Scope
         return concat(getTemplates().stream(), getImportedTemplates().stream()).collect(toList());
     }
 
-    static Module create(Model model, String name)
+    static Module create(TempModel model, String name)
     {
         return new ModuleImpl(model, name);
     }
@@ -116,7 +116,7 @@ class ModuleImpl implements Module
     private final NamedElement namedElement;
     private final Scope scope;
 
-    ModuleImpl(Model model, String name)
+    ModuleImpl(TempModel model, String name)
     {
         this.modelElement = extendModelElement(this, model, null);
         this.namedElement = extendNamedElement(modelElement, name);

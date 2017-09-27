@@ -4,7 +4,7 @@ import cml.generator.Generator;
 import cml.io.Console;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.language.loader.ModelLoader;
 
 public interface Compiler
@@ -55,7 +55,7 @@ class CompilerImpl implements Compiler
         moduleManager.addBaseDir(System.getenv("CML_MODULES_PATH"));
         moduleManager.addBaseDir(modulesBaseDir);
 
-        final Model model = Model.create();
+        final TempModel model = TempModel.create();
         final int exitCode = modelLoader.loadModel(model, moduleName);
 
         if (exitCode == 0)

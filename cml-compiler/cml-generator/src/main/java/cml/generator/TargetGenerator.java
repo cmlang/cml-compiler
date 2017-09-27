@@ -3,7 +3,7 @@ package cml.generator;
 import cml.language.features.Association;
 import cml.language.features.Concept;
 import cml.language.features.Task;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.language.generated.NamedElement;
 import cml.language.loader.ModelVisitor;
 
@@ -28,7 +28,7 @@ class TargetGenerator implements ModelVisitor
     }
 
     @Override
-    public void visit(Model model)
+    public void visit(TempModel model)
     {
         generateTargetFiles(MODEL, model);
     }

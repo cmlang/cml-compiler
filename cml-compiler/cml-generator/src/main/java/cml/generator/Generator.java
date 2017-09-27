@@ -5,7 +5,7 @@ import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
 import cml.language.features.Task;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.templates.TemplateGroupFile;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;
@@ -17,7 +17,7 @@ import static cml.language.functions.ModelVisitorFunctions.visitModel;
 
 public interface Generator
 {
-    int generate(Model model, final String targetName, final String targetDirPath);
+    int generate(TempModel model, final String targetName, final String targetDirPath);
 
     static Generator create(Console console, FileSystem fileSystem, ModuleManager moduleManager)
     {
@@ -61,7 +61,7 @@ class GeneratorImpl implements Generator
     }
 
     @Override
-    public int generate(Model model, final String targetName, final String targetDirPath)
+    public int generate(TempModel model, final String targetName, final String targetDirPath)
     {
         TemplateGroupFile.setModuleManager(moduleManager);
 

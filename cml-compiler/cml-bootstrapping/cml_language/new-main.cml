@@ -1,30 +1,4 @@
 
-concept MODEL: SCOPE
-{
-    /model = self as? MODEL?;
-    /modulo = first(modules);
-
-    /modules = members as? MODULE*;
-    /concepts = modules.concepts;
-    /associations = modules.associations;
-
-/*
-
-    /templates = modules.templates;
-    /tasks = modules.tasks;
-
-    /ordered_concepts = concepts | sort: c1, c2 ->
-        if (c1.dependencies | includes: c2.name) and (c2.dependencies | includes: c1.name) then (
-            // If concepts depend on each other, the more general one is listed first:
-            if c1.inherited_dependencies | includes: c2.name then +1
-            else if c2.inherited_dependencies | includes c1.name then -1
-            else 0
-         )
-         else if c1.dependencies | includes: c2.name then +1
-         else if c2.dependencies | includes: c1.name then -1
-         else 0;
-*/
-}
 
 concept MODULE: NAMED_ELEMENT, SCOPE
 {
@@ -92,16 +66,6 @@ concept CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
     /redefined_ancestors: CONCEPT_REDEF*;
     /redefined_inherited_concrete_properties: PROPERTY*;
 */
-}
-
-abstraction MODEL_ELEMENT
-{
-    parent: SCOPE?;
-    location: LOCATION?;
-
-    /model: MODEL? = parent.model;
-
-    /modulo: MODULE? = parent.modulo;
 }
 
 abstraction SCOPE: MODEL_ELEMENT

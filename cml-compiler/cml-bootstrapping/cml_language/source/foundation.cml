@@ -1,35 +1,39 @@
 
-concept ModelElement
+abstraction MODEL_ELEMENT
 {
     parent: Scope?;
     location: Location?;
+
+//    /model: MODEL? = parent.model;
+
+//    /modulo: MODULE? = parent.modulo;
 }
 
-concept Scope: ModelElement
+concept Scope: MODEL_ELEMENT
 {
-    members: ModelElement*;
+    members: MODEL_ELEMENT*;
 }
 
 concept Location
 {
     line: Integer;
     column: Integer;
-    element: ModelElement;
+    element: MODEL_ELEMENT;
 }
 
 association Membership
 {
-    ModelElement.parent;
+    MODEL_ELEMENT.parent;
     Scope.members;
 }
 
 association Localization
 {
     Location.element;
-    ModelElement.location;
+    MODEL_ELEMENT.location;
 }
 
-concept NamedElement: ModelElement
+concept NamedElement: MODEL_ELEMENT
 {
     name: String;
 }

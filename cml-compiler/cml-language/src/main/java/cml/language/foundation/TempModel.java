@@ -1,10 +1,7 @@
 package cml.language.foundation;
 
 import cml.language.features.*;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -13,7 +10,7 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-public interface Model extends NamedElement, Scope
+public interface TempModel extends NamedElement, Scope, Model
 {
     default String getName()
     {
@@ -90,13 +87,13 @@ public interface Model extends NamedElement, Scope
                            .collect(toList());
     }
 
-    static Model create()
+    static TempModel create()
     {
         return new ModelImpl();
     }
 }
 
-class ModelImpl implements Model
+class ModelImpl implements TempModel
 {
     private final ModelElement modelElement;
     private final Scope scope;
@@ -120,10 +117,15 @@ class ModelImpl implements Model
     }
 
     @Override
+    public Optional<Model> getModel()
+    {
+        return Optional.of(this);
+    }
+
+    @Override
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
     }
-
 }
 

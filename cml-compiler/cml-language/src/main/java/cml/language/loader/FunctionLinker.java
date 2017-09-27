@@ -2,17 +2,17 @@ package cml.language.loader;
 
 import cml.language.expressions.Expression;
 import cml.language.expressions.Invocation;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 
 import static cml.language.functions.ModelFunctions.templateOf;
 import static org.jooq.lambda.Seq.seq;
 
 public class FunctionLinker implements ModelVisitor
 {
-    private Model model;
+    private TempModel model;
 
     @Override
-    public void visit(final Model model)
+    public void visit(final TempModel model)
     {
         this.model = model;
     }

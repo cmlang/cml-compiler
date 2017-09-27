@@ -5,7 +5,7 @@ import cml.io.FileSystem;
 import cml.io.ModuleManager;
 import cml.language.expressions.Literal;
 import cml.language.features.*;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.language.foundation.Property;
 import cml.language.loader.ModelLoader;
 import cml.language.types.NamedType;
@@ -73,7 +73,7 @@ public class ModelLoaderTest
         moduleManager.clearBaseDirs();
         moduleManager.addBaseDir(modulesBaseDir);
 
-        final Model model = Model.create();
+        final TempModel model = TempModel.create();
         final int result = modelLoader.loadModel(model, moduleName);
 
         assertThat(result, is(3));
@@ -150,7 +150,7 @@ public class ModelLoaderTest
         return association.get();
     }
 
-    private Model loadModel(String moduleName)
+    private TempModel loadModel(String moduleName)
     {
         final String modulePath = BASE_PATH + moduleName;
         final String modulesBaseDir = fileSystem.extractParentPath(modulePath);
@@ -158,7 +158,7 @@ public class ModelLoaderTest
         moduleManager.clearBaseDirs();
         moduleManager.addBaseDir(modulesBaseDir);
 
-        final Model model = Model.create();
+        final TempModel model = TempModel.create();
 
         modelLoader.loadModel(model, moduleName);
 

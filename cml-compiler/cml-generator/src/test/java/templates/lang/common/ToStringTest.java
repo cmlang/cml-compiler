@@ -2,7 +2,7 @@ package templates.lang.common;
 
 import cml.language.features.Concept;
 import cml.language.features.Module;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.language.foundation.Property;
 import cml.language.types.NamedType;
 import org.junit.Test;
@@ -74,6 +74,6 @@ public class ToStringTest  extends LangTest
 
     private static Module createModule()
     {
-        return Module.create(Model.create(), "some_module");
+        return Module.create(TempModel.create(), "some_module");
     }
 }

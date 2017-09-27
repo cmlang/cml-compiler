@@ -1,14 +1,14 @@
 package cml.language.functions;
 
 import cml.language.features.*;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 
 import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class ModelFunctions
 {
-    public static Optional<Module> moduleOf(Model model, String name)
+    public static Optional<Module> moduleOf(TempModel model, String name)
     {
         for (final Module module : model.getModules())
         {
@@ -21,7 +21,7 @@ public class ModelFunctions
         return Optional.empty();
     }
 
-    public static Optional<Concept> conceptOf(Model model, String name)
+    public static Optional<Concept> conceptOf(TempModel model, String name)
     {
         return model.getConcepts()
                     .stream()
@@ -29,7 +29,7 @@ public class ModelFunctions
                     .findFirst();
     }
 
-    public static Optional<Association> associationOf(Model model, String name)
+    public static Optional<Association> associationOf(TempModel model, String name)
     {
         return model.getAssociations()
                     .stream()
@@ -37,7 +37,7 @@ public class ModelFunctions
                     .findFirst();
     }
 
-    public static Optional<Task> targetOf(Model model, String name)
+    public static Optional<Task> targetOf(TempModel model, String name)
     {
         return model.getTasks()
                     .stream()
@@ -45,7 +45,7 @@ public class ModelFunctions
                     .findFirst();
     }
 
-    public static Optional<Template> templateOf(Model model, String name)
+    public static Optional<Template> templateOf(TempModel model, String name)
     {
         return model.getTemplates()
                     .stream()

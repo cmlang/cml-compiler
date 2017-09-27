@@ -6,7 +6,7 @@ import cml.io.ModuleManager;
 import cml.language.expressions.Expression;
 import cml.language.features.Concept;
 import cml.language.features.Module;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.language.foundation.Property;
 import cml.language.loader.ModelLoader;
 import cml.language.types.Type;
@@ -97,7 +97,7 @@ public class ExpressionTest
         moduleManager.clearBaseDirs();
         moduleManager.addBaseDir(modulesBaseDir);
 
-        final Model model = Model.create();
+        final TempModel model = TempModel.create();
         modelLoader.loadModel(model, moduleDir.getName());
 
         final String moduleName = moduleDir.getName();

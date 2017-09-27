@@ -1,7 +1,6 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
-import cml.language.functions.ConceptFunctions;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
 import cml.language.generated.NamedElement;
@@ -253,7 +252,7 @@ public interface Concept extends NamedElement, PropertyList
         .collect(toList());
     }
 
-    default Model getModel()
+    default TempModel getModel()
     {
         assert moduleOf(this).isPresent();
 

@@ -75,7 +75,7 @@ public interface Property extends TypedElement, Scope
         return (Concept) getParent().get();
     }
 
-    default Model getModel()
+    default TempModel getModel()
     {
         return getConcept().getModel();
     }

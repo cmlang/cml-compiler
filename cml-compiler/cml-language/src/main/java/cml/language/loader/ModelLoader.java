@@ -7,7 +7,7 @@ import cml.io.SourceFile;
 import cml.language.features.Import;
 import cml.language.features.Module;
 import cml.language.foundation.Diagnostic;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
 import cml.language.grammar.CMLLexer;
@@ -31,7 +31,7 @@ import static cml.language.functions.ModuleFunctions.importedModuleOf;
 
 public interface ModelLoader
 {
-    int loadModel(Model model, String moduleName);
+    int loadModel(TempModel model, String moduleName);
 
     static ModelLoader create(Console console, ModuleManager moduleManager)
     {
@@ -61,7 +61,7 @@ class ModelLoaderImpl implements ModelLoader
     }
 
     @Override
-    public int loadModel(Model model, String moduleName)
+    public int loadModel(TempModel model, String moduleName)
     {
         try
         {
@@ -97,7 +97,7 @@ class ModelLoaderImpl implements ModelLoader
         }
     }
 
-    private int loadModule(Model model, String moduleName, @Nullable Import _import) throws IOException
+    private int loadModule(TempModel model, String moduleName, @Nullable Import _import) throws IOException
     {
         final Optional<Module> existingModule = moduleOf(model, moduleName);
         if (existingModule.isPresent())
@@ -183,17 +183,17 @@ class ModelLoaderImpl implements ModelLoader
         walker.walk(modelAugmenter, compilationUnitContext);
     }
 
-    private void linkFunctions(final Model model)
+    private void linkFunctions(final TempModel model)
     {
         visitModel(model, new FunctionLinker());
     }
 
-    private void linkLambdaScope(final Model model)
+    private void linkLambdaScope(final TempModel model)
     {
         visitModel(model, new LambdaScopeLinker());
     }
 
-    private int validateModel(Model model)
+    private int validateModel(TempModel model)
     {
         final ModelValidator modelValidator = new ModelValidator();
 

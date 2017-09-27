@@ -1,7 +1,7 @@
 model files:
 - pom.xml
 
-ModelElement files:
+MODEL_ELEMENT files:
 - src/main/java/cml/language/generated/ModelElement.java
 
 Scope files:
@@ -12,6 +12,9 @@ Location files:
 
 NamedElement files:
 - src/main/java/cml/language/generated/NamedElement.java
+
+MODEL files:
+- src/main/java/cml/language/generated/Model.java
 
 Membership files:
 - src/main/java/cml/language/generated/Membership.java

@@ -3,14 +3,14 @@ package cml.language.functions;
 import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.Concept;
-import cml.language.foundation.Model;
+import cml.language.foundation.TempModel;
 import cml.language.foundation.Property;
 import cml.language.loader.ModelVisitor;
 
 @SuppressWarnings("WeakerAccess")
 public class ModelVisitorFunctions
 {
-    public static void visitModel(Model model, ModelVisitor visitor)
+    public static void visitModel(TempModel model, ModelVisitor visitor)
     {
         visitor.visit(model);
 
