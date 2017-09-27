@@ -112,7 +112,7 @@ public interface Association extends NamedElement, Scope
         return end1.getProperty().get().getType().isSingle() && end2.getProperty().get().getType().isSingle();
     }
 
-    static Association create(Module module, String name, List<AssociationEnd> associationEnds, Location location)
+    static Association create(TempModule module, String name, List<AssociationEnd> associationEnds, Location location)
     {
         return new AssociationImpl(module, name, associationEnds, location);
     }
@@ -133,7 +133,7 @@ class AssociationImpl implements Association
     private final NamedElement namedElement;
     private final Scope scope;
 
-    AssociationImpl(Module module, String name, List<AssociationEnd> associationEnds, Location location)
+    AssociationImpl(TempModule module, String name, List<AssociationEnd> associationEnds, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
         this.namedElement = extendNamedElement(modelElement, name);

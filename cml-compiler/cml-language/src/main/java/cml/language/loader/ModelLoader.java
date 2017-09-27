@@ -5,7 +5,7 @@ import cml.io.Directory;
 import cml.io.ModuleManager;
 import cml.io.SourceFile;
 import cml.language.features.Import;
-import cml.language.features.Module;
+import cml.language.features.TempModule;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.TempModel;
 import cml.language.generated.Location;
@@ -99,7 +99,7 @@ class ModelLoaderImpl implements ModelLoader
 
     private int loadModule(TempModel model, String moduleName, @Nullable Import _import) throws IOException
     {
-        final Optional<Module> existingModule = moduleOf(model, moduleName);
+        final Optional<TempModule> existingModule = moduleOf(model, moduleName);
         if (existingModule.isPresent())
         {
             assert _import != null;
@@ -109,7 +109,7 @@ class ModelLoaderImpl implements ModelLoader
             return SUCCESS;
         }
 
-        final Module module = Module.create(model, moduleName);
+        final TempModule module = TempModule.create(model, moduleName);
 
         if (_import != null)
         {
@@ -159,7 +159,7 @@ class ModelLoaderImpl implements ModelLoader
         return SUCCESS;
     }
 
-    private void addBaseModule(Module module)
+    private void addBaseModule(TempModule module)
     {
         if (!module.getName().equals(CML_BASE_MODULE) && !importedModuleOf(module, CML_BASE_MODULE).isPresent())
         {
@@ -167,7 +167,7 @@ class ModelLoaderImpl implements ModelLoader
         }
     }
 
-    private void synthesizeModule(Module module, CompilationUnitContext compilationUnitContext)
+    private void synthesizeModule(TempModule module, CompilationUnitContext compilationUnitContext)
     {
         final ParseTreeWalker walker = new ParseTreeWalker();
         final ModelSynthesizer modelSynthesizer = new ModelSynthesizer(module);
@@ -175,7 +175,7 @@ class ModelLoaderImpl implements ModelLoader
         walker.walk(modelSynthesizer, compilationUnitContext);
     }
 
-    private void augmentModule(Module module, CompilationUnitContext compilationUnitContext)
+    private void augmentModule(TempModule module, CompilationUnitContext compilationUnitContext)
     {
         final ParseTreeWalker walker = new ParseTreeWalker();
         final ModelAugmenter modelAugmenter = new ModelAugmenter(module);

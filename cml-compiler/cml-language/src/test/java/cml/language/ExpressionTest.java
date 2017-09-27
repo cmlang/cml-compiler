@@ -5,7 +5,7 @@ import cml.io.FileSystem;
 import cml.io.ModuleManager;
 import cml.language.expressions.Expression;
 import cml.language.features.Concept;
-import cml.language.features.Module;
+import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
 import cml.language.foundation.Property;
 import cml.language.loader.ModelLoader;
@@ -101,7 +101,7 @@ public class ExpressionTest
         modelLoader.loadModel(model, moduleDir.getName());
 
         final String moduleName = moduleDir.getName();
-        final Optional<Module> module = moduleOf(model, moduleName);
+        final Optional<TempModule> module = moduleOf(model, moduleName);
         assertTrue("Module should be found: " + moduleName, module.isPresent());
 
         final Optional<Concept> concept = conceptOf(module.get(), "Expressions");

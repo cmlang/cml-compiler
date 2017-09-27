@@ -37,9 +37,9 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
     private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
 
-    private final Module module;
+    private final TempModule module;
 
-    ModelSynthesizer(Module module)
+    ModelSynthesizer(TempModule module)
     {
         this.module = module;
     }

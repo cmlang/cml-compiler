@@ -12,11 +12,11 @@ import static java.util.stream.Collectors.toList;
 
 public interface TempModel extends NamedElement, Scope, Model
 {
-    default List<Module> getModules()
+    default List<TempModule> getModules()
     {
         return getMembers().stream()
-                           .filter(e -> e instanceof Module)
-                           .map(e -> (Module)e)
+                           .filter(e -> e instanceof TempModule)
+                           .map(e -> (TempModule)e)
                            .collect(toList());
     }
 

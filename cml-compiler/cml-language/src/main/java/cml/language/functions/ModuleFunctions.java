@@ -1,7 +1,7 @@
 package cml.language.functions;
 
 import cml.language.features.Concept;
-import cml.language.features.Module;
+import cml.language.features.TempModule;
 import cml.language.features.Template;
 
 import java.util.Optional;
@@ -9,9 +9,9 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 public class ModuleFunctions
 {
-    public static Optional<Module> importedModuleOf(Module module, String name)
+    public static Optional<TempModule> importedModuleOf(TempModule module, String name)
     {
-        for (final Module m: module.getImportedModules())
+        for (final TempModule m: module.getImportedModules())
         {
             if (m.getName().equals(name))
             {
@@ -22,7 +22,7 @@ public class ModuleFunctions
         return Optional.empty();
     }
 
-    public static Optional<Module> selfOrImportedModuleOf(Module module, String name)
+    public static Optional<TempModule> selfOrImportedModuleOf(TempModule module, String name)
     {
         if (module.getName().equals(name))
         {
@@ -32,7 +32,7 @@ public class ModuleFunctions
         return importedModuleOf(module, name);
     }
 
-    public static Optional<Concept> conceptOf(Module module, String name)
+    public static Optional<Concept> conceptOf(TempModule module, String name)
     {
         return module.getAllConcepts()
                      .stream()
@@ -40,7 +40,7 @@ public class ModuleFunctions
                      .findFirst();
     }
 
-    public static Optional<Template> templateOf(Module module, String name)
+    public static Optional<Template> templateOf(TempModule module, String name)
     {
         return module.getAllTemplates()
                      .stream()

@@ -8,9 +8,9 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 public class ModelFunctions
 {
-    public static Optional<Module> moduleOf(TempModel model, String name)
+    public static Optional<TempModule> moduleOf(TempModel model, String name)
     {
-        for (final Module module : model.getModules())
+        for (final TempModule module : model.getModules())
         {
             if (module.getName().equals(name))
             {

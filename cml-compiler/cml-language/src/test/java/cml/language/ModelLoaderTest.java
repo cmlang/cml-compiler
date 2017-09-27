@@ -46,7 +46,7 @@ public class ModelLoaderTest
     public void module()
     {
         final String moduleName = "module_name";
-        final Module module = loadModule(moduleName);
+        final TempModule module = loadModule(moduleName);
         final Concept concept = module.getConcepts().get(0);
 
         assertThat(module.getName(), is(moduleName));
@@ -54,7 +54,7 @@ public class ModelLoaderTest
 
         final String anotherModuleName = "another_module";
         final Import _import = module.getImports().get(0);
-        final Module anotherModule = _import.getImportedModule().get();
+        final TempModule anotherModule = _import.getImportedModule().get();
         final Concept anotherConcept = anotherModule.getConcepts().get(0);
 
         assertThat(_import.getName(), is(anotherModuleName));
@@ -131,7 +131,7 @@ public class ModelLoaderTest
         assertAssociationEndFound(vehicleOwnership, "Organization", "fleet", NamedType.create("Vehicle", "*"));
     }
 
-    private Module loadModule(String sourceFileName)
+    private TempModule loadModule(String sourceFileName)
     {
         return loadModel(sourceFileName).getModules().get(0);
     }

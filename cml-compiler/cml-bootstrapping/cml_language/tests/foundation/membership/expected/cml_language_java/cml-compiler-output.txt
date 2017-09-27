@@ -16,6 +16,9 @@ Location files:
 MODEL files:
 - src/main/java/cml/language/generated/Model.java
 
+MODULE files:
+- src/main/java/cml/language/generated/Module.java
+
 Membership files:
 - src/main/java/cml/language/generated/Membership.java
 

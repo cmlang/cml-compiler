@@ -1,0 +1,22 @@
+
+concept MODULE: NAMED_ELEMENT, Scope
+{
+/*
+    /modulo = self as? MODULE?;
+
+    /concepts = members as? CONCEPT*;
+    /associations = members as? ASSOCIATION*;
+
+    /imports = members as? IMPORT*;
+    /templates = for m in members | select: m is TEMPLATE;
+    /tasks = for m in members | select: m is TASK;
+
+    /all_concepts = concat(concepts, imported_concepts);
+    /all_templates = concat(templates, imported_templates);
+
+    /imported_concepts = imported_modules | yield: concepts;
+    /imported_templates = imported_modules | yield: templates;
+    /imported_modules = imports | yield: imported_module;
+*/
+}
+

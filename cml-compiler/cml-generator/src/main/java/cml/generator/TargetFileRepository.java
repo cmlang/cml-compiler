@@ -1,6 +1,6 @@
 package cml.generator;
 
-import cml.language.features.Module;
+import cml.language.features.TempModule;
 import cml.language.features.Task;
 import cml.templates.TemplateFile;
 import cml.templates.TemplateRenderer;
@@ -62,7 +62,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
         if (fileTemplates.isPresent() && moduleOf(task).isPresent())
         {
             final String moduleName = fileTemplates.get().getModuleName();
-            final Optional<Module> module = selfOrImportedModuleOf(moduleOf(task).get(), moduleName);
+            final Optional<TempModule> module = selfOrImportedModuleOf(moduleOf(task).get(), moduleName);
 
             if (module.isPresent() && task.getConstructor().isPresent())
             {
@@ -88,7 +88,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     {
         if (moduleOf(task).isPresent() & task.getConstructor().isPresent())
         {
-            final Module module = moduleOf(task).get();
+            final TempModule module = moduleOf(task).get();
             final String constructorName = task.getConstructor().get();
 
             return findTemplateFile(module, constructorName, GROUP_FILES);
@@ -98,7 +98,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     }
 
     private TargetFile createTargetFile(
-        final Module module,
+        final TempModule module,
         String constructorName,
         final String targetFilePath,
         String templateFileName)
@@ -120,7 +120,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
     }
 
     private Optional<TemplateFile> findTemplateFile(
-        final Module module,
+        final TempModule module,
         final String constructorName,
         final String templateFileName)
     {
@@ -135,7 +135,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
         }
         else
         {
-            for (final Module importedModule: module.getImportedModules())
+            for (final TempModule importedModule: module.getImportedModules())
             {
                 final Optional<TemplateFile> importedTemplateFile = templateRepository.findTemplate(
                     importedModule.getName(),

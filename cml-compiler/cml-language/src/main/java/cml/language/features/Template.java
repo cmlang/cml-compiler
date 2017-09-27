@@ -6,7 +6,7 @@ public class Template extends NamedElementBase
 {
     private final Function function;
 
-    public Template(Module module, Function function)
+    public Template(TempModule module, Function function)
     {
         super(module, function.getName());
 

@@ -1,10 +1,7 @@
 package cml.language.features;
 
 import cml.language.foundation.TempModel;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +13,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
-public interface Module extends NamedElement, Scope
+public interface TempModule extends NamedElement, Scope, Module
 {
     default TempModel getModel()
     {
@@ -34,7 +31,7 @@ public interface Module extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default List<Module> getImportedModules()
+    default List<TempModule> getImportedModules()
     {
         return getImports().stream()
                            .map(Import::getImportedModule)
@@ -104,23 +101,25 @@ public interface Module extends NamedElement, Scope
         return concat(getTemplates().stream(), getImportedTemplates().stream()).collect(toList());
     }
 
-    static Module create(TempModel model, String name)
+    static TempModule create(TempModel model, String name)
     {
         return new ModuleImpl(model, name);
     }
 }
 
-class ModuleImpl implements Module
+class ModuleImpl implements TempModule
 {
     private final ModelElement modelElement;
     private final NamedElement namedElement;
     private final Scope scope;
+    private final Module module;
 
     ModuleImpl(TempModel model, String name)
     {
         this.modelElement = extendModelElement(this, model, null);
         this.namedElement = extendNamedElement(modelElement, name);
         this.scope = extendScope(this, modelElement, emptyList());
+        this.module = Module.extendModule(modelElement, namedElement, scope);
     }
 
     @Override

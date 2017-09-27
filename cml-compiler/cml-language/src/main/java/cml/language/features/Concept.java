@@ -269,17 +269,17 @@ public interface Concept extends NamedElement, PropertyList
                          .collect(toList());
     }
 
-    static Concept create(Module module, String name)
+    static Concept create(TempModule module, String name)
     {
         return create(module, name, false, emptyList(), null);
     }
 
-    static Concept create(Module module, String name, List<Property> propertyList)
+    static Concept create(TempModule module, String name, List<Property> propertyList)
     {
         return new ConceptImpl(module, name, false, propertyList, null);
     }
 
-    static Concept create(Module module, String name, boolean _abstract, List<Property> propertyList, Location location)
+    static Concept create(TempModule module, String name, boolean _abstract, List<Property> propertyList, Location location)
     {
         return new ConceptImpl(module, name, _abstract, propertyList, location);
     }
@@ -303,7 +303,7 @@ class ConceptImpl implements Concept
     private final List<Concept> directAncestors = new ArrayList<>();
     private final boolean _abstract;
 
-    ConceptImpl(Module module, String name, boolean _abstract, final List<Property> propertyList, Location location)
+    ConceptImpl(TempModule module, String name, boolean _abstract, final List<Property> propertyList, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
         this.namedElement = extendNamedElement(modelElement, name);

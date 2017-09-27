@@ -2,7 +2,7 @@ package cml.language.loader;
 
 import cml.language.features.AssociationEnd;
 import cml.language.features.Concept;
-import cml.language.features.Module;
+import cml.language.features.TempModule;
 import cml.language.generated.NamedElement;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
@@ -19,9 +19,9 @@ import static cml.language.functions.ModuleFunctions.conceptOf;
 
 class ModelAugmenter extends CMLBaseListener
 {
-    private final Module module;
+    private final TempModule module;
 
-    ModelAugmenter(Module module)
+    ModelAugmenter(TempModule module)
     {
         this.module = module;
     }

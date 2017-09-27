@@ -20,7 +20,7 @@ public interface Task extends NamedElement, PropertyList
 {
     Optional<String> getConstructor();
 
-    static Task create(Module module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
+    static Task create(TempModule module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
     {
         return new TaskImpl(module, name, constructor, propertyList, location);
     }
@@ -34,7 +34,7 @@ class TaskImpl implements Task
 
     private @Nullable String constructor;
 
-    TaskImpl(Module module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
+    TaskImpl(TempModule module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
         this.namedElement = extendNamedElement(modelElement, name);

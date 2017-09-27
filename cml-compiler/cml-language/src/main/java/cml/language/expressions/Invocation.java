@@ -3,7 +3,7 @@ package cml.language.expressions;
 import cml.language.features.Concept;
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
-import cml.language.features.Module;
+import cml.language.features.TempModule;
 import cml.language.foundation.Diagnostic;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
@@ -158,7 +158,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else
         {
-            final Optional<Module> module = moduleOf(this);
+            final Optional<TempModule> module = moduleOf(this);
 
             assert module.isPresent();
 

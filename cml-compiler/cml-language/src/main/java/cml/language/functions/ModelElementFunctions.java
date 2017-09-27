@@ -4,7 +4,7 @@ import cml.language.expressions.Invocation;
 import cml.language.expressions.Lambda;
 import cml.language.features.Concept;
 import cml.language.features.Import;
-import cml.language.features.Module;
+import cml.language.features.TempModule;
 import cml.language.generated.ModelElement;
 import cml.language.types.NamedType;
 
@@ -17,7 +17,7 @@ import static java.util.Optional.empty;
 @SuppressWarnings("WeakerAccess")
 public class ModelElementFunctions
 {
-    public static Optional<Module> moduleOf(ModelElement element)
+    public static Optional<TempModule> moduleOf(ModelElement element)
     {
         if (element instanceof Import)
         {
@@ -25,9 +25,9 @@ public class ModelElementFunctions
 
             return _import.getImportedModule();
         }
-        else if (element instanceof Module)
+        else if (element instanceof TempModule)
         {
-            final Module module = (Module) element;
+            final TempModule module = (TempModule) element;
 
             return Optional.of(module);
         }

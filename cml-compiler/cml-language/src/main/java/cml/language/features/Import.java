@@ -14,10 +14,10 @@ import static cml.language.generated.NamedElement.extendNamedElement;
 
 public interface Import extends NamedElement
 {
-    Optional<Module> getImportedModule();
-    void setImportedModule(@NotNull Module module);
+    Optional<TempModule> getImportedModule();
+    void setImportedModule(@NotNull TempModule module);
 
-    static Import create(Module module, String name)
+    static Import create(TempModule module, String name)
     {
         return new ImportImpl(module, name);
     }
@@ -28,9 +28,9 @@ class ImportImpl implements Import
     private final ModelElement modelElement;
     private final NamedElement namedElement;
 
-    private @Nullable Module module;
+    private @Nullable TempModule module;
 
-    ImportImpl(Module module, String name)
+    ImportImpl(TempModule module, String name)
     {
         this.modelElement = extendModelElement(this, module, null);
         this.namedElement = extendNamedElement(modelElement, name);
@@ -55,13 +55,13 @@ class ImportImpl implements Import
     }
 
     @Override
-    public Optional<Module> getImportedModule()
+    public Optional<TempModule> getImportedModule()
     {
         return Optional.ofNullable(module);
     }
 
     @Override
-    public void setImportedModule(@NotNull Module module)
+    public void setImportedModule(@NotNull TempModule module)
     {
         this.module = module;
     }
