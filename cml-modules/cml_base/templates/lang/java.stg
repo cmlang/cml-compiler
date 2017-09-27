@@ -332,15 +332,31 @@ seq(<prefix><getter_name(path)>())<\\>
 >>
 
 path_base_call(path) ::= <<
-<if(path.base.type.sequence)><\\>
-<path_expr(path.base)>.<path_map_call(path)><\\>
+<if(path.base.type.sequence || path.base.type.optional)><\\>
+<if(path.base.type.optional)><\\>
+seq(<path_expr(path.base)>)<\\>
+<else><\\>
+<path_expr(path.base)><\\>
+<endif><\\>
+.<path_map_call(path)><\\>
 <else><\\>
 <path_getter_call({<path_expr(path.base)>.}, path)><\\>
 <endif>
 >>
 
 path_map_call(path) ::= <<
-map(<field_name(path.base.type)> -> <field_name(path.base.type)>.<getter_name(path)>())
+<if(path.base.type.required && path.type.required)><\\>
+map(<field_name(path.base.type)> -> <field_name(path.base.type)>.<getter_name(path)>())<\\>
+<else><\\>
+flatMap(<field_name(path.base.type)> -> seq(<\\>
+<if(path.originalType.required)><\\>
+asList(<field_name(path.base.type)>.<getter_name(path)>())<\\>
+<else><\\>
+<field_name(path.base.type)>.<getter_name(path)>()<\\>
+<endif><\\>
+))<\\>
+<endif><\\>
+<if(!path.base.base && path.type.optional)>.findFirst()<endif>
 >>
 
 to_list(expr) ::= <<

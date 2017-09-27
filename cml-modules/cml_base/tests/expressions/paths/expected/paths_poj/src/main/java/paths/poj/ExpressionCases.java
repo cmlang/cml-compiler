@@ -60,12 +60,12 @@ public class ExpressionCases
 
     public List<BigDecimal> getPathVar3()
     {
-        return seq(getSomePathList()).map(someConcept -> someConcept.getOneMorePath()).map(anotherConcept -> anotherConcept.getEtc()).toList();
+        return seq(getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getOneMorePath()))).flatMap(anotherConcept -> seq(asList(anotherConcept.getEtc()))).toList();
     }
 
     public List<Integer> getPathBars()
     {
-        return seq(getSomePathList()).map(someConcept -> someConcept.getBar()).toList();
+        return seq(getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getBar()))).toList();
     }
 
     public String toString()
