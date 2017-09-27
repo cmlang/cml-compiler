@@ -7,7 +7,7 @@
 
     <groupId>cml</groupId>
     <artifactId>cml-compiler</artifactId>
-    <version>2017.09.27-alpha</version>
+    <version>master-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
