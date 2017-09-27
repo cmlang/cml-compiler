@@ -9,6 +9,11 @@ abstraction MODEL_ELEMENT
 //    /modulo: MODULE? = parent.modulo;
 }
 
+abstraction NAMED_ELEMENT: MODEL_ELEMENT
+{
+    name: string;
+}
+
 concept Scope: MODEL_ELEMENT
 {
     members: MODEL_ELEMENT*;
@@ -31,9 +36,4 @@ association Localization
 {
     Location.element;
     MODEL_ELEMENT.location;
-}
-
-concept NamedElement: MODEL_ELEMENT
-{
-    name: String;
 }

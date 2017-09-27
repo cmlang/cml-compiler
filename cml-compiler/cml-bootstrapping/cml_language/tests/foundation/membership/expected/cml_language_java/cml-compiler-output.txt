@@ -4,14 +4,14 @@ model files:
 MODEL_ELEMENT files:
 - src/main/java/cml/language/generated/ModelElement.java
 
+NAMED_ELEMENT files:
+- src/main/java/cml/language/generated/NamedElement.java
+
 Scope files:
 - src/main/java/cml/language/generated/Scope.java
 
 Location files:
 - src/main/java/cml/language/generated/Location.java
-
-NamedElement files:
-- src/main/java/cml/language/generated/NamedElement.java
 
 MODEL files:
 - src/main/java/cml/language/generated/Model.java

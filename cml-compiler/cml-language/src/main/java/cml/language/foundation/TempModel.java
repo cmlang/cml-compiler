@@ -12,11 +12,6 @@ import static java.util.stream.Collectors.toList;
 
 public interface TempModel extends NamedElement, Scope, Model
 {
-    default String getName()
-    {
-        return "model";
-    }
-
     default List<Module> getModules()
     {
         return getMembers().stream()
@@ -96,12 +91,16 @@ public interface TempModel extends NamedElement, Scope, Model
 class ModelImpl implements TempModel
 {
     private final ModelElement modelElement;
+    private final NamedElement namedElement;
     private final Scope scope;
+    private final Model model;
 
     ModelImpl()
     {
         this.modelElement = ModelElement.extendModelElement(this, null, null);
+        this.namedElement = NamedElement.extendNamedElement(modelElement, "");
         this.scope = Scope.extendScope(this, modelElement, emptyList());
+        this.model = Model.extendModel(modelElement, namedElement, scope);
     }
 
     @Override
@@ -117,15 +116,21 @@ class ModelImpl implements TempModel
     }
 
     @Override
-    public Optional<Model> getModel()
-    {
-        return Optional.of(this);
-    }
-
-    @Override
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return model.getModel();
+    }
+
+    @Override
+    public String getName()
+    {
+        return model.getName();
     }
 }
 

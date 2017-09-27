@@ -1,6 +1,8 @@
 
-concept MODEL: Scope
+concept MODEL: NAMED_ELEMENT, Scope
 {
+    /name = "model";
+
     /model = self as? MODEL?;
 //    /modulo = first(modules);
 

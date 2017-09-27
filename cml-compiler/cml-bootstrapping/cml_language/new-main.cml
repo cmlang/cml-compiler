@@ -92,11 +92,6 @@ association LOCALIZATION
     MODEL_ELEMENT.location;
 }
 
-abstraction NAMED_ELEMENT: MODEL_ELEMENT
-{
-    name: string;
-}
-
 abstraction TYPED_ELEMENT: NAMED_ELEMENT
 {
     type: TIPO;
