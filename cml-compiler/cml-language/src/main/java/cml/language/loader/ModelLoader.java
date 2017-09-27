@@ -20,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
@@ -39,7 +41,6 @@ public interface ModelLoader
 
 class ModelLoaderImpl implements ModelLoader
 {
-    private static final String MAIN_SOURCE = "main.cml";
     private static final String CML_BASE_MODULE = "cml_base";
 
     private static final int SUCCESS = 0;
@@ -47,7 +48,7 @@ class ModelLoaderImpl implements ModelLoader
     private static final int FAILURE__FAILED_LOADING_MODEL = 3;
     private static final int FAILURE__MODEL_VALIDATION = 4;
 
-    private static final String NO_MAIN_SOURCE_FILE_IN_MODULE = "no main source file in module: %s";
+    private static final String NO_SOURCE_FILES_IN_MODULE = "no source files in module: %s";
     private static final String NO_SOURCE_DIR_IN_MODULE = "no source dir in module: %s";
 
     private final Console console;
@@ -118,16 +119,20 @@ class ModelLoaderImpl implements ModelLoader
         final Optional<Directory> sourceDir = moduleManager.findSourceDir(moduleName);
         if (sourceDir.isPresent())
         {
-            final Optional<SourceFile> sourceFile = moduleManager.findSourceFile(moduleName, MAIN_SOURCE);
-            if (!sourceFile.isPresent())
+            final List<SourceFile> sourceFiles = moduleManager.findSourceFiles(moduleName);
+            if (sourceFiles.isEmpty())
             {
-                console.error(NO_MAIN_SOURCE_FILE_IN_MODULE, moduleName);
+                console.error(NO_SOURCE_FILES_IN_MODULE, moduleName);
                 return FAILURE__SOURCE_FILE_NOT_FOUND;
             }
 
-            final CompilationUnitContext compilationUnitContext = parse(sourceFile.get());
-
-            synthesizeModule(module, compilationUnitContext);
+            final List<CompilationUnitContext> compilationUnitContexts = new ArrayList<>();
+            for (SourceFile sourceFile: sourceFiles)
+            {
+                final CompilationUnitContext compilationUnitContext = parse(sourceFile);
+                synthesizeModule(module, compilationUnitContext);
+                compilationUnitContexts.add(compilationUnitContext);
+            }
 
             addBaseModule(module);
 
@@ -141,7 +146,10 @@ class ModelLoaderImpl implements ModelLoader
                 }
             }
 
-            augmentModule(module, compilationUnitContext);
+            for (CompilationUnitContext compilationUnitContext: compilationUnitContexts)
+            {
+                augmentModule(module, compilationUnitContext);
+            }
         }
         else
         {

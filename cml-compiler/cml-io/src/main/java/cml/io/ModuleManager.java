@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
+
 public interface ModuleManager
 {
     void clearBaseDirs();
@@ -14,7 +16,7 @@ public interface ModuleManager
     Optional<Directory> findModuleDir(String moduleName);
 
     Optional<Directory> findSourceDir(String moduleName);
-    Optional<SourceFile> findSourceFile(String path, String name);
+    List<SourceFile> findSourceFiles(String moduleName);
 
     Optional<URL> findTemplateFile(String path);
 
@@ -104,19 +106,19 @@ class ModuleManagerImpl implements ModuleManager
     }
 
     @Override
-    public Optional<SourceFile> findSourceFile(String moduleName, String sourceFileName)
+    public List<SourceFile> findSourceFiles(String moduleName)
     {
         final Optional<Directory> sourceDir = findSourceDir(moduleName);
 
         if (sourceDir.isPresent())
         {
-            return fileSystem.findSourceFile(sourceDir.get(), sourceFileName);
+            return fileSystem.findSourceFiles(sourceDir.get());
         }
         else
         {
             console.error(UNABLE_TO_FIND_MODULE, moduleName);
 
-            return Optional.empty();
+            return emptyList();
         }
     }
 

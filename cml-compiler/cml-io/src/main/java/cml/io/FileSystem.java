@@ -7,14 +7,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.sort;
+import static java.util.Collections.unmodifiableList;
 import static org.apache.commons.io.FileUtils.forceMkdir;
+import static org.jooq.lambda.Seq.seq;
 
 public interface FileSystem
 {
     Optional<Directory> findDirectory(Directory baseDir, String dirName);
     Optional<Directory> findDirectory(String path);
+
+    List<Directory> findSubDirs(Directory baseDir);
+
+    List<SourceFile> findSourceFiles(Directory sourceDir);
     Optional<SourceFile> findSourceFile(Directory directory, String name);
 
     Optional<URL> getURL(Directory directory, String path);
@@ -39,6 +49,7 @@ class FileSystemImpl implements FileSystem
     private static final String ERROR_BUILDING_FILE_URL = "Error building file URL: %s";
 
     private static final String FILE_URL_PREFIX = "file://";
+    private static final String CML_FILE_EXT = "cml";
 
     private final Console console;
 
@@ -51,6 +62,19 @@ class FileSystemImpl implements FileSystem
     public Optional<Directory> findDirectory(Directory baseDir, String dirName)
     {
         return findDirectory(baseDir.getPath() + File.separator + dirName);
+    }
+
+    @Override
+    public List<Directory> findSubDirs(Directory baseDir)
+    {
+        final String canonicalPath = getCanonicalFile(baseDir.getPath()).getPath();
+        final File[] subDirs = new File(canonicalPath).listFiles(File::isDirectory);
+        final List<File> subDirList = asList(subDirs == null ? new File[0] : subDirs);
+
+        return seq(subDirList).map(subDir -> findDirectory(subDir.getPath()))
+                              .filter(Optional::isPresent)
+                              .map(Optional::get)
+                              .toList();
     }
 
     @Override
@@ -86,6 +110,30 @@ class FileSystemImpl implements FileSystem
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public List<SourceFile> findSourceFiles(Directory sourceDir)
+    {
+        final String canonicalPath = getCanonicalFile(sourceDir.getPath()).getPath();
+        final File[] files = new File(canonicalPath).listFiles(File::isFile);
+        final List<File> fileList = asList(files == null ? new File[0] : files);
+
+        final List<SourceFile> sourceFiles = seq(fileList).map(file -> findSourceFile(sourceDir, file.getName()))
+                                                          .filter(Optional::isPresent)
+                                                          .map(Optional::get)
+                                                          .filter(file -> file.getExtension().equals(CML_FILE_EXT))
+                                                          .toList();
+
+        final List<SourceFile> all = new ArrayList<>(sourceFiles);
+        for (Directory subDir: findSubDirs(sourceDir))
+        {
+            all.addAll(findSourceFiles(subDir));
+        }
+
+        sort(all);
+
+        return unmodifiableList(all);
     }
 
     @Override
