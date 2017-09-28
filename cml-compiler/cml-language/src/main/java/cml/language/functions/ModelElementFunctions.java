@@ -3,8 +3,8 @@ package cml.language.functions;
 import cml.language.expressions.Invocation;
 import cml.language.expressions.Lambda;
 import cml.language.features.Concept;
-import cml.language.features.Import;
 import cml.language.features.TempModule;
+import cml.language.generated.Import;
 import cml.language.generated.ModelElement;
 import cml.language.types.NamedType;
 
@@ -22,8 +22,9 @@ public class ModelElementFunctions
         if (element instanceof Import)
         {
             final Import _import = (Import) element;
+            final TempModule module = (TempModule) _import.getImportedModule();
 
-            return _import.getImportedModule();
+            return Optional.of(module);
         }
         else if (element instanceof TempModule)
         {

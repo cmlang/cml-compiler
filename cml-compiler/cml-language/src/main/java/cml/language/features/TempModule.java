@@ -35,8 +35,7 @@ public interface TempModule extends NamedElement, Scope, Module
     {
         return getImports().stream()
                            .map(Import::getImportedModule)
-                           .filter(Optional::isPresent)
-                           .map(Optional::get)
+                           .map(m -> (TempModule)m)
                            .collect(toList());
     }
 

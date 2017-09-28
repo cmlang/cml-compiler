@@ -4,10 +4,10 @@ import cml.io.Console;
 import cml.io.Directory;
 import cml.io.ModuleManager;
 import cml.io.SourceFile;
-import cml.language.features.Import;
 import cml.language.features.TempModule;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.TempModel;
+import cml.language.generated.Import;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
 import cml.language.grammar.CMLLexer;
@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.lambda.Seq;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,9 +26,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
-import static cml.language.functions.ModelFunctions.moduleOf;
 import static cml.language.functions.ModelVisitorFunctions.visitModel;
+import static cml.language.functions.ModuleFunctions.createImportOfModule;
 import static cml.language.functions.ModuleFunctions.importedModuleOf;
+import static org.jooq.lambda.Seq.seq;
 
 public interface ModelLoader
 {
@@ -99,21 +101,19 @@ class ModelLoaderImpl implements ModelLoader
 
     private int loadModule(TempModel model, String moduleName, @Nullable Import _import) throws IOException
     {
-        final Optional<TempModule> existingModule = moduleOf(model, moduleName);
-        if (existingModule.isPresent())
+        TempModule module;
+
+        if (_import == null)
         {
-            assert _import != null;
-
-            _import.setImportedModule(existingModule.get());
-
-            return SUCCESS;
+            module = TempModule.create(model, moduleName);
         }
-
-        final TempModule module = TempModule.create(model, moduleName);
-
-        if (_import != null)
+        else if (_import.isFirstImport())
         {
-            _import.setImportedModule(module);
+            module = (TempModule) _import.getImportedModule();
+        }
+        else
+        {
+            return SUCCESS;
         }
 
         final Optional<Directory> sourceDir = moduleManager.findSourceDir(moduleName);
@@ -163,7 +163,7 @@ class ModelLoaderImpl implements ModelLoader
     {
         if (!module.getName().equals(CML_BASE_MODULE) && !importedModuleOf(module, CML_BASE_MODULE).isPresent())
         {
-            Import.create(module, CML_BASE_MODULE);
+            createImportOfModule(CML_BASE_MODULE, null, module);
         }
     }
 

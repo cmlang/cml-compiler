@@ -4,9 +4,13 @@ import cml.io.Console;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
 import cml.language.expressions.Literal;
-import cml.language.features.*;
-import cml.language.foundation.TempModel;
+import cml.language.features.Association;
+import cml.language.features.AssociationEnd;
+import cml.language.features.Concept;
+import cml.language.features.TempModule;
 import cml.language.foundation.Property;
+import cml.language.foundation.TempModel;
+import cml.language.generated.Import;
 import cml.language.loader.ModelLoader;
 import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +58,7 @@ public class ModelLoaderTest
 
         final String anotherModuleName = "another_module";
         final Import _import = module.getImports().get(0);
-        final TempModule anotherModule = _import.getImportedModule().get();
+        final TempModule anotherModule = (TempModule) _import.getImportedModule();
         final Concept anotherConcept = anotherModule.getConcepts().get(0);
 
         assertThat(_import.getName(), is(anotherModuleName));

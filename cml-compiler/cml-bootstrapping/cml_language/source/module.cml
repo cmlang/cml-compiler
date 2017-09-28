@@ -20,3 +20,9 @@ concept MODULE: NAMED_ELEMENT, Scope
 */
 }
 
+concept IMPORT: NAMED_ELEMENT
+{
+    imported_module: MODULE;
+    first_import: boolean;
+}
+

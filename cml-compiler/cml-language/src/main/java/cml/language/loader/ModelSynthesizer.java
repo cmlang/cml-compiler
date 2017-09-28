@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import static cml.language.functions.ModuleFunctions.createImportOfModule;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -58,9 +59,10 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitImportDeclaration(ImportDeclarationContext ctx)
     {
-        final String name = ctx.NAME().getText();
+        final String moduleName = ctx.NAME().getText();
+        final Location location = locationOf(ctx);
 
-        ctx._import = Import.create(module, name);
+        ctx._import = createImportOfModule(moduleName, location, module);
     }
 
     @Override

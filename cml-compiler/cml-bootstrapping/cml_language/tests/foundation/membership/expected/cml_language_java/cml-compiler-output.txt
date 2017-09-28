@@ -19,6 +19,9 @@ MODEL files:
 MODULE files:
 - src/main/java/cml/language/generated/Module.java
 
+IMPORT files:
+- src/main/java/cml/language/generated/Import.java
+
 Membership files:
 - src/main/java/cml/language/generated/Membership.java
 
