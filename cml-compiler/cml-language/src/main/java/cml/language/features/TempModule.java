@@ -23,14 +23,6 @@ public interface TempModule extends NamedElement, Scope, Module
         return (TempModel) getParent().get();
     }
 
-    default List<Import> getImports()
-    {
-        return getMembers().stream()
-                           .filter(e -> e instanceof Import)
-                           .map(e -> (Import)e)
-                           .collect(toList());
-    }
-
     default List<TempModule> getImportedModules()
     {
         return getImports().stream()
@@ -102,18 +94,18 @@ public interface TempModule extends NamedElement, Scope, Module
 
     static TempModule create(TempModel model, String name)
     {
-        return new ModuleImpl(model, name);
+        return new TempModuleImpl(model, name);
     }
 }
 
-class ModuleImpl implements TempModule
+class TempModuleImpl implements TempModule
 {
     private final ModelElement modelElement;
     private final NamedElement namedElement;
     private final Scope scope;
     private final Module module;
 
-    ModuleImpl(TempModel model, String name)
+    TempModuleImpl(TempModel model, String name)
     {
         this.modelElement = extendModelElement(this, model, null);
         this.namedElement = extendNamedElement(modelElement, name);
@@ -143,5 +135,11 @@ class ModuleImpl implements TempModule
     public List<ModelElement> getMembers()
     {
         return scope.getMembers();
+    }
+
+    @Override
+    public List<Import> getImports()
+    {
+        return module.getImports();
     }
 }

@@ -1,13 +1,14 @@
 
 concept MODULE: NAMED_ELEMENT, Scope
 {
+    /imports = members as? IMPORT*;
+
 /*
     /modulo = self as? MODULE?;
 
     /concepts = members as? CONCEPT*;
     /associations = members as? ASSOCIATION*;
 
-    /imports = members as? IMPORT*;
     /templates = for m in members | select: m is TEMPLATE;
     /tasks = for m in members | select: m is TASK;
 
