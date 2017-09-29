@@ -1,50 +1,50 @@
 
-concept Vehicle
+@concept Vehicle
 {
     plate: String;
     driver: Employee?;
     owner: Organization;
 }
 
-concept Employee
+@concept Employee
 {
     name: String;
     employer: Organization;
     vehicle: Vehicle?;
 }
 
-abstraction Organization
+@abstraction Organization
 {
     name: String;
     employees: Employee*;
     fleet: Vehicle*;
 }
 
-concept Corporation: Organization
+@concept Corporation: Organization
 {
     stock: Boolean = true;
     profit: Boolean = true;
 }
 
-association Employment
+@association Employment
 {
     Employee.employer;
     Organization.employees;
 }
 
-association VehicleOwnership
+@association VehicleOwnership
 {
     Vehicle.owner: Organization;
     Organization.fleet: Vehicle*;
 }
 
-association VehicleAssignment
+@association VehicleAssignment
 {
     Vehicle.driver: Employee?;
     Employee.vehicle: Vehicle?;
 }
 
-task vehicles_poj by poj
+@task vehicles_poj: poj
 {
     groupId = "cml-associations-bidirectional";
     artifactId = "vehicles-poj";
@@ -53,13 +53,13 @@ task vehicles_poj by poj
     packagePath = "vehicles/poj";
 }
 
-task vehicles_pop by pop
+@task vehicles_pop: pop
 {
     moduleName = "cml_associations_bidirectional_vehicles_pop";
     moduleVersion = "1.0";
 }
 
-task vehicles_cmlc_java by cmlc_java
+@task vehicles_cmlc_java: cmlc_java
 {
     groupId = "cml-associations-bidirectional";
     artifactId = "vehicles-cmlc";
@@ -68,7 +68,7 @@ task vehicles_cmlc_java by cmlc_java
     packagePath = "vehicles/cmlc";
 }
 
-task vehicles_cmlc_py by cmlc_py
+@task vehicles_cmlc_py: cmlc_py
 {
     moduleName = "cml_associations_bidirectional_vehicles_cmlc";
     moduleVersion = "1.0";

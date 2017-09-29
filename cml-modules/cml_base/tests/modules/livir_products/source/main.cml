@@ -1,11 +1,11 @@
 
-concept Product
+@concept Product
 {
     name: String;
     price: Decimal = 0.00;
 }
 
-concept Customer
+@concept Customer
 {
     name: String;
 }

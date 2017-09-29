@@ -1,5 +1,5 @@
 
-concept SomeConcept: MissingAncestor, AnotherMissingAncestor;
+@concept SomeConcept: MissingAncestor, AnotherMissingAncestor;
 
-task some_task;
+@task some_task;
 

@@ -1,20 +1,20 @@
 
-concept A
+@concept A
 {
     number: INTEGER;
 }
 
-concept B
+@concept B
 {
     number: DECIMAL;
 }
 
 // The "number" property has incompatible types in A and B:
-concept C: A, B;
+@concept C: A, B;
 
 // Indirectly inheriting conflicting definitions of "number":
-concept D: A;
-concept E: B;
-concept F: D, E;
+@concept D: A;
+@concept E: B;
+@concept F: D, E;
 
-task some_task;
+@task some_task;

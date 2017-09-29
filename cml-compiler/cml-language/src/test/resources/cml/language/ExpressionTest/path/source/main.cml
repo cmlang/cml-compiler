@@ -1,5 +1,5 @@
 
-concept Expressions: AbstractConcept
+@concept Expressions: AbstractConcept
 {
     foo: STRING;
     somePath: SomeConcept;
@@ -15,24 +15,24 @@ concept Expressions: AbstractConcept
     /super_derived_value = super_value.flag;
 }
 
-concept SomeConcept
+@concept SomeConcept
 {
     bar: INTEGER;
     oneMorePath: AnotherConcept;
 }
 
-concept AnotherConcept
+@concept AnotherConcept
 {
     etc: DECIMAL;
     flag: BOOLEAN;
 }
 
-abstraction AbstractConcept: SuperAbstractConcept
+@abstraction AbstractConcept: SuperAbstractConcept
 {
     value: AnotherConcept;
 }
 
-abstraction SuperAbstractConcept
+@abstraction SuperAbstractConcept
 {
     super_value: AnotherConcept;
 }

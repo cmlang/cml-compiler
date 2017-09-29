@@ -1,5 +1,5 @@
 
-concept MODEL: NAMED_ELEMENT, Scope
+@concept MODEL: NAMED_ELEMENT, Scope
 {
     /name = "model";
 

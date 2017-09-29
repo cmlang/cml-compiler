@@ -1,29 +1,29 @@
-abstraction Shape
+@abstraction Shape
 {
     -- A derived property without an expression is considered abstract:
     /area: Double;
 }
 
 -- In order to be considered concrete, Circle should have redefined "area".
-concept Circle: Shape;
+@concept Circle: Shape;
 
 -- Also missing redefinition in specialization of Circle
-concept UnitCircleA: Circle;
+@concept UnitCircleA: Circle;
 
 -- Properly redefined "area" as a derived property:
-concept UnitCircleB: Circle
+@concept UnitCircleB: Circle
 {
     /area = 1.0d;
 }
 
 -- Properly redefined "area" as a concrete property:
-concept UnitCircleC: Circle
+@concept UnitCircleC: Circle
 {
     area = 1.0d;
 }
 
 -- OK to miss redefinition in this specialization because it is an abstraction:
-abstraction UnitCircleD: Circle;
+@abstraction UnitCircleD: Circle;
 
 
 

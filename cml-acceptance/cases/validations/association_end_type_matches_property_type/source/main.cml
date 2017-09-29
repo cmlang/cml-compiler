@@ -1,16 +1,16 @@
-concept Vehicle
+@concept Vehicle
 {
     plate: String;
     owner: Organization;
 }
 
-concept Organization
+@concept Organization
 {
     name: String;
     fleet: Vehicle*;
 }
 
-association VehicleOwnership
+@association VehicleOwnership
 {
     Vehicle.owner: Organization*;
     Organization.fleet: Vehicle;

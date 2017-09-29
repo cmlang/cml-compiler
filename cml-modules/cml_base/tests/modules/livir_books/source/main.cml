@@ -1,17 +1,17 @@
 
-module livir_books
+@module livir_books
 {
-    import livir_products;
+    @import livir_products;
 }
 
-concept Book: Product
+@concept Book: Product
 {
     isbn: String = "Not Provided";
     title: String = "No Title";
     name = title;
 }
 
-concept Order
+@concept Order
 {
     customer: Customer;
     items: Item*;
@@ -19,7 +19,7 @@ concept Order
 //    /total = (for item in items | from sum = 0 reduce sum + item.total);
 }
 
-concept Item
+@concept Item
 {
     book: Book;
     quantity: Integer;
@@ -27,13 +27,13 @@ concept Item
 //    /total = book.price * quantity;
 }
 
-concept BookStore
+@concept BookStore
 {
     books: Book*;
     customers: Customer*;
 }
 
-task livir_poj by poj
+@task livir_poj: poj
 {
     groupId = "livir";
     artifactId = "livir-books";
@@ -42,7 +42,7 @@ task livir_poj by poj
     packagePath = "livir/books";
 }
 
-task livir_pop by pop
+@task livir_pop: pop
 {
     moduleName = "livir_books";
     moduleVersion = "1.0";

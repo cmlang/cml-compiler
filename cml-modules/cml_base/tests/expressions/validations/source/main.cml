@@ -1,5 +1,5 @@
 
-concept InfixValidations
+@concept InfixValidations
 {
     flag: boolean;
     some: Something;
@@ -23,7 +23,7 @@ concept InfixValidations
     /bool_ref_inequality = flag !== flag;
 }
 
-concept UnaryValidations
+@concept UnaryValidations
 {
     some: Something;
 
@@ -38,6 +38,6 @@ concept UnaryValidations
     /invalid_number = - flag;
 }
 
-concept Something {}
+@concept Something {}
 
-task expressions_validations by poj {}
+@task expressions_validations: poj {}

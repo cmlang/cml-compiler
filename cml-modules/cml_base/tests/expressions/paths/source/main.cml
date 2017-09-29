@@ -1,5 +1,5 @@
 
-concept ExpressionCases
+@concept ExpressionCases
 {
     // Used by paths below:
     foo: String;
@@ -15,18 +15,18 @@ concept ExpressionCases
     /path_bars = somePathList.bar;
 }
 
-concept SomeConcept
+@concept SomeConcept
 {
     bar: Integer;
     oneMorePath: AnotherConcept;
 }
 
-concept AnotherConcept
+@concept AnotherConcept
 {
     etc: Decimal;
 }
 
-task paths_poj by poj
+@task paths_poj: poj
 {
     groupId = "cml-expressions";
     artifactId = "cml-expressions-paths";
@@ -35,7 +35,7 @@ task paths_poj by poj
     packagePath = "paths/poj";
 }
 
-task paths_pop by pop
+@task paths_pop: pop
 {
     moduleName = "cml_expressions_paths_pop";
     moduleVersion = "1.0";

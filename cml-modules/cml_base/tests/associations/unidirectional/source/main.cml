@@ -1,23 +1,23 @@
 
-concept VEHICLE
+@concept VEHICLE
 {
     plate: STRING;
     driver: EMPLOYEE?;
     owner: ORGANIZATION;
 }
 
-concept ORGANIZATION
+@concept ORGANIZATION
 {
     name: STRING;
     employees: EMPLOYEE*;
 }
 
-concept EMPLOYEE
+@concept EMPLOYEE
 {
     name: STRING;
 }
 
-task vehicles_poj by poj
+@task vehicles_poj: poj
 {
     groupId = "cml-associations-unidirectional";
     artifactId = "vehicles-poj";
@@ -26,13 +26,13 @@ task vehicles_poj by poj
     packagePath = "vehicles/poj";
 }
 
-task vehicles_pop by pop
+@task vehicles_pop: pop
 {
     moduleName = "cml_associations_unidirectional_vehicles_pop";
     moduleVersion = "1.0";
 }
 
-task vehicles_cmlc_java by cmlc_java
+@task vehicles_cmlc_java: cmlc_java
 {
     groupId = "cml-associations-unidirectional";
     artifactId = "vehicles-cmlc";
@@ -41,7 +41,7 @@ task vehicles_cmlc_java by cmlc_java
     packagePath = "vehicles/cmlc";
 }
 
-task vehicles_cmlc_py by cmlc_py
+@task vehicles_cmlc_py: cmlc_py
 {
     moduleName = "cml_associations_unidirectional_vehicles_cmlc";
     moduleVersion = "1.0";

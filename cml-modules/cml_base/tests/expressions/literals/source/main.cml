@@ -1,5 +1,5 @@
 
-concept LITERAL_EXPRESSIONS
+@concept LITERAL_EXPRESSIONS
 {
     LiteralTrueBoolean = true;
     LiteralFalseBoolean = false;
@@ -9,7 +9,7 @@ concept LITERAL_EXPRESSIONS
     LiteralDecimalInit2 = .456;
 }
 
-task literals_poj by poj
+@task literals_poj: poj
 {
     groupId = "cml-expressions";
     artifactId = "cml-expressions-literals";
@@ -18,7 +18,7 @@ task literals_poj by poj
     packagePath = "literals/poj";
 }
 
-task literals_pop by pop
+@task literals_pop: pop
 {
     moduleName = "cml_expressions_literals_pop";
     moduleVersion = "1.0";

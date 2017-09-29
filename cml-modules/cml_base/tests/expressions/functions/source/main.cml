@@ -1,5 +1,5 @@
 
-concept Functions
+@concept Functions
 {
     required_item: Item;
     single_item: Item?;
@@ -46,12 +46,12 @@ concept Functions
     /required_item_collect = required_item | collect: size;
 }
 
-concept Item
+@concept Item
 {
     size: integer;
 }
 
-task poj by poj
+@task poj: poj
 {
     groupId = "cml-expressions";
     artifactId = "cml-expressions-functions";
@@ -60,7 +60,7 @@ task poj by poj
     packagePath = "functions/poj";
 }
 
-task pop by pop
+@task pop: pop
 {
     moduleName = "cml_expressions_functions_pop";
     moduleVersion = "1.0";

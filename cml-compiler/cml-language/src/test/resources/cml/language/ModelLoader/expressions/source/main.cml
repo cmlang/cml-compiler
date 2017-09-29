@@ -1,4 +1,4 @@
-concept Expressions
+@concept Expressions
 {
     str = "SomeString";
     int = 123;

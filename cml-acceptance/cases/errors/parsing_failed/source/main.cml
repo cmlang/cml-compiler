@@ -1,6 +1,6 @@
 
-task some_task;
+@task some_task;
 
 // Syntax error - abstract keyword after the concept keyword:
-concept
+@concept
 

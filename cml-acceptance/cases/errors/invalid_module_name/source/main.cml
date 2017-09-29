@@ -1,10 +1,10 @@
 
 // Module name should be: invalid_module_name
-module some_module_name
+@module some_module_name
 {
 }
 
-concept SomeConcept;
+@concept SomeConcept;
 
-task some_task by poj;
+@task some_task: poj;
 

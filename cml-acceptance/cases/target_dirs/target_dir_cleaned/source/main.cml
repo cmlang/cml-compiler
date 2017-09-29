@@ -1,6 +1,6 @@
-concept BookStore;
+@concept BookStore;
 
-task some_task by poj
+@task some_task: poj
 {
     groupId = "books";
     artifactId = "books";

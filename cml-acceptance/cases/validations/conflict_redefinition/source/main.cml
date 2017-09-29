@@ -1,9 +1,9 @@
-concept Base
+@concept Base
 {
     a: STRING;
 }
 
-concept A: Base
+@concept A: Base
 {
     p1: INTEGER = 0;
     q1: STRING;
@@ -13,7 +13,7 @@ concept A: Base
     t1: STRING = "A";
 }
 
-concept B: Base
+@concept B: Base
 {
     p1: INTEGER = 1;
     q2: STRING;
@@ -21,10 +21,10 @@ concept B: Base
 
 // Property "p1" should have been redefined
 // in order to resolve definition conflict between A and B:
-concept C: A, B;
+@concept C: A, B;
 
 // Redefinition as expected:
-concept D: A, B
+@concept D: A, B
 {
     p1: INTEGER = 2;
     q3: STRING;
@@ -35,13 +35,13 @@ concept D: A, B
 }
 
 // Missing redefinition of "p1" and "r1":
-concept E: A, D
+@concept E: A, D
 {
     t1: STRING = "E";
 }
 
 // Redefinitions as expected (except for "t1"):
-concept F: A, D, Base
+@concept F: A, D, Base
 {
     p1: INTEGER = 3;
     q4: STRING;
@@ -53,4 +53,4 @@ concept F: A, D, Base
     s2 = 4.0;
 }
 
-task some_task;
+@task some_task;

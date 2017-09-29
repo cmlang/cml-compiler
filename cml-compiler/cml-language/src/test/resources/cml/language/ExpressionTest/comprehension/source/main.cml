@@ -1,21 +1,21 @@
 
-template function select<T>(seq: T*, expr: (T) -> BOOLEAN) -> T*;
+@template @function select<T>(seq: T*, expr: (T) -> BOOLEAN) -> T*;
 
-template function reject<T>(seq: T*, expr: (T) -> BOOLEAN) -> T*;
+@template @function reject<T>(seq: T*, expr: (T) -> BOOLEAN) -> T*;
 
-template function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
+@template @function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
 
-template function distinct<T>(seq: T*) -> T*;
+@template @function distinct<T>(seq: T*) -> T*;
 
-template function exists<T>(seq: T*, expr: (T) -> BOOLEAN) -> BOOLEAN;
+@template @function exists<T>(seq: T*, expr: (T) -> BOOLEAN) -> BOOLEAN;
 
-template function recurse<T,S>(seq: T*, expr: (T) -> S*) -> S*;
+@template @function recurse<T,S>(seq: T*, expr: (T) -> S*) -> S*;
 
-template function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
+@template @function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
 
-template function cross_join<T,S>(seq1: T*, seq2: S*) -> (T, S)*;
+@template @function cross_join<T,S>(seq1: T*, seq2: S*) -> (T, S)*;
 
-concept Expressions
+@concept Expressions
 {
     top_items: Item*;
     class: Class;
@@ -64,14 +64,14 @@ concept Expressions
                               { order, gold_customer -> order.customer.name });
 }
 
-concept Order
+@concept Order
 {
     customer: Customer;
     items: Item*;
     total: DECIMAL;
 }
 
-concept Item
+@concept Item
 {
     number: INTEGER;
     name: STRING;
@@ -79,14 +79,14 @@ concept Item
     qty: INTEGER;
 }
 
-concept Customer
+@concept Customer
 {
     name: STRING;
 }
 
-concept Product;
+@concept Product;
 
-concept Class
+@concept Class
 {
     ancestors: Class*;
     children: Class*;

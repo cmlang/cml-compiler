@@ -1,5 +1,5 @@
 
-concept MODULE: NAMED_ELEMENT, Scope
+@concept MODULE: NAMED_ELEMENT, Scope
 {
     /imports = members as? IMPORT*;
 
@@ -21,7 +21,7 @@ concept MODULE: NAMED_ELEMENT, Scope
 */
 }
 
-concept IMPORT: NAMED_ELEMENT
+@concept IMPORT: NAMED_ELEMENT
 {
     imported_module: MODULE;
     first_import: boolean;

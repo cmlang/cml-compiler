@@ -1,4 +1,4 @@
-concept SomeConcept
+@concept SomeConcept
 {
     /derivedProperty: String = "A";
     nonDerivedProperty: String = "A";

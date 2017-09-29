@@ -1,18 +1,18 @@
 
-template function exists<T>(seq: T*, expr: (T) -> Boolean) -> BOOLEAN;
+@template @function exists<T>(seq: T*, expr: (T) -> Boolean) -> BOOLEAN;
 
-template function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
-template function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
+@template @function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
+@template @function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 
-template function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
+@template @function yield<T>(seq: T*, expr: (T) -> R*) -> R*;
 
-template function distinct<T>(seq: T*) -> T*;
+@template @function distinct<T>(seq: T*) -> T*;
 
-template function recurse<T,S>(seq: T*, expr: (T) -> S*) -> S*;
+@template @function recurse<T,S>(seq: T*, expr: (T) -> S*) -> S*;
 
-template function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
+@template @function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
 
-concept Expressions
+@concept Expressions
 {
     top_items: Item*;
     class: Class;
@@ -40,28 +40,28 @@ concept Expressions
     reduce_invocation = reduce(top_orders, { order, sum -> sum + order.total }, { 0.0 });
 }
 
-concept Order
+@concept Order
 {
     customer: Customer;
     items: Item*;
     total: DECIMAL;
 }
 
-concept Item
+@concept Item
 {
     name: STRING;
     product: Product;
     qty: INTEGER;
 }
 
-concept Customer
+@concept Customer
 {
     name: STRING;
 }
 
-concept Product;
+@concept Product;
 
-concept Class
+@concept Class
 {
     ancestors: Class*;
     children: Class*;

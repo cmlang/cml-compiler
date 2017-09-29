@@ -1,5 +1,5 @@
 
-abstraction MODEL_ELEMENT
+@abstraction MODEL_ELEMENT
 {
     parent: Scope?;
     location: Location?;
@@ -9,30 +9,30 @@ abstraction MODEL_ELEMENT
 //    /modulo: MODULE? = parent.modulo;
 }
 
-abstraction NAMED_ELEMENT: MODEL_ELEMENT
+@abstraction NAMED_ELEMENT: MODEL_ELEMENT
 {
     name: string;
 }
 
-concept Scope: MODEL_ELEMENT
+@concept Scope: MODEL_ELEMENT
 {
     members: MODEL_ELEMENT*;
 }
 
-concept Location
+@concept Location
 {
     line: Integer;
     column: Integer;
     element: MODEL_ELEMENT;
 }
 
-association Membership
+@association Membership
 {
     MODEL_ELEMENT.parent;
     Scope.members;
 }
 
-association Localization
+@association Localization
 {
     Location.element;
     MODEL_ELEMENT.location;

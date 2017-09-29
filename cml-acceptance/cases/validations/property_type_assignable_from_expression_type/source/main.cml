@@ -1,7 +1,7 @@
-concept A;
-concept B: A;
+@concept A;
+@concept B: A;
 
-abstraction Attributes
+@abstraction Attributes
 {
     a: A;
     b: B;

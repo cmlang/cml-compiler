@@ -1,16 +1,16 @@
 
-concept Employee
+@concept Employee
 {
     name: String;
 }
 
-concept Organization
+@concept Organization
 {
     name: String;
     employees: Employee*;
 }
 
-association Employment
+@association Employment
 {
     Employee.employer;
     Organiza.employees;

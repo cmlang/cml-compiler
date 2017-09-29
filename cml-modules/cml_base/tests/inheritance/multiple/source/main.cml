@@ -1,29 +1,29 @@
 
-abstraction ModelElement
+@abstraction ModelElement
 {
     parent: ModelElement?;
     elements: ModelElement*;
 }
 
-abstraction NamedElement: ModelElement
+@abstraction NamedElement: ModelElement
 {
     name: String;
 }
 
-abstraction PropertyList: ModelElement
+@abstraction PropertyList: ModelElement
 {
 }
 
-concept Concept: NamedElement, PropertyList
+@concept Concept: NamedElement, PropertyList
 {
     abstracted: Boolean;
 }
 
-concept Model: ModelElement
+@concept Model: ModelElement
 {
 }
 
-task mcml_java by cmlc_java
+@task mcml_java: cmlc_java
 {
     groupId = "cml-inheritance-multiple";
     artifactId = "mcml-cmlc";
@@ -32,7 +32,7 @@ task mcml_java by cmlc_java
     packagePath = "mcml/cmlc";
 }
 
-task mcml_py by cmlc_py
+@task mcml_py: cmlc_py
 {
     moduleName = "cml_inheritance_multiple_mcml_cmlc";
     moduleVersion = "1.0";

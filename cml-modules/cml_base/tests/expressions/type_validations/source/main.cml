@@ -1,5 +1,5 @@
 
-concept Types
+@concept Types
 {
     req: Ancestor;
     opt: Ancestor?;
@@ -36,11 +36,11 @@ concept Types
     /descendants = for a in seq | select: a is Descendant;
 }
 
-concept Ancestor;
+@concept Ancestor;
 
-concept Descendant: Ancestor;
+@concept Descendant: Ancestor;
 
-task type_validations by poj
+@task type_validations: poj
 {
     groupId = "cml-expressions";
     artifactId = "cml-expressions-type-validations";

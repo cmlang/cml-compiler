@@ -1,5 +1,5 @@
 
-concept Types
+@concept Types
 {
     req: Ancestor;
     opt: Ancestor?;
@@ -36,11 +36,11 @@ concept Types
     /descendants = for a in seq | select: a is Descendant;
 }
 
-concept Ancestor;
+@concept Ancestor;
 
-concept Descendant: Ancestor;
+@concept Descendant: Ancestor;
 
-task poj by poj
+@task poj: poj
 {
     groupId = "cml-expressions";
     artifactId = "cml-expressions-types";
@@ -49,7 +49,7 @@ task poj by poj
     packagePath = "types/poj";
 }
 
-task pop by pop
+@task pop: pop
 {
     moduleName = "cml_expressions_types_pop";
     moduleVersion = "1.0";

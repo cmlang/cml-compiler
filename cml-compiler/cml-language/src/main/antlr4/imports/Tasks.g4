@@ -7,5 +7,5 @@ taskDeclaration returns [Task task]:
     constructorDeclaration?
     (';' | propertyList);
 
-constructorDeclaration: ('by' | ':') NAME;
+constructorDeclaration: ':' NAME;
 

@@ -1,7 +1,7 @@
 
 -- Generalization of Circle and Rectangle.
 -- As an abstraction, no direct instances of Shape are ever created.
-abstraction Shape
+@abstraction Shape
 {
     -- Abstractions may also have concrete properties.
     -- Specializations below share the color attribute as-is.
@@ -14,7 +14,7 @@ abstraction Shape
 }
 
 // Specialization of Shape:
-concept Rectangle: Shape
+@concept Rectangle: Shape
 {
     // New attributes that characterize a rectangle:
     width: Double;
@@ -25,7 +25,7 @@ concept Rectangle: Shape
 }
 
 // Another specialization of Shape:
-concept Rhombus: Shape
+@concept Rhombus: Shape
 {
     // Diagonal attributes that characterize a rhombus:
     p: Double;
@@ -36,7 +36,7 @@ concept Rhombus: Shape
 }
 
 // Specialization of both Rectangle and Rhombus:
-concept Square: Rectangle, Rhombus
+@concept Square: Rectangle, Rhombus
 {
     // Only attribute needed to characterize a square:
     side_length: Double;
@@ -55,7 +55,7 @@ concept Square: Rectangle, Rhombus
 }
 
 -- All instances of Circle are in turn instances of Shape.
-concept Circle: Shape
+@concept Circle: Shape
 {
     radius: Double;
 
@@ -69,7 +69,7 @@ concept Circle: Shape
     color = "Blue";
 }
 
-concept UnitCircle: Circle
+@concept UnitCircle: Circle
 {
     -- Observe below that the redefinition of
     -- an abstract property may be concrete;
@@ -89,12 +89,12 @@ concept UnitCircle: Circle
     /radius = 1.0d;
 }
 
-concept RedUnitCircle: UnitCircle
+@concept RedUnitCircle: UnitCircle
 {
     color = "Red";
 }
 
-task shapes_cmlc_java by cmlc_java
+@task shapes_cmlc_java: cmlc_java
 {
     groupId = "cml-specializations-redefinitions";
     artifactId = "shapes-cmlc";
@@ -103,7 +103,7 @@ task shapes_cmlc_java by cmlc_java
     packagePath = "shapes/cmlc";
 }
 
-task shapes_cmlc_py by cmlc_py
+@task shapes_cmlc_py: cmlc_py
 {
     moduleName = "cml_specializations_redefinitions_shapes_cmlc";
     moduleVersion = "1.0";
