@@ -137,7 +137,7 @@ public class ModelLoaderTest
 
     private TempModule loadModule(String sourceFileName)
     {
-        return loadModel(sourceFileName).getModules().get(0);
+        return (TempModule) loadModel(sourceFileName).getModules().get(0);
     }
 
     private Concept loadConcept(String sourceFileName)

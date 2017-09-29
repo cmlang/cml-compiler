@@ -6,7 +6,8 @@
     /model = self as? MODEL?;
 //    /modulo = first(modules);
 
-//    /modules = members as? MODULE*;
+    /modules = members as? MODULE*;
+
 //    /concepts = modules.concepts;
 //    /associations = modules.associations;
 

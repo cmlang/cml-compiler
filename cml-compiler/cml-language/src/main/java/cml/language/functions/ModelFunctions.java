@@ -2,6 +2,7 @@ package cml.language.functions;
 
 import cml.language.features.*;
 import cml.language.foundation.TempModel;
+import cml.language.generated.Module;
 
 import java.util.Optional;
 
@@ -10,11 +11,11 @@ public class ModelFunctions
 {
     public static Optional<TempModule> moduleOf(TempModel model, String name)
     {
-        for (final TempModule module : model.getModules())
+        for (final Module module : model.getModules())
         {
             if (module.getName().equals(name))
             {
-                return Optional.of(module);
+                return Optional.of((TempModule) module);
             }
         }
 

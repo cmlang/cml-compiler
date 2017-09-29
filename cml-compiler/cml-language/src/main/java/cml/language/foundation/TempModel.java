@@ -12,14 +12,6 @@ import static java.util.stream.Collectors.toList;
 
 public interface TempModel extends NamedElement, Scope, Model
 {
-    default List<TempModule> getModules()
-    {
-        return getMembers().stream()
-                           .filter(e -> e instanceof TempModule)
-                           .map(e -> (TempModule)e)
-                           .collect(toList());
-    }
-
     default List<Concept> getOrderedConcepts()
     {
         return getConcepts().stream()
@@ -57,6 +49,7 @@ public interface TempModel extends NamedElement, Scope, Model
     default List<Concept> getConcepts()
     {
         return getModules().stream()
+                           .map(m -> (TempModule)m)
                            .flatMap(m -> m.getConcepts().stream())
                            .collect(toList());
     }
@@ -64,6 +57,7 @@ public interface TempModel extends NamedElement, Scope, Model
     default List<Association> getAssociations()
     {
         return getModules().stream()
+                           .map(m -> (TempModule)m)
                            .flatMap(m -> m.getAssociations().stream())
                            .collect(toList());
     }
@@ -71,6 +65,7 @@ public interface TempModel extends NamedElement, Scope, Model
     default List<Task> getTasks()
     {
         return getModules().stream()
+                           .map(m -> (TempModule)m)
                            .flatMap(m -> m.getTasks().stream())
                            .collect(toList());
     }
@@ -78,6 +73,7 @@ public interface TempModel extends NamedElement, Scope, Model
     default List<Template> getTemplates()
     {
         return getModules().stream()
+                           .map(m -> (TempModule)m)
                            .flatMap(m -> m.getTemplates().stream())
                            .collect(toList());
     }
@@ -125,6 +121,12 @@ class ModelImpl implements TempModel
     public Optional<Model> getModel()
     {
         return model.getModel();
+    }
+
+    @Override
+    public List<Module> getModules()
+    {
+        return model.getModules();
     }
 
     @Override
