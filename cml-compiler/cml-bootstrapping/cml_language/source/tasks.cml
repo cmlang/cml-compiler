@@ -1,5 +1,5 @@
 
-task cml_language_java by cmlc_java
+task cml_language_java: cmlc_java
 {
     groupId = "cml";
     artifactId = "cml-language-generated";
@@ -8,7 +8,7 @@ task cml_language_java by cmlc_java
     packagePath = "cml/language/generated";
 }
 
-task cml_language_py by cmlc_py
+task cml_language_py: cmlc_py
 {
     moduleName = "cml_language";
     moduleVersion = "master-SNAPSHOT";

@@ -4,7 +4,7 @@ import Names, Types;
 
 associationDeclaration
     returns [Association association]:
-    'association' NAME
+    ASSOCIATION NAME
     '{' (associationEndDeclaration ';')* '}';
 
 associationEndDeclaration

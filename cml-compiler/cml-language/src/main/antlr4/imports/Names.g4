@@ -51,16 +51,28 @@ NOT:
     'not';
 
 TEMPLATE:
-    'template';
+    '@'? 'template';
 
 FUNCTION:
-    'function';
+    '@'? 'function';
 
 ABSTRACTION:
-    'abstraction';
+    '@'? 'abstraction';
 
 CONCEPT:
-    'concept';
+    '@'? 'concept';
+
+TASK:
+    '@'? 'task';
+
+ASSOCIATION:
+    '@'? 'association';
+
+MODULE:
+    '@'? 'module';
+
+IMPORT:
+    '@'? 'import';
 
 NAME:
     ('A'..'Z' | 'a'..'z')

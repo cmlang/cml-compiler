@@ -3,9 +3,9 @@ grammar Tasks;
 import Names, Properties;
 
 taskDeclaration returns [Task task]:
-    'task' NAME
+    TASK NAME
     constructorDeclaration?
     (';' | propertyList);
 
-constructorDeclaration: 'by' NAME;
+constructorDeclaration: ('by' | ':') NAME;
 
