@@ -15,14 +15,18 @@ class Shape(ABC):
         pass
 
     @staticmethod
-    def extend_shape(color: 'str') -> 'Shape':
-        return ShapeImpl(color)
+    def extend_shape(actual_self: 'Optional[Shape]', color: 'str') -> 'Shape':
+        return ShapeImpl(actual_self, color)
 
 
 class ShapeImpl(Shape):
 
-    def __init__(self, color: 'str') -> 'None':
-        
+    def __init__(self, actual_self: 'Optional[Shape]', color: 'str') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Shape]
+        else:
+            self.__actual_self = actual_self
+
         self.__color = color
 
     @property
@@ -57,18 +61,23 @@ class Rectangle(Shape, ABC):
 
     @staticmethod
     def create_rectangle(color: 'str', width: 'float', height: 'float') -> 'Rectangle':
-        return RectangleImpl(None, width, height, color=color)
+        return RectangleImpl(None, None, width, height, color=color)
 
     @staticmethod
-    def extend_rectangle(shape: 'Shape', width: 'float', height: 'float') -> 'Rectangle':
-        return RectangleImpl(shape, width, height)
+    def extend_rectangle(actual_self: 'Optional[Rectangle]', shape: 'Shape', width: 'float', height: 'float') -> 'Rectangle':
+        return RectangleImpl(actual_self, shape, width, height)
 
 
 class RectangleImpl(Rectangle):
 
-    def __init__(self, shape: 'Optional[Shape]', width: 'float', height: 'float', **kwargs) -> 'None':
+    def __init__(self, actual_self: 'Optional[Rectangle]', shape: 'Optional[Shape]', width: 'float', height: 'float', **kwargs) -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Rectangle]
+        else:
+            self.__actual_self = actual_self
+
         if shape is None:
-            self.__shape = Shape.extend_shape(kwargs['color'])
+            self.__shape = Shape.extend_shape(self.__actual_self, kwargs['color'])
         else:
             self.__shape = shape
         self.__width = width
@@ -116,18 +125,23 @@ class Rhombus(Shape, ABC):
 
     @staticmethod
     def create_rhombus(color: 'str', p: 'float', q: 'float') -> 'Rhombus':
-        return RhombusImpl(None, p, q, color=color)
+        return RhombusImpl(None, None, p, q, color=color)
 
     @staticmethod
-    def extend_rhombus(shape: 'Shape', p: 'float', q: 'float') -> 'Rhombus':
-        return RhombusImpl(shape, p, q)
+    def extend_rhombus(actual_self: 'Optional[Rhombus]', shape: 'Shape', p: 'float', q: 'float') -> 'Rhombus':
+        return RhombusImpl(actual_self, shape, p, q)
 
 
 class RhombusImpl(Rhombus):
 
-    def __init__(self, shape: 'Optional[Shape]', p: 'float', q: 'float', **kwargs) -> 'None':
+    def __init__(self, actual_self: 'Optional[Rhombus]', shape: 'Optional[Shape]', p: 'float', q: 'float', **kwargs) -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Rhombus]
+        else:
+            self.__actual_self = actual_self
+
         if shape is None:
-            self.__shape = Shape.extend_shape(kwargs['color'])
+            self.__shape = Shape.extend_shape(self.__actual_self, kwargs['color'])
         else:
             self.__shape = shape
         self.__p = p
@@ -187,26 +201,31 @@ class Square(Rectangle, Rhombus, ABC):
 
     @staticmethod
     def create_square(color: 'str', side_length: 'float') -> 'Square':
-        return SquareImpl(None, None, None, side_length, color=color)
+        return SquareImpl(None, None, None, None, side_length, color=color)
 
     @staticmethod
-    def extend_square(shape: 'Shape', rectangle: 'Rectangle', rhombus: 'Rhombus', side_length: 'float') -> 'Square':
-        return SquareImpl(shape, rectangle, rhombus, side_length)
+    def extend_square(actual_self: 'Optional[Square]', shape: 'Shape', rectangle: 'Rectangle', rhombus: 'Rhombus', side_length: 'float') -> 'Square':
+        return SquareImpl(actual_self, shape, rectangle, rhombus, side_length)
 
 
 class SquareImpl(Square):
 
-    def __init__(self, shape: 'Optional[Shape]', rectangle: 'Optional[Rectangle]', rhombus: 'Optional[Rhombus]', side_length: 'float', **kwargs) -> 'None':
+    def __init__(self, actual_self: 'Optional[Square]', shape: 'Optional[Shape]', rectangle: 'Optional[Rectangle]', rhombus: 'Optional[Rhombus]', side_length: 'float', **kwargs) -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Square]
+        else:
+            self.__actual_self = actual_self
+
         if shape is None:
-            self.__shape = Shape.extend_shape(kwargs['color'])
+            self.__shape = Shape.extend_shape(self.__actual_self, kwargs['color'])
         else:
             self.__shape = shape
         if rectangle is None:
-            self.__rectangle = Rectangle.extend_rectangle(self.__shape, 0, 0)
+            self.__rectangle = Rectangle.extend_rectangle(self.__actual_self, self.__shape, 0, 0)
         else:
             self.__rectangle = rectangle
         if rhombus is None:
-            self.__rhombus = Rhombus.extend_rhombus(self.__shape, 0, 0)
+            self.__rhombus = Rhombus.extend_rhombus(self.__actual_self, self.__shape, 0, 0)
         else:
             self.__rhombus = rhombus
         self.__side_length = side_length
@@ -268,18 +287,23 @@ class Circle(Shape, ABC):
 
     @staticmethod
     def create_circle(radius: 'float', color: 'str' = "Blue") -> 'Circle':
-        return CircleImpl(None, radius, color)
+        return CircleImpl(None, None, radius, color)
 
     @staticmethod
-    def extend_circle(shape: 'Shape', radius: 'float', color: 'str' = "Blue") -> 'Circle':
-        return CircleImpl(shape, radius, color)
+    def extend_circle(actual_self: 'Optional[Circle]', shape: 'Shape', radius: 'float', color: 'str' = "Blue") -> 'Circle':
+        return CircleImpl(actual_self, shape, radius, color)
 
 
 class CircleImpl(Circle):
 
-    def __init__(self, shape: 'Shape', radius: 'float', color: 'str' = "Blue") -> 'None':
+    def __init__(self, actual_self: 'Optional[Circle]', shape: 'Optional[Shape]', radius: 'float', color: 'str' = "Blue") -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Circle]
+        else:
+            self.__actual_self = actual_self
+
         if shape is None:
-            self.__shape = Shape.extend_shape(color)
+            self.__shape = Shape.extend_shape(self.__actual_self, color)
         else:
             self.__shape = shape
         self.__radius = radius
@@ -318,22 +342,27 @@ class UnitCircle(Circle, ABC):
 
     @staticmethod
     def create_unit_circle(color: 'str' = "Blue", area: 'float' = 3.14159) -> 'UnitCircle':
-        return UnitCircleImpl(None, None, area, color=color)
+        return UnitCircleImpl(None, None, None, area, color=color)
 
     @staticmethod
-    def extend_unit_circle(shape: 'Shape', circle: 'Circle', area: 'float' = 3.14159) -> 'UnitCircle':
-        return UnitCircleImpl(shape, circle, area)
+    def extend_unit_circle(actual_self: 'Optional[UnitCircle]', shape: 'Shape', circle: 'Circle', area: 'float' = 3.14159) -> 'UnitCircle':
+        return UnitCircleImpl(actual_self, shape, circle, area)
 
 
 class UnitCircleImpl(UnitCircle):
 
-    def __init__(self, shape: 'Optional[Shape]', circle: 'Optional[Circle]', area: 'float' = 3.14159, **kwargs) -> 'None':
+    def __init__(self, actual_self: 'Optional[UnitCircle]', shape: 'Optional[Shape]', circle: 'Optional[Circle]', area: 'float' = 3.14159, **kwargs) -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[UnitCircle]
+        else:
+            self.__actual_self = actual_self
+
         if shape is None:
-            self.__shape = Shape.extend_shape(kwargs['color'])
+            self.__shape = Shape.extend_shape(self.__actual_self, kwargs['color'])
         else:
             self.__shape = shape
         if circle is None:
-            self.__circle = Circle.extend_circle(self.__shape, 0, kwargs['color'])
+            self.__circle = Circle.extend_circle(self.__actual_self, self.__shape, 0, kwargs['color'])
         else:
             self.__circle = circle
         self.__area = area
@@ -367,26 +396,31 @@ class RedUnitCircle(UnitCircle, ABC):
 
     @staticmethod
     def create_red_unit_circle(area: 'float' = 3.14159, color: 'str' = "Red") -> 'RedUnitCircle':
-        return RedUnitCircleImpl(None, None, None, color, area=area)
+        return RedUnitCircleImpl(None, None, None, None, color, area=area)
 
     @staticmethod
-    def extend_red_unit_circle(shape: 'Shape', circle: 'Circle', unit_circle: 'UnitCircle', color: 'str' = "Red") -> 'RedUnitCircle':
-        return RedUnitCircleImpl(shape, circle, unit_circle, color)
+    def extend_red_unit_circle(actual_self: 'Optional[RedUnitCircle]', shape: 'Shape', circle: 'Circle', unit_circle: 'UnitCircle', color: 'str' = "Red") -> 'RedUnitCircle':
+        return RedUnitCircleImpl(actual_self, shape, circle, unit_circle, color)
 
 
 class RedUnitCircleImpl(RedUnitCircle):
 
-    def __init__(self, shape: 'Optional[Shape]', circle: 'Optional[Circle]', unit_circle: 'Optional[UnitCircle]', color: 'str' = "Red", **kwargs) -> 'None':
+    def __init__(self, actual_self: 'Optional[RedUnitCircle]', shape: 'Optional[Shape]', circle: 'Optional[Circle]', unit_circle: 'Optional[UnitCircle]', color: 'str' = "Red", **kwargs) -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[RedUnitCircle]
+        else:
+            self.__actual_self = actual_self
+
         if shape is None:
-            self.__shape = Shape.extend_shape(color)
+            self.__shape = Shape.extend_shape(self.__actual_self, color)
         else:
             self.__shape = shape
         if circle is None:
-            self.__circle = Circle.extend_circle(self.__shape, 0, color)
+            self.__circle = Circle.extend_circle(self.__actual_self, self.__shape, 0, color)
         else:
             self.__circle = circle
         if unit_circle is None:
-            self.__unit_circle = UnitCircle.extend_unit_circle(self.__shape, self.__circle, kwargs['area'])
+            self.__unit_circle = UnitCircle.extend_unit_circle(self.__actual_self, self.__shape, self.__circle, kwargs['area'])
         else:
             self.__unit_circle = unit_circle
         self.__color = color

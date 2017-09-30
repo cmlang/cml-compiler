@@ -6,10 +6,6 @@ actual_self_type(concept) ::= "<field_type_optional(concept)>"
 
 actual_self_decl(concept) ::= "<param_decl(actual_self(), actual_self_type(concept))>"
 
-actual_self_field(concept) ::= <<
-<if(concept.associationProperties)><\\>
-<field_access(actual_self())><\\>
-<else><\\>
-<self()><\\>
-<endif>
+actual_self_field() ::= <<
+<field_access(actual_self())>
 >>

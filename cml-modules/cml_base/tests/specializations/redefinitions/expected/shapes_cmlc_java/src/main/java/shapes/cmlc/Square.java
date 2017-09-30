@@ -26,33 +26,39 @@ public interface Square extends Rectangle, Rhombus
 
     static Square createSquare(String color, double sideLength)
     {
-        return new SquareImpl(color, sideLength);
+        return new SquareImpl(null, color, sideLength);
     }
 
-    static Square extendSquare(Shape shape, Rectangle rectangle, Rhombus rhombus, double sideLength)
+    static Square extendSquare(@Nullable Square actual_self, Shape shape, Rectangle rectangle, Rhombus rhombus, double sideLength)
     {
-        return new SquareImpl(shape, rectangle, rhombus, sideLength);
+        return new SquareImpl(actual_self, shape, rectangle, rhombus, sideLength);
     }
 }
 
 class SquareImpl implements Square
 {
+    private final @Nullable Square actual_self;
+
     private final Shape shape;
     private final Rectangle rectangle;
     private final Rhombus rhombus;
 
     private final double sideLength;
 
-    SquareImpl(String color, double sideLength)
+    SquareImpl(@Nullable Square actual_self, String color, double sideLength)
     {
-        this.shape = Shape.extendShape(color);
-        this.rectangle = Rectangle.extendRectangle(this.shape, 0.0f, 0.0f);
-        this.rhombus = Rhombus.extendRhombus(this.shape, 0.0f, 0.0f);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.shape = Shape.extendShape(this.actual_self, color);
+        this.rectangle = Rectangle.extendRectangle(this.actual_self, this.shape, 0.0f, 0.0f);
+        this.rhombus = Rhombus.extendRhombus(this.actual_self, this.shape, 0.0f, 0.0f);
         this.sideLength = sideLength;
     }
 
-    SquareImpl(Shape shape, Rectangle rectangle, Rhombus rhombus, double sideLength)
+    SquareImpl(@Nullable Square actual_self, Shape shape, Rectangle rectangle, Rhombus rhombus, double sideLength)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.shape = shape;
         this.rectangle = rectangle;
         this.rhombus = rhombus;

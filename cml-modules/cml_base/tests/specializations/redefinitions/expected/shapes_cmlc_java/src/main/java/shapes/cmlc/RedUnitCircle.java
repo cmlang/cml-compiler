@@ -21,33 +21,39 @@ public interface RedUnitCircle extends UnitCircle
 
     static RedUnitCircle createRedUnitCircle(double area, String color)
     {
-        return new RedUnitCircleImpl(area, color);
+        return new RedUnitCircleImpl(null, area, color);
     }
 
-    static RedUnitCircle extendRedUnitCircle(Shape shape, Circle circle, UnitCircle unitCircle, String color)
+    static RedUnitCircle extendRedUnitCircle(@Nullable RedUnitCircle actual_self, Shape shape, Circle circle, UnitCircle unitCircle, String color)
     {
-        return new RedUnitCircleImpl(shape, circle, unitCircle, color);
+        return new RedUnitCircleImpl(actual_self, shape, circle, unitCircle, color);
     }
 }
 
 class RedUnitCircleImpl implements RedUnitCircle
 {
+    private final @Nullable RedUnitCircle actual_self;
+
     private final Shape shape;
     private final Circle circle;
     private final UnitCircle unitCircle;
 
     private final String color;
 
-    RedUnitCircleImpl(double area, String color)
+    RedUnitCircleImpl(@Nullable RedUnitCircle actual_self, double area, String color)
     {
-        this.shape = Shape.extendShape(color);
-        this.circle = Circle.extendCircle(this.shape, 0.0f, color);
-        this.unitCircle = UnitCircle.extendUnitCircle(this.shape, this.circle, area);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.shape = Shape.extendShape(this.actual_self, color);
+        this.circle = Circle.extendCircle(this.actual_self, this.shape, 0.0f, color);
+        this.unitCircle = UnitCircle.extendUnitCircle(this.actual_self, this.shape, this.circle, area);
         this.color = color;
     }
 
-    RedUnitCircleImpl(Shape shape, Circle circle, UnitCircle unitCircle, String color)
+    RedUnitCircleImpl(@Nullable RedUnitCircle actual_self, Shape shape, Circle circle, UnitCircle unitCircle, String color)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.shape = shape;
         this.circle = circle;
         this.unitCircle = unitCircle;

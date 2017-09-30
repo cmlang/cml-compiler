@@ -16,33 +16,39 @@ public interface Concept extends NamedElement, PropertyList
 
     static Concept createConcept(String name, @Nullable ModelElement parent, List<ModelElement> elements, boolean abstracted)
     {
-        return new ConceptImpl(name, parent, elements, abstracted);
+        return new ConceptImpl(null, name, parent, elements, abstracted);
     }
 
-    static Concept extendConcept(ModelElement modelElement, NamedElement namedElement, PropertyList propertyList, boolean abstracted)
+    static Concept extendConcept(@Nullable Concept actual_self, ModelElement modelElement, NamedElement namedElement, PropertyList propertyList, boolean abstracted)
     {
-        return new ConceptImpl(modelElement, namedElement, propertyList, abstracted);
+        return new ConceptImpl(actual_self, modelElement, namedElement, propertyList, abstracted);
     }
 }
 
 class ConceptImpl implements Concept
 {
+    private final @Nullable Concept actual_self;
+
     private final ModelElement modelElement;
     private final NamedElement namedElement;
     private final PropertyList propertyList;
 
     private final boolean abstracted;
 
-    ConceptImpl(String name, @Nullable ModelElement parent, List<ModelElement> elements, boolean abstracted)
+    ConceptImpl(@Nullable Concept actual_self, String name, @Nullable ModelElement parent, List<ModelElement> elements, boolean abstracted)
     {
-        this.modelElement = ModelElement.extendModelElement(parent, elements);
-        this.namedElement = NamedElement.extendNamedElement(this.modelElement, name);
-        this.propertyList = PropertyList.extendPropertyList(this.modelElement);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.modelElement = ModelElement.extendModelElement(this.actual_self, parent, elements);
+        this.namedElement = NamedElement.extendNamedElement(this.actual_self, this.modelElement, name);
+        this.propertyList = PropertyList.extendPropertyList(this.actual_self, this.modelElement);
         this.abstracted = abstracted;
     }
 
-    ConceptImpl(ModelElement modelElement, NamedElement namedElement, PropertyList propertyList, boolean abstracted)
+    ConceptImpl(@Nullable Concept actual_self, ModelElement modelElement, NamedElement namedElement, PropertyList propertyList, boolean abstracted)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.modelElement = modelElement;
         this.namedElement = namedElement;
         this.propertyList = propertyList;

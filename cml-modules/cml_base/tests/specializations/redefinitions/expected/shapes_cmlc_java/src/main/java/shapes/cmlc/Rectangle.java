@@ -20,31 +20,37 @@ public interface Rectangle extends Shape
 
     static Rectangle createRectangle(String color, double width, double height)
     {
-        return new RectangleImpl(color, width, height);
+        return new RectangleImpl(null, color, width, height);
     }
 
-    static Rectangle extendRectangle(Shape shape, double width, double height)
+    static Rectangle extendRectangle(@Nullable Rectangle actual_self, Shape shape, double width, double height)
     {
-        return new RectangleImpl(shape, width, height);
+        return new RectangleImpl(actual_self, shape, width, height);
     }
 }
 
 class RectangleImpl implements Rectangle
 {
+    private final @Nullable Rectangle actual_self;
+
     private final Shape shape;
 
     private final double width;
     private final double height;
 
-    RectangleImpl(String color, double width, double height)
+    RectangleImpl(@Nullable Rectangle actual_self, String color, double width, double height)
     {
-        this.shape = Shape.extendShape(color);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.shape = Shape.extendShape(this.actual_self, color);
         this.width = width;
         this.height = height;
     }
 
-    RectangleImpl(Shape shape, double width, double height)
+    RectangleImpl(@Nullable Rectangle actual_self, Shape shape, double width, double height)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.shape = shape;
         this.width = width;
         this.height = height;

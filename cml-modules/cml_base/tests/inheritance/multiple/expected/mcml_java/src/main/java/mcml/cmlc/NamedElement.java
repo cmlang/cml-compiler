@@ -14,26 +14,32 @@ public interface NamedElement extends ModelElement
 {
     String getName();
 
-    static NamedElement extendNamedElement(ModelElement modelElement, String name)
+    static NamedElement extendNamedElement(@Nullable NamedElement actual_self, ModelElement modelElement, String name)
     {
-        return new NamedElementImpl(modelElement, name);
+        return new NamedElementImpl(actual_self, modelElement, name);
     }
 }
 
 class NamedElementImpl implements NamedElement
 {
+    private final @Nullable NamedElement actual_self;
+
     private final ModelElement modelElement;
 
     private final String name;
 
-    NamedElementImpl(@Nullable ModelElement parent, List<ModelElement> elements, String name)
+    NamedElementImpl(@Nullable NamedElement actual_self, @Nullable ModelElement parent, List<ModelElement> elements, String name)
     {
-        this.modelElement = ModelElement.extendModelElement(parent, elements);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.modelElement = ModelElement.extendModelElement(this.actual_self, parent, elements);
         this.name = name;
     }
 
-    NamedElementImpl(ModelElement modelElement, String name)
+    NamedElementImpl(@Nullable NamedElement actual_self, ModelElement modelElement, String name)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.modelElement = modelElement;
         this.name = name;
     }

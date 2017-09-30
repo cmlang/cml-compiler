@@ -1,15 +1,13 @@
 // design/cmlc
 
 class_self_field(concept) ::= <<
-<if(concept.associationProperties)><\\>
-<field_decl(actual_self_decl(concept))><\\>
-<endif>
+<field_decl(actual_self_decl(concept))>
 >>
 
 extend_invocation(conceptRedef) ::= <<
 <field_access(conceptRedef.concept)> = <\\>
 <type_name(conceptRedef.concept)>.<interface_extend_name(type_name(conceptRedef.concept))><\\>
-(<if(conceptRedef.concept.associationProperties)><actual_self_field(concept)>, <endif><extend_invocation_extra_args(conceptRedef)>)<statement_terminator()>
+(<actual_self_field()>, <extend_invocation_extra_args(conceptRedef)>)<statement_terminator()>
 >>
 
 extend_invocation_extra_args(conceptRedef) ::= <<

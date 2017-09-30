@@ -16,6 +16,8 @@ public interface Corporation extends Organization
 
     boolean isProfit();
 
+    Corporation getMyself();
+
     static Corporation createCorporation(String name, List<Employee> employees, List<Vehicle> fleet)
     {
         return createCorporation(name, employees, fleet, true, true);
@@ -23,31 +25,37 @@ public interface Corporation extends Organization
 
     static Corporation createCorporation(String name, List<Employee> employees, List<Vehicle> fleet, boolean stock, boolean profit)
     {
-        return new CorporationImpl(name, employees, fleet, stock, profit);
+        return new CorporationImpl(null, name, employees, fleet, stock, profit);
     }
 
-    static Corporation extendCorporation(Organization organization, boolean stock, boolean profit)
+    static Corporation extendCorporation(@Nullable Corporation actual_self, Organization organization, boolean stock, boolean profit)
     {
-        return new CorporationImpl(organization, stock, profit);
+        return new CorporationImpl(actual_self, organization, stock, profit);
     }
 }
 
 class CorporationImpl implements Corporation
 {
+    private final @Nullable Corporation actual_self;
+
     private final Organization organization;
 
     private final boolean stock;
     private final boolean profit;
 
-    CorporationImpl(String name, List<Employee> employees, List<Vehicle> fleet, boolean stock, boolean profit)
+    CorporationImpl(@Nullable Corporation actual_self, String name, List<Employee> employees, List<Vehicle> fleet, boolean stock, boolean profit)
     {
-        this.organization = Organization.extendOrganization(this, name, employees, fleet);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.organization = Organization.extendOrganization(this.actual_self, name, employees, fleet);
         this.stock = stock;
         this.profit = profit;
     }
 
-    CorporationImpl(Organization organization, boolean stock, boolean profit)
+    CorporationImpl(@Nullable Corporation actual_self, Organization organization, boolean stock, boolean profit)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.organization = organization;
         this.stock = stock;
         this.profit = profit;
@@ -61,6 +69,11 @@ class CorporationImpl implements Corporation
     public boolean isProfit()
     {
         return this.profit;
+    }
+
+    public Corporation getMyself()
+    {
+        return this.actual_self;
     }
 
     public String getName()

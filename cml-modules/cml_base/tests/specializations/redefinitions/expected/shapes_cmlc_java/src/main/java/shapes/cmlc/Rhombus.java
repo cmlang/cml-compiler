@@ -20,31 +20,37 @@ public interface Rhombus extends Shape
 
     static Rhombus createRhombus(String color, double p, double q)
     {
-        return new RhombusImpl(color, p, q);
+        return new RhombusImpl(null, color, p, q);
     }
 
-    static Rhombus extendRhombus(Shape shape, double p, double q)
+    static Rhombus extendRhombus(@Nullable Rhombus actual_self, Shape shape, double p, double q)
     {
-        return new RhombusImpl(shape, p, q);
+        return new RhombusImpl(actual_self, shape, p, q);
     }
 }
 
 class RhombusImpl implements Rhombus
 {
+    private final @Nullable Rhombus actual_self;
+
     private final Shape shape;
 
     private final double p;
     private final double q;
 
-    RhombusImpl(String color, double p, double q)
+    RhombusImpl(@Nullable Rhombus actual_self, String color, double p, double q)
     {
-        this.shape = Shape.extendShape(color);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.shape = Shape.extendShape(this.actual_self, color);
         this.p = p;
         this.q = q;
     }
 
-    RhombusImpl(Shape shape, double p, double q)
+    RhombusImpl(@Nullable Rhombus actual_self, Shape shape, double p, double q)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.shape = shape;
         this.p = p;
         this.q = q;

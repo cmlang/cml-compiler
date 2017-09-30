@@ -14,27 +14,33 @@ public interface Model extends ModelElement
 {
     static Model createModel(@Nullable ModelElement parent, List<ModelElement> elements)
     {
-        return new ModelImpl(parent, elements);
+        return new ModelImpl(null, parent, elements);
     }
 
-    static Model extendModel(ModelElement modelElement)
+    static Model extendModel(@Nullable Model actual_self, ModelElement modelElement)
     {
-        return new ModelImpl(modelElement);
+        return new ModelImpl(actual_self, modelElement);
     }
 }
 
 class ModelImpl implements Model
 {
+    private final @Nullable Model actual_self;
+
     private final ModelElement modelElement;
 
-    ModelImpl(@Nullable ModelElement parent, List<ModelElement> elements)
+    ModelImpl(@Nullable Model actual_self, @Nullable ModelElement parent, List<ModelElement> elements)
     {
-        this.modelElement = ModelElement.extendModelElement(parent, elements);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.modelElement = ModelElement.extendModelElement(this.actual_self, parent, elements);
 
     }
 
-    ModelImpl(ModelElement modelElement)
+    ModelImpl(@Nullable Model actual_self, ModelElement modelElement)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.modelElement = modelElement;
     }
 

@@ -23,31 +23,37 @@ public interface UnitCircle extends Circle
 
     static UnitCircle createUnitCircle(String color, double area)
     {
-        return new UnitCircleImpl(color, area);
+        return new UnitCircleImpl(null, color, area);
     }
 
-    static UnitCircle extendUnitCircle(Shape shape, Circle circle, double area)
+    static UnitCircle extendUnitCircle(@Nullable UnitCircle actual_self, Shape shape, Circle circle, double area)
     {
-        return new UnitCircleImpl(shape, circle, area);
+        return new UnitCircleImpl(actual_self, shape, circle, area);
     }
 }
 
 class UnitCircleImpl implements UnitCircle
 {
+    private final @Nullable UnitCircle actual_self;
+
     private final Shape shape;
     private final Circle circle;
 
     private final double area;
 
-    UnitCircleImpl(String color, double area)
+    UnitCircleImpl(@Nullable UnitCircle actual_self, String color, double area)
     {
-        this.shape = Shape.extendShape(color);
-        this.circle = Circle.extendCircle(this.shape, 0.0f, color);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.shape = Shape.extendShape(this.actual_self, color);
+        this.circle = Circle.extendCircle(this.actual_self, this.shape, 0.0f, color);
         this.area = area;
     }
 
-    UnitCircleImpl(Shape shape, Circle circle, double area)
+    UnitCircleImpl(@Nullable UnitCircle actual_self, Shape shape, Circle circle, double area)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.shape = shape;
         this.circle = circle;
         this.area = area;

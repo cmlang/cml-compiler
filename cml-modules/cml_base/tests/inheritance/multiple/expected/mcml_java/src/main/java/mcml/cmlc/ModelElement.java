@@ -16,19 +16,23 @@ public interface ModelElement
 
     List<ModelElement> getElements();
 
-    static ModelElement extendModelElement(@Nullable ModelElement parent, List<ModelElement> elements)
+    static ModelElement extendModelElement(@Nullable ModelElement actual_self, @Nullable ModelElement parent, List<ModelElement> elements)
     {
-        return new ModelElementImpl(parent, elements);
+        return new ModelElementImpl(actual_self, parent, elements);
     }
 }
 
 class ModelElementImpl implements ModelElement
 {
+    private final @Nullable ModelElement actual_self;
+
     private final @Nullable ModelElement parent;
     private final List<ModelElement> elements;
 
-    ModelElementImpl(@Nullable ModelElement parent, List<ModelElement> elements)
+    ModelElementImpl(@Nullable ModelElement actual_self, @Nullable ModelElement parent, List<ModelElement> elements)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.parent = parent;
         this.elements = elements;
     }

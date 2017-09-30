@@ -25,31 +25,37 @@ public interface Circle extends Shape
 
     static Circle createCircle(double radius, String color)
     {
-        return new CircleImpl(radius, color);
+        return new CircleImpl(null, radius, color);
     }
 
-    static Circle extendCircle(Shape shape, double radius, String color)
+    static Circle extendCircle(@Nullable Circle actual_self, Shape shape, double radius, String color)
     {
-        return new CircleImpl(shape, radius, color);
+        return new CircleImpl(actual_self, shape, radius, color);
     }
 }
 
 class CircleImpl implements Circle
 {
+    private final @Nullable Circle actual_self;
+
     private final Shape shape;
 
     private final double radius;
     private final String color;
 
-    CircleImpl(double radius, String color)
+    CircleImpl(@Nullable Circle actual_self, double radius, String color)
     {
-        this.shape = Shape.extendShape(color);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.shape = Shape.extendShape(this.actual_self, color);
         this.radius = radius;
         this.color = color;
     }
 
-    CircleImpl(Shape shape, double radius, String color)
+    CircleImpl(@Nullable Circle actual_self, Shape shape, double radius, String color)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.shape = shape;
         this.radius = radius;
         this.color = color;

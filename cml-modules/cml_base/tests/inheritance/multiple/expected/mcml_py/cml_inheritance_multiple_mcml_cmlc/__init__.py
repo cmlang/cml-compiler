@@ -15,14 +15,18 @@ class ModelElement(ABC):
         pass
 
     @staticmethod
-    def extend_model_element(parent: 'Optional[ModelElement]', elements: 'List[ModelElement]') -> 'ModelElement':
-        return ModelElementImpl(parent, elements)
+    def extend_model_element(actual_self: 'Optional[ModelElement]', parent: 'Optional[ModelElement]', elements: 'List[ModelElement]') -> 'ModelElement':
+        return ModelElementImpl(actual_self, parent, elements)
 
 
 class ModelElementImpl(ModelElement):
 
-    def __init__(self, parent: 'Optional[ModelElement]', elements: 'List[ModelElement]') -> 'None':
-        
+    def __init__(self, actual_self: 'Optional[ModelElement]', parent: 'Optional[ModelElement]', elements: 'List[ModelElement]') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[ModelElement]
+        else:
+            self.__actual_self = actual_self
+
         self.__parent = parent
         self.__elements = elements
 
@@ -48,13 +52,18 @@ class NamedElement(ModelElement, ABC):
         pass
 
     @staticmethod
-    def extend_named_element(model_element: 'ModelElement', name: 'str') -> 'NamedElement':
-        return NamedElementImpl(model_element, name)
+    def extend_named_element(actual_self: 'Optional[NamedElement]', model_element: 'ModelElement', name: 'str') -> 'NamedElement':
+        return NamedElementImpl(actual_self, model_element, name)
 
 
 class NamedElementImpl(NamedElement):
 
-    def __init__(self, model_element: 'ModelElement', name: 'str') -> 'None':
+    def __init__(self, actual_self: 'Optional[NamedElement]', model_element: 'Optional[ModelElement]', name: 'str') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[NamedElement]
+        else:
+            self.__actual_self = actual_self
+
         self.__model_element = model_element
         self.__name = name
 
@@ -81,13 +90,18 @@ class NamedElementImpl(NamedElement):
 class PropertyList(ModelElement, ABC):
 
     @staticmethod
-    def extend_property_list(model_element: 'ModelElement') -> 'PropertyList':
-        return PropertyListImpl(model_element)
+    def extend_property_list(actual_self: 'Optional[PropertyList]', model_element: 'ModelElement') -> 'PropertyList':
+        return PropertyListImpl(actual_self, model_element)
 
 
 class PropertyListImpl(PropertyList):
 
-    def __init__(self, model_element: 'ModelElement') -> 'None':
+    def __init__(self, actual_self: 'Optional[PropertyList]', model_element: 'Optional[ModelElement]') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[PropertyList]
+        else:
+            self.__actual_self = actual_self
+
         self.__model_element = model_element
 
 
@@ -114,26 +128,31 @@ class Concept(NamedElement, PropertyList, ABC):
 
     @staticmethod
     def create_concept(name: 'str', parent: 'Optional[ModelElement]', elements: 'List[ModelElement]', abstracted: 'bool') -> 'Concept':
-        return ConceptImpl(None, None, None, abstracted, name=name, parent=parent, elements=elements)
+        return ConceptImpl(None, None, None, None, abstracted, name=name, parent=parent, elements=elements)
 
     @staticmethod
-    def extend_concept(model_element: 'ModelElement', named_element: 'NamedElement', property_list: 'PropertyList', abstracted: 'bool') -> 'Concept':
-        return ConceptImpl(model_element, named_element, property_list, abstracted)
+    def extend_concept(actual_self: 'Optional[Concept]', model_element: 'ModelElement', named_element: 'NamedElement', property_list: 'PropertyList', abstracted: 'bool') -> 'Concept':
+        return ConceptImpl(actual_self, model_element, named_element, property_list, abstracted)
 
 
 class ConceptImpl(Concept):
 
-    def __init__(self, model_element: 'Optional[ModelElement]', named_element: 'Optional[NamedElement]', property_list: 'Optional[PropertyList]', abstracted: 'bool', **kwargs) -> 'None':
+    def __init__(self, actual_self: 'Optional[Concept]', model_element: 'Optional[ModelElement]', named_element: 'Optional[NamedElement]', property_list: 'Optional[PropertyList]', abstracted: 'bool', **kwargs) -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Concept]
+        else:
+            self.__actual_self = actual_self
+
         if model_element is None:
-            self.__model_element = ModelElement.extend_model_element(kwargs['parent'], kwargs['elements'])
+            self.__model_element = ModelElement.extend_model_element(self.__actual_self, kwargs['parent'], kwargs['elements'])
         else:
             self.__model_element = model_element
         if named_element is None:
-            self.__named_element = NamedElement.extend_named_element(self.__model_element, kwargs['name'])
+            self.__named_element = NamedElement.extend_named_element(self.__actual_self, self.__model_element, kwargs['name'])
         else:
             self.__named_element = named_element
         if property_list is None:
-            self.__property_list = PropertyList.extend_property_list(self.__model_element)
+            self.__property_list = PropertyList.extend_property_list(self.__actual_self, self.__model_element)
         else:
             self.__property_list = property_list
         self.__abstracted = abstracted
@@ -167,18 +186,23 @@ class Model(ModelElement, ABC):
 
     @staticmethod
     def create_model(parent: 'Optional[ModelElement]', elements: 'List[ModelElement]') -> 'Model':
-        return ModelImpl(None, parent=parent, elements=elements)
+        return ModelImpl(None, None, parent=parent, elements=elements)
 
     @staticmethod
-    def extend_model(model_element: 'ModelElement') -> 'Model':
-        return ModelImpl(model_element)
+    def extend_model(actual_self: 'Optional[Model]', model_element: 'ModelElement') -> 'Model':
+        return ModelImpl(actual_self, model_element)
 
 
 class ModelImpl(Model):
 
-    def __init__(self, model_element: 'Optional[ModelElement]', **kwargs) -> 'None':
+    def __init__(self, actual_self: 'Optional[Model]', model_element: 'Optional[ModelElement]', **kwargs) -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Model]
+        else:
+            self.__actual_self = actual_self
+
         if model_element is None:
-            self.__model_element = ModelElement.extend_model_element(kwargs['parent'], kwargs['elements'])
+            self.__model_element = ModelElement.extend_model_element(self.__actual_self, kwargs['parent'], kwargs['elements'])
         else:
             self.__model_element = model_element
 

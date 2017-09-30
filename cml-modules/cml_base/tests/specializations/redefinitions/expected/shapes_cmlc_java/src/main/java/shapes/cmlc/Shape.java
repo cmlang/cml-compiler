@@ -16,18 +16,22 @@ public interface Shape
 
     double getArea();
 
-    static Shape extendShape(String color)
+    static Shape extendShape(@Nullable Shape actual_self, String color)
     {
-        return new ShapeImpl(color);
+        return new ShapeImpl(actual_self, color);
     }
 }
 
 class ShapeImpl implements Shape
 {
+    private final @Nullable Shape actual_self;
+
     private final String color;
 
-    ShapeImpl(String color)
+    ShapeImpl(@Nullable Shape actual_self, String color)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.color = color;
     }
 

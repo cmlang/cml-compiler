@@ -5,7 +5,7 @@ expression(expr) ::= <<
 
 expression_path(path) ::= <<
 <if(path.self)><\\>
-<self()><\\>
+<actual_self_field()><\\>
 <else><\\>
 <path_expr(path)><\\>
 <endif>

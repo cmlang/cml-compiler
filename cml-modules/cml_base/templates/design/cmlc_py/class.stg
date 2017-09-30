@@ -2,15 +2,6 @@
 
 class_primary_constructor(inherited_properties, super_properties, ancestors) ::= <<
 <if(ancestors || concept.nonDerivedProperties)><\\>
-<if(concept.associationProperties)><\\>
-<class_primary_constructor__assoc(concept, ancestors)><\\>
-<else><\\>
-<class_primary_constructor__no_assoc(concept, ancestors)><\\>
-<endif><\\>
-<endif>
->>
-
-class_primary_constructor__assoc(concept, ancestors) ::= <<
 <if(concept.abstract || !concept.superProperties)><\\>
 <class_constructor(
     [actual_self_decl(concept), ancestors:optional_param_decl(), concept.nonDerivedProperties],
@@ -21,17 +12,7 @@ class_primary_constructor__assoc(concept, ancestors) ::= <<
     [actual_self_decl(concept), ancestors:optional_param_decl(), concept.nonDerivedProperties, class_primary_constructor_keyword_args(concept)],
     class_primary_constructor_statements()
 )><\\>
-<endif>
->>
-
-class_primary_constructor__no_assoc(concept, ancestors) ::= <<
-<if(concept.abstract || !concept.superProperties)><\\>
-<class_constructor([ancestors, concept.nonDerivedProperties], class_primary_constructor_statements())><\\>
-<else><\\>
-<class_constructor(
-    [ancestors:optional_param_decl(), concept.nonDerivedProperties, class_primary_constructor_keyword_args(concept)],
-    class_primary_constructor_statements()
-)><\\>
+<endif><\\>
 <endif>
 >>
 
@@ -41,7 +22,8 @@ class_primary_constructor_statements() ::= <<
 <if(super_properties)><\\>
 <concept.nonDerivedProperties:field_init();separator="\n"><\\>
 <else><\\>
-<if(concept.associationProperties)><actual_self_init()><\n><endif><\\>
+<actual_self_init()>
+
 <if(concept.redefinedAncestors)><\\>
 <concept.redefinedAncestors:field_init_or_extend_invocation();separator="\n">
 <else><\\>
@@ -65,9 +47,9 @@ else:
 
 actual_self_init() ::= <<
 if <actual_self()> is None:
-<indent()><actual_self_field(concept)> = <self()>  # type: <actual_self_type(concept)>
+<indent()><actual_self_field()> = <self()>  # type: <actual_self_type(concept)>
 else:
-<indent()><actual_self_field(concept)> = <actual_self()>
+<indent()><actual_self_field()> = <actual_self()>
 >>
 
 extend_invocation_arg(propertyRedef) ::= <<

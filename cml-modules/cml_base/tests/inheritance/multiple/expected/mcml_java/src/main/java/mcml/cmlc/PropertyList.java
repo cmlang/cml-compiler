@@ -12,24 +12,30 @@ import static org.jooq.lambda.Seq.*;
 
 public interface PropertyList extends ModelElement
 {
-    static PropertyList extendPropertyList(ModelElement modelElement)
+    static PropertyList extendPropertyList(@Nullable PropertyList actual_self, ModelElement modelElement)
     {
-        return new PropertyListImpl(modelElement);
+        return new PropertyListImpl(actual_self, modelElement);
     }
 }
 
 class PropertyListImpl implements PropertyList
 {
+    private final @Nullable PropertyList actual_self;
+
     private final ModelElement modelElement;
 
-    PropertyListImpl(@Nullable ModelElement parent, List<ModelElement> elements)
+    PropertyListImpl(@Nullable PropertyList actual_self, @Nullable ModelElement parent, List<ModelElement> elements)
     {
-        this.modelElement = ModelElement.extendModelElement(parent, elements);
+        this.actual_self = actual_self == null ? this : actual_self;
+
+        this.modelElement = ModelElement.extendModelElement(this.actual_self, parent, elements);
 
     }
 
-    PropertyListImpl(ModelElement modelElement)
+    PropertyListImpl(@Nullable PropertyList actual_self, ModelElement modelElement)
     {
+        this.actual_self = actual_self == null ? this : actual_self;
+
         this.modelElement = modelElement;
     }
 

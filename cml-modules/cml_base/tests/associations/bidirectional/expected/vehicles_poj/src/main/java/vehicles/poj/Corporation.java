@@ -37,6 +37,11 @@ public class Corporation extends Organization
         return this.profit;
     }
 
+    public Corporation getMyself()
+    {
+        return this;
+    }
+
     public String toString()
     {
         return new StringBuilder(Corporation.class.getSimpleName())

@@ -297,20 +297,29 @@ class Corporation(Organization, ABC):
     def profit(self) -> 'bool':
         pass
 
-    @staticmethod
-    def create_corporation(name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]', stock: 'bool' = True, profit: 'bool' = True) -> 'Corporation':
-        return CorporationImpl(None, stock, profit, name=name, employees=employees, fleet=fleet)
+    @abstractproperty
+    def myself(self) -> 'Corporation':
+        pass
 
     @staticmethod
-    def extend_corporation(organization: 'Organization', stock: 'bool' = True, profit: 'bool' = True) -> 'Corporation':
-        return CorporationImpl(organization, stock, profit)
+    def create_corporation(name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]', stock: 'bool' = True, profit: 'bool' = True) -> 'Corporation':
+        return CorporationImpl(None, None, stock, profit, name=name, employees=employees, fleet=fleet)
+
+    @staticmethod
+    def extend_corporation(actual_self: 'Optional[Corporation]', organization: 'Organization', stock: 'bool' = True, profit: 'bool' = True) -> 'Corporation':
+        return CorporationImpl(actual_self, organization, stock, profit)
 
 
 class CorporationImpl(Corporation):
 
-    def __init__(self, organization: 'Optional[Organization]', stock: 'bool' = True, profit: 'bool' = True, **kwargs) -> 'None':
+    def __init__(self, actual_self: 'Optional[Corporation]', organization: 'Optional[Organization]', stock: 'bool' = True, profit: 'bool' = True, **kwargs) -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Corporation]
+        else:
+            self.__actual_self = actual_self
+
         if organization is None:
-            self.__organization = Organization.extend_organization(self, kwargs['name'], kwargs['employees'], kwargs['fleet'])
+            self.__organization = Organization.extend_organization(self.__actual_self, kwargs['name'], kwargs['employees'], kwargs['fleet'])
         else:
             self.__organization = organization
         self.__stock = stock
@@ -323,6 +332,10 @@ class CorporationImpl(Corporation):
     @property
     def profit(self) -> 'bool':
         return self.__profit
+
+    @property
+    def myself(self) -> 'Corporation':
+        return self.__actual_self
 
     @property
     def name(self) -> 'str':

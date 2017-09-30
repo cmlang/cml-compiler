@@ -2,22 +2,16 @@
 
 class_primary_constructor(inherited_properties, super_properties, ancestors) ::= <<
 <if(ancestors || concept.nonDerivedProperties)><\\>
-<if(concept.associationProperties)><\\>
 <class_constructor(
     [actual_self_decl(concept), concept.superProperties, concept.nonDerivedProperties],
     class_primary_constructor_statements()
 )><\\>
-<else><\\>
-<class_constructor(
-    [concept.superProperties, concept.nonDerivedProperties],
-    class_primary_constructor_statements()
-)><\\>
-<endif><\\>
 <endif>
 >>
 
 class_primary_constructor_statements() ::= <<
-<if(concept.associationProperties)><actual_self_init()><\n><\n><endif><\\>
+<actual_self_init()>
+
 <if(concept.redefinedAncestors)><\\>
 <concept.redefinedAncestors:extend_invocation();separator="\n">
 <endif><\\>
@@ -27,28 +21,22 @@ class_primary_constructor_statements() ::= <<
 
 class_extension_constructor(concept) ::= <<
 <if(concept.allAncestors)><\\>
-<if(concept.associationProperties)><\\>
 <class_constructor(
     [actual_self_decl(concept), concept.allAncestors, concept.nonDerivedProperties],
     class_extension_constructor_statements()
 )><\\>
-<else><\\>
-<class_constructor(
-    [concept.allAncestors, concept.nonDerivedProperties],
-    class_extension_constructor_statements()
-)><\\>
-<endif><\\>
 <endif>
 >>
 
 class_extension_constructor_statements() ::= <<
-<if(concept.associationProperties)><actual_self_init()><\n><\n><endif><\\>
+<actual_self_init()>
+
 <[concept.allAncestors, concept.slotProperties]:field_init();separator="\n"><\\>
 <association_link_calls(concept)>
 >>
 
 actual_self_init() ::= <<
-<actual_self_field(concept)> = <actual_self()> == null ? <self()> : <actual_self()>;
+<actual_self_field()> = <actual_self()> == null ? <self()> : <actual_self()>;
 >>
 
 extend_invocation_arg(propertyRedef) ::= <<

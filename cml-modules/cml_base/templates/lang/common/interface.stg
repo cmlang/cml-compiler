@@ -43,18 +43,12 @@ interface_primary_create_method_statements(concept) ::= ""
 
 interface_extend_method() ::= <<
 <if(class_name_suffix)><\\>
-<if(concept.associationProperties)><\\>
 <interface_extend_method_with_params_args(
     [actual_self_decl(concept), concept.allAncestors, concept.nonDerivedProperties],
     [actual_self(), concept.allAncestors, concept.nonDerivedProperties]
 )><\\>
-<else><\\>
-<interface_extend_method_with_params([concept.allAncestors, concept.nonDerivedProperties])><\\>
-<endif><\\>
 <endif>
 >>
-
-interface_extend_method_with_params(params) ::= "<interface_extend_method_with_params_args(params, params)>"
 
 interface_extend_method_with_params_args(params, args) ::= <<
 <static_operation(

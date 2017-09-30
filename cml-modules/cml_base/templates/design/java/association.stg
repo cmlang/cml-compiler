@@ -77,11 +77,11 @@ for (<type_name(association.manyProperty.type)> <field_name(association.manyProp
 >>
 
 association_link_call_seq(property) ::= <<
-<field_name(property.association)>.linkMany(<actual_self_field(property.concept)>, <field_name(property)>);
+<field_name(property.association)>.linkMany(<actual_self_field()>, <field_name(property)>);
 >>
 
 association_link_call_non_seq(property) ::= <<
-<field_name(property.association)>.link(<field_name(property)>, <actual_self_field(property.concept)>);
+<field_name(property.association)>.link(<field_name(property)>, <actual_self_field()>);
 >>
 
 association_class_getter_expr(property) ::= <<

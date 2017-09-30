@@ -222,6 +222,10 @@ class Corporation(Organization):
     def profit(self) -> 'bool':
         return self.__profit
 
+    @property
+    def myself(self) -> 'Corporation':
+        return self
+
     def __str__(self) -> 'str':
         return "%s(stock=%s, profit=%s, name=%s)" % (
             type(self).__name__,
