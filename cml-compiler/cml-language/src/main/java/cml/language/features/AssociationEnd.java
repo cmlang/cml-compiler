@@ -4,9 +4,7 @@ import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Invariant;
 import cml.language.foundation.InvariantValidator;
 import cml.language.foundation.Property;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 import cml.language.types.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -127,6 +125,18 @@ class AssociationEndImpl implements AssociationEnd
     public Optional<Scope> getParent()
     {
         return modelElement.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
     }
 
     @Override

@@ -2,10 +2,7 @@ package cml.language.features;
 
 import cml.language.foundation.Property;
 import cml.language.foundation.PropertyList;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -37,7 +34,7 @@ class TaskImpl implements Task
     TaskImpl(TempModule module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
-        this.namedElement = extendNamedElement(modelElement, name);
+        this.namedElement = extendNamedElement(this, modelElement, name);
         this.scope = extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
 
         this.constructor = constructor;
@@ -53,6 +50,18 @@ class TaskImpl implements Task
     public Optional<Scope> getParent()
     {
         return modelElement.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
     }
 
     @Override

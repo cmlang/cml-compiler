@@ -1,10 +1,7 @@
 package cml.language.features;
 
 import cml.language.foundation.*;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 import cml.language.types.Type;
 
 import java.util.ArrayList;
@@ -13,8 +10,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static cml.language.functions.ConceptFunctions.*;
-import static cml.language.functions.ModelElementFunctions.moduleOf;
+import static cml.language.functions.ConceptFunctions.redefinedAncestors;
+import static cml.language.functions.ConceptFunctions.redefinedInheritedConcreteProperties;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
@@ -252,17 +249,9 @@ public interface Concept extends NamedElement, PropertyList
         .collect(toList());
     }
 
-    default TempModel getModel()
-    {
-        assert moduleOf(this).isPresent();
-
-        return moduleOf(this).get().getModel();
-    }
-
     default List<Association> getAssociations()
     {
-        return getModel().getAssociations()
-                         .stream()
+        return seq(getModel()).flatMap(m -> seq(((TempModel) m).getAssociations()))
                          .filter(assoc -> assoc.getAssociationEnds()
                                                .stream()
                                                .anyMatch(end -> end.getConcept().isPresent() && end.getConcept().get() == this))
@@ -306,7 +295,7 @@ class ConceptImpl implements Concept
     ConceptImpl(TempModule module, String name, boolean _abstract, final List<Property> propertyList, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
-        this.namedElement = extendNamedElement(modelElement, name);
+        this.namedElement = extendNamedElement(this, modelElement, name);
         this.scope = extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
         this._abstract = _abstract;
     }
@@ -327,6 +316,18 @@ class ConceptImpl implements Concept
     public Optional<Scope> getParent()
     {
         return modelElement.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
     }
 
     @Override

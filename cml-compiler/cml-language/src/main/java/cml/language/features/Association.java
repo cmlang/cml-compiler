@@ -1,10 +1,10 @@
 package cml.language.features;
 
-import cml.language.foundation.*;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.foundation.Diagnostic;
+import cml.language.foundation.Invariant;
+import cml.language.foundation.InvariantValidator;
+import cml.language.foundation.Property;
+import cml.language.generated.*;
 import cml.language.types.Type;
 
 import java.util.List;
@@ -136,7 +136,7 @@ class AssociationImpl implements Association
     AssociationImpl(TempModule module, String name, List<AssociationEnd> associationEnds, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
-        this.namedElement = extendNamedElement(modelElement, name);
+        this.namedElement = extendNamedElement(this, modelElement, name);
         this.scope = extendScope(this, modelElement, seq(associationEnds).map(end -> (ModelElement)end).toList());
     }
 
@@ -150,6 +150,18 @@ class AssociationImpl implements Association
     public Optional<Scope> getParent()
     {
         return modelElement.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
     }
 
     @Override

@@ -5,10 +5,7 @@ import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
 import cml.language.features.TempModule;
 import cml.language.foundation.Diagnostic;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 import cml.language.types.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -276,7 +273,7 @@ class InvocationImpl implements Invocation
     InvocationImpl(String name, List<Expression> arguments)
     {
         modelElement = extendModelElement(this, null, null);
-        namedElement = extendNamedElement(modelElement, name);
+        namedElement = extendNamedElement(this, modelElement, name);
         scope = extendScope(this, modelElement, seq(arguments).map(a -> (ModelElement)a).toList());
 
         this.arguments = new ArrayList<>(arguments);
@@ -336,6 +333,18 @@ class InvocationImpl implements Invocation
     }
 
     @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
+    }
+
+    @Override
     public String getName()
     {
         return namedElement.getName();
@@ -367,7 +376,7 @@ class ParameterizedInvocation implements Invocation
     ParameterizedInvocation(String name, LinkedHashMap<String, Expression> namedArguments)
     {
         modelElement = extendModelElement(this, null, null);
-        namedElement = extendNamedElement(modelElement, name);
+        namedElement = extendNamedElement(this, modelElement, name);
         scope = extendScope(this, modelElement, seq(namedArguments.values()).map(a -> (ModelElement)a).toList());
 
         this.namedArguments = new LinkedHashMap<>(namedArguments);
@@ -415,6 +424,18 @@ class ParameterizedInvocation implements Invocation
     public Optional<Scope> getParent()
     {
         return modelElement.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
     }
 
     @Override

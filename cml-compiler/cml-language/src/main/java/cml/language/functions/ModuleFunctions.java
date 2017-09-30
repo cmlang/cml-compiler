@@ -56,7 +56,9 @@ public class ModuleFunctions
 
     public static Import createImportOfModule(final String moduleName, final Location location, final TempModule importingModule)
     {
-        final TempModel model = importingModule.getModel();
+        assert importingModule.getModel().isPresent();
+
+        final TempModel model = (TempModel) importingModule.getModel().get();
         final Optional<TempModule> existingModule = moduleOf(model, moduleName);
         final boolean firstImport = !existingModule.isPresent();
         final TempModule importedModule = firstImport ? TempModule.create(model, moduleName) : existingModule.get();

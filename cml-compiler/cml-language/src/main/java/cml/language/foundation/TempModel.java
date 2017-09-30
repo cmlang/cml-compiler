@@ -7,6 +7,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.NamedElement.extendNamedElement;
+import static cml.language.generated.Scope.extendScope;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -86,41 +89,45 @@ public interface TempModel extends NamedElement, Scope, Model
 
 class ModelImpl implements TempModel
 {
-    private final ModelElement modelElement;
-    private final NamedElement namedElement;
-    private final Scope scope;
     private final Model model;
 
     ModelImpl()
     {
-        this.modelElement = ModelElement.extendModelElement(this, null, null);
-        this.namedElement = NamedElement.extendNamedElement(modelElement, "");
-        this.scope = Scope.extendScope(this, modelElement, emptyList());
-        this.model = Model.extendModel(modelElement, namedElement, scope);
+        final ModelElement modelElement = extendModelElement(this, null, null);
+        final NamedElement namedElement = extendNamedElement(this, modelElement, "");
+        final Scope scope = extendScope(this, modelElement, emptyList());
+
+        this.model = Model.extendModel(this, modelElement, namedElement, scope);
     }
 
     @Override
     public Optional<Location> getLocation()
     {
-        return modelElement.getLocation();
+        return model.getLocation();
     }
 
     @Override
     public Optional<Scope> getParent()
     {
-        return modelElement.getParent();
+        return model.getParent();
     }
 
     @Override
     public List<ModelElement> getMembers()
     {
-        return scope.getMembers();
+        return model.getMembers();
     }
 
     @Override
     public Optional<Model> getModel()
     {
         return model.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return model.getModule();
     }
 
     @Override

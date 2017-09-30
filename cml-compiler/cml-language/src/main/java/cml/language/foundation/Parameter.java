@@ -1,9 +1,6 @@
 package cml.language.foundation;
 
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 import cml.language.types.NamedType;
 import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +45,7 @@ class ParameterImpl implements Parameter
     ParameterImpl(String name, NamedType type, String scopeName)
     {
         modelElement = extendModelElement(this, null, null);
-        namedElement = extendNamedElement(modelElement, name);
+        namedElement = extendNamedElement(this, modelElement, name);
 
         this.type = type;
         this.scopeName = scopeName;
@@ -82,5 +79,17 @@ class ParameterImpl implements Parameter
     public Optional<Scope> getParent()
     {
         return modelElement.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
     }
 }

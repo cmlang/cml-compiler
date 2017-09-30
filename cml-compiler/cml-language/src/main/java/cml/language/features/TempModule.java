@@ -15,14 +15,6 @@ import static java.util.stream.Stream.concat;
 
 public interface TempModule extends NamedElement, Scope, Module
 {
-    default TempModel getModel()
-    {
-        assert getParent().isPresent();
-        assert getParent().get() instanceof TempModel;
-
-        return (TempModel) getParent().get();
-    }
-
     default List<TempModule> getImportedModules()
     {
         return getImports().stream()
@@ -100,41 +92,51 @@ public interface TempModule extends NamedElement, Scope, Module
 
 class TempModuleImpl implements TempModule
 {
-    private final ModelElement modelElement;
-    private final NamedElement namedElement;
-    private final Scope scope;
     private final Module module;
 
     TempModuleImpl(TempModel model, String name)
     {
-        this.modelElement = extendModelElement(this, model, null);
-        this.namedElement = extendNamedElement(modelElement, name);
-        this.scope = extendScope(this, modelElement, emptyList());
-        this.module = Module.extendModule(modelElement, namedElement, scope);
+        final ModelElement modelElement = extendModelElement(this, model, null);
+        final NamedElement namedElement = extendNamedElement(this, modelElement, name);
+        final Scope scope = extendScope(this, modelElement, emptyList());
+
+        this.module = Module.extendModule(this, modelElement, namedElement, scope);
     }
 
     @Override
     public Optional<Location> getLocation()
     {
-        return modelElement.getLocation();
+        return module.getLocation();
     }
 
     @Override
     public Optional<Scope> getParent()
     {
-        return modelElement.getParent();
+        return module.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return module.getModel();
     }
 
     @Override
     public String getName()
     {
-        return namedElement.getName();
+        return module.getName();
     }
 
     @Override
     public List<ModelElement> getMembers()
     {
-        return scope.getMembers();
+        return module.getMembers();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return module.getModule();
     }
 
     @Override

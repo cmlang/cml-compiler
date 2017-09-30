@@ -3,10 +3,7 @@ package cml.language.foundation;
 import cml.language.expressions.Expression;
 import cml.language.features.Association;
 import cml.language.features.Concept;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 import cml.language.types.NamedType;
 import cml.language.types.Type;
 import cml.language.types.TypedElement;
@@ -22,6 +19,7 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.jooq.lambda.Seq.seq;
 
 public interface Property extends TypedElement, Scope
 {
@@ -75,15 +73,9 @@ public interface Property extends TypedElement, Scope
         return (Concept) getParent().get();
     }
 
-    default TempModel getModel()
-    {
-        return getConcept().getModel();
-    }
-
     default Optional<Association> getAssociation()
     {
-        return getModel().getAssociations()
-                         .stream()
+        return seq(getModel()).flatMap(m -> seq(((TempModel) m).getAssociations()))
                          .filter(assoc -> assoc.getAssociationEnds()
                                                .stream()
                                                .anyMatch(end -> end.getProperty().isPresent() && end.getProperty().get() == this))
@@ -139,7 +131,7 @@ class PropertyImpl implements Property
     PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived, Location location)
     {
         modelElement = ModelElement.extendModelElement(this, null, location);
-        namedElement = NamedElement.extendNamedElement(modelElement, name);
+        namedElement = NamedElement.extendNamedElement(this, modelElement, name);
         scope = Scope.extendScope(this, modelElement, singletonList(value));
 
         this.type = type;
@@ -231,6 +223,18 @@ class PropertyImpl implements Property
     public Optional<Scope> getParent()
     {
         return modelElement.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
     }
 
     @Override

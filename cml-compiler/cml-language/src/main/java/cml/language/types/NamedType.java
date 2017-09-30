@@ -1,10 +1,7 @@
 package cml.language.types;
 
 import cml.language.features.Concept;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
+import cml.language.generated.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -117,7 +114,7 @@ class NamedTypeImpl implements NamedType
     NamedTypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
     {
         this.modelElement = extendModelElement(this, null, null);
-        this.namedElement = extendNamedElement(modelElement, name);
+        this.namedElement = extendNamedElement(this, modelElement, name);
         this.cardinality = cardinality;
         this.errorMessage = errorMessage;
     }
@@ -132,6 +129,18 @@ class NamedTypeImpl implements NamedType
     public Optional<Scope> getParent()
     {
         return modelElement.getParent();
+    }
+
+    @Override
+    public Optional<Model> getModel()
+    {
+        return modelElement.getModel();
+    }
+
+    @Override
+    public Optional<Module> getModule()
+    {
+        return modelElement.getModule();
     }
 
     @Override

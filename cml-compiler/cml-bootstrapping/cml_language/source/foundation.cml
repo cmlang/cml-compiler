@@ -4,9 +4,8 @@
     parent: Scope?;
     location: Location?;
 
-//    /model: MODEL? = parent.model;
-
-//    /modulo: MODULE? = parent.modulo;
+    /model: MODEL? = parent.model;
+    /module: MODULE? = parent.module;
 }
 
 @abstraction NAMED_ELEMENT: MODEL_ELEMENT

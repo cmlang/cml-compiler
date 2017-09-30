@@ -18,7 +18,7 @@ public class NamedElementBase extends ModelElementBase implements NamedElement
     public NamedElementBase(@Nullable Scope parent, String name)
     {
         super(parent);
-        namedElement = extendNamedElement(modelElement, name);
+        namedElement = extendNamedElement(this, modelElement, name);
     }
 
     @Override
