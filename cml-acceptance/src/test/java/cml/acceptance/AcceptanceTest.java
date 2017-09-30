@@ -31,7 +31,7 @@ import static org.jooq.lambda.Seq.seq;
 public class AcceptanceTest
 {
     private static final Charset OUTPUT_FILE_ENCODING = Charset.forName("UTF-8");
-    private static final int PROCESS_TIMEOUT_IN_SECONDS = 180;
+    private static final int PROCESS_TIMEOUT_IN_SECONDS = 360;
 
     private static final String BASE_DIR = "..";
 
@@ -39,9 +39,6 @@ public class AcceptanceTest
     private static final String FRONTEND_DIR = COMPILER_DIR + "/cml-frontend";
     private static final String FRONTEND_TARGET_DIR = FRONTEND_DIR + "/target";
     private static final String COMPILER_JAR = FRONTEND_TARGET_DIR + "/cml-compiler-jar-with-dependencies.jar";
-
-    private static final String CLIENT_BASE_DIR = BASE_DIR + "/" + "cml-clients";
-    private static final String CLIENT_JAR_SUFFIX = "-jar-with-dependencies.jar";
 
     private static final String CML_MODULES_BASE_DIR = BASE_DIR + "/" + "cml-modules";
 
