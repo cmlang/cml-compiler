@@ -1,5 +1,5 @@
 
-@concept MODULE: NAMED_ELEMENT, Scope
+@concept MODULE: NAMED_ELEMENT, SCOPE
 {
     /module = self as? MODULE?;
 

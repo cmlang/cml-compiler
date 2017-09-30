@@ -1,8 +1,8 @@
 
 @abstraction MODEL_ELEMENT
 {
-    parent: Scope?;
-    location: Location?;
+    parent: SCOPE?;
+    location: LOCATION?;
 
     /model: MODEL? = parent.model;
     /module: MODULE? = parent.module;
@@ -13,26 +13,26 @@
     name: string;
 }
 
-@concept Scope: MODEL_ELEMENT
+@concept SCOPE: MODEL_ELEMENT
 {
     members: MODEL_ELEMENT*;
 }
 
-@concept Location
+@concept LOCATION
 {
-    line: Integer;
-    column: Integer;
+    line: integer;
+    column: integer;
     element: MODEL_ELEMENT;
 }
 
-@association Membership
+@association MEMBERSHIP
 {
     MODEL_ELEMENT.parent;
-    Scope.members;
+    SCOPE.members;
 }
 
-@association Localization
+@association LOCALIZATION
 {
-    Location.element;
+    LOCATION.element;
     MODEL_ELEMENT.location;
 }

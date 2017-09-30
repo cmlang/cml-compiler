@@ -7,10 +7,10 @@ MODEL_ELEMENT files:
 NAMED_ELEMENT files:
 - src/main/java/cml/language/generated/NamedElement.java
 
-Scope files:
+SCOPE files:
 - src/main/java/cml/language/generated/Scope.java
 
-Location files:
+LOCATION files:
 - src/main/java/cml/language/generated/Location.java
 
 MODEL files:
@@ -22,8 +22,8 @@ MODULE files:
 IMPORT files:
 - src/main/java/cml/language/generated/Import.java
 
-Membership files:
+MEMBERSHIP files:
 - src/main/java/cml/language/generated/Membership.java
 
-Localization files:
+LOCALIZATION files:
 - src/main/java/cml/language/generated/Localization.java
