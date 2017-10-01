@@ -1,11 +1,11 @@
 package cml.language.loader;
 
-import cml.language.expressions.TempExpression;
 import cml.language.features.Association;
 import cml.language.features.AssociationEnd;
 import cml.language.features.TempConcept;
 import cml.language.foundation.TempModel;
 import cml.language.foundation.TempProperty;
+import cml.language.generated.Expression;
 
 @SuppressWarnings("unused")
 public interface ModelVisitor
@@ -15,5 +15,5 @@ public interface ModelVisitor
     default void visit(TempProperty property) {}
     default void visit(Association association) {}
     default void visit(AssociationEnd associationEnd) {}
-    default void visit(TempExpression expression) {}
+    default void visit(Expression expression) {}
 }

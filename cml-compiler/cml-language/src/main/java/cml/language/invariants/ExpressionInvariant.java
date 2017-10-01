@@ -4,8 +4,9 @@ import cml.language.expressions.Invocation;
 import cml.language.expressions.TempExpression;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Invariant;
+import cml.language.generated.Expression;
 
-public class ExpressionInvariant implements Invariant<TempExpression>
+public class ExpressionInvariant implements Invariant<Expression>
 {
     private final InvocationInvariant invocationInvariant = new InvocationInvariant();
 
@@ -16,9 +17,9 @@ public class ExpressionInvariant implements Invariant<TempExpression>
     }
 
     @Override
-    public boolean evaluate(final TempExpression self)
+    public boolean evaluate(final Expression self)
     {
-        for (final TempExpression expr: self.getSubExpressions())
+        for (final Expression expr: ((TempExpression)self).getSubExpressions())
         {
             final boolean pass = evaluateInvariantsOf(expr);
 
@@ -29,9 +30,9 @@ public class ExpressionInvariant implements Invariant<TempExpression>
     }
 
     @Override
-    public Diagnostic createDiagnostic(final TempExpression self)
+    public Diagnostic createDiagnostic(final Expression self)
     {
-        for (final TempExpression expr: self.getSubExpressions())
+        for (final Expression expr: ((TempExpression)self).getSubExpressions())
         {
             final boolean pass = evaluateInvariantsOf(expr);
 
@@ -42,13 +43,13 @@ public class ExpressionInvariant implements Invariant<TempExpression>
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    private boolean evaluateInvariantsOf(final TempExpression expr)
+    private boolean evaluateInvariantsOf(final Expression expr)
     {
         if (expr instanceof Invocation) return invocationInvariant.evaluate((Invocation) expr);
         else return true;
     }
 
-    private Diagnostic createDiagnosticOf(final TempExpression expr)
+    private Diagnostic createDiagnosticOf(final Expression expr)
     {
         if (expr instanceof Invocation) return invocationInvariant.createDiagnostic((Invocation) expr);
         else throw new IllegalArgumentException("Unexpected diagnostic for expression: " + expr);

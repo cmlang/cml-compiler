@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Expression;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
 import cml.language.types.NamedType;
@@ -45,9 +46,9 @@ public class Lambda extends ExpressionBase
     }
 
     @Override
-    public List<TempExpression> getSubExpressions()
+    public List<Expression> getSubExpressions()
     {
-        return Seq.of(innerExpression).toList();
+        return Seq.of(innerExpression).map(m -> (Expression)m).toList();
     }
 
     public Optional<FunctionType> getFunctionType()

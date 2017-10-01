@@ -5,7 +5,9 @@ import cml.language.features.Association;
 import cml.language.features.TempConcept;
 import cml.language.foundation.TempModel;
 import cml.language.foundation.TempProperty;
+import cml.language.generated.Expression;
 import cml.language.loader.ModelVisitor;
+import cml.language.types.TempType;
 
 @SuppressWarnings("WeakerAccess")
 public class ModelVisitorFunctions
@@ -40,10 +42,10 @@ public class ModelVisitorFunctions
         property.getValue().ifPresent(expression -> visitExpression(expression, visitor));
     }
 
-    public static void visitExpression(TempExpression expression, ModelVisitor visitor)
+    public static void visitExpression(Expression expression, ModelVisitor visitor)
     {
         visitor.visit(expression);
 
-        expression.getSubExpressions().forEach(e -> visitExpression(e, visitor));
+        ((TempExpression)expression).getSubExpressions().forEach(e -> visitExpression(e, visitor));
     }
 }

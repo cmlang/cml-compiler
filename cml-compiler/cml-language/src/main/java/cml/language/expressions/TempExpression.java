@@ -17,10 +17,10 @@ public interface TempExpression extends Expression
         return getType();
     }
 
-    default List<TempExpression> getSubExpressions()
+    default List<Expression> getSubExpressions()
     {
-        return seq(getMembers()).filter(m -> m instanceof TempExpression)
-                                .map(m -> (TempExpression)m)
+        return seq(getMembers()).filter(m -> m instanceof Expression)
+                                .map(m -> (Expression)m)
                                 .toList();
     }
 }

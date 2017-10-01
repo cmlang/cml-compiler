@@ -1,8 +1,8 @@
 package cml.language.loader;
 
-import cml.language.expressions.TempExpression;
 import cml.language.expressions.Invocation;
 import cml.language.foundation.TempModel;
+import cml.language.generated.Expression;
 
 import static cml.language.functions.ModelFunctions.templateOf;
 import static org.jooq.lambda.Seq.seq;
@@ -18,7 +18,7 @@ public class FunctionLinker implements ModelVisitor
     }
 
     @Override
-    public void visit(final TempExpression expression)
+    public void visit(final Expression expression)
     {
         if (expression instanceof Invocation)
         {
