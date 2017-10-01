@@ -12,6 +12,7 @@ import cml.language.types.TempType;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -76,7 +77,11 @@ public class ScopeFunctions
 
     public static Optional<TempType> typeOfVariableNamed(String name, Scope scope)
     {
-        if (scope instanceof LambdaScope)
+        if (name.equals("self"))
+        {
+            return ofNullable(selfTypeOf(scope));
+        }
+        else if (scope instanceof LambdaScope)
         {
             final LambdaScope lambdaScope = (LambdaScope) scope;
             final Optional<TempType> type = ofNullable(lambdaScope.getParameters().get(name));

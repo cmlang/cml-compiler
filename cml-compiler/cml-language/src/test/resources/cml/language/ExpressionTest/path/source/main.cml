@@ -6,6 +6,7 @@
     somePathList: SomeConcept*;
 
     self_var = self;
+    derived_some_path = self.somePath;
     single_var = foo;
     path_var = somePath.bar;
     path_var2 = somePath.oneMorePath.etc;
