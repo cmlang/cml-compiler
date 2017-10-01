@@ -180,7 +180,7 @@ interface_operation_body() ::= <<
 class_keyword() ::= "class "
 
 class_type_name(name) ::= <<
-<name; format="pascal-case">
+<task.classTypeNamePrefix><name; format="pascal-case">
 >>
 
 constructor_name(class_name) ::= "__init__"

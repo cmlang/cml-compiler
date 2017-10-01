@@ -12,4 +12,5 @@
 {
     moduleName = "cml_language";
     moduleVersion = "master-SNAPSHOT";
+    classTypeNamePrefix = "CML";
 }

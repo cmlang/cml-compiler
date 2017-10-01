@@ -20,7 +20,7 @@ call_arg(arg) ::= <<
 >>
 
 new_call(class_name, args) ::= <<
-<call({<new_keyword()><type_name(class_name)>}, args)>
+<call({<new_keyword()><class_name>}, args)>
 >>
 
 init_call(name, args) ::= <<
