@@ -1,0 +1,26 @@
+
+@abstraction TYPE: MODEL_ELEMENT
+{
+    concept: CONCEPT?;
+    cardinality: STRING?;
+    kind: STRING;
+    error_message: STRING?;
+
+    /element_type: TYPE;
+    /matching_result_type = self;
+    /base_type = self;
+
+    /parameter = defined and not primitive and empty(concept);
+    /defined = not undefined;
+    /undefined = false;
+
+    /primitive = false;
+    /numeric = false;
+    /binary_floating_point = false;
+
+    /single = (required or optional) and not sequence;
+    /required = kind == "required";
+    /optional = kind == "optional";
+    /sequence = kind == "sequence";
+}
+

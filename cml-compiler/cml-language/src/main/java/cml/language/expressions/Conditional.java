@@ -1,18 +1,18 @@
 package cml.language.expressions;
 
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.util.Arrays.asList;
 
 public class Conditional extends ExpressionBase
 {
-    private final Expression cond;
-    private final Expression then;
-    private final Expression else_;
+    private final TempExpression cond;
+    private final TempExpression then;
+    private final TempExpression else_;
 
-    public Conditional(Expression cond, Expression then, Expression else_)
+    public Conditional(TempExpression cond, TempExpression then, TempExpression else_)
     {
         super(asList(cond, then, else_));
 
@@ -21,17 +21,17 @@ public class Conditional extends ExpressionBase
         this.else_ = else_;
     }
 
-    public Expression getCond()
+    public TempExpression getCond()
     {
         return cond;
     }
 
-    public Expression getThen()
+    public TempExpression getThen()
     {
         return then;
     }
 
-    public Expression getElse_()
+    public TempExpression getElse_()
     {
         return else_;
     }
@@ -43,10 +43,10 @@ public class Conditional extends ExpressionBase
     }
 
     @Override
-    public Type getType()
+    public TempType getType()
     {
-        final Type thenType = then.getType();
-        final Type elseType = else_.getType();
+        final TempType thenType = then.getType();
+        final TempType elseType = else_.getType();
 
         if (isAssignableFrom(thenType, elseType))
         {

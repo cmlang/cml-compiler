@@ -3,9 +3,9 @@ package cml.language.features;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Invariant;
 import cml.language.foundation.InvariantValidator;
-import cml.language.foundation.Property;
+import cml.language.foundation.TempProperty;
 import cml.language.generated.*;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,20 +24,20 @@ public interface AssociationEnd extends ModelElement
 {
     String getConceptName();
     String getPropertyName();
-    Optional<Type> getPropertyType();
+    Optional<TempType> getPropertyType();
 
-    Optional<Concept> getConcept();
-    void setConcept(@NotNull Concept concept);
+    Optional<TempConcept> getConcept();
+    void setConcept(@NotNull TempConcept concept);
 
-    Optional<Property> getProperty();
-    void setProperty(@NotNull Property property);
+    Optional<TempProperty> getProperty();
+    void setProperty(@NotNull TempProperty property);
 
     static AssociationEnd create(String conceptName, String propertyName)
     {
         return create(conceptName, propertyName, null, null);
     }
 
-    static AssociationEnd create(String conceptName, String propertyName, @Nullable Type propertyType, Location location)
+    static AssociationEnd create(String conceptName, String propertyName, @Nullable TempType propertyType, Location location)
     {
         return new AssociationEndImpl(conceptName, propertyName, propertyType, location);
     }
@@ -56,12 +56,12 @@ class AssociationEndImpl implements AssociationEnd
     private final ModelElement modelElement;
     private final String conceptName;
     private final String propertyName;
-    private final @Nullable Type propertyType;
+    private final @Nullable TempType propertyType;
 
-    private @Nullable Concept concept;
-    private @Nullable Property property;
+    private @Nullable TempConcept concept;
+    private @Nullable TempProperty property;
 
-    AssociationEndImpl(String conceptName, String propertyName, @Nullable Type propertyType, Location location)
+    AssociationEndImpl(String conceptName, String propertyName, @Nullable TempType propertyType, Location location)
     {
         this.modelElement = ModelElement.extendModelElement(this, null, location);
         this.conceptName = conceptName;
@@ -82,19 +82,19 @@ class AssociationEndImpl implements AssociationEnd
     }
 
     @Override
-    public Optional<Type> getPropertyType()
+    public Optional<TempType> getPropertyType()
     {
         return Optional.ofNullable(propertyType);
     }
 
     @Override
-    public Optional<Concept> getConcept()
+    public Optional<TempConcept> getConcept()
     {
         return Optional.ofNullable(concept);
     }
 
     @Override
-    public void setConcept(@NotNull Concept concept)
+    public void setConcept(@NotNull TempConcept concept)
     {
         assert this.concept == null;
 
@@ -102,13 +102,13 @@ class AssociationEndImpl implements AssociationEnd
     }
 
     @Override
-    public Optional<Property> getProperty()
+    public Optional<TempProperty> getProperty()
     {
         return Optional.ofNullable(property);
     }
 
     @Override
-    public void setProperty(@NotNull Property property)
+    public void setProperty(@NotNull TempProperty property)
     {
         assert this.property == null;
 

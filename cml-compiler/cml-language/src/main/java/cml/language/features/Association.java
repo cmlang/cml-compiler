@@ -3,9 +3,9 @@ package cml.language.features;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Invariant;
 import cml.language.foundation.InvariantValidator;
-import cml.language.foundation.Property;
+import cml.language.foundation.TempProperty;
 import cml.language.generated.*;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,18 +37,18 @@ public interface Association extends NamedElement, Scope
                            .collect(toList());
     }
 
-    default List<Type> getPropertyTypes()
+    default List<TempType> getPropertyTypes()
     {
         return getAssociationEnds()
             .stream()
             .map(AssociationEnd::getProperty)
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(Property::getType)
+            .map(TempProperty::getType)
             .collect(toList());
     }
 
-    default List<Type> getReversedPropertyTypes()
+    default List<TempType> getReversedPropertyTypes()
     {
         return seq(getPropertyTypes()).reverse().toList();
     }
@@ -66,7 +66,7 @@ public interface Association extends NamedElement, Scope
         return oneToOne(getAssociationEnds().get(0), getAssociationEnds().get(1));
     }
 
-    default Optional<Property> getOneProperty()
+    default Optional<TempProperty> getOneProperty()
     {
         if (oneToMany(getAssociationEnds().get(0), getAssociationEnds().get(1)))
         {
@@ -81,7 +81,7 @@ public interface Association extends NamedElement, Scope
         return Optional.empty();
     }
 
-    default Optional<Property> getManyProperty()
+    default Optional<TempProperty> getManyProperty()
     {
         if (oneToMany(getAssociationEnds().get(0), getAssociationEnds().get(1)))
         {
@@ -225,15 +225,15 @@ class AssociationEndTypesMustMatch implements Invariant<Association>
             return true;
         }
 
-        final Concept firstConcept = end1.getConcept().get();
-        final Concept secondConcept = end2.getConcept().get();
-        final Property firstProperty = end1.getProperty().get();
-        final Property secondProperty = end2.getProperty().get();
+        final TempConcept firstConcept = end1.getConcept().get();
+        final TempConcept secondConcept = end2.getConcept().get();
+        final TempProperty firstProperty = end1.getProperty().get();
+        final TempProperty secondProperty = end2.getProperty().get();
 
         return typesMatch(firstConcept, secondProperty) && typesMatch(secondConcept, firstProperty);
     }
 
-    private static boolean typesMatch(Concept concept, Property property)
+    private static boolean typesMatch(TempConcept concept, TempProperty property)
     {
         return isEqualTo(property.getType().getElementType(), selfTypeOf(concept));
     }

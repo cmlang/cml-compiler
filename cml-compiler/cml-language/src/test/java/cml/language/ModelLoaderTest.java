@@ -6,9 +6,9 @@ import cml.io.ModuleManager;
 import cml.language.expressions.Literal;
 import cml.language.features.Association;
 import cml.language.features.AssociationEnd;
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
-import cml.language.foundation.Property;
+import cml.language.foundation.TempProperty;
 import cml.language.foundation.TempModel;
 import cml.language.generated.Import;
 import cml.language.loader.ModelLoader;
@@ -51,7 +51,7 @@ public class ModelLoaderTest
     {
         final String moduleName = "module_name";
         final TempModule module = loadModule(moduleName);
-        final Concept concept = module.getConcepts().get(0);
+        final TempConcept concept = module.getConcepts().get(0);
 
         assertThat(module.getName(), is(moduleName));
         assertThat(concept.getName(), is("SomeConcept"));
@@ -59,7 +59,7 @@ public class ModelLoaderTest
         final String anotherModuleName = "another_module";
         final Import _import = module.getImports().get(0);
         final TempModule anotherModule = (TempModule) _import.getImportedModule();
-        final Concept anotherConcept = anotherModule.getConcepts().get(0);
+        final TempConcept anotherConcept = anotherModule.getConcepts().get(0);
 
         assertThat(_import.getName(), is(anotherModuleName));
         assertThat(anotherModule.getName(), is(anotherModuleName));
@@ -86,7 +86,7 @@ public class ModelLoaderTest
     @Test
     public void concrete_concept()
     {
-        final Concept concept = loadConcept("concrete_concept");
+        final TempConcept concept = loadConcept("concrete_concept");
 
         assertThat(concept.getName(), is("ModelElement"));
         assertFalse("Concept should be concrete.", concept.isAbstract());
@@ -95,7 +95,7 @@ public class ModelLoaderTest
     @Test
     public void derived_property()
     {
-        final Concept concept = loadConcept("derived_property");
+        final TempConcept concept = loadConcept("derived_property");
 
         assertThat(concept.getName(), is("SomeConcept"));
         assertTrue("derivedProperty should be derived.", propertyOf(concept, "derivedProperty").get().isDerived());
@@ -105,7 +105,7 @@ public class ModelLoaderTest
     @Test
     public void abstract_concept()
     {
-        final Concept concept = loadConcept("abstract_concept");
+        final TempConcept concept = loadConcept("abstract_concept");
 
         assertThat(concept.getName(), is("ModelElement"));
         assertTrue("Concept should be abstract.", concept.isAbstract());
@@ -114,7 +114,7 @@ public class ModelLoaderTest
     @Test
     public void expressions()
     {
-        final Concept concept = loadConcept("expressions");
+        final TempConcept concept = loadConcept("expressions");
 
         assertThat(concept.getName(), is("Expressions"));
 
@@ -140,7 +140,7 @@ public class ModelLoaderTest
         return (TempModule) loadModel(sourceFileName).getModules().get(0);
     }
 
-    private Concept loadConcept(String sourceFileName)
+    private TempConcept loadConcept(String sourceFileName)
     {
         return loadModel(sourceFileName).getConcepts().get(0);
     }
@@ -169,9 +169,9 @@ public class ModelLoaderTest
         return model;
     }
 
-    private void assertPropertyFound(Concept concept, String propertyName, String propertyValue)
+    private void assertPropertyFound(TempConcept concept, String propertyName, String propertyValue)
     {
-        final Property str = propertyOf(concept, propertyName).orElse(null);
+        final TempProperty str = propertyOf(concept, propertyName).orElse(null);
         assertNotNull(propertyName, str);
 
         final Literal literal = (Literal)str.getValue().orElse(null);
@@ -205,10 +205,10 @@ public class ModelLoaderTest
             assertTrue("Expected matching type for: " + conceptName + "." + propertyName, isEqualTo(expectedType, associationEnd.getPropertyType().get()));
         }
 
-        final Concept concept = associationEnd.getConcept().get();
+        final TempConcept concept = associationEnd.getConcept().get();
         assertEquals(conceptName, concept.getName(), conceptName);
 
-        final Property property = associationEnd.getProperty().get();
+        final TempProperty property = associationEnd.getProperty().get();
         assertEquals(conceptName + "." + propertyName, property.getName(), propertyName);
 
         assertTrue(conceptName + "." + propertyName, concept.getMembers().contains(property));

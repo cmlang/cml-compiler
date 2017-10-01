@@ -3,7 +3,7 @@ package cml.language.expressions;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
@@ -24,11 +24,11 @@ import static org.jooq.lambda.Seq.seq;
 public class Lambda extends ExpressionBase
 {
     private final List<String> parameters;
-    private final Expression innerExpression;
+    private final TempExpression innerExpression;
 
     private @Nullable FunctionType functionType;
 
-    public Lambda(final Seq<String> parameters, final Expression innerExpression)
+    public Lambda(final Seq<String> parameters, final TempExpression innerExpression)
     {
         this.parameters = parameters.toList();
         this.innerExpression = innerExpression;
@@ -39,13 +39,13 @@ public class Lambda extends ExpressionBase
         return seq(parameters);
     }
 
-    public Expression getInnerExpression()
+    public TempExpression getInnerExpression()
     {
         return innerExpression;
     }
 
     @Override
-    public List<Expression> getSubExpressions()
+    public List<TempExpression> getSubExpressions()
     {
         return Seq.of(innerExpression).toList();
     }
@@ -62,7 +62,7 @@ public class Lambda extends ExpressionBase
         this.functionType = functionType;
     }
 
-    public Map<String, Type> getTypedParameters()
+    public Map<String, TempType> getTypedParameters()
     {
         if (functionType == null)
         {
@@ -95,7 +95,7 @@ public class Lambda extends ExpressionBase
         }
     }
 
-    public Seq<Tuple2<String, Type>> getUntypedParams()
+    public Seq<Tuple2<String, TempType>> getUntypedParams()
     {
         return getTypeUndefinedParams().zip(getTypeUndefinedParams().map(p -> NamedType.UNDEFINED));
     }
@@ -110,7 +110,7 @@ public class Lambda extends ExpressionBase
         return getParameters().skip(getParamTypeCount());
     }
 
-    public Seq<Type> getParamTypes()
+    public Seq<TempType> getParamTypes()
     {
         assert functionType != null;
 
@@ -122,7 +122,7 @@ public class Lambda extends ExpressionBase
         return getParamTypes().count();
     }
 
-    public Optional<Type> getExpectedScopeType()
+    public Optional<TempType> getExpectedScopeType()
     {
         if (parameters.isEmpty() && functionType != null && functionType.isSingleParam())
         {
@@ -141,13 +141,13 @@ public class Lambda extends ExpressionBase
     }
 
     @Override
-    public Type getType()
+    public TempType getType()
     {
         return functionType == null ? NamedType.createUndefined("Function type not specified for: " + this) : functionType;
     }
 
     @Override
-    public Type getMatchingResultType()
+    public TempType getMatchingResultType()
     {
         return innerExpression.getType();
     }
@@ -167,8 +167,8 @@ public class Lambda extends ExpressionBase
 
     private String stringOf(final String parameter)
     {
-        final Optional<Type> actualType = typeOfVariableNamed(parameter, innerExpression);
-        final Type formalType = getTypedParameters().get(parameter);
+        final Optional<TempType> actualType = typeOfVariableNamed(parameter, innerExpression);
+        final TempType formalType = getTypedParameters().get(parameter);
 
         return actualType.map(t -> parameter + ": " + t)
                    .orElseGet(() -> formalType == null ? parameter : formalType.toString());

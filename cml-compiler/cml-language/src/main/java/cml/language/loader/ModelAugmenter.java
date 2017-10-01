@@ -1,14 +1,14 @@
 package cml.language.loader;
 
 import cml.language.features.AssociationEnd;
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.generated.NamedElement;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
@@ -36,11 +36,11 @@ class ModelAugmenter extends CMLBaseListener
                                                   .map(ParseTree::getText)
                                                   .collect(Collectors.toList());
 
-            final List<Concept> foundAncestors = ancestorNames.stream()
-                                                         .map(name -> conceptOf(module, name))
-                                                         .filter(Optional::isPresent)
-                                                         .map(Optional::get)
-                                                         .collect(Collectors.toList());
+            final List<TempConcept> foundAncestors = ancestorNames.stream()
+                                                                  .map(name -> conceptOf(module, name))
+                                                                  .filter(Optional::isPresent)
+                                                                  .map(Optional::get)
+                                                                  .collect(Collectors.toList());
 
             final List<String> foundAncestorNames = foundAncestors.stream()
                                                                   .map(NamedElement::getName)
@@ -83,7 +83,7 @@ class ModelAugmenter extends CMLBaseListener
     @Override
     public void enterTypeDeclaration(CMLParser.TypeDeclarationContext ctx)
     {
-        final Type type = ctx.type;
+        final TempType type = ctx.type;
 
         if (type != null && type instanceof NamedType && !type.isPrimitive())
         {

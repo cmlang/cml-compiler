@@ -3,13 +3,13 @@ package cml.language;
 import cml.io.Console;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
-import cml.language.expressions.Expression;
-import cml.language.features.Concept;
+import cml.language.expressions.TempExpression;
+import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
-import cml.language.foundation.Property;
+import cml.language.foundation.TempProperty;
 import cml.language.loader.ModelLoader;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 import cml.templates.ModelAdaptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,10 +69,10 @@ public class ExpressionTest
     @Test
     public void expressionOCL() throws Exception
     {
-        final Concept concept = loadExpressions();
+        final TempConcept concept = loadExpressions();
         final Properties expectedOCL = loadProperties("expected_ocl.properties");
 
-        for (final Property property: concept.getProperties())
+        for (final TempProperty property: concept.getProperties())
         {
             assertExpectedOCL(expectedOCL, property);
         }
@@ -81,16 +81,16 @@ public class ExpressionTest
     @Test
     public void expectedType() throws Exception
     {
-        final Concept concept = loadExpressions();
+        final TempConcept concept = loadExpressions();
         final Properties expectedType = loadProperties("expected_type.properties");
 
-        for (final Property property: concept.getProperties())
+        for (final TempProperty property: concept.getProperties())
         {
             assertExpectedType(expectedType, property);
         }
     }
 
-    private Concept loadExpressions()
+    private TempConcept loadExpressions()
     {
         final String modulesBaseDir = fileSystem.extractParentPath(moduleDir.getPath());
 
@@ -104,7 +104,7 @@ public class ExpressionTest
         final Optional<TempModule> module = moduleOf(model, moduleName);
         assertTrue("Module should be found: " + moduleName, module.isPresent());
 
-        final Optional<Concept> concept = conceptOf(module.get(), "Expressions");
+        final Optional<TempConcept> concept = conceptOf(module.get(), "Expressions");
         assertTrue("The Expressions concept should be found in module: " + moduleName, concept.isPresent());
 
         return concept.get();
@@ -134,7 +134,7 @@ public class ExpressionTest
         return groupFile;
     }
 
-    private void assertExpectedOCL(Properties expectedOCL, Property property)
+    private void assertExpectedOCL(Properties expectedOCL, TempProperty property)
     {
         final String expectedOCLExpression = expectedOCL.getProperty(property.getName());
 
@@ -158,7 +158,7 @@ public class ExpressionTest
         }
     }
 
-    private void assertExpectedType(Properties expectedTypes, Property property)
+    private void assertExpectedType(Properties expectedTypes, TempProperty property)
     {
         final String expectedType = expectedTypes.getProperty(property.getName());
 
@@ -172,10 +172,10 @@ public class ExpressionTest
         {
             assertTrue("Expected type for property: " + property.getName(), property.getValue().isPresent());
 
-            final Expression value = property.getValue().orElse(null);
+            final TempExpression value = property.getValue().orElse(null);
             assertNotNull("Should have init for property: " + property.getName(), value);
 
-            final Type type = value.getType();
+            final TempType type = value.getType();
             assertNotNull("Should have computed type for property: " + property.getName(), type);
 
             if (type.getErrorMessage().isPresent())

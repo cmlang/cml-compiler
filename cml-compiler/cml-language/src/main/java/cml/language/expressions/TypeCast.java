@@ -1,7 +1,7 @@
 package cml.language.expressions;
 
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 
 import static cml.language.functions.TypeFunctions.isCastAllowed;
 import static java.lang.String.format;
@@ -12,11 +12,11 @@ public class TypeCast extends ExpressionBase
     public static final String ASB = "asb";
     public static final String ASQ = "asq";
 
-    private final Expression expr;
+    private final TempExpression expr;
     private final String operator;
-    private final Type castType;
+    private final TempType castType;
 
-    public TypeCast(Expression expr, final String operator, final Type castType)
+    public TypeCast(TempExpression expr, final String operator, final TempType castType)
     {
         super(singletonList(expr));
         this.expr = expr;
@@ -24,7 +24,7 @@ public class TypeCast extends ExpressionBase
         this.castType = castType;
     }
 
-    public Expression getExpr()
+    public TempExpression getExpr()
     {
         return expr;
     }
@@ -34,7 +34,7 @@ public class TypeCast extends ExpressionBase
         return operator;
     }
 
-    public Type getCastType()
+    public TempType getCastType()
     {
         return castType;
     }
@@ -46,9 +46,9 @@ public class TypeCast extends ExpressionBase
     }
 
     @Override
-    public Type getType()
+    public TempType getType()
     {
-        final Type exprType = expr.getType();
+        final TempType exprType = expr.getType();
 
         if (isCastAllowed(operator, exprType, castType))
         {
@@ -63,7 +63,7 @@ public class TypeCast extends ExpressionBase
         }
     }
 
-    private static String diagnosticMessage(String operator, Type exprType, Type castType)
+    private static String diagnosticMessage(String operator, TempType exprType, TempType castType)
     {
         if (operator.equals(ASQ) && castType.isRequired())
         {

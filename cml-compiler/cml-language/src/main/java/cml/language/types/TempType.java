@@ -1,6 +1,6 @@
 package cml.language.types;
 
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.generated.ModelElement;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static java.util.Optional.empty;
 
-public interface Type extends ModelElement
+public interface TempType extends ModelElement
 {
     String REQUIRED = "required";
     String OPTIONAL = "optional";
@@ -24,14 +24,14 @@ public interface Type extends ModelElement
         return empty();
     }
 
-    Type getElementType();
+    TempType getElementType();
 
-    default Type getMatchingResultType()
+    default TempType getMatchingResultType()
     {
         return this;
     }
 
-    default Type getBaseType()
+    default TempType getBaseType()
     {
         return this;
     }
@@ -124,12 +124,12 @@ public interface Type extends ModelElement
         return REQUIRED;
     }
 
-    default Optional<Concept> getConcept()
+    default Optional<TempConcept> getConcept()
     {
         return empty();
     }
 
-    default void setConcept(@NotNull Concept concept)
+    default void setConcept(@NotNull TempConcept concept)
     {
         throw new UnsupportedOperationException("setConcept");
     }

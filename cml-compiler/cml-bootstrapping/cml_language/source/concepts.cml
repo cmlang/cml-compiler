@@ -1,0 +1,77 @@
+
+@concept CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
+{
+/*
+    abstract: BOOLEAN;
+
+    generalizations: INHERITANCE*;
+    specializations: INHERITANCE*;
+
+    ancestors = generalizations.ancestor;
+    descendants = specializations.descendant;
+
+    /associations = model.associations | select: (association_ends | exists: concept == self);
+
+    /slot_properties = properties | select: slot;
+    /association_properties = properties | select: present(association);
+
+    /init_properties = all_properties | select: init;
+    /non_init_properties = all_properties | select: non_init;
+    /printable_properties = all_properties | select: printable;
+
+    /all_properties = concat(properties, non_redefined_properties);
+    /non_redefined_properties = for p1 in inherited_properties, p2 in properties
+                                    | reject: p1.name == p2.name
+                                    | yield: p1
+                                    | distinct;
+    /inherited_properties = ancestors | yield: all_properties | distinct;
+    /super_properties = non_redefined_properties | select: not derived;
+
+    /dependencies = distinct(concat(inherited_dependencies, property_dependencies));
+    /property_dependencies = distinct(concat(
+                                transitive_property_concepts | yield: inherited_dependencies,
+                                transitive_property_concepts | yield: name));
+    /inherited_dependencies = all_ancestors | select: name | distinct;
+
+    /transitive_property_concepts = self | recurse_depth: property_concepts;
+    /property_concepts = property_types | reject: primitive | yield: concept | distinct;
+    /property_types = all_properties | yield: type;
+
+    /all_ancestors = self | recurse_depth: ancestors | distinct;
+
+    /redefined_ancestors: CONCEPT_REDEF*;
+    /redefined_inherited_concrete_properties: PROPERTY*;
+*/
+}
+
+/*
+concept INHERITANCE: MODEL_ELEMENT
+{
+    ancestor: CONCEPT;
+    descendant: CONCEPT;
+}
+
+association GENERALIZATION
+{
+    CONCEPT.generalizations;
+    INHERITANCE.descendant;
+}
+
+association SPECIALIZATION
+{
+    CONCEPT.specializations;
+    INHERITANCE.ancestor;
+}
+
+concept CONCEPT_REDEF
+{
+    concept: CONCEPT;
+    propertyRedefs: PROPERTY_REDEF*;
+}
+
+concept PROPERTY_REDEF
+{
+    property: PROPERTY;
+    redefined: BOOLEAN;
+}
+*/

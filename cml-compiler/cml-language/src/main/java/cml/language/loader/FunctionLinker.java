@@ -1,6 +1,6 @@
 package cml.language.loader;
 
-import cml.language.expressions.Expression;
+import cml.language.expressions.TempExpression;
 import cml.language.expressions.Invocation;
 import cml.language.foundation.TempModel;
 
@@ -18,7 +18,7 @@ public class FunctionLinker implements ModelVisitor
     }
 
     @Override
-    public void visit(final Expression expression)
+    public void visit(final TempExpression expression)
     {
         if (expression instanceof Invocation)
         {

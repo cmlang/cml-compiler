@@ -14,7 +14,7 @@ import static org.jooq.lambda.Seq.zip;
 @SuppressWarnings("WeakerAccess")
 public class TypeFunctions
 {
-    public static Type withCardinality(Type type, String cardinality)
+    public static TempType withCardinality(TempType type, String cardinality)
     {
         if (type instanceof NamedType)
         {
@@ -40,7 +40,7 @@ public class TypeFunctions
         }
     }
 
-    public static boolean isElementTypeAssignableFrom(Type thisElementType, Type thatElementType)
+    public static boolean isElementTypeAssignableFrom(TempType thisElementType, TempType thatElementType)
     {
         assert !thisElementType.getCardinality().isPresent();
         assert !thatElementType.getCardinality().isPresent();
@@ -113,19 +113,19 @@ public class TypeFunctions
         }
     }
 
-    public static boolean isCardinalityAssignableFrom(Type thisType, Type thatType)
+    public static boolean isCardinalityAssignableFrom(TempType thisType, TempType thatType)
     {
         return Objects.equals(thisType.getCardinality(), thatType.getCardinality()) ||
                (thisType.isOptional() && thatType.isRequired()) || (thisType.isSequence());
     }
 
-    public static boolean isAssignableFrom(Type thisType, Type thatType)
+    public static boolean isAssignableFrom(TempType thisType, TempType thatType)
     {
         return isElementTypeAssignableFrom(thisType.getElementType(), thatType.getElementType()) &&
                isCardinalityAssignableFrom(thisType, thatType);
     }
 
-    public static boolean isEqualTo(Type thisType, Type thatType)
+    public static boolean isEqualTo(TempType thisType, TempType thatType)
     {
         if (thisType instanceof NamedType && thatType instanceof NamedType)
         {
@@ -158,7 +158,7 @@ public class TypeFunctions
         return Objects.equals(thisType.getCardinality(), thatType.getCardinality());
     }
 
-    public static boolean isNumericWiderThan(Type thisType, Type thatType)
+    public static boolean isNumericWiderThan(TempType thisType, TempType thatType)
     {
         if (thisType instanceof NamedType && thatType instanceof NamedType)
         {
@@ -177,7 +177,7 @@ public class TypeFunctions
         return false;
     }
 
-    public static boolean isBinaryFloatingPointWiderThan(Type thisType, Type thatType)
+    public static boolean isBinaryFloatingPointWiderThan(TempType thisType, TempType thatType)
     {
         if (thisType instanceof NamedType && thatType instanceof NamedType)
         {
@@ -197,7 +197,7 @@ public class TypeFunctions
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isCastAllowed(String operator, Type exprType, Type castType)
+    public static boolean isCastAllowed(String operator, TempType exprType, TempType castType)
     {
         if (operator.equals(TypeCast.ASQ) && castType.isRequired())
         {

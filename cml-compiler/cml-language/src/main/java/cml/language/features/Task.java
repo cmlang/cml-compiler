@@ -1,7 +1,7 @@
 package cml.language.features;
 
-import cml.language.foundation.Property;
-import cml.language.foundation.PropertyList;
+import cml.language.foundation.TempProperty;
+import cml.language.foundation.TempPropertyList;
 import cml.language.generated.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,11 +13,11 @@ import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static org.jooq.lambda.Seq.seq;
 
-public interface Task extends NamedElement, PropertyList
+public interface Task extends NamedElement, TempPropertyList
 {
     Optional<String> getConstructor();
 
-    static Task create(TempModule module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
+    static Task create(TempModule module, String name, @Nullable String constructor, List<TempProperty> propertyList, Location location)
     {
         return new TaskImpl(module, name, constructor, propertyList, location);
     }
@@ -31,7 +31,7 @@ class TaskImpl implements Task
 
     private @Nullable String constructor;
 
-    TaskImpl(TempModule module, String name, @Nullable String constructor, List<Property> propertyList, Location location)
+    TaskImpl(TempModule module, String name, @Nullable String constructor, List<TempProperty> propertyList, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
         this.namedElement = extendNamedElement(this, modelElement, name);

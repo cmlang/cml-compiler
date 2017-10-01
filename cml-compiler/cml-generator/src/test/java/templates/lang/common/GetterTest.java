@@ -1,6 +1,6 @@
 package templates.lang.common;
 
-import cml.language.foundation.Property;
+import cml.language.foundation.TempProperty;
 import cml.language.types.NamedType;
 import org.junit.Test;
 
@@ -144,8 +144,8 @@ public class GetterTest extends LangTest
         testTemplateWithProperty("field_getter", createProperty(cardinality), expectedOutputFileName);
     }
 
-    private static Property createProperty(String cardinality)
+    private static TempProperty createProperty(String cardinality)
     {
-        return Property.create("SomeProperty", NamedType.create("someType", cardinality));
+        return TempProperty.create("SomeProperty", NamedType.create("someType", cardinality));
     }
 }

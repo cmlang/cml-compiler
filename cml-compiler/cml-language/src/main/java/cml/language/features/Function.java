@@ -1,6 +1,6 @@
 package cml.language.features;
 
-import cml.language.types.Type;
+import cml.language.types.TempType;
 import cml.language.types.TypedElementBase;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class Function extends TypedElementBase
 {
     private List<FunctionParameter> parameters;
 
-    public Function(final String name, final Type type, final Stream<FunctionParameter> parameters)
+    public Function(final String name, final TempType type, final Stream<FunctionParameter> parameters)
     {
         super(name, type);
 
@@ -34,12 +34,12 @@ public class Function extends TypedElementBase
                               .findFirst();
     }
 
-    public int getParamIndexOfMatchingType(final Type type)
+    public int getParamIndexOfMatchingType(final TempType type)
     {
         return getParamIndexOfMatchingType(type, -1);
     }
 
-    public int getParamIndexOfMatchingType(final Type type, final int skipIndex)
+    public int getParamIndexOfMatchingType(final TempType type, final int skipIndex)
     {
         assert type.isParameter(): "Must be called only when type is a parameter.";
 

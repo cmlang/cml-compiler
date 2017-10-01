@@ -1,24 +1,22 @@
 package cml.language.foundation;
 
-import cml.language.features.Concept;
 import cml.language.generated.Scope;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public interface PropertyList extends Scope
+public interface TempPropertyList extends Scope
 {
-    default List<Property> getDerivedProperties()
+    default List<TempProperty> getDerivedProperties()
     {
         return getProperties().stream()
-                              .filter(Property::isDerived)
+                              .filter(TempProperty::isDerived)
                               .collect(toList());
     }
 
-    default List<Property> getNonDerivedProperties()
+    default List<TempProperty> getNonDerivedProperties()
     {
         return getProperties().stream()
                               .filter(p -> !p.isDerived())
@@ -26,20 +24,20 @@ public interface PropertyList extends Scope
                               .collect(toList());
     }
 
-    static Comparator<Property> byInitOrder()
+    static Comparator<TempProperty> byInitOrder()
     {
-        return (Property p1, Property p2) -> {
+        return (TempProperty p1, TempProperty p2) -> {
             if (p1.getValue().isPresent() && !p2.getValue().isPresent()) return +1;
             else if (!p1.getValue().isPresent() && p2.getValue().isPresent()) return -1;
             else return 0;
         };
     }
 
-    default List<Property> getProperties()
+    default List<TempProperty> getProperties()
     {
         return getMembers().stream()
-                           .filter(e -> e instanceof Property)
-                           .map(e -> (Property)e)
+                           .filter(e -> e instanceof TempProperty)
+                           .map(e -> (TempProperty)e)
                            .collect(toList());
     }
 }

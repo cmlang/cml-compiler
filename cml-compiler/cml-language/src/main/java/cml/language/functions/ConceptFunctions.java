@@ -1,9 +1,9 @@
 package cml.language.functions;
 
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.features.ConceptRedef;
 import cml.language.features.PropertyRedef;
-import cml.language.foundation.Property;
+import cml.language.foundation.TempProperty;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,23 +16,23 @@ import static java.util.stream.Stream.concat;
 @SuppressWarnings("WeakerAccess")
 public class ConceptFunctions
 {
-    public static List<Property> redefinedInheritedConcreteProperties(Concept concept)
+    public static List<TempProperty> redefinedInheritedConcreteProperties(TempConcept concept)
     {
         return concept.getInheritedProperties()
                       .stream()
-                      .filter(Property::isConcrete)
+                      .filter(TempProperty::isConcrete)
                       .map(p -> propertyOf(concept, p.getName()).orElse(p))
                       .collect(toList());
     }
 
-    public static Optional<Property> propertyOf(Concept concept, String propertyName)
+    public static Optional<TempProperty> propertyOf(TempConcept concept, String propertyName)
     {
         return concept.getProperties().stream()
                       .filter(p -> p.getName().equals(propertyName))
                       .findFirst();
     }
 
-    public static Function<Concept, ConceptRedef> conceptRedefined(Concept concept, Concept redefBase)
+    public static Function<TempConcept, ConceptRedef> conceptRedefined(TempConcept concept, TempConcept redefBase)
     {
         return c -> {
             final List<PropertyRedef> propertyRedefs = c.getNonDerivedProperties()
@@ -68,12 +68,12 @@ public class ConceptFunctions
         };
     }
 
-    public static List<ConceptRedef> redefinedAncestors(Concept concept)
+    public static List<ConceptRedef> redefinedAncestors(TempConcept concept)
     {
         return redefinedAncestors(concept, concept);
     }
 
-    public static List<ConceptRedef> redefinedAncestors(Concept concept, Concept redefBase)
+    public static List<ConceptRedef> redefinedAncestors(TempConcept concept, TempConcept redefBase)
     {
         final List<ConceptRedef> redefinitions = concept.getAllAncestors()
                                                         .stream()

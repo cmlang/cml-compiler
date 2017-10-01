@@ -2,11 +2,11 @@ package cml.language.functions;
 
 import cml.language.expressions.LambdaScope;
 import cml.language.expressions.Path;
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 import cml.language.types.TypedElement;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class ScopeFunctions
             .findFirst();
     }
 
-    public static Optional<Type> typeOfMemberNamed(String name, Scope scope)
+    public static Optional<TempType> typeOfMemberNamed(String name, Scope scope)
     {
         final Optional<TypedElement> typedElement = memberNamed(name, scope, TypedElement.class);
 
@@ -63,7 +63,7 @@ public class ScopeFunctions
         return empty();
     }
 
-    public static Optional<Scope> scopeOfType(Type type, Scope scope)
+    public static Optional<Scope> scopeOfType(TempType type, Scope scope)
     {
         if (type instanceof NamedType)
         {
@@ -74,12 +74,12 @@ public class ScopeFunctions
         return empty();
     }
 
-    public static Optional<Type> typeOfVariableNamed(String name, Scope scope)
+    public static Optional<TempType> typeOfVariableNamed(String name, Scope scope)
     {
         if (scope instanceof LambdaScope)
         {
             final LambdaScope lambdaScope = (LambdaScope) scope;
-            final Optional<Type> type = ofNullable(lambdaScope.getParameters().get(name));
+            final Optional<TempType> type = ofNullable(lambdaScope.getParameters().get(name));
 
             if (type.isPresent()) return type;
         }
@@ -87,27 +87,27 @@ public class ScopeFunctions
         {
             final Path path = (Path) scope;
             final Optional<Scope> typeScope = scopeOfType(path.getType(), scope);
-            final Optional<Type> type = typeScope.flatMap(s -> typeOfVariableNamed(name, s));
+            final Optional<TempType> type = typeScope.flatMap(s -> typeOfVariableNamed(name, s));
 
             if (type.isPresent()) return type;
         }
-        else if (scope instanceof Concept)
+        else if (scope instanceof TempConcept)
         {
-            final Optional<Type> memberType = typeOfMemberNamed(name, scope);
+            final Optional<TempType> memberType = typeOfMemberNamed(name, scope);
             if (memberType.isPresent()) return memberType;
 
-            final Concept concept = (Concept) scope;
+            final TempConcept concept = (TempConcept) scope;
 
-            for (Concept ancestor: concept.getDirectAncestors())
+            for (TempConcept ancestor: concept.getDirectAncestors())
             {
-                final Optional<Type> type = typeOfVariableNamed(name, ancestor);
+                final Optional<TempType> type = typeOfVariableNamed(name, ancestor);
 
                 if (type.isPresent()) return type;
             }
         }
         else
         {
-            final Optional<Type> memberType = typeOfMemberNamed(name, scope);
+            final Optional<TempType> memberType = typeOfMemberNamed(name, scope);
             if (memberType.isPresent()) return memberType;
         }
 

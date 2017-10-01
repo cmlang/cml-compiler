@@ -8,7 +8,7 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 import static org.jooq.lambda.Seq.seq;
 
-public abstract class ExpressionBase implements Expression
+public abstract class ExpressionBase implements TempExpression
 {
     private final ModelElement modelElement;
     private final Scope scope;
@@ -23,12 +23,12 @@ public abstract class ExpressionBase implements Expression
         this(scope, emptyList());
     }
 
-    ExpressionBase(List<Expression> subExpressions)
+    ExpressionBase(List<TempExpression> subExpressions)
     {
         this(null, subExpressions);
     }
 
-    ExpressionBase(Scope parent, List<Expression> subExpressions)
+    ExpressionBase(Scope parent, List<TempExpression> subExpressions)
     {
         modelElement = ModelElement.extendModelElement(this, parent, null);
         scope = Scope.extendScope(this, modelElement, seq(subExpressions).map(s -> (ModelElement)s).toList());

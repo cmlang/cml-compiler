@@ -24,7 +24,7 @@ public class InvocationTransforms
 
         final Query query = first.get();
         final String name = query.getInvocationName();
-        final LinkedHashMap<String, Expression> arguments = new LinkedHashMap<>();
+        final LinkedHashMap<String, TempExpression> arguments = new LinkedHashMap<>();
 
         final List<Query> rest = seq(queries).skip(1).toList();
 

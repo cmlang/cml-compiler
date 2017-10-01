@@ -11,9 +11,9 @@ import static org.jooq.lambda.Seq.seq;
 public class Keyword extends NamedElementBase
 {
     private final List<String> parameters;
-    private final Expression expression;
+    private final TempExpression expression;
 
-    public Keyword(final String name, final Seq<String> parameters, final Expression expression)
+    public Keyword(final String name, final Seq<String> parameters, final TempExpression expression)
     {
         super(name);
 
@@ -26,12 +26,12 @@ public class Keyword extends NamedElementBase
         return seq(parameters);
     }
 
-    public Expression getExpression()
+    public TempExpression getExpression()
     {
         return expression;
     }
 
-    public Expression getLambdaExpression()
+    public TempExpression getLambdaExpression()
     {
         return new Lambda(seq(parameters), expression);
     }

@@ -10,7 +10,7 @@ import java.util.Optional;
 import static java.lang.String.format;
 import static org.jooq.lambda.Seq.seq;
 
-public class TupleType extends ModelElementBase implements Type
+public class TupleType extends ModelElementBase implements TempType
 {
     private final List<TupleTypeElement> elements;
     private final @Nullable String cardinality;
@@ -26,7 +26,7 @@ public class TupleType extends ModelElementBase implements Type
         return seq(elements);
     }
 
-    public Seq<Type> getElementTypes()
+    public Seq<TempType> getElementTypes()
     {
         return seq(elements).map(TupleTypeElement::getType);
     }
@@ -38,7 +38,7 @@ public class TupleType extends ModelElementBase implements Type
     }
 
     @Override
-    public Type getElementType()
+    public TempType getElementType()
     {
         final TupleType tupleType = new TupleType(seq(elements), null);
 

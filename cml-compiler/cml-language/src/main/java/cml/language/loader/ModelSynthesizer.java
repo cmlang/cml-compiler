@@ -2,7 +2,7 @@ package cml.language.loader;
 
 import cml.language.expressions.*;
 import cml.language.features.*;
-import cml.language.foundation.Property;
+import cml.language.foundation.TempProperty;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
 import cml.language.grammar.CMLBaseListener;
@@ -75,11 +75,11 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final boolean _abstract = ctx.ABSTRACTION() != null;
-        final List<Property> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
+        final List<TempProperty> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
             .map(node -> node.property)
             .toList();
 
-        ctx.concept = Concept.create(module, name, _abstract, propertyList, locationOf(ctx));
+        ctx.concept = TempConcept.create(module, name, _abstract, propertyList, locationOf(ctx));
     }
 
     @Override
@@ -113,7 +113,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String conceptName = ctx.conceptName.getText();
         final String propertyName = ctx.propertyName.getText();
-        final @Nullable Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final @Nullable TempType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
 
         ctx.associationEnd = AssociationEnd.create(conceptName, propertyName, type, locationOf(ctx));
     }
@@ -128,7 +128,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final String constructor = ctx.constructorDeclaration() == null ? null : ctx.constructorDeclaration().NAME().getText();
-        final List<Property> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
+        final List<TempProperty> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
             .map(node -> node.property)
             .toList();
 
@@ -150,10 +150,10 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-        final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
+        final TempType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final TempExpression value = (ctx.expression() == null) ? null : ctx.expression().expr;
 
-        ctx.property = Property.create(name, type, value, ctx.DERIVED() != null, locationOf(ctx));
+        ctx.property = TempProperty.create(name, type, value, ctx.DERIVED() != null, locationOf(ctx));
     }
 
     @Override
@@ -186,7 +186,7 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitTupleTypeElementDeclaration(final TupleTypeElementDeclarationContext ctx)
     {
-        final Type type = ctx.type.type;
+        final TempType type = ctx.type.type;
         final Optional<String> name = ofNullable(ctx.name).map(Token::getText);
 
         ctx.element = new TupleTypeElement(type, name.orElse(null));
@@ -202,7 +202,7 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitFunctionDeclaration(final FunctionDeclarationContext ctx)
     {
         final String name = ctx.name.getText();
-        final Type type = ctx.resultType.type;
+        final TempType type = ctx.resultType.type;
         final Stream<FunctionParameter> params = ctx.functionParameterList().params;
 
         ctx.function = new Function(name, type, params);
@@ -247,21 +247,21 @@ class ModelSynthesizer extends CMLBaseListener
         createLocation(ctx, ctx.expr);
     }
 
-    private Expression createTypeExpression(final ExpressionContext ctx)
+    private TempExpression createTypeExpression(final ExpressionContext ctx)
     {
         assert ctx.expression().size() == 1;
 
-        final Expression expr = ctx.expression().get(0).expr;
+        final TempExpression expr = ctx.expression().get(0).expr;
         final String operator = ctx.operator.getText().replace('?', 'q').replace('!', 'b');
 
         if (operator.equals(TypeCast.ASB) || operator.equals(TypeCast.ASQ))
         {
-            final Type castType = ctx.type.type;
+            final TempType castType = ctx.type.type;
             return new TypeCast(expr, operator, castType);
         }
         else
         {
-            final Type checkedType = ctx.type.type;
+            final TempType checkedType = ctx.type.type;
             return new TypeCheck(expr, operator, checkedType);
         }
     }
@@ -269,7 +269,7 @@ class ModelSynthesizer extends CMLBaseListener
     private Unary createUnary(ExpressionContext ctx)
     {
         final String operator = ctx.operator.getText();
-        final Expression expr = ctx.expression().get(0).expr;
+        final TempExpression expr = ctx.expression().get(0).expr;
 
         return new Unary(operator, expr);
     }
@@ -277,8 +277,8 @@ class ModelSynthesizer extends CMLBaseListener
     private Infix createInfix(ExpressionContext ctx)
     {
         final String operator = ctx.operator.getText();
-        final Expression left = ctx.expression().get(0).expr;
-        final Expression right = ctx.expression().get(1).expr;
+        final TempExpression left = ctx.expression().get(0).expr;
+        final TempExpression right = ctx.expression().get(1).expr;
 
         return new Infix(operator, left, right);
     }
@@ -286,9 +286,9 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitConditionalExpression(final ConditionalExpressionContext ctx)
     {
-        final Expression cond = ctx.cond.expr;
-        final Expression then = ctx.then.expr;
-        final Expression else_ = ctx.else_.expr;
+        final TempExpression cond = ctx.cond.expr;
+        final TempExpression then = ctx.then.expr;
+        final TempExpression else_ = ctx.else_.expr;
 
         ctx.conditional = new Conditional(cond, then, else_);
     }
@@ -320,7 +320,7 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitLambdaExpression(final LambdaExpressionContext ctx)
     {
         final Seq<String> parameters = ctx.lambdaParameterList() == null ? empty() : ctx.lambdaParameterList().params;
-        final Expression expr = ctx.expression().expr;
+        final TempExpression expr = ctx.expression().expr;
 
         ctx.lambda = new Lambda(parameters, expr);
     }
@@ -336,12 +336,12 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final String name = ctx.NAME().getText();
         final Optional<Lambda> lambda = ofNullable(ctx.lambdaExpression()).map(c -> c.lambda);
-        final List<Expression> arguments = expressionsOf(ctx).concat(seq(lambda)).toList();
+        final List<TempExpression> arguments = expressionsOf(ctx).concat(seq(lambda)).toList();
 
         ctx.invocation = Invocation.create(name, arguments);
     }
 
-    private Seq<Expression> expressionsOf(final InvocationExpressionContext ctx)
+    private Seq<TempExpression> expressionsOf(final InvocationExpressionContext ctx)
     {
         final AtomicInteger index = new AtomicInteger(2);
         return seq(ctx.expression()).map(e -> {
@@ -403,7 +403,7 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final String name = ctx.NAME().getText();
         final Seq<String> parameters = ctx.lambdaParameterList() == null ? empty() : ctx.lambdaParameterList().params;
-        final Expression expression = ctx.expression().expr;
+        final TempExpression expression = ctx.expression().expr;
 
         ctx.keyword = new Keyword(name, parameters, expression);
     }

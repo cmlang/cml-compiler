@@ -1,6 +1,6 @@
 package cml.language.types;
 
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.generated.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
 
-public interface NamedType extends Type, NamedElement
+public interface NamedType extends TempType, NamedElement
 {
     NamedType UNDEFINED = NamedType.create("UNDEFINED");
     NamedType BOOLEAN = NamedType.create("BOOLEAN");
@@ -109,7 +109,7 @@ class NamedTypeImpl implements NamedType
     private final @Nullable String cardinality;
     private final @Nullable String errorMessage;
 
-    private @Nullable Concept concept;
+    private @Nullable TempConcept concept;
 
     NamedTypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
     {
@@ -161,13 +161,13 @@ class NamedTypeImpl implements NamedType
     }
 
     @Override
-    public Optional<Concept> getConcept()
+    public Optional<TempConcept> getConcept()
     {
         return Optional.ofNullable(concept);
     }
 
     @Override
-    public void setConcept(@NotNull Concept concept)
+    public void setConcept(@NotNull TempConcept concept)
     {
         assert this.concept == null;
 

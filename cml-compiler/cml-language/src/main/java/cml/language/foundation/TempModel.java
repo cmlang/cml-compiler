@@ -15,16 +15,16 @@ import static java.util.stream.Collectors.toList;
 
 public interface TempModel extends NamedElement, Scope, Model
 {
-    default List<Concept> getOrderedConcepts()
+    default List<TempConcept> getOrderedConcepts()
     {
         return getConcepts().stream()
                             .sorted(byDependencyOrder())
                             .collect(toList());
     }
 
-    static Comparator<Concept> byDependencyOrder()
+    static Comparator<TempConcept> byDependencyOrder()
     {
-        return (Concept c1, Concept c2) -> {
+        return (TempConcept c1, TempConcept c2) -> {
             try
             {
                 final boolean c1_gt_c2 = c1.getDependencies().contains(c2.getName());
@@ -49,7 +49,7 @@ public interface TempModel extends NamedElement, Scope, Model
         };
     }
 
-    default List<Concept> getConcepts()
+    default List<TempConcept> getConcepts()
     {
         return getModules().stream()
                            .map(m -> (TempModule)m)

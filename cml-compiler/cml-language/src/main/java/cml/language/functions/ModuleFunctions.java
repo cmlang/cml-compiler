@@ -1,6 +1,6 @@
 package cml.language.functions;
 
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.features.Template;
 import cml.language.foundation.TempModel;
@@ -38,7 +38,7 @@ public class ModuleFunctions
         return importedModuleOf(module, name);
     }
 
-    public static Optional<Concept> conceptOf(TempModule module, String name)
+    public static Optional<TempConcept> conceptOf(TempModule module, String name)
     {
         return module.getAllConcepts()
                      .stream()

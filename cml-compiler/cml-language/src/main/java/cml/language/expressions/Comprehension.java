@@ -52,7 +52,7 @@ public class Comprehension extends ExpressionBase
         return unmodifiableList(queries);
     }
 
-    public List<Expression> getExpressions()
+    public List<TempExpression> getExpressions()
     {
         return seq(enumerators).map(Enumerator::getPath)
                                .collect(toList());

@@ -23,15 +23,15 @@ public interface TempModule extends NamedElement, Scope, Module
                            .collect(toList());
     }
 
-    default List<Concept> getConcepts()
+    default List<TempConcept> getConcepts()
     {
         return getMembers().stream()
-                           .filter(e -> e instanceof Concept)
-                           .map(e -> (Concept)e)
+                           .filter(e -> e instanceof TempConcept)
+                           .map(e -> (TempConcept)e)
                            .collect(toList());
     }
 
-    default List<Concept> getImportedConcepts()
+    default List<TempConcept> getImportedConcepts()
     {
         return getImportedModules()
                     .stream()
@@ -39,7 +39,7 @@ public interface TempModule extends NamedElement, Scope, Module
                     .collect(toList());
     }
 
-    default List<Concept> getAllConcepts()
+    default List<TempConcept> getAllConcepts()
     {
         return concat(
             getConcepts().stream(),

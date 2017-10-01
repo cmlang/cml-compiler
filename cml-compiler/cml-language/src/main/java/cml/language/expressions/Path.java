@@ -2,7 +2,7 @@ package cml.language.expressions;
 
 import cml.language.generated.Scope;
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -79,7 +79,7 @@ public class Path extends ExpressionBase
     }
 
     @Override
-    public Type getType()
+    public TempType getType()
     {
         assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
         assert getParent().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames() + " " + getLocation();
@@ -89,13 +89,13 @@ public class Path extends ExpressionBase
         if (isSelf()) return selfTypeOf(scope);
 
         final String variableName = getNames().get(0);
-        final Optional<Type> variableType = typeOfVariableNamed(variableName, scope);
+        final Optional<TempType> variableType = typeOfVariableNamed(variableName, scope);
 
         StringBuilder intermediatePath = new StringBuilder(variableName);
 
         if (variableType.isPresent())
         {
-            Type type = variableType.get();
+            TempType type = variableType.get();
 
             for (final String memberName: getMemberNames())
             {
@@ -107,7 +107,7 @@ public class Path extends ExpressionBase
                 {
                     scope = optionalScope.get();
 
-                    final Optional<Type> memberType = typeOfVariableNamed(memberName, scope);
+                    final Optional<TempType> memberType = typeOfVariableNamed(memberName, scope);
 
                     if (memberType.isPresent())
                     {
@@ -137,7 +137,7 @@ public class Path extends ExpressionBase
         }
     }
 
-    public Type getOriginalType()
+    public TempType getOriginalType()
     {
         assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
         assert getParent().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames() + " " + getLocation();
@@ -147,13 +147,13 @@ public class Path extends ExpressionBase
         if (isSelf()) return selfTypeOf(scope);
 
         final String variableName = getNames().get(0);
-        final Optional<Type> variableType = typeOfVariableNamed(variableName, scope);
+        final Optional<TempType> variableType = typeOfVariableNamed(variableName, scope);
 
         StringBuilder intermediatePath = new StringBuilder(variableName);
 
         if (variableType.isPresent())
         {
-            Type type = variableType.get();
+            TempType type = variableType.get();
 
             for (final String memberName: getMemberNames())
             {
@@ -165,7 +165,7 @@ public class Path extends ExpressionBase
                 {
                     scope = optionalScope.get();
 
-                    final Optional<Type> memberType = typeOfVariableNamed(memberName, scope);
+                    final Optional<TempType> memberType = typeOfVariableNamed(memberName, scope);
 
                     if (memberType.isPresent())
                     {
@@ -190,7 +190,7 @@ public class Path extends ExpressionBase
         }
     }
 
-    public Type getElementType()
+    public TempType getElementType()
     {
         return getType().getElementType();
     }

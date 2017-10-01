@@ -1,7 +1,7 @@
 package cml.language.expressions;
 
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,10 +65,10 @@ public class Infix extends ExpressionBase
         }};
 
     private final String operator;
-    private final Expression left;
-    private final Expression right;
+    private final TempExpression left;
+    private final TempExpression right;
 
-    public Infix(String operator, Expression left, Expression right)
+    public Infix(String operator, TempExpression left, TempExpression right)
     {
         super(asList(left, right));
 
@@ -89,12 +89,12 @@ public class Infix extends ExpressionBase
         return Optional.ofNullable(operation);
     }
 
-    public Expression getLeft()
+    public TempExpression getLeft()
     {
         return left;
     }
 
-    public Expression getRight()
+    public TempExpression getRight()
     {
         return right;
     }
@@ -106,10 +106,10 @@ public class Infix extends ExpressionBase
     }
 
     @Override
-    public Type getType()
+    public TempType getType()
     {
-        final Type leftType = left.getType();
-        final Type rightType = right.getType();
+        final TempType leftType = left.getType();
+        final TempType rightType = right.getType();
 
         assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + left.getKind();
         assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + right.getKind();

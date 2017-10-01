@@ -2,7 +2,7 @@ grammar Concepts;
 
 import Names, Properties;
 
-conceptDeclaration returns [Concept concept]:
+conceptDeclaration returns [TempConcept concept]:
     (ABSTRACTION | CONCEPT) NAME
     (':' generalizations)?
     (';' | propertyList);

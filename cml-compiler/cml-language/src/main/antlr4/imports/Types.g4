@@ -2,7 +2,7 @@ grammar Types;
 
 import Names;
 
-typeDeclaration returns [Type type]
+typeDeclaration returns [TempType type]
     : name=NAME cardinality? // named type
     | tuple=tupleTypeDeclaration // tuple type
     | params=tupleTypeDeclaration '->' result=typeDeclaration // function type

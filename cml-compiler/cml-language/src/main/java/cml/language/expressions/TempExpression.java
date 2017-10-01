@@ -5,27 +5,27 @@ import cml.language.foundation.Invariant;
 import cml.language.foundation.InvariantValidator;
 import cml.language.generated.ModelElement;
 import cml.language.generated.Scope;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 
 import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.jooq.lambda.Seq.seq;
 
-public interface Expression extends ModelElement, Scope
+public interface TempExpression extends ModelElement, Scope
 {
     String getKind();
-    Type getType();
+    TempType getType();
 
-    default Type getMatchingResultType()
+    default TempType getMatchingResultType()
     {
         return getType();
     }
 
-    default List<Expression> getSubExpressions()
+    default List<TempExpression> getSubExpressions()
     {
-        return seq(getMembers()).filter(m -> m instanceof Expression)
-                                .map(m -> (Expression)m)
+        return seq(getMembers()).filter(m -> m instanceof TempExpression)
+                                .map(m -> (TempExpression)m)
                                 .toList();
     }
 
@@ -34,7 +34,7 @@ public interface Expression extends ModelElement, Scope
         return true;
     }
 
-    static InvariantValidator<Expression> invariantValidator()
+    static InvariantValidator<TempExpression> invariantValidator()
     {
         return () -> singletonList(new ExpressionInvariant());
     }
@@ -45,7 +45,7 @@ public interface Expression extends ModelElement, Scope
     }
 }
 
-class ExpressionInvariant implements Invariant<Expression>
+class ExpressionInvariant implements Invariant<TempExpression>
 {
     @Override
     public boolean isCritical()
@@ -54,9 +54,9 @@ class ExpressionInvariant implements Invariant<Expression>
     }
 
     @Override
-    public boolean evaluate(final Expression self)
+    public boolean evaluate(final TempExpression self)
     {
-        for (final Expression expr: self.getSubExpressions())
+        for (final TempExpression expr: self.getSubExpressions())
         {
             final boolean pass = expr.evaluateInvariants();
 
@@ -67,9 +67,9 @@ class ExpressionInvariant implements Invariant<Expression>
     }
 
     @Override
-    public Diagnostic createDiagnostic(final Expression self)
+    public Diagnostic createDiagnostic(final TempExpression self)
     {
-        for (final Expression expr: self.getSubExpressions())
+        for (final TempExpression expr: self.getSubExpressions())
         {
             final boolean pass = expr.evaluateInvariants();
 

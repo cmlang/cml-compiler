@@ -6,7 +6,7 @@ import static cml.language.functions.TypeFunctions.isAssignableFrom;
 
 public interface TypedElement extends NamedElement
 {
-    Type getType();
+    TempType getType();
 
     default boolean matchesTypeOf(TypedElement other)
     {

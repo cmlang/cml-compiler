@@ -7,16 +7,16 @@ import java.util.Optional;
 
 public class ConceptRedef
 {
-    private final Concept concept;
+    private final TempConcept concept;
     private final List<PropertyRedef> propertyRedefs;
 
-    public ConceptRedef(Concept concept, List<PropertyRedef> properties)
+    public ConceptRedef(TempConcept concept, List<PropertyRedef> properties)
     {
         this.concept = concept;
         this.propertyRedefs = new ArrayList<>(properties);
     }
 
-    public Concept getConcept()
+    public TempConcept getConcept()
     {
         return concept;
     }

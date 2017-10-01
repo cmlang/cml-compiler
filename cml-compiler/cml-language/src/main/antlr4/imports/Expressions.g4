@@ -2,7 +2,7 @@ grammar Expressions;
 
 import Literals, Types;
 
-expression returns [Expression expr]
+expression returns [TempExpression expr]
     : literalExpression
     | pathExpression
     | conditionalExpression

@@ -22,7 +22,7 @@ public class ModelFunctions
         return Optional.empty();
     }
 
-    public static Optional<Concept> conceptOf(TempModel model, String name)
+    public static Optional<TempConcept> conceptOf(TempModel model, String name)
     {
         return model.getConcepts()
                     .stream()

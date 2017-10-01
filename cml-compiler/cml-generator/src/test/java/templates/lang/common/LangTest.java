@@ -1,8 +1,8 @@
 package templates.lang.common;
 
 import cml.language.features.Association;
-import cml.language.features.Concept;
-import cml.language.foundation.Property;
+import cml.language.features.TempConcept;
+import cml.language.foundation.TempProperty;
 import cml.language.generated.NamedElement;
 import cml.language.types.NamedType;
 import com.google.common.io.Resources;
@@ -68,7 +68,7 @@ public abstract class LangTest extends TemplateTest
         assertThatOutputMatches(expectedOutputPath + "." + getTargetLanguageExtension(), result);
     }
 
-    void testConceptClass(Concept concept, String expectedOutputPath) throws IOException
+    void testConceptClass(TempConcept concept, String expectedOutputPath) throws IOException
     {
         final String templateName = "class";
         final ST template = getTemplate(templateName);
@@ -80,13 +80,13 @@ public abstract class LangTest extends TemplateTest
         assertThatOutputMatches(expectedOutputPath + "." + getTargetLanguageExtension(), result);
     }
 
-    void testTemplateWithConcept(String templateName, Concept concept, String expectedOutputPath)
+    void testTemplateWithConcept(String templateName, TempConcept concept, String expectedOutputPath)
         throws IOException
     {
         testTemplate(templateName, "concept", concept, expectedOutputPath);
     }
 
-    void testTemplateWithProperty(String templateName, Property property, String expectedOutputPath)
+    void testTemplateWithProperty(String templateName, TempProperty property, String expectedOutputPath)
         throws IOException
     {
         testTemplate(templateName, "property", property, expectedOutputPath);

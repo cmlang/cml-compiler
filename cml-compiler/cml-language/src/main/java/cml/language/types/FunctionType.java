@@ -7,12 +7,12 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 
-public class FunctionType extends ModelElementBase implements Type
+public class FunctionType extends ModelElementBase implements TempType
 {
     private final TupleType params;
-    private final Type result;
+    private final TempType result;
 
-    public FunctionType(final TupleType params, final Type result)
+    public FunctionType(final TupleType params, final TempType result)
     {
         this.params = params;
         this.result = result;
@@ -23,12 +23,12 @@ public class FunctionType extends ModelElementBase implements Type
         return params;
     }
 
-    public Type getResult()
+    public TempType getResult()
     {
         return result;
     }
 
-    public Seq<Type> getParamTypes()
+    public Seq<TempType> getParamTypes()
     {
         return params.getElements().map(TupleTypeElement::getType);
     }
@@ -38,7 +38,7 @@ public class FunctionType extends ModelElementBase implements Type
         return getParams().getElements().count() == 1;
     }
 
-    public Type getSingleParamType()
+    public TempType getSingleParamType()
     {
         assert isSingleParam();
 
@@ -49,13 +49,13 @@ public class FunctionType extends ModelElementBase implements Type
         return single.get().getType();
     }
 
-    public Type getMatchingResultType()
+    public TempType getMatchingResultType()
     {
         return getResult();
     }
 
     @Override
-    public Type getElementType()
+    public TempType getElementType()
     {
         assert !getCardinality().isPresent();
 

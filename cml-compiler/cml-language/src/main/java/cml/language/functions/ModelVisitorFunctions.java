@@ -1,10 +1,10 @@
 package cml.language.functions;
 
-import cml.language.expressions.Expression;
+import cml.language.expressions.TempExpression;
 import cml.language.features.Association;
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.foundation.TempModel;
-import cml.language.foundation.Property;
+import cml.language.foundation.TempProperty;
 import cml.language.loader.ModelVisitor;
 
 @SuppressWarnings("WeakerAccess")
@@ -19,7 +19,7 @@ public class ModelVisitorFunctions
         model.getAssociations().forEach(a -> visitAssociation(a, visitor));
     }
 
-    public static void visitConcept(Concept concept, ModelVisitor visitor)
+    public static void visitConcept(TempConcept concept, ModelVisitor visitor)
     {
         visitor.visit(concept);
 
@@ -33,14 +33,14 @@ public class ModelVisitorFunctions
         association.getAssociationEnds().forEach(visitor::visit);
     }
 
-    public static void visitProperty(Property property, ModelVisitor visitor)
+    public static void visitProperty(TempProperty property, ModelVisitor visitor)
     {
         visitor.visit(property);
 
         property.getValue().ifPresent(expression -> visitExpression(expression, visitor));
     }
 
-    public static void visitExpression(Expression expression, ModelVisitor visitor)
+    public static void visitExpression(TempExpression expression, ModelVisitor visitor)
     {
         visitor.visit(expression);
 

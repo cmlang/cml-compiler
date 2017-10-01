@@ -1,11 +1,11 @@
 package cml.language.foundation;
 
-import cml.language.expressions.Expression;
+import cml.language.expressions.TempExpression;
 import cml.language.features.Association;
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.generated.*;
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.jooq.lambda.Seq.seq;
 
-public interface Property extends TypedElement, Scope
+public interface TempProperty extends TypedElement, Scope
 {
     default boolean isConcrete()
     {
@@ -48,9 +48,9 @@ public interface Property extends TypedElement, Scope
         return getAssociation().isPresent();
     }
 
-    Optional<Type> getDeclaredType();
+    Optional<TempType> getDeclaredType();
 
-    Optional<Expression> getValue();
+    Optional<TempExpression> getValue();
     boolean isDerived();
 
     @SuppressWarnings("unused")
@@ -65,12 +65,12 @@ public interface Property extends TypedElement, Scope
     @SuppressWarnings("unused")
     void setTypeAllowed(boolean typeAllowed);
 
-    default Concept getConcept()
+    default TempConcept getConcept()
     {
         assert getParent().isPresent();
-        assert getParent().get() instanceof Concept;
+        assert getParent().get() instanceof TempConcept;
 
-        return (Concept) getParent().get();
+        return (TempConcept) getParent().get();
     }
 
     default Optional<Association> getAssociation()
@@ -82,28 +82,28 @@ public interface Property extends TypedElement, Scope
                          .findFirst();
     }
 
-    static Property create(String name, @Nullable NamedType type)
+    static TempProperty create(String name, @Nullable NamedType type)
     {
         return create(name, type, null, false, null);
     }
 
     @SuppressWarnings("unused")
-    static Property create(String name, @Nullable Expression value)
+    static TempProperty create(String name, @Nullable TempExpression value)
     {
         return create(name, null, value, false, null);
     }
 
-    static Property create(String name, @Nullable Type type, @Nullable Expression value)
+    static TempProperty create(String name, @Nullable TempType type, @Nullable TempExpression value)
     {
         return create(name, type, value, false, null);
     }
 
-    static Property create(String name, @Nullable Type type, @Nullable Expression value, boolean derived, Location location)
+    static TempProperty create(String name, @Nullable TempType type, @Nullable TempExpression value, boolean derived, Location location)
     {
         return new PropertyImpl(name, type, value, derived, location);
     }
 
-    static InvariantValidator<Property> invariantValidator()
+    static InvariantValidator<TempProperty> invariantValidator()
     {
         return () -> asList(
             new UniquePropertyName(),
@@ -115,7 +115,7 @@ public interface Property extends TypedElement, Scope
     }
 }
 
-class PropertyImpl implements Property
+class PropertyImpl implements TempProperty
 {
     private final ModelElement modelElement;
     private final NamedElement namedElement;
@@ -124,11 +124,11 @@ class PropertyImpl implements Property
     private boolean typeRequired;
     private boolean typeAllowed;
 
-    private final @Nullable Type type;
-    private final @Nullable Expression value;
+    private final @Nullable TempType type;
+    private final @Nullable TempExpression value;
     private final boolean derived;
 
-    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived, Location location)
+    PropertyImpl(String name, @Nullable TempType type, @Nullable TempExpression value, boolean derived, Location location)
     {
         modelElement = ModelElement.extendModelElement(this, null, location);
         namedElement = NamedElement.extendNamedElement(this, modelElement, name);
@@ -146,13 +146,13 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public Optional<Type> getDeclaredType()
+    public Optional<TempType> getDeclaredType()
     {
         return Optional.ofNullable(type);
     }
 
     @Override
-    public Optional<Expression> getValue()
+    public Optional<TempExpression> getValue()
     {
         return Optional.ofNullable(value);
     }
@@ -182,7 +182,7 @@ class PropertyImpl implements Property
     }
 
     @Override
-    public Type getType()
+    public TempType getType()
     {
         if (type == null)
         {
@@ -253,29 +253,29 @@ class PropertyImpl implements Property
     }
 }
 
-class GeneralizationCompatibleRedefinition implements Invariant<Property>
+class GeneralizationCompatibleRedefinition implements Invariant<TempProperty>
 {
     @Override
-    public boolean evaluate(Property self)
+    public boolean evaluate(TempProperty self)
     {
         return getRedefinedProperties(self).allMatch(p -> p.matchesTypeOf(self));
     }
 
     @Override
-    public Diagnostic createDiagnostic(Property self)
+    public Diagnostic createDiagnostic(TempProperty self)
     {
-        final List<Property> conflictingProperties = getRedefinedProperties(self)
+        final List<TempProperty> conflictingProperties = getRedefinedProperties(self)
                                                         .filter(p -> !p.matchesTypeOf(self))
                                                         .collect(Collectors.toList());
 
         return new Diagnostic("generalization_compatible_redefinition", self, conflictingProperties);
     }
 
-    private Stream<Property> getRedefinedProperties(Property self)
+    private Stream<TempProperty> getRedefinedProperties(TempProperty self)
     {
-        if (self.getParent().isPresent() && self.getParent().get() instanceof Concept)
+        if (self.getParent().isPresent() && self.getParent().get() instanceof TempConcept)
         {
-            final Concept concept = (Concept) self.getParent().get();
+            final TempConcept concept = (TempConcept) self.getParent().get();
 
             return concept.getInheritedProperties().stream()
                           .filter(p -> p.getName().equals(self.getName()));
@@ -287,14 +287,14 @@ class GeneralizationCompatibleRedefinition implements Invariant<Property>
     }
 }
 
-class AbstractPropertyInAbstractConcept implements Invariant<Property>
+class AbstractPropertyInAbstractConcept implements Invariant<TempProperty>
 {
     @Override
-    public boolean evaluate(Property self)
+    public boolean evaluate(TempProperty self)
     {
-        if (self.getParent().isPresent() && self.getParent().get() instanceof Concept)
+        if (self.getParent().isPresent() && self.getParent().get() instanceof TempConcept)
         {
-            final Concept concept = (Concept) self.getParent().get();
+            final TempConcept concept = (TempConcept) self.getParent().get();
 
             return self.isConcrete() || concept.isAbstract();
         }
@@ -305,33 +305,33 @@ class AbstractPropertyInAbstractConcept implements Invariant<Property>
     }
 
     @Override
-    public Diagnostic createDiagnostic(Property self)
+    public Diagnostic createDiagnostic(TempProperty self)
     {
         return new Diagnostic("abstract_property_in_abstract_concept", self, emptyList());
     }
 }
 
-class UniquePropertyName implements Invariant<Property>
+class UniquePropertyName implements Invariant<TempProperty>
 {
     @Override
-    public boolean evaluate(Property self)
+    public boolean evaluate(TempProperty self)
     {
         return getConflictingProperties(self).count() == 0;
     }
 
     @Override
-    public Diagnostic createDiagnostic(Property self)
+    public Diagnostic createDiagnostic(TempProperty self)
     {
-        final List<Property> participants = getConflictingProperties(self).collect(Collectors.toList());
+        final List<TempProperty> participants = getConflictingProperties(self).collect(Collectors.toList());
 
         return new Diagnostic("unique_property_name", self, participants);
     }
 
-    private Stream<Property> getConflictingProperties(Property self)
+    private Stream<TempProperty> getConflictingProperties(TempProperty self)
     {
-        if (self.getParent().isPresent() && self.getParent().get() instanceof Concept)
+        if (self.getParent().isPresent() && self.getParent().get() instanceof TempConcept)
         {
-            final Concept concept = (Concept) self.getParent().get();
+            final TempConcept concept = (TempConcept) self.getParent().get();
 
             return concept.getProperties()
                           .stream()
@@ -344,16 +344,16 @@ class UniquePropertyName implements Invariant<Property>
     }
 }
 
-class PropertyTypeSpecifiedOrInferred implements Invariant<Property>
+class PropertyTypeSpecifiedOrInferred implements Invariant<TempProperty>
 {
     @Override
-    public boolean evaluate(Property self)
+    public boolean evaluate(TempProperty self)
     {
         return self.getType().isDefined();
     }
 
     @Override
-    public Diagnostic createDiagnostic(Property self)
+    public Diagnostic createDiagnostic(TempProperty self)
     {
         return new Diagnostic(
             "property_type_specified_or_inferred",
@@ -363,17 +363,17 @@ class PropertyTypeSpecifiedOrInferred implements Invariant<Property>
 
 }
 
-class PropertyTypeAssignableFromExpressionType implements Invariant<Property>
+class PropertyTypeAssignableFromExpressionType implements Invariant<TempProperty>
 {
     @Override
-    public boolean evaluate(Property self)
+    public boolean evaluate(TempProperty self)
     {
         return !(self.getDeclaredType().isPresent() && self.getValue().isPresent()) ||
                isAssignableFrom(self.getDeclaredType().get(), self.getValue().get().getType());
     }
 
     @Override
-    public Diagnostic createDiagnostic(Property self)
+    public Diagnostic createDiagnostic(TempProperty self)
     {
         assert self.getDeclaredType().isPresent();
         assert self.getValue().isPresent();

@@ -13,6 +13,11 @@
     name: string;
 }
 
+@abstraction TYPED_ELEMENT: NAMED_ELEMENT
+{
+    type: TYPE;
+}
+
 @concept SCOPE: MODEL_ELEMENT
 {
     members: MODEL_ELEMENT*;

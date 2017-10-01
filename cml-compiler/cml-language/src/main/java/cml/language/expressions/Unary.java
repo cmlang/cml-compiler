@@ -1,7 +1,7 @@
 package cml.language.expressions;
 
 import cml.language.types.NamedType;
-import cml.language.types.Type;
+import cml.language.types.TempType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,9 +32,9 @@ public class Unary extends ExpressionBase
         }};
 
     private final String operator;
-    private final Expression subExpr;
+    private final TempExpression subExpr;
 
-    public Unary(String operator, Expression subExpr)
+    public Unary(String operator, TempExpression subExpr)
     {
         super(singletonList(subExpr));
 
@@ -54,7 +54,7 @@ public class Unary extends ExpressionBase
         return Optional.ofNullable(operation);
     }
 
-    public Expression getSubExpr()
+    public TempExpression getSubExpr()
     {
         return subExpr;
     }
@@ -66,9 +66,9 @@ public class Unary extends ExpressionBase
     }
 
     @Override
-    public Type getType()
+    public TempType getType()
     {
-        final Type subExprType = subExpr.getType();
+        final TempType subExprType = subExpr.getType();
 
         if (subExprType.isUndefined())
         {

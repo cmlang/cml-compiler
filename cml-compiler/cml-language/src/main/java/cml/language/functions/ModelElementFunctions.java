@@ -2,7 +2,7 @@ package cml.language.functions;
 
 import cml.language.expressions.Invocation;
 import cml.language.expressions.Lambda;
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.generated.Import;
 import cml.language.generated.ModelElement;
@@ -41,9 +41,9 @@ public class ModelElementFunctions
 
     public static NamedType selfTypeOf(ModelElement element)
     {
-        if (element instanceof Concept)
+        if (element instanceof TempConcept)
         {
-            final Concept concept = (Concept) element;
+            final TempConcept concept = (TempConcept) element;
             final NamedType namedType = NamedType.create(concept.getName());
 
             namedType.setConcept(concept);

@@ -1,17 +1,26 @@
 model files:
 - pom.xml
 
+CONCEPT files:
+- src/main/java/cml/language/generated/Concept.java
+
 MODEL_ELEMENT files:
 - src/main/java/cml/language/generated/ModelElement.java
 
 NAMED_ELEMENT files:
 - src/main/java/cml/language/generated/NamedElement.java
 
+TYPED_ELEMENT files:
+- src/main/java/cml/language/generated/TypedElement.java
+
 SCOPE files:
 - src/main/java/cml/language/generated/Scope.java
 
 LOCATION files:
 - src/main/java/cml/language/generated/Location.java
+
+EXPRESSION files:
+- src/main/java/cml/language/generated/Expression.java
 
 MODEL files:
 - src/main/java/cml/language/generated/Model.java
@@ -21,6 +30,15 @@ MODULE files:
 
 IMPORT files:
 - src/main/java/cml/language/generated/Import.java
+
+PROPERTY files:
+- src/main/java/cml/language/generated/Property.java
+
+PROPERTY_LIST files:
+- src/main/java/cml/language/generated/PropertyList.java
+
+TYPE files:
+- src/main/java/cml/language/generated/Type.java
 
 MEMBERSHIP files:
 - src/main/java/cml/language/generated/Membership.java

@@ -1,6 +1,6 @@
 package cml.language.expressions;
 
-import cml.language.features.Concept;
+import cml.language.features.TempConcept;
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
 import cml.language.features.TempModule;
@@ -25,16 +25,16 @@ import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
 import static org.jooq.lambda.Seq.seq;
 
-public interface Invocation extends Expression, NamedElement
+public interface Invocation extends TempExpression, NamedElement
 {
     String MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION = "Unable to find function of invocation: ";
     String MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION = "Number of arguments in invocation should match the number of parameters in function: ";
     String MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION = "Argument type should match parameter type in function: ";
 
-    List<Expression> getArguments();
-    Map<String, Expression> getNamedArguments();
+    List<TempExpression> getArguments();
+    Map<String, TempExpression> getNamedArguments();
 
-    default Map<FunctionParameter, Expression> getParameterizedArguments()
+    default Map<FunctionParameter, TempExpression> getParameterizedArguments()
     {
         if (getFunction().isPresent())
         {
@@ -59,11 +59,11 @@ public interface Invocation extends Expression, NamedElement
     Optional<Function> getFunction();
     void setFunction(@NotNull Function function);
 
-    default Type getType()
+    default TempType getType()
     {
         if (getFunction().isPresent())
         {
-            final Type resultType = getFunction().get().getType();
+            final TempType resultType = getFunction().get().getType();
 
             return getMatchingTypeOf(resultType);
         }
@@ -73,7 +73,7 @@ public interface Invocation extends Expression, NamedElement
         }
     }
 
-    default Type getMatchingTypeOf(final Type type)
+    default TempType getMatchingTypeOf(final TempType type)
     {
         assert getFunction().isPresent();
 
@@ -95,7 +95,7 @@ public interface Invocation extends Expression, NamedElement
 
                 if (paramIndex < getArguments().size())
                 {
-                    Type paramType = getArguments().get(paramIndex).getMatchingResultType();
+                    TempType paramType = getArguments().get(paramIndex).getMatchingResultType();
 
                     if (paramType.isUndefined())
                     {
@@ -139,15 +139,15 @@ public interface Invocation extends Expression, NamedElement
     {
         assert lambda.getFunctionType().isPresent() && !lambda.isInnerExpressionInSomeScope();
 
-        final Optional<Type> scopeType = lambda.getExpectedScopeType();
+        final Optional<TempType> scopeType = lambda.getExpectedScopeType();
 
         if (scopeType.isPresent())
         {
-            final Type matchingType = getMatchingTypeOf(scopeType.get());
+            final TempType matchingType = getMatchingTypeOf(scopeType.get());
 
             assert matchingType.getConcept().isPresent(): "Expected concept but found '" + matchingType + "' for lambda: " + lambda + " - " + scopeType.get();
 
-            final Optional<Concept> concept = matchingType.getConcept();
+            final Optional<TempConcept> concept = matchingType.getConcept();
 
             assert concept.isPresent();
 
@@ -182,10 +182,10 @@ public interface Invocation extends Expression, NamedElement
         return false;
     }
 
-    default boolean typeMatches(final FunctionParameter param, final Expression argument)
+    default boolean typeMatches(final FunctionParameter param, final TempExpression argument)
     {
-        final Type paramType = param.getMatchingResultType();
-        final Type argumentType = argument.getMatchingResultType();
+        final TempType paramType = param.getMatchingResultType();
+        final TempType argumentType = argument.getMatchingResultType();
 
         return !argumentType.isUndefined() && isAssignableFrom(getMatchingTypeOf(paramType), argumentType);
     }
@@ -249,12 +249,12 @@ public interface Invocation extends Expression, NamedElement
         return emptyList();
     }
 
-    static Invocation create(String name, List<Expression> arguments)
+    static Invocation create(String name, List<TempExpression> arguments)
     {
         return new InvocationImpl(name, arguments);
     }
 
-    static Invocation create(String name, LinkedHashMap<String, Expression> namedArguments)
+    static Invocation create(String name, LinkedHashMap<String, TempExpression> namedArguments)
     {
         return new ParameterizedInvocation(name, namedArguments);
     }
@@ -266,11 +266,11 @@ class InvocationImpl implements Invocation
     private final NamedElement namedElement;
     private final Scope scope;
 
-    private final List<Expression> arguments;
+    private final List<TempExpression> arguments;
 
     private @Nullable Function function;
 
-    InvocationImpl(String name, List<Expression> arguments)
+    InvocationImpl(String name, List<TempExpression> arguments)
     {
         modelElement = extendModelElement(this, null, null);
         namedElement = extendNamedElement(this, modelElement, name);
@@ -280,13 +280,13 @@ class InvocationImpl implements Invocation
     }
 
     @Override
-    public List<Expression> getArguments()
+    public List<TempExpression> getArguments()
     {
         return unmodifiableList(arguments);
     }
 
     @Override
-    public Map<String, Expression> getNamedArguments()
+    public Map<String, TempExpression> getNamedArguments()
     {
         if (getFunction().isPresent())
         {
@@ -369,11 +369,11 @@ class ParameterizedInvocation implements Invocation
     private final NamedElement namedElement;
     private final Scope scope;
 
-    private final LinkedHashMap<String, Expression> namedArguments;
+    private final LinkedHashMap<String, TempExpression> namedArguments;
 
     private @Nullable Function function;
 
-    ParameterizedInvocation(String name, LinkedHashMap<String, Expression> namedArguments)
+    ParameterizedInvocation(String name, LinkedHashMap<String, TempExpression> namedArguments)
     {
         modelElement = extendModelElement(this, null, null);
         namedElement = extendNamedElement(this, modelElement, name);
@@ -383,13 +383,13 @@ class ParameterizedInvocation implements Invocation
     }
 
     @Override
-    public List<Expression> getArguments()
+    public List<TempExpression> getArguments()
     {
         return new ArrayList<>(namedArguments.values());
     }
 
     @Override
-    public Map<String, Expression> getNamedArguments()
+    public Map<String, TempExpression> getNamedArguments()
     {
         return unmodifiableMap(namedArguments);
     }
