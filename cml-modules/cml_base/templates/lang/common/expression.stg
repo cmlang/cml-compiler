@@ -4,11 +4,7 @@ expression(expr) ::= <<
 >>
 
 expression_path(path) ::= <<
-<if(path.self)><\\>
-<actual_self_field()><\\>
-<else><\\>
-<path_expr(path)><\\>
-<endif>
+<path_expr(path)>
 >>
 
 expression_unary(expr) ::= <<

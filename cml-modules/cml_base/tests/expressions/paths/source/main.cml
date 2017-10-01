@@ -9,6 +9,7 @@
     // Path-derived properties:
     /self_var = self;
     /single_var = foo;
+    /derived_some_path = self.somePath;
     /path_var = somePath.bar;
     /path_var2 = somePath.oneMorePath.etc;
     /path_var3 = somePathList.oneMorePath.etc;
@@ -35,8 +36,23 @@
     packagePath = "paths/poj";
 }
 
+@task paths_cmlc_java: cmlc_java
+{
+    groupId = "cml-expressions";
+    artifactId = "cml-expressions-paths-cmlc";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "paths.cmlc";
+    packagePath = "paths/cmlc";
+}
+
 @task paths_pop: pop
 {
     moduleName = "cml_expressions_paths_pop";
+    moduleVersion = "1.0";
+}
+
+@task paths_cmlc_py: cmlc_py
+{
+    moduleName = "cml_expressions_paths_cmlc";
     moduleVersion = "1.0";
 }

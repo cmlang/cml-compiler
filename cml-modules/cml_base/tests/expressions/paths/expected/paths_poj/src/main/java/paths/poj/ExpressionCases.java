@@ -48,6 +48,11 @@ public class ExpressionCases
         return this.getFoo();
     }
 
+    public SomeConcept getDerivedSomePath()
+    {
+        return this.getSomePath();
+    }
+
     public int getPathVar()
     {
         return this.getSomePath().getBar();

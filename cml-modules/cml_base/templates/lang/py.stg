@@ -290,7 +290,9 @@ operation_not_ref_eq_required_required(left, right) ::= "<expression(left)> != <
 // Paths
 
 path_expr(path) ::= <<
-<if(path.base)><\\>
+<if(path.self)><\\>
+<actual_self_field()><\\>
+<elseif(path.base)><\\>
 <path_base_call(path)><\\>
 <elseif(lambda.parameters)><\\>
 <field_name(path)><\\>

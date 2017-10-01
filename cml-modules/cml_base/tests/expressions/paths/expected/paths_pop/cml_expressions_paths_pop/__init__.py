@@ -70,6 +70,10 @@ class ExpressionCases:
         return self.foo
 
     @property
+    def derived_some_path(self) -> 'SomeConcept':
+        return self.some_path
+
+    @property
     def path_var(self) -> 'int':
         return self.some_path.bar
 
