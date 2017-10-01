@@ -1,5 +1,5 @@
 
-@concept EXPRESSION: SCOPE
+@abstraction EXPRESSION: SCOPE
 {
-    kind: string;
+    /kind: string;
 }

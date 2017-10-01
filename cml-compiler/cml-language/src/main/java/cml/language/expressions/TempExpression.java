@@ -3,6 +3,7 @@ package cml.language.expressions;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Invariant;
 import cml.language.foundation.InvariantValidator;
+import cml.language.generated.Expression;
 import cml.language.generated.ModelElement;
 import cml.language.generated.Scope;
 import cml.language.types.TempType;
@@ -12,7 +13,7 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 import static org.jooq.lambda.Seq.seq;
 
-public interface TempExpression extends ModelElement, Scope
+public interface TempExpression extends Expression
 {
     String getKind();
     TempType getType();
