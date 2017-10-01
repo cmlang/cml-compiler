@@ -42,6 +42,17 @@
     /redefined_ancestors: CONCEPT_REDEF*;
     /redefined_inherited_concrete_properties: PROPERTY*;
 */
+
+/*
+
+    /nonDerivedProperties = properties
+        | select: not derived
+        | sort: p1, p2 ->
+            if present(p1) and empty(p2) then +1
+            else if empty(p1) and present(p2) then -1
+            else 0;
+*/
+
 }
 
 /*

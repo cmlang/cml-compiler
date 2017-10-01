@@ -5,6 +5,7 @@ import cml.language.generated.*;
 import cml.language.types.TempType;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -26,6 +27,24 @@ import static org.jooq.lambda.Seq.seq;
 public interface TempConcept extends Concept, TempPropertyList
 {
     boolean isAbstract();
+
+    default List<TempProperty> getNonDerivedProperties()
+    {
+        return getProperties().stream()
+                              .map(p -> (TempProperty)p)
+                              .filter(p -> !p.isDerived())
+                              .sorted(byInitOrder())
+                              .collect(toList());
+    }
+
+    static Comparator<TempProperty> byInitOrder()
+    {
+        return (TempProperty p1, TempProperty p2) -> {
+            if (p1.getValue().isPresent() && !p2.getValue().isPresent()) return +1;
+            else if (!p1.getValue().isPresent() && p2.getValue().isPresent()) return -1;
+            else return 0;
+        };
+    }
 
     default List<String> getDependencies()
     {
