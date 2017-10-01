@@ -78,15 +78,21 @@ class TaskImpl implements Task
     }
 
     @Override
+    public Optional<String> getConstructor()
+    {
+        return Optional.ofNullable(constructor);
+    }
+
+    @Override
     public List<Property> getProperties()
     {
         return propertyList.getProperties();
     }
 
     @Override
-    public Optional<String> getConstructor()
+    public List<Property> getDerivedProperties()
     {
-        return Optional.ofNullable(constructor);
+        return propertyList.getDerivedProperties();
     }
 }
 

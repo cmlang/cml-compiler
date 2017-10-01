@@ -354,6 +354,12 @@ class ConceptImpl implements TempConcept
     }
 
     @Override
+    public List<Property> getDerivedProperties()
+    {
+        return concept.getDerivedProperties();
+    }
+
+    @Override
     public List<TempConcept> getDirectAncestors()
     {
         return unmodifiableList(directAncestors);

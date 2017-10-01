@@ -1,10 +1,11 @@
 
 @concept PROPERTY: TYPED_ELEMENT, SCOPE
 {
+    derived: BOOLEAN;
+
 /*
     value: EXPRESSION?;
     declared_type: TYPE?;
-    derived: BOOLEAN;
     type_required: BOOLEAN;
     type_allowed: BOOLEAN;
 
@@ -25,9 +26,9 @@
 @abstraction PROPERTY_LIST: SCOPE
 {
     /properties = members as? PROPERTY*;
+    /derivedProperties = properties | select: derived;
 
 /*
-    /derivedProperties = properties | select: derived;
 
     /nonDerivedProperties = properties
         | select: not derived

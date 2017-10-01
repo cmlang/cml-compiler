@@ -9,14 +9,6 @@ import static java.util.stream.Collectors.toList;
 
 public interface TempPropertyList extends PropertyList
 {
-    default List<TempProperty> getDerivedProperties()
-    {
-        return getProperties().stream()
-                              .map(p -> (TempProperty)p)
-                              .filter(TempProperty::isDerived)
-                              .collect(toList());
-    }
-
     default List<TempProperty> getNonDerivedProperties()
     {
         return getProperties().stream()
