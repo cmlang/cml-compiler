@@ -1,6 +1,8 @@
 package cml.language.functions;
 
 import cml.language.expressions.TypeCast;
+import cml.language.features.TempConcept;
+import cml.language.generated.Type;
 import cml.language.types.*;
 
 import java.util.Objects;
@@ -14,14 +16,14 @@ import static org.jooq.lambda.Seq.zip;
 @SuppressWarnings("WeakerAccess")
 public class TypeFunctions
 {
-    public static TempType withCardinality(TempType type, String cardinality)
+    public static TempType withCardinality(Type type, String cardinality)
     {
         if (type instanceof NamedType)
         {
             final NamedType namedType = (NamedType) type;
             final NamedType newType = NamedType.create(namedType.getName(), cardinality);
 
-            namedType.getConcept().ifPresent(newType::setConcept);
+            namedType.getConcept().map(c -> (TempConcept)c).ifPresent(newType::setConcept);
 
             return newType;
         }
@@ -30,7 +32,7 @@ public class TypeFunctions
             final TupleType tupleType = (TupleType) type;
             final TupleType newType = new TupleType(seq(tupleType.getElements()), cardinality);
 
-            tupleType.getConcept().ifPresent(newType::setConcept);
+            tupleType.getConcept().map(c -> (TempConcept)c).ifPresent(newType::setConcept);
 
             return newType;
         }
@@ -40,7 +42,7 @@ public class TypeFunctions
         }
     }
 
-    public static boolean isElementTypeAssignableFrom(TempType thisElementType, TempType thatElementType)
+    public static boolean isElementTypeAssignableFrom(Type thisElementType, Type thatElementType)
     {
         assert !thisElementType.getCardinality().isPresent();
         assert !thatElementType.getCardinality().isPresent();
@@ -67,7 +69,8 @@ public class TypeFunctions
                 }
                 else if (thisNamedType.getConcept().isPresent() && thatNamedType.getConcept().isPresent())
                 {
-                    return seq(thatNamedType.getConcept()).flatMap(c -> c.getAllGeneralizations().stream())
+                    return seq(thatNamedType.getConcept()).map(c -> (TempConcept)c)
+                                                          .flatMap(c -> c.getAllGeneralizations().stream())
                                                           .anyMatch(c -> isElementTypeAssignableFrom(thisNamedType, selfTypeOf(c)));
                 }
             }
@@ -113,19 +116,19 @@ public class TypeFunctions
         }
     }
 
-    public static boolean isCardinalityAssignableFrom(TempType thisType, TempType thatType)
+    public static boolean isCardinalityAssignableFrom(Type thisType, Type thatType)
     {
         return Objects.equals(thisType.getCardinality(), thatType.getCardinality()) ||
                (thisType.isOptional() && thatType.isRequired()) || (thisType.isSequence());
     }
 
-    public static boolean isAssignableFrom(TempType thisType, TempType thatType)
+    public static boolean isAssignableFrom(Type thisType, Type thatType)
     {
         return isElementTypeAssignableFrom(thisType.getElementType(), thatType.getElementType()) &&
                isCardinalityAssignableFrom(thisType, thatType);
     }
 
-    public static boolean isEqualTo(TempType thisType, TempType thatType)
+    public static boolean isEqualTo(Type thisType, Type thatType)
     {
         if (thisType instanceof NamedType && thatType instanceof NamedType)
         {
@@ -158,7 +161,7 @@ public class TypeFunctions
         return Objects.equals(thisType.getCardinality(), thatType.getCardinality());
     }
 
-    public static boolean isNumericWiderThan(TempType thisType, TempType thatType)
+    public static boolean isNumericWiderThan(Type thisType, Type thatType)
     {
         if (thisType instanceof NamedType && thatType instanceof NamedType)
         {
@@ -177,7 +180,7 @@ public class TypeFunctions
         return false;
     }
 
-    public static boolean isBinaryFloatingPointWiderThan(TempType thisType, TempType thatType)
+    public static boolean isBinaryFloatingPointWiderThan(Type thisType, Type thatType)
     {
         if (thisType instanceof NamedType && thatType instanceof NamedType)
         {
@@ -197,7 +200,7 @@ public class TypeFunctions
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isCastAllowed(String operator, TempType exprType, TempType castType)
+    public static boolean isCastAllowed(String operator, Type exprType, Type castType)
     {
         if (operator.equals(TypeCast.ASQ) && castType.isRequired())
         {

@@ -1,6 +1,5 @@
 package cml.language.expressions;
 
-import cml.language.features.TempConcept;
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
 import cml.language.features.TempModule;
@@ -117,7 +116,7 @@ public interface Invocation extends TempExpression, NamedElement
                                              .orElse(NamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
                     }
 
-                    return withCardinality(paramType, type.getCardinality().orElse(null));
+                    return (TempType) withCardinality(paramType, type.getCardinality().orElse(null));
                 }
                 else
                 {
@@ -147,7 +146,7 @@ public interface Invocation extends TempExpression, NamedElement
 
             assert matchingType.getConcept().isPresent(): "Expected concept but found '" + matchingType + "' for lambda: " + lambda + " - " + scopeType.get();
 
-            final Optional<TempConcept> concept = matchingType.getConcept();
+            final Optional<Concept> concept = matchingType.getConcept();
 
             assert concept.isPresent();
 

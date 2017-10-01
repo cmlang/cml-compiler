@@ -5,9 +5,9 @@ import cml.language.expressions.Path;
 import cml.language.features.TempConcept;
 import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
+import cml.language.generated.TypedElement;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
-import cml.language.types.TypedElement;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class ScopeFunctions
     {
         final Optional<TypedElement> typedElement = memberNamed(name, scope, TypedElement.class);
 
-        return typedElement.map(TypedElement::getType);
+        return typedElement.map(e -> (TempType) e.getType());
     }
 
     public static <T> Optional<T> elementNamed(String name, Scope scope, Class<T> clazz)

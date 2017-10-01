@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import static cml.language.functions.ConceptFunctions.redefinedAncestors;
 import static cml.language.functions.ConceptFunctions.redefinedInheritedConcreteProperties;
+import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
@@ -84,6 +85,7 @@ public interface TempConcept extends Concept, TempPropertyList
                                  .map(TempType::getConcept)
                                  .filter(Optional::isPresent)
                                  .map(Optional::get)
+                                 .map(c -> (TempConcept)c)
                                  .distinct()
                                  .collect(toList());
     }
@@ -92,6 +94,7 @@ public interface TempConcept extends Concept, TempPropertyList
     {
         return getAllProperties().stream()
                                  .map(TempProperty::getType)
+                                 .map(c -> (TempType)c)
                                  .collect(toList());
     }
 
@@ -391,14 +394,14 @@ class CompatibleGeneralizations implements Invariant<TempConcept>
     {
         return self.getGeneralizationPropertyPairs()
                    .stream()
-                   .allMatch(pair -> pair.getLeft().matchesTypeOf(pair.getRight()));
+                   .allMatch(pair -> isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()));
     }
 
     @Override
     public Diagnostic createDiagnostic(TempConcept self)
     {
         final List<TempProperty> conflictingProperties = self.getGeneralizationPropertyPairs().stream()
-                                                             .filter(pair -> !pair.getLeft().matchesTypeOf(pair.getRight()))
+                                                             .filter(pair -> !isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
                                                              .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
                                                              .collect(toList());
 
@@ -419,7 +422,7 @@ class ConflictRedefinition implements Invariant<TempConcept>
     private Stream<Pair<TempProperty>> getConflictingPropertyPairs(TempConcept self)
     {
         return self.getGeneralizationPropertyPairs().stream()
-                   .filter(pair -> pair.getLeft().matchesTypeOf(pair.getRight()))
+                   .filter(pair -> isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
                    .filter(pair -> pair.getLeft().isDerived() ||
                                    pair.getLeft().getValue().isPresent() ||
                                    pair.getRight().isDerived() ||

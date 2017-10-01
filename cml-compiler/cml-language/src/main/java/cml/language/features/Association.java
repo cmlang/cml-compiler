@@ -45,6 +45,7 @@ public interface Association extends NamedElement, Scope
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(TempProperty::getType)
+            .map(t -> (TempType)t)
             .collect(toList());
     }
 

@@ -81,7 +81,7 @@ public interface NamedType extends TempType, NamedElement
     {
         final NamedType elementType = NamedType.create(getName());
 
-        getConcept().ifPresent(elementType::setConcept);
+        getConcept().map(c -> (TempConcept)c).ifPresent(elementType::setConcept);
 
         return elementType;
     }
@@ -161,7 +161,7 @@ class NamedTypeImpl implements NamedType
     }
 
     @Override
-    public Optional<TempConcept> getConcept()
+    public Optional<Concept> getConcept()
     {
         return Optional.ofNullable(concept);
     }

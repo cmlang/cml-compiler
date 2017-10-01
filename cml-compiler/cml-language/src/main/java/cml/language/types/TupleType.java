@@ -1,5 +1,6 @@
 package cml.language.types;
 
+import cml.language.features.TempConcept;
 import cml.language.foundation.ModelElementBase;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
@@ -42,7 +43,8 @@ public class TupleType extends ModelElementBase implements TempType
     {
         final TupleType tupleType = new TupleType(seq(elements), null);
 
-        getConcept().ifPresent(tupleType::setConcept);
+        getConcept().map(c -> (TempConcept)c)
+                    .ifPresent(tupleType::setConcept);
 
         return tupleType;
     }

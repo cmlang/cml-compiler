@@ -2,7 +2,6 @@ package cml.language.foundation;
 
 import cml.language.generated.*;
 import cml.language.types.NamedType;
-import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

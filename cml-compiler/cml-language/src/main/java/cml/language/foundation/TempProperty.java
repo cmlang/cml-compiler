@@ -6,7 +6,6 @@ import cml.language.features.TempConcept;
 import cml.language.generated.*;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
-import cml.language.types.TypedElement;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -258,14 +257,14 @@ class GeneralizationCompatibleRedefinition implements Invariant<TempProperty>
     @Override
     public boolean evaluate(TempProperty self)
     {
-        return getRedefinedProperties(self).allMatch(p -> p.matchesTypeOf(self));
+        return getRedefinedProperties(self).allMatch(p -> isAssignableFrom(p.getType(), self.getType()));
     }
 
     @Override
     public Diagnostic createDiagnostic(TempProperty self)
     {
         final List<TempProperty> conflictingProperties = getRedefinedProperties(self)
-                                                        .filter(p -> !p.matchesTypeOf(self))
+                                                        .filter(p -> !isAssignableFrom(p.getType(), self.getType()))
                                                         .collect(Collectors.toList());
 
         return new Diagnostic("generalization_compatible_redefinition", self, conflictingProperties);

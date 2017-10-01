@@ -1,6 +1,7 @@
 package cml.language.types;
 
 import cml.language.foundation.NamedElementBase;
+import cml.language.generated.TypedElement;
 
 public abstract class TypedElementBase extends NamedElementBase implements TypedElement
 {
@@ -15,6 +16,6 @@ public abstract class TypedElementBase extends NamedElementBase implements Typed
     @Override
     public TempType getType()
     {
-        return type;
+        return (TempType) type;
     }
 }
