@@ -6,6 +6,7 @@
     artifactVersion = "master-SNAPSHOT";
     packageName = "cml.language.generated";
     packagePath = "cml/language/generated";
+    classTypeNamePrefix = "";
 }
 
 @task cml_language_py: cmlc_py
