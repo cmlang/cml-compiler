@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static org.jooq.lambda.Seq.seq;
 
-public interface TempConcept extends Concept, TempPropertyList
+public interface TempConcept extends Concept, PropertyList
 {
     boolean isAbstract();
 

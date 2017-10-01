@@ -1,7 +1,6 @@
 package cml.language.features;
 
 import cml.language.foundation.TempProperty;
-import cml.language.foundation.TempPropertyList;
 import cml.language.generated.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +12,7 @@ import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static org.jooq.lambda.Seq.seq;
 
-public interface Task extends NamedElement, TempPropertyList
+public interface Task extends NamedElement, PropertyList
 {
     Optional<String> getConstructor();
 
