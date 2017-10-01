@@ -40,4 +40,10 @@
 
 @concept Something {}
 
+@concept InvocationValidations
+{
+    value: string;
+    /derived = unknown_function(value);
+}
+
 @task expressions_validations: poj {}

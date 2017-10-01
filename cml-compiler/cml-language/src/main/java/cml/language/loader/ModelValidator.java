@@ -7,9 +7,12 @@ import cml.language.features.TempConcept;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.InvariantValidator;
 import cml.language.foundation.TempProperty;
+import cml.language.invariants.ExpressionInvariant;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 public class ModelValidator implements ModelVisitor
 {
@@ -17,7 +20,7 @@ public class ModelValidator implements ModelVisitor
     private final InvariantValidator<TempProperty> propertyInvariantValidator = TempProperty.invariantValidator();
     private final InvariantValidator<Association> associationInvariantValidator = Association.invariantValidator();
     private final InvariantValidator<AssociationEnd> associationEndInvariantValidator = AssociationEnd.invariantValidator();
-    private final InvariantValidator<TempExpression> expressionInvariantValidator = TempExpression.invariantValidator();
+    private final InvariantValidator<TempExpression> expressionInvariantValidator = () -> singletonList(new ExpressionInvariant());
     private final List<Diagnostic> diagnostics = new ArrayList<>();
 
     List<Diagnostic> getDiagnostics()

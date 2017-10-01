@@ -55,3 +55,9 @@ Incompatible operand 'number' of type 'integer' for operator 'not'.
 
 Failed validation: required property_type_specified_or_inferred: in property UnaryValidations.invalid_number: UNDEFINED (38:5)
 Incompatible operand 'flag' of type 'boolean' for operator '-'.
+
+Failed validation: required property_type_specified_or_inferred: in property InvocationValidations.derived: UNDEFINED (46:5)
+Unable to find function of invocation: unknown_function
+
+Failed validation: required matching_function_for_invocation: in unknown_function(value) -> UNDEFINED (46:16)
+Unable to find function of invocation: unknown_function
