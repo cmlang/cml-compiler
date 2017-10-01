@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.NamedType;
 
@@ -8,11 +9,11 @@ import static java.util.Arrays.asList;
 
 public class Conditional extends ExpressionBase
 {
-    private final TempExpression cond;
-    private final TempExpression then;
-    private final TempExpression else_;
+    private final Expression cond;
+    private final Expression then;
+    private final Expression else_;
 
-    public Conditional(TempExpression cond, TempExpression then, TempExpression else_)
+    public Conditional(Expression cond, Expression then, Expression else_)
     {
         super(asList(cond, then, else_));
 
@@ -21,17 +22,17 @@ public class Conditional extends ExpressionBase
         this.else_ = else_;
     }
 
-    public TempExpression getCond()
+    public Expression getCond()
     {
         return cond;
     }
 
-    public TempExpression getThen()
+    public Expression getThen()
     {
         return then;
     }
 
-    public TempExpression getElse_()
+    public Expression getElse_()
     {
         return else_;
     }

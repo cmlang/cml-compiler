@@ -1,13 +1,11 @@
 package cml.language.functions;
 
-import cml.language.expressions.TempExpression;
 import cml.language.features.Association;
 import cml.language.features.TempConcept;
 import cml.language.foundation.TempModel;
 import cml.language.foundation.TempProperty;
 import cml.language.generated.Expression;
 import cml.language.loader.ModelVisitor;
-import cml.language.types.TempType;
 
 @SuppressWarnings("WeakerAccess")
 public class ModelVisitorFunctions
@@ -46,6 +44,6 @@ public class ModelVisitorFunctions
     {
         visitor.visit(expression);
 
-        ((TempExpression)expression).getSubExpressions().forEach(e -> visitExpression(e, visitor));
+        ((Expression)expression).getSubExpressions().forEach(e -> visitExpression(e, visitor));
     }
 }

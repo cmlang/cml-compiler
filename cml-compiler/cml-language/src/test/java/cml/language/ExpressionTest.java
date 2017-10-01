@@ -3,11 +3,11 @@ package cml.language;
 import cml.io.Console;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
-import cml.language.expressions.TempExpression;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
 import cml.language.foundation.TempProperty;
+import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.loader.ModelLoader;
 import cml.templates.ModelAdaptor;
@@ -172,7 +172,7 @@ public class ExpressionTest
         {
             assertTrue("Expected type for property: " + property.getName(), property.getValue().isPresent());
 
-            final TempExpression value = property.getValue().orElse(null);
+            final Expression value = property.getValue().orElse(null);
             assertNotNull("Should have init for property: " + property.getName(), value);
 
             final Type type = value.getType();

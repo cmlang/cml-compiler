@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
@@ -13,11 +14,11 @@ public class TypeCast extends ExpressionBase
     public static final String ASB = "asb";
     public static final String ASQ = "asq";
 
-    private final TempExpression expr;
+    private final Expression expr;
     private final String operator;
     private final TempType castType;
 
-    public TypeCast(TempExpression expr, final String operator, final TempType castType)
+    public TypeCast(Expression expr, final String operator, final TempType castType)
     {
         super(singletonList(expr));
         this.expr = expr;
@@ -25,7 +26,7 @@ public class TypeCast extends ExpressionBase
         this.castType = castType;
     }
 
-    public TempExpression getExpr()
+    public Expression getExpr()
     {
         return expr;
     }

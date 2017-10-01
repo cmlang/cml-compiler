@@ -1,6 +1,7 @@
 package cml.language.expressions;
 
 import cml.language.foundation.ModelElementBase;
+import cml.language.generated.Expression;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
@@ -46,7 +47,7 @@ public class Query extends ModelElementBase
         return first.map(Keyword::getName).orElse(name);
     }
 
-    public Optional<TempExpression> getExpression()
+    public Optional<Expression> getExpression()
     {
         final Optional<Keyword> first = seq(keywords).findFirst();
 

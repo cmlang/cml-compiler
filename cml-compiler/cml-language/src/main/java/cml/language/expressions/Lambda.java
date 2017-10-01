@@ -25,11 +25,11 @@ import static org.jooq.lambda.Seq.seq;
 public class Lambda extends ExpressionBase
 {
     private final List<String> parameters;
-    private final TempExpression innerExpression;
+    private final Expression innerExpression;
 
     private @Nullable FunctionType functionType;
 
-    public Lambda(final Seq<String> parameters, final TempExpression innerExpression)
+    public Lambda(final Seq<String> parameters, final Expression innerExpression)
     {
         this.parameters = parameters.toList();
         this.innerExpression = innerExpression;
@@ -40,7 +40,7 @@ public class Lambda extends ExpressionBase
         return seq(parameters);
     }
 
-    public TempExpression getInnerExpression()
+    public Expression getInnerExpression()
     {
         return innerExpression;
     }

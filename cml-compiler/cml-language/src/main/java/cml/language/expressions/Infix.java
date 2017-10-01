@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
@@ -67,10 +68,10 @@ public class Infix extends ExpressionBase
         }};
 
     private final String operator;
-    private final TempExpression left;
-    private final TempExpression right;
+    private final Expression left;
+    private final Expression right;
 
-    public Infix(String operator, TempExpression left, TempExpression right)
+    public Infix(String operator, Expression left, Expression right)
     {
         super(asList(left, right));
 
@@ -91,12 +92,12 @@ public class Infix extends ExpressionBase
         return Optional.ofNullable(operation);
     }
 
-    public TempExpression getLeft()
+    public Expression getLeft()
     {
         return left;
     }
 
-    public TempExpression getRight()
+    public Expression getRight()
     {
         return right;
     }

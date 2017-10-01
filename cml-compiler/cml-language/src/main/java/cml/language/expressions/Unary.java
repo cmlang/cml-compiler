@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
@@ -33,9 +34,9 @@ public class Unary extends ExpressionBase
         }};
 
     private final String operator;
-    private final TempExpression subExpr;
+    private final Expression subExpr;
 
-    public Unary(String operator, TempExpression subExpr)
+    public Unary(String operator, Expression subExpr)
     {
         super(singletonList(subExpr));
 
@@ -55,7 +56,7 @@ public class Unary extends ExpressionBase
         return Optional.ofNullable(operation);
     }
 
-    public TempExpression getSubExpr()
+    public Expression getSubExpr()
     {
         return subExpr;
     }

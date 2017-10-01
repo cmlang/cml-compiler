@@ -3,7 +3,10 @@ package cml.language.expressions;
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
 import cml.language.features.TempModule;
-import cml.language.generated.*;
+import cml.language.generated.Concept;
+import cml.language.generated.Expression;
+import cml.language.generated.NamedElement;
+import cml.language.generated.Type;
 import cml.language.types.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,24 +18,22 @@ import java.util.*;
 import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static cml.language.functions.TypeFunctions.withCardinality;
-import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
-import static cml.language.generated.Scope.extendScope;
 import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
 import static org.jooq.lambda.Seq.seq;
 
-public interface Invocation extends TempExpression, NamedElement
+public interface Invocation extends Expression, NamedElement
 {
     String MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION = "Unable to find function of invocation: ";
     String MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION = "Number of arguments in invocation should match the number of parameters in function: ";
     String MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION = "Argument type should match parameter type in function: ";
 
-    List<TempExpression> getArguments();
-    Map<String, TempExpression> getNamedArguments();
+    List<Expression> getArguments();
+    Map<String, Expression> getNamedArguments();
 
-    default Map<FunctionParameter, TempExpression> getParameterizedArguments()
+    default Map<FunctionParameter, Expression> getParameterizedArguments()
     {
         if (getFunction().isPresent())
         {
@@ -56,20 +57,6 @@ public interface Invocation extends TempExpression, NamedElement
 
     Optional<Function> getFunction();
     void setFunction(@NotNull Function function);
-
-    default TempType getType()
-    {
-        if (getFunction().isPresent())
-        {
-            final TempType resultType = getFunction().get().getType();
-
-            return getMatchingTypeOf(resultType);
-        }
-        else
-        {
-            return NamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
-        }
-    }
 
     default TempType getMatchingTypeOf(final TempType type)
     {
@@ -164,7 +151,7 @@ public interface Invocation extends TempExpression, NamedElement
         }
     }
 
-    default boolean typeMatches(final FunctionParameter param, final TempExpression argument)
+    default boolean typeMatches(final FunctionParameter param, final Expression argument)
     {
         final TempType paramType = param.getMatchingResultType();
         final TempType argumentType = (TempType) argument.getMatchingResultType();
@@ -172,44 +159,42 @@ public interface Invocation extends TempExpression, NamedElement
         return !argumentType.isUndefined() && isAssignableFrom(getMatchingTypeOf(paramType), argumentType);
     }
 
-    static Invocation create(String name, List<TempExpression> arguments)
+    static Invocation create(String name, List<Expression> arguments)
     {
         return new InvocationImpl(name, arguments);
     }
 
-    static Invocation create(String name, LinkedHashMap<String, TempExpression> namedArguments)
+    static Invocation create(String name, LinkedHashMap<String, Expression> namedArguments)
     {
         return new ParameterizedInvocation(name, namedArguments);
     }
 }
 
-class InvocationImpl implements Invocation
+class InvocationImpl extends ExpressionBase implements Invocation
 {
-    private final ModelElement modelElement;
     private final NamedElement namedElement;
-    private final Scope scope;
 
-    private final List<TempExpression> arguments;
+    private final List<Expression> arguments;
 
     private @Nullable Function function;
 
-    InvocationImpl(String name, List<TempExpression> arguments)
+    InvocationImpl(String name, List<Expression> arguments)
     {
-        modelElement = extendModelElement(this, null, null);
-        namedElement = extendNamedElement(this, modelElement, name);
-        scope = extendScope(this, modelElement, seq(arguments).map(a -> (ModelElement)a).toList());
+        super(seq(arguments).toList());
+
+        namedElement = extendNamedElement(this, expression, name);
 
         this.arguments = new ArrayList<>(arguments);
     }
 
     @Override
-    public List<TempExpression> getArguments()
+    public List<Expression> getArguments()
     {
         return unmodifiableList(arguments);
     }
 
     @Override
-    public Map<String, TempExpression> getNamedArguments()
+    public Map<String, Expression> getNamedArguments()
     {
         if (getFunction().isPresent())
         {
@@ -244,27 +229,24 @@ class InvocationImpl implements Invocation
     }
 
     @Override
-    public Optional<Location> getLocation()
+    public TempType getType()
     {
-        return modelElement.getLocation();
+        if (getFunction().isPresent())
+        {
+            final TempType resultType = getFunction().get().getType();
+
+            return getMatchingTypeOf(resultType);
+        }
+        else
+        {
+            return NamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
+        }
     }
 
     @Override
-    public Optional<Scope> getParent()
+    public Type getMatchingResultType()
     {
-        return modelElement.getParent();
-    }
-
-    @Override
-    public Optional<Model> getModel()
-    {
-        return modelElement.getModel();
-    }
-
-    @Override
-    public Optional<Module> getModule()
-    {
-        return modelElement.getModule();
+        return expression.getMatchingResultType();
     }
 
     @Override
@@ -274,45 +256,37 @@ class InvocationImpl implements Invocation
     }
 
     @Override
-    public List<ModelElement> getMembers()
-    {
-        return scope.getMembers();
-    }
-
-    @Override
     public String toString()
     {
         return format("%s(%s)", getName(), seq(arguments).toString(", "));
     }
 }
 
-class ParameterizedInvocation implements Invocation
+class ParameterizedInvocation extends ExpressionBase implements Invocation
 {
-    private final ModelElement modelElement;
     private final NamedElement namedElement;
-    private final Scope scope;
 
-    private final LinkedHashMap<String, TempExpression> namedArguments;
+    private final LinkedHashMap<String, Expression> namedArguments;
 
     private @Nullable Function function;
 
-    ParameterizedInvocation(String name, LinkedHashMap<String, TempExpression> namedArguments)
+    ParameterizedInvocation(String name, LinkedHashMap<String, Expression> namedArguments)
     {
-        modelElement = extendModelElement(this, null, null);
-        namedElement = extendNamedElement(this, modelElement, name);
-        scope = extendScope(this, modelElement, seq(namedArguments.values()).map(a -> (ModelElement)a).toList());
+        super(seq(namedArguments.values()).toList());
+
+        namedElement = extendNamedElement(this, expression, name);
 
         this.namedArguments = new LinkedHashMap<>(namedArguments);
     }
 
     @Override
-    public List<TempExpression> getArguments()
+    public List<Expression> getArguments()
     {
         return new ArrayList<>(namedArguments.values());
     }
 
     @Override
-    public Map<String, TempExpression> getNamedArguments()
+    public Map<String, Expression> getNamedArguments()
     {
         return unmodifiableMap(namedArguments);
     }
@@ -338,39 +312,30 @@ class ParameterizedInvocation implements Invocation
     }
 
     @Override
-    public Optional<Location> getLocation()
+    public TempType getType()
     {
-        return modelElement.getLocation();
+        if (getFunction().isPresent())
+        {
+            final TempType resultType = getFunction().get().getType();
+
+            return getMatchingTypeOf(resultType);
+        }
+        else
+        {
+            return NamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
+        }
     }
 
     @Override
-    public Optional<Scope> getParent()
+    public Type getMatchingResultType()
     {
-        return modelElement.getParent();
-    }
-
-    @Override
-    public Optional<Model> getModel()
-    {
-        return modelElement.getModel();
-    }
-
-    @Override
-    public Optional<Module> getModule()
-    {
-        return modelElement.getModule();
+        return expression.getMatchingResultType();
     }
 
     @Override
     public String getName()
     {
         return namedElement.getName();
-    }
-
-    @Override
-    public List<ModelElement> getMembers()
-    {
-        return scope.getMembers();
     }
 
     @Override

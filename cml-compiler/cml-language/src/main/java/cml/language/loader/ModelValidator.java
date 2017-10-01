@@ -1,6 +1,5 @@
 package cml.language.loader;
 
-import cml.language.expressions.TempExpression;
 import cml.language.features.Association;
 import cml.language.features.AssociationEnd;
 import cml.language.features.TempConcept;

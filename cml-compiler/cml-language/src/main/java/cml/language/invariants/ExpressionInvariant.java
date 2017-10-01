@@ -1,7 +1,6 @@
 package cml.language.invariants;
 
 import cml.language.expressions.Invocation;
-import cml.language.expressions.TempExpression;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Invariant;
 import cml.language.generated.Expression;
@@ -19,7 +18,7 @@ public class ExpressionInvariant implements Invariant<Expression>
     @Override
     public boolean evaluate(final Expression self)
     {
-        for (final Expression expr: ((TempExpression)self).getSubExpressions())
+        for (final Expression expr: self.getSubExpressions())
         {
             final boolean pass = evaluateInvariantsOf(expr);
 
@@ -32,7 +31,7 @@ public class ExpressionInvariant implements Invariant<Expression>
     @Override
     public Diagnostic createDiagnostic(final Expression self)
     {
-        for (final Expression expr: ((TempExpression)self).getSubExpressions())
+        for (final Expression expr: self.getSubExpressions())
         {
             final boolean pass = evaluateInvariantsOf(expr);
 

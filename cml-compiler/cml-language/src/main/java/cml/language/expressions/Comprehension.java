@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Expression;
 import cml.language.types.NamedType;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
@@ -52,7 +53,7 @@ public class Comprehension extends ExpressionBase
         return unmodifiableList(queries);
     }
 
-    public List<TempExpression> getExpressions()
+    public List<Expression> getExpressions()
     {
         return seq(enumerators).map(Enumerator::getPath)
                                .collect(toList());

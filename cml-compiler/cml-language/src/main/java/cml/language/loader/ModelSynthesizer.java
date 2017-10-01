@@ -3,6 +3,7 @@ package cml.language.loader;
 import cml.language.expressions.*;
 import cml.language.features.*;
 import cml.language.foundation.TempProperty;
+import cml.language.generated.Expression;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
 import cml.language.grammar.CMLBaseListener;
@@ -151,7 +152,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final TempType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-        final TempExpression value = (ctx.expression() == null) ? null : ctx.expression().expr;
+        final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
 
         ctx.property = TempProperty.create(name, type, value, ctx.DERIVED() != null, locationOf(ctx));
     }
@@ -247,11 +248,11 @@ class ModelSynthesizer extends CMLBaseListener
         createLocation(ctx, ctx.expr);
     }
 
-    private TempExpression createTypeExpression(final ExpressionContext ctx)
+    private Expression createTypeExpression(final ExpressionContext ctx)
     {
         assert ctx.expression().size() == 1;
 
-        final TempExpression expr = ctx.expression().get(0).expr;
+        final Expression expr = ctx.expression().get(0).expr;
         final String operator = ctx.operator.getText().replace('?', 'q').replace('!', 'b');
 
         if (operator.equals(TypeCast.ASB) || operator.equals(TypeCast.ASQ))
@@ -269,7 +270,7 @@ class ModelSynthesizer extends CMLBaseListener
     private Unary createUnary(ExpressionContext ctx)
     {
         final String operator = ctx.operator.getText();
-        final TempExpression expr = ctx.expression().get(0).expr;
+        final Expression expr = ctx.expression().get(0).expr;
 
         return new Unary(operator, expr);
     }
@@ -277,8 +278,8 @@ class ModelSynthesizer extends CMLBaseListener
     private Infix createInfix(ExpressionContext ctx)
     {
         final String operator = ctx.operator.getText();
-        final TempExpression left = ctx.expression().get(0).expr;
-        final TempExpression right = ctx.expression().get(1).expr;
+        final Expression left = ctx.expression().get(0).expr;
+        final Expression right = ctx.expression().get(1).expr;
 
         return new Infix(operator, left, right);
     }
@@ -286,9 +287,9 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitConditionalExpression(final ConditionalExpressionContext ctx)
     {
-        final TempExpression cond = ctx.cond.expr;
-        final TempExpression then = ctx.then.expr;
-        final TempExpression else_ = ctx.else_.expr;
+        final Expression cond = ctx.cond.expr;
+        final Expression then = ctx.then.expr;
+        final Expression else_ = ctx.else_.expr;
 
         ctx.conditional = new Conditional(cond, then, else_);
     }
@@ -320,7 +321,7 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitLambdaExpression(final LambdaExpressionContext ctx)
     {
         final Seq<String> parameters = ctx.lambdaParameterList() == null ? empty() : ctx.lambdaParameterList().params;
-        final TempExpression expr = ctx.expression().expr;
+        final Expression expr = ctx.expression().expr;
 
         ctx.lambda = new Lambda(parameters, expr);
     }
@@ -336,12 +337,12 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final String name = ctx.NAME().getText();
         final Optional<Lambda> lambda = ofNullable(ctx.lambdaExpression()).map(c -> c.lambda);
-        final List<TempExpression> arguments = expressionsOf(ctx).concat(seq(lambda)).toList();
+        final List<Expression> arguments = expressionsOf(ctx).concat(seq(lambda)).toList();
 
         ctx.invocation = Invocation.create(name, arguments);
     }
 
-    private Seq<TempExpression> expressionsOf(final InvocationExpressionContext ctx)
+    private Seq<Expression> expressionsOf(final InvocationExpressionContext ctx)
     {
         final AtomicInteger index = new AtomicInteger(2);
         return seq(ctx.expression()).map(e -> {
@@ -403,7 +404,7 @@ class ModelSynthesizer extends CMLBaseListener
     {
         final String name = ctx.NAME().getText();
         final Seq<String> parameters = ctx.lambdaParameterList() == null ? empty() : ctx.lambdaParameterList().params;
-        final TempExpression expression = ctx.expression().expr;
+        final Expression expression = ctx.expression().expr;
 
         ctx.keyword = new Keyword(name, parameters, expression);
     }

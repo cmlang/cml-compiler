@@ -1,6 +1,10 @@
 package cml.language.transforms;
 
-import cml.language.expressions.*;
+import cml.language.expressions.Comprehension;
+import cml.language.expressions.Invocation;
+import cml.language.expressions.Lambda;
+import cml.language.expressions.Query;
+import cml.language.generated.Expression;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,7 +28,7 @@ public class InvocationTransforms
 
         final Query query = first.get();
         final String name = query.getInvocationName();
-        final LinkedHashMap<String, TempExpression> arguments = new LinkedHashMap<>();
+        final LinkedHashMap<String, Expression> arguments = new LinkedHashMap<>();
 
         final List<Query> rest = seq(queries).skip(1).toList();
 
