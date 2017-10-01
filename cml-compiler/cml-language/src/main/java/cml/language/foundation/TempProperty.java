@@ -49,7 +49,6 @@ public interface TempProperty extends Property
     Optional<TempType> getDeclaredType();
 
     Optional<Expression> getValue();
-    boolean isDerived();
 
     @SuppressWarnings("unused")
     boolean isTypeRequired();
@@ -115,32 +114,31 @@ public interface TempProperty extends Property
 
 class PropertyImpl implements TempProperty
 {
-    private final ModelElement modelElement;
-    private final NamedElement namedElement;
-    private final Scope scope;
+    private final Property property;
 
     private boolean typeRequired;
     private boolean typeAllowed;
 
     private final @Nullable TempType type;
     private final @Nullable Expression value;
-    private final boolean derived;
 
     PropertyImpl(String name, @Nullable TempType type, @Nullable Expression value, boolean derived, Location location)
     {
-        modelElement = ModelElement.extendModelElement(this, null, location);
-        namedElement = NamedElement.extendNamedElement(this, modelElement, name);
-        scope = Scope.extendScope(this, modelElement, singletonList(value));
+        final ModelElement modelElement = ModelElement.extendModelElement(this, null, location);
+        final NamedElement namedElement = NamedElement.extendNamedElement(this, modelElement, name);
+        final TypedElement typedElement = TypedElement.extendTypedElement(this, modelElement, namedElement, type);
+
+        final Scope scope = Scope.extendScope(this, modelElement, singletonList(value));
+        property = Property.extendProperty(this, modelElement, namedElement, typedElement, scope, derived);
 
         this.type = type;
         this.value = value;
-        this.derived = derived;
     }
 
     @Override
     public boolean isDerived()
     {
-        return derived;
+        return property.isDerived();
     }
 
     @Override
@@ -202,37 +200,37 @@ class PropertyImpl implements TempProperty
     @Override
     public List<ModelElement> getMembers()
     {
-        return scope.getMembers();
+        return property.getMembers();
     }
 
     @Override
     public String getName()
     {
-        return namedElement.getName();
+        return property.getName();
     }
 
     @Override
     public Optional<Location> getLocation()
     {
-        return modelElement.getLocation();
+        return property.getLocation();
     }
 
     @Override
     public Optional<Scope> getParent()
     {
-        return modelElement.getParent();
+        return property.getParent();
     }
 
     @Override
     public Optional<Model> getModel()
     {
-        return modelElement.getModel();
+        return property.getModel();
     }
 
     @Override
     public Optional<Module> getModule()
     {
-        return modelElement.getModule();
+        return property.getModule();
     }
 
     @Override
