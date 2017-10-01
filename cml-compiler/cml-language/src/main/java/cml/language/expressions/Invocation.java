@@ -93,7 +93,7 @@ public interface Invocation extends TempExpression, NamedElement
 
                 if (paramIndex < getArguments().size())
                 {
-                    TempType paramType = getArguments().get(paramIndex).getMatchingResultType();
+                    TempType paramType = (TempType) getArguments().get(paramIndex).getMatchingResultType();
 
                     if (paramType.isUndefined())
                     {
@@ -101,7 +101,7 @@ public interface Invocation extends TempExpression, NamedElement
 
                         if (paramIndex < getArguments().size())
                         {
-                            paramType = getArguments().get(paramIndex).getMatchingResultType();
+                            paramType = (TempType) getArguments().get(paramIndex).getMatchingResultType();
                         }
                     }
 
@@ -167,7 +167,7 @@ public interface Invocation extends TempExpression, NamedElement
     default boolean typeMatches(final FunctionParameter param, final TempExpression argument)
     {
         final TempType paramType = param.getMatchingResultType();
-        final TempType argumentType = argument.getMatchingResultType();
+        final TempType argumentType = (TempType) argument.getMatchingResultType();
 
         return !argumentType.isUndefined() && isAssignableFrom(getMatchingTypeOf(paramType), argumentType);
     }

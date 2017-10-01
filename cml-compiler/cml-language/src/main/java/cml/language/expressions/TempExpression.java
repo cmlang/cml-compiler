@@ -2,7 +2,6 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.types.TempType;
 
 import java.util.List;
 
@@ -13,9 +12,9 @@ public interface TempExpression extends Expression
     String getKind();
     Type getType();
 
-    default TempType getMatchingResultType()
+    default Type getMatchingResultType()
     {
-        return (TempType) getType();
+        return getType();
     }
 
     default List<TempExpression> getSubExpressions()
