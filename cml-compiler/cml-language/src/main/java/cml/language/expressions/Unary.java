@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Type;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
 
@@ -66,9 +67,9 @@ public class Unary extends ExpressionBase
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
-        final TempType subExprType = subExpr.getType();
+        final TempType subExprType = (TempType) subExpr.getType();
 
         if (subExprType.isUndefined())
         {

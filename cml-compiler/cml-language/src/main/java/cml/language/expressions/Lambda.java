@@ -149,7 +149,7 @@ public class Lambda extends ExpressionBase
     @Override
     public TempType getMatchingResultType()
     {
-        return innerExpression.getType();
+        return (TempType) innerExpression.getType();
     }
 
     public boolean isInnerExpressionInSomeScope()

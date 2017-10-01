@@ -1,7 +1,7 @@
 package cml.language.expressions;
 
+import cml.language.generated.Type;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.util.Arrays.asList;
@@ -43,10 +43,10 @@ public class Conditional extends ExpressionBase
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
-        final TempType thenType = then.getType();
-        final TempType elseType = else_.getType();
+        final Type thenType = then.getType();
+        final Type elseType = else_.getType();
 
         if (isAssignableFrom(thenType, elseType))
         {

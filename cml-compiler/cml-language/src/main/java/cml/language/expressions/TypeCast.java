@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Type;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
 
@@ -46,9 +47,9 @@ public class TypeCast extends ExpressionBase
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
-        final TempType exprType = expr.getType();
+        final Type exprType = expr.getType();
 
         if (isCastAllowed(operator, exprType, castType))
         {
@@ -59,7 +60,7 @@ public class TypeCast extends ExpressionBase
             return NamedType.createUndefined(
                 format(
                     "%s:\n- left operand is '%s: %s'\n- right operand is '%s'",
-                    diagnosticMessage(operator, exprType, castType), expr, exprType, castType));
+                    diagnosticMessage(operator, (TempType) exprType, castType), expr, exprType, castType));
         }
     }
 

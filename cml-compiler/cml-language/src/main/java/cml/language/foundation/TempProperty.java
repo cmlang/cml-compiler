@@ -181,7 +181,7 @@ class PropertyImpl implements TempProperty
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
         if (type == null)
         {

@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Type;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
 
@@ -43,9 +44,9 @@ public class TypeCheck extends ExpressionBase
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
-        final TempType exprType = expr.getType();
+        final TempType exprType = (TempType) expr.getType();
 
         if (exprType.isReferential() && checkedType.isReferential() && isAssignableFrom(exprType, checkedType))
         {

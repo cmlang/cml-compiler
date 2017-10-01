@@ -8,8 +8,8 @@ import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
 import cml.language.foundation.TempProperty;
+import cml.language.generated.Type;
 import cml.language.loader.ModelLoader;
-import cml.language.types.TempType;
 import cml.templates.ModelAdaptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -175,7 +175,7 @@ public class ExpressionTest
             final TempExpression value = property.getValue().orElse(null);
             assertNotNull("Should have init for property: " + property.getName(), value);
 
-            final TempType type = value.getType();
+            final Type type = value.getType();
             assertNotNull("Should have computed type for property: " + property.getName(), type);
 
             if (type.getErrorMessage().isPresent())
