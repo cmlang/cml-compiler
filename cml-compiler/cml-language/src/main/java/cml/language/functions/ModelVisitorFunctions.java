@@ -7,6 +7,8 @@ import cml.language.foundation.TempProperty;
 import cml.language.generated.Expression;
 import cml.language.loader.ModelVisitor;
 
+import static org.jooq.lambda.Seq.seq;
+
 @SuppressWarnings("WeakerAccess")
 public class ModelVisitorFunctions
 {
@@ -23,7 +25,7 @@ public class ModelVisitorFunctions
     {
         visitor.visit(concept);
 
-        concept.getProperties().forEach(p -> visitProperty(p, visitor));
+        seq(concept.getProperties()).map(p -> (TempProperty)p).forEach(p -> visitProperty(p, visitor));
     }
 
     public static void visitAssociation(Association association, ModelVisitor visitor)

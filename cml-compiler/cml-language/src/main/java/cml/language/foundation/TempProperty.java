@@ -19,7 +19,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.jooq.lambda.Seq.seq;
 
-public interface TempProperty extends TypedElement, Scope
+public interface TempProperty extends Property
 {
     default boolean isConcrete()
     {
@@ -333,6 +333,7 @@ class UniquePropertyName implements Invariant<TempProperty>
 
             return concept.getProperties()
                           .stream()
+                          .map(p -> (TempProperty)p)
                           .filter(p -> p != self && p.getName().equals(self.getName()));
         }
         else

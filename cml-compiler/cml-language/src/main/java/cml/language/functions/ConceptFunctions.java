@@ -1,8 +1,8 @@
 package cml.language.functions;
 
-import cml.language.features.TempConcept;
 import cml.language.features.ConceptRedef;
 import cml.language.features.PropertyRedef;
+import cml.language.features.TempConcept;
 import cml.language.foundation.TempProperty;
 
 import java.util.List;
@@ -28,6 +28,7 @@ public class ConceptFunctions
     public static Optional<TempProperty> propertyOf(TempConcept concept, String propertyName)
     {
         return concept.getProperties().stream()
+                      .map(p -> (TempProperty)p)
                       .filter(p -> p.getName().equals(propertyName))
                       .findFirst();
     }

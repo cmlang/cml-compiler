@@ -164,7 +164,7 @@ public interface TempConcept extends Concept, TempPropertyList
     default List<TempProperty> getAllProperties()
     {
         return concat(
-            getProperties().stream(),
+            getProperties().stream().map(p -> (TempProperty)p),
             getDelegatedProperties().stream()
         ).collect(toList());
     }
@@ -188,6 +188,7 @@ public interface TempConcept extends Concept, TempPropertyList
     default List<TempProperty> getAssociationProperties()
     {
         return getProperties().stream()
+                              .map(p -> (TempProperty)p)
                               .filter(p -> p.getAssociation().isPresent())
                               .collect(toList());
     }
@@ -195,6 +196,7 @@ public interface TempConcept extends Concept, TempPropertyList
     default List<TempProperty> getSlotProperties()
     {
         return getProperties().stream()
+                              .map(p -> (TempProperty)p)
                               .filter(TempProperty::isSlot)
                               .collect(toList());
     }
@@ -346,6 +348,12 @@ class ConceptImpl implements TempConcept
     }
 
     @Override
+    public List<Property> getProperties()
+    {
+        return concept.getProperties();
+    }
+
+    @Override
     public List<TempConcept> getDirectAncestors()
     {
         return unmodifiableList(directAncestors);
@@ -461,6 +469,7 @@ class AbstractPropertyRedefinition implements Invariant<TempConcept>
         return p1 -> self.getProperties()
                          .stream()
                          .filter(p2 -> p1.getName().equals(p2.getName()))
+                         .map(p -> (TempProperty)p)
                          .filter(TempProperty::isConcrete)
                          .count() > 0;
     }

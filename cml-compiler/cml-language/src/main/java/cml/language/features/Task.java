@@ -25,17 +25,18 @@ public interface Task extends NamedElement, TempPropertyList
 
 class TaskImpl implements Task
 {
-    private final ModelElement modelElement;
     private final NamedElement namedElement;
-    private final Scope scope;
+    private final PropertyList propertyList;
 
     private @Nullable String constructor;
 
-    TaskImpl(TempModule module, String name, @Nullable String constructor, List<TempProperty> propertyList, Location location)
+    TaskImpl(TempModule module, String name, @Nullable String constructor, List<TempProperty> properties, Location location)
     {
-        this.modelElement = extendModelElement(this, module, location);
+        final ModelElement modelElement = extendModelElement(this, module, location);
         this.namedElement = extendNamedElement(this, modelElement, name);
-        this.scope = extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
+
+        final Scope scope = extendScope(this, modelElement, seq(properties).map(p -> (ModelElement)p).toList());
+        propertyList = PropertyList.extendPropertyList(this, modelElement, scope);
 
         this.constructor = constructor;
     }
@@ -43,25 +44,31 @@ class TaskImpl implements Task
     @Override
     public Optional<Location> getLocation()
     {
-        return modelElement.getLocation();
+        return propertyList.getLocation();
     }
 
     @Override
     public Optional<Scope> getParent()
     {
-        return modelElement.getParent();
+        return propertyList.getParent();
     }
 
     @Override
     public Optional<Model> getModel()
     {
-        return modelElement.getModel();
+        return propertyList.getModel();
     }
 
     @Override
     public Optional<Module> getModule()
     {
-        return modelElement.getModule();
+        return propertyList.getModule();
+    }
+
+    @Override
+    public List<ModelElement> getMembers()
+    {
+        return propertyList.getMembers();
     }
 
     @Override
@@ -71,9 +78,9 @@ class TaskImpl implements Task
     }
 
     @Override
-    public List<ModelElement> getMembers()
+    public List<Property> getProperties()
     {
-        return scope.getMembers();
+        return propertyList.getProperties();
     }
 
     @Override

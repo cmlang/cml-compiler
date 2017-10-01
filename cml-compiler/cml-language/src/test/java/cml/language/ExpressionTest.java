@@ -28,6 +28,7 @@ import static cml.language.functions.ModelFunctions.moduleOf;
 import static cml.language.functions.ModuleFunctions.conceptOf;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.seq;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
@@ -72,7 +73,7 @@ public class ExpressionTest
         final TempConcept concept = loadExpressions();
         final Properties expectedOCL = loadProperties("expected_ocl.properties");
 
-        for (final TempProperty property: concept.getProperties())
+        for (final TempProperty property: seq(concept.getProperties()).map(p -> (TempProperty)p))
         {
             assertExpectedOCL(expectedOCL, property);
         }
@@ -84,7 +85,7 @@ public class ExpressionTest
         final TempConcept concept = loadExpressions();
         final Properties expectedType = loadProperties("expected_type.properties");
 
-        for (final TempProperty property: concept.getProperties())
+        for (final TempProperty property: seq(concept.getProperties()).map(p -> (TempProperty)p))
         {
             assertExpectedType(expectedType, property);
         }
