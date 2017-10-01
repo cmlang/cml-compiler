@@ -6,6 +6,7 @@ import cml.language.foundation.TempProperty;
 import cml.language.generated.Expression;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
+import cml.language.generated.Task;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.*;
@@ -129,11 +130,11 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final String constructor = ctx.constructorDeclaration() == null ? null : ctx.constructorDeclaration().NAME().getText();
-        final List<TempProperty> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
-            .map(node -> node.property)
+        final List<ModelElement> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
+            .map(node -> (ModelElement) node.property)
             .toList();
 
-        ctx.task = Task.create(module, name, constructor, propertyList, locationOf(ctx));
+        ctx.task = Task.createTask(name, module, locationOf(ctx), propertyList, constructor);
     }
 
     @Override

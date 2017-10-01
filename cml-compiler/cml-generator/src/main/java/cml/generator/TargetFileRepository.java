@@ -1,7 +1,7 @@
 package cml.generator;
 
 import cml.language.features.TempModule;
-import cml.language.features.Task;
+import cml.language.generated.Task;
 import cml.templates.TemplateFile;
 import cml.templates.TemplateRenderer;
 import cml.templates.TemplateRepository;

@@ -1,8 +1,12 @@
 package cml.language.functions;
 
-import cml.language.features.*;
+import cml.language.features.Association;
+import cml.language.features.TempConcept;
+import cml.language.features.TempModule;
+import cml.language.features.Template;
 import cml.language.foundation.TempModel;
 import cml.language.generated.Module;
+import cml.language.generated.Task;
 
 import java.util.Optional;
 

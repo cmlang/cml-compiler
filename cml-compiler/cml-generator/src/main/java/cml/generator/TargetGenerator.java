@@ -2,9 +2,9 @@ package cml.generator;
 
 import cml.language.features.Association;
 import cml.language.features.TempConcept;
-import cml.language.features.Task;
 import cml.language.foundation.TempModel;
 import cml.language.generated.NamedElement;
+import cml.language.generated.Task;
 import cml.language.loader.ModelVisitor;
 
 class TargetGenerator implements ModelVisitor

@@ -37,6 +37,9 @@ PROPERTY files:
 PROPERTY_LIST files:
 - src/main/java/cml/language/generated/PropertyList.java
 
+TASK files:
+- src/main/java/cml/language/generated/Task.java
+
 TYPE files:
 - src/main/java/cml/language/generated/Type.java
 
