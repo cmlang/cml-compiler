@@ -4,6 +4,7 @@
     /module = self as? MODULE?;
 
     /imports = members as? IMPORT*;
+    /tasks = members as? TASK*;
 
 /*
 
@@ -11,7 +12,6 @@
     /associations = members as? ASSOCIATION*;
 
     /templates = for m in members | select: m is TEMPLATE;
-    /tasks = for m in members | select: m is TASK;
 
     /all_concepts = concat(concepts, imported_concepts);
     /all_templates = concat(templates, imported_templates);

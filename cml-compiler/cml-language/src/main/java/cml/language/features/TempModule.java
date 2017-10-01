@@ -55,14 +55,6 @@ public interface TempModule extends NamedElement, Scope, Module
                            .collect(toList());
     }
 
-    default List<Task> getTasks()
-    {
-        return getMembers().stream()
-                           .filter(e -> e instanceof Task)
-                           .map(e -> (Task)e)
-                           .collect(toList());
-    }
-
     default List<Template> getTemplates()
     {
         return getMembers().stream()
@@ -143,5 +135,11 @@ class TempModuleImpl implements TempModule
     public List<Import> getImports()
     {
         return module.getImports();
+    }
+
+    @Override
+    public List<Task> getTasks()
+    {
+        return module.getTasks();
     }
 }

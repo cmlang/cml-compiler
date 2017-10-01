@@ -1,6 +1,9 @@
 package cml.language.foundation;
 
-import cml.language.features.*;
+import cml.language.features.Association;
+import cml.language.features.TempConcept;
+import cml.language.features.TempModule;
+import cml.language.features.Template;
 import cml.language.generated.*;
 
 import java.util.Comparator;
@@ -65,14 +68,6 @@ public interface TempModel extends NamedElement, Scope, Model
                            .collect(toList());
     }
 
-    default List<Task> getTasks()
-    {
-        return getModules().stream()
-                           .map(m -> (TempModule)m)
-                           .flatMap(m -> m.getTasks().stream())
-                           .collect(toList());
-    }
-
     default List<Template> getTemplates()
     {
         return getModules().stream()
@@ -134,6 +129,12 @@ class ModelImpl implements TempModel
     public List<Module> getModules()
     {
         return model.getModules();
+    }
+
+    @Override
+    public List<Task> getTasks()
+    {
+        return model.getTasks();
     }
 
     @Override
