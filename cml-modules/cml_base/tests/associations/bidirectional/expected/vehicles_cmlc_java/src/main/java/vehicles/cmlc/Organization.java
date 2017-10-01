@@ -62,7 +62,7 @@ class OrganizationImpl implements Organization
     {
         return new StringBuilder(Organization.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName()))
+                   .append("name=").append(String.format("\"%s\"", this.actual_self.getName()))
                    .append(')')
                    .toString();
     }

@@ -48,10 +48,10 @@ public class Book extends Product
     {
         return new StringBuilder(Book.class.getSimpleName())
                    .append('(')
-                   .append("isbn=").append(String.format("\"%s\"", getIsbn())).append(", ")
-                   .append("title=").append(String.format("\"%s\"", getTitle())).append(", ")
-                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
-                   .append("price=").append(String.format("\"%s\"", getPrice()))
+                   .append("isbn=").append(String.format("\"%s\"", this.getIsbn())).append(", ")
+                   .append("title=").append(String.format("\"%s\"", this.getTitle())).append(", ")
+                   .append("name=").append(String.format("\"%s\"", this.getName())).append(", ")
+                   .append("price=").append(String.format("\"%s\"", this.getPrice()))
                    .append(')')
                    .toString();
     }

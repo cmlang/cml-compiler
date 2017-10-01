@@ -67,7 +67,7 @@ class VehicleImpl implements Vehicle
     {
         return new StringBuilder(Vehicle.class.getSimpleName())
                    .append('(')
-                   .append("plate=").append(String.format("\"%s\"", getPlate()))
+                   .append("plate=").append(String.format("\"%s\"", this.actual_self.getPlate()))
                    .append(')')
                    .toString();
     }

@@ -11,6 +11,9 @@
     -- A derived property without an expression is considered abstract.
     -- Only abstractions may have abstract properties.
     /area: Double;
+
+    -- If specializations redefine "area", "total_area" should match its value.
+    /total_area = area;
 }
 
 // Specialization of Shape:

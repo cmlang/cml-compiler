@@ -63,8 +63,8 @@ class NamedElementImpl implements NamedElement
     {
         return new StringBuilder(NamedElement.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
-                   .append("parent=").append(getParent().isPresent() ? String.format("\"%s\"", getParent()) : "not present")
+                   .append("name=").append(String.format("\"%s\"", this.actual_self.getName())).append(", ")
+                   .append("parent=").append(this.actual_self.getParent().isPresent() ? String.format("\"%s\"", this.actual_self.getParent()) : "not present")
                    .append(')')
                    .toString();
     }

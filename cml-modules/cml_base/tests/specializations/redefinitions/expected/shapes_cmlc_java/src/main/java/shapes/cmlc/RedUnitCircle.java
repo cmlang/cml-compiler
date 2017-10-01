@@ -75,13 +75,19 @@ class RedUnitCircleImpl implements RedUnitCircle
         return this.unitCircle.getRadius();
     }
 
+    public double getTotalArea()
+    {
+        return this.shape.getTotalArea();
+    }
+
     public String toString()
     {
         return new StringBuilder(RedUnitCircle.class.getSimpleName())
                    .append('(')
-                   .append("color=").append(String.format("\"%s\"", getColor())).append(", ")
-                   .append("area=").append(String.format("\"%s\"", getArea())).append(", ")
-                   .append("radius=").append(String.format("\"%s\"", getRadius()))
+                   .append("color=").append(String.format("\"%s\"", this.actual_self.getColor())).append(", ")
+                   .append("area=").append(String.format("\"%s\"", this.actual_self.getArea())).append(", ")
+                   .append("radius=").append(String.format("\"%s\"", this.actual_self.getRadius())).append(", ")
+                   .append("totalArea=").append(String.format("\"%s\"", this.actual_self.getTotalArea()))
                    .append(')')
                    .toString();
     }

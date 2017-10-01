@@ -28,7 +28,7 @@ public class Item
     {
         return new StringBuilder(Item.class.getSimpleName())
                    .append('(')
-                   .append("size=").append(String.format("\"%s\"", getSize()))
+                   .append("size=").append(String.format("\"%s\"", this.getSize()))
                    .append(')')
                    .toString();
     }

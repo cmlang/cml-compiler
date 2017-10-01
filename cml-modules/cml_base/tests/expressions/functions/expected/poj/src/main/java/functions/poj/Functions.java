@@ -40,160 +40,160 @@ public class Functions
 
     public boolean isEmptyItems()
     {
-        return seq(getItems()).isEmpty();
+        return seq(this.getItems()).isEmpty();
     }
 
     public boolean isPresentItems()
     {
-        return !seq(getItems()).isEmpty();
+        return !seq(this.getItems()).isEmpty();
     }
 
     public boolean isEmptySingleItem()
     {
-        return !getSingleItem().isPresent();
+        return !this.getSingleItem().isPresent();
     }
 
     public boolean isPresentSingleItem()
     {
-        return getSingleItem().isPresent();
+        return this.getSingleItem().isPresent();
     }
 
     public boolean isRequiredEmptySingleItem()
     {
-        return getRequiredItem() == null;
+        return this.getRequiredItem() == null;
     }
 
     public boolean isRequiredPresentSingleItem()
     {
-        return getRequiredItem() != null;
+        return this.getRequiredItem() != null;
     }
 
     public Optional<Item> getItemsFirst()
     {
-        return seq(getItems()).findFirst();
+        return seq(this.getItems()).findFirst();
     }
 
     public Optional<Item> getItemsLast()
     {
-        return seq(getItems()).findLast();
+        return seq(this.getItems()).findLast();
     }
 
     public Optional<Item> getSingleItemFirst()
     {
-        return seq(getSingleItem()).findFirst();
+        return seq(this.getSingleItem()).findFirst();
     }
 
     public Optional<Item> getSingleItemLast()
     {
-        return seq(getSingleItem()).findLast();
+        return seq(this.getSingleItem()).findLast();
     }
 
     public Optional<Item> getRequiredItemFirst()
     {
-        return seq(asList(getRequiredItem())).findFirst();
+        return seq(asList(this.getRequiredItem())).findFirst();
     }
 
     public Optional<Item> getRequiredItemLast()
     {
-        return seq(asList(getRequiredItem())).findLast();
+        return seq(asList(this.getRequiredItem())).findLast();
     }
 
     public boolean isAtLeastOneLargeItem()
     {
-        return seq(getItems()).anyMatch(item1 -> (item1.getSize() > 100));
+        return seq(this.getItems()).anyMatch(item1 -> (item1.getSize() > 100));
     }
 
     public boolean isAllLargeItems()
     {
-        return seq(getItems()).allMatch(item2 -> (item2.getSize() > 100));
+        return seq(this.getItems()).allMatch(item2 -> (item2.getSize() > 100));
     }
 
     public boolean isLargeItemExists()
     {
-        return seq(getSingleItem()).anyMatch(item3 -> (item3.getSize() > 100));
+        return seq(this.getSingleItem()).anyMatch(item3 -> (item3.getSize() > 100));
     }
 
     public boolean isLargeItemAll()
     {
-        return seq(getSingleItem()).allMatch(item4 -> (item4.getSize() > 100));
+        return seq(this.getSingleItem()).allMatch(item4 -> (item4.getSize() > 100));
     }
 
     public boolean isRequiredItemExists()
     {
-        return seq(asList(getRequiredItem())).anyMatch(item5 -> (item5.getSize() > 100));
+        return seq(asList(this.getRequiredItem())).anyMatch(item5 -> (item5.getSize() > 100));
     }
 
     public boolean isRequiredItemAll()
     {
-        return seq(asList(getRequiredItem())).allMatch(item6 -> (item6.getSize() > 100));
+        return seq(asList(this.getRequiredItem())).allMatch(item6 -> (item6.getSize() > 100));
     }
 
     public List<Item> getItemsSelect()
     {
-        return seq(getItems()).filter(item7 -> (item7.getSize() > 100)).toList();
+        return seq(this.getItems()).filter(item7 -> (item7.getSize() > 100)).toList();
     }
 
     public List<Item> getItemsReject()
     {
-        return seq(getItems()).removeAll(seq(getItems()).filter(item8 -> (item8.getSize() > 100))).toList();
+        return seq(this.getItems()).removeAll(seq(this.getItems()).filter(item8 -> (item8.getSize() > 100))).toList();
     }
 
     public List<Item> getSingleItemSelect()
     {
-        return seq(getSingleItem()).filter(item9 -> (item9.getSize() > 100)).toList();
+        return seq(this.getSingleItem()).filter(item9 -> (item9.getSize() > 100)).toList();
     }
 
     public List<Item> getSingleItemReject()
     {
-        return seq(getSingleItem()).removeAll(seq(getSingleItem()).filter(item10 -> (item10.getSize() > 100))).toList();
+        return seq(this.getSingleItem()).removeAll(seq(this.getSingleItem()).filter(item10 -> (item10.getSize() > 100))).toList();
     }
 
     public List<Item> getRequiredItemSelect()
     {
-        return seq(asList(getRequiredItem())).filter(item11 -> (item11.getSize() > 100)).toList();
+        return seq(asList(this.getRequiredItem())).filter(item11 -> (item11.getSize() > 100)).toList();
     }
 
     public List<Item> getRequiredItemReject()
     {
-        return seq(asList(getRequiredItem())).removeAll(seq(asList(getRequiredItem())).filter(item12 -> (item12.getSize() > 100))).toList();
+        return seq(asList(this.getRequiredItem())).removeAll(seq(asList(this.getRequiredItem())).filter(item12 -> (item12.getSize() > 100))).toList();
     }
 
     public List<Integer> getItemsCollect()
     {
-        return seq(getItems()).map(item13 -> item13.getSize()).toList();
+        return seq(this.getItems()).map(item13 -> item13.getSize()).toList();
     }
 
     public List<Integer> getSingleItemCollect()
     {
-        return seq(getSingleItem()).map(item14 -> item14.getSize()).toList();
+        return seq(this.getSingleItem()).map(item14 -> item14.getSize()).toList();
     }
 
     public List<Integer> getRequiredItemCollect()
     {
-        return seq(asList(getRequiredItem())).map(item15 -> item15.getSize()).toList();
+        return seq(asList(this.getRequiredItem())).map(item15 -> item15.getSize()).toList();
     }
 
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())
                    .append('(')
-                   .append("requiredItem=").append(String.format("\"%s\"", getRequiredItem())).append(", ")
-                   .append("singleItem=").append(getSingleItem().isPresent() ? String.format("\"%s\"", getSingleItem()) : "not present").append(", ")
-                   .append("emptyItems=").append(String.format("\"%s\"", isEmptyItems())).append(", ")
-                   .append("presentItems=").append(String.format("\"%s\"", isPresentItems())).append(", ")
-                   .append("emptySingleItem=").append(String.format("\"%s\"", isEmptySingleItem())).append(", ")
-                   .append("presentSingleItem=").append(String.format("\"%s\"", isPresentSingleItem())).append(", ")
-                   .append("requiredEmptySingleItem=").append(String.format("\"%s\"", isRequiredEmptySingleItem())).append(", ")
-                   .append("requiredPresentSingleItem=").append(String.format("\"%s\"", isRequiredPresentSingleItem())).append(", ")
-                   .append("atLeastOneLargeItem=").append(String.format("\"%s\"", isAtLeastOneLargeItem())).append(", ")
-                   .append("allLargeItems=").append(String.format("\"%s\"", isAllLargeItems())).append(", ")
-                   .append("largeItemExists=").append(String.format("\"%s\"", isLargeItemExists())).append(", ")
-                   .append("largeItemAll=").append(String.format("\"%s\"", isLargeItemAll())).append(", ")
-                   .append("requiredItemExists=").append(String.format("\"%s\"", isRequiredItemExists())).append(", ")
-                   .append("requiredItemAll=").append(String.format("\"%s\"", isRequiredItemAll())).append(", ")
-                   .append("itemsCollect=").append(getItemsCollect()).append(", ")
-                   .append("singleItemCollect=").append(getSingleItemCollect()).append(", ")
-                   .append("requiredItemCollect=").append(getRequiredItemCollect())
+                   .append("requiredItem=").append(String.format("\"%s\"", this.getRequiredItem())).append(", ")
+                   .append("singleItem=").append(this.getSingleItem().isPresent() ? String.format("\"%s\"", this.getSingleItem()) : "not present").append(", ")
+                   .append("emptyItems=").append(String.format("\"%s\"", this.isEmptyItems())).append(", ")
+                   .append("presentItems=").append(String.format("\"%s\"", this.isPresentItems())).append(", ")
+                   .append("emptySingleItem=").append(String.format("\"%s\"", this.isEmptySingleItem())).append(", ")
+                   .append("presentSingleItem=").append(String.format("\"%s\"", this.isPresentSingleItem())).append(", ")
+                   .append("requiredEmptySingleItem=").append(String.format("\"%s\"", this.isRequiredEmptySingleItem())).append(", ")
+                   .append("requiredPresentSingleItem=").append(String.format("\"%s\"", this.isRequiredPresentSingleItem())).append(", ")
+                   .append("atLeastOneLargeItem=").append(String.format("\"%s\"", this.isAtLeastOneLargeItem())).append(", ")
+                   .append("allLargeItems=").append(String.format("\"%s\"", this.isAllLargeItems())).append(", ")
+                   .append("largeItemExists=").append(String.format("\"%s\"", this.isLargeItemExists())).append(", ")
+                   .append("largeItemAll=").append(String.format("\"%s\"", this.isLargeItemAll())).append(", ")
+                   .append("requiredItemExists=").append(String.format("\"%s\"", this.isRequiredItemExists())).append(", ")
+                   .append("requiredItemAll=").append(String.format("\"%s\"", this.isRequiredItemAll())).append(", ")
+                   .append("itemsCollect=").append(this.getItemsCollect()).append(", ")
+                   .append("singleItemCollect=").append(this.getSingleItemCollect()).append(", ")
+                   .append("requiredItemCollect=").append(this.getRequiredItemCollect())
                    .append(')')
                    .toString();
     }

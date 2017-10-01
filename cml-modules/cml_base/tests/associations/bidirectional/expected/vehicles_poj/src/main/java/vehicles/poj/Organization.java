@@ -44,7 +44,7 @@ public abstract class Organization
     {
         return new StringBuilder(Organization.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName()))
+                   .append("name=").append(String.format("\"%s\"", this.getName()))
                    .append(')')
                    .toString();
     }

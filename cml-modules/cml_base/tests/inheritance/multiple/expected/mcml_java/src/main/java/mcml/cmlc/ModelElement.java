@@ -51,7 +51,7 @@ class ModelElementImpl implements ModelElement
     {
         return new StringBuilder(ModelElement.class.getSimpleName())
                    .append('(')
-                   .append("parent=").append(getParent().isPresent() ? String.format("\"%s\"", getParent()) : "not present")
+                   .append("parent=").append(this.actual_self.getParent().isPresent() ? String.format("\"%s\"", this.actual_self.getParent()) : "not present")
                    .append(')')
                    .toString();
     }

@@ -171,7 +171,7 @@ class VehicleImpl(Vehicle):
     def __str__(self) -> 'str':
         return "%s(plate=%s)" % (
             type(self).__name__,
-            self.plate
+            self.__actual_self.plate
         )
 
 
@@ -229,7 +229,7 @@ class EmployeeImpl(Employee):
     def __str__(self) -> 'str':
         return "%s(name=%s)" % (
             type(self).__name__,
-            self.name
+            self.__actual_self.name
         )
 
 
@@ -283,7 +283,7 @@ class OrganizationImpl(Organization):
     def __str__(self) -> 'str':
         return "%s(name=%s)" % (
             type(self).__name__,
-            self.name
+            self.__actual_self.name
         )
 
 
@@ -352,7 +352,7 @@ class CorporationImpl(Corporation):
     def __str__(self) -> 'str':
         return "%s(stock=%s, profit=%s, name=%s)" % (
             type(self).__name__,
-            self.stock,
-            self.profit,
-            self.name
+            self.__actual_self.stock,
+            self.__actual_self.profit,
+            self.__actual_self.name
         )

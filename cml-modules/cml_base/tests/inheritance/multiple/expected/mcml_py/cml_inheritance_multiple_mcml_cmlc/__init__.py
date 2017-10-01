@@ -41,7 +41,7 @@ class ModelElementImpl(ModelElement):
     def __str__(self) -> 'str':
         return "%s(parent=%s)" % (
             type(self).__name__,
-            self.parent
+            self.__actual_self.parent
         )
 
 
@@ -82,8 +82,8 @@ class NamedElementImpl(NamedElement):
     def __str__(self) -> 'str':
         return "%s(name=%s, parent=%s)" % (
             type(self).__name__,
-            self.name,
-            self.parent
+            self.__actual_self.name,
+            self.__actual_self.parent
         )
 
 
@@ -116,7 +116,7 @@ class PropertyListImpl(PropertyList):
     def __str__(self) -> 'str':
         return "%s(parent=%s)" % (
             type(self).__name__,
-            self.parent
+            self.__actual_self.parent
         )
 
 
@@ -176,9 +176,9 @@ class ConceptImpl(Concept):
     def __str__(self) -> 'str':
         return "%s(abstracted=%s, name=%s, parent=%s)" % (
             type(self).__name__,
-            self.abstracted,
-            self.name,
-            self.parent
+            self.__actual_self.abstracted,
+            self.__actual_self.name,
+            self.__actual_self.parent
         )
 
 
@@ -218,5 +218,5 @@ class ModelImpl(Model):
     def __str__(self) -> 'str':
         return "%s(parent=%s)" % (
             type(self).__name__,
-            self.parent
+            self.__actual_self.parent
         )

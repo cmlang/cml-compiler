@@ -46,9 +46,9 @@ public class Corporation extends Organization
     {
         return new StringBuilder(Corporation.class.getSimpleName())
                    .append('(')
-                   .append("stock=").append(String.format("\"%s\"", isStock())).append(", ")
-                   .append("profit=").append(String.format("\"%s\"", isProfit())).append(", ")
-                   .append("name=").append(String.format("\"%s\"", getName()))
+                   .append("stock=").append(String.format("\"%s\"", this.isStock())).append(", ")
+                   .append("profit=").append(String.format("\"%s\"", this.isProfit())).append(", ")
+                   .append("name=").append(String.format("\"%s\"", this.getName()))
                    .append(')')
                    .toString();
     }

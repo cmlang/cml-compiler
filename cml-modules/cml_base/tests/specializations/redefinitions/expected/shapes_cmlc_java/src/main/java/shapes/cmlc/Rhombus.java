@@ -68,7 +68,7 @@ class RhombusImpl implements Rhombus
 
     public double getArea()
     {
-        return ((getP() * getQ()) / 2.0);
+        return ((this.actual_self.getP() * this.actual_self.getQ()) / 2.0);
     }
 
     public String getColor()
@@ -76,14 +76,20 @@ class RhombusImpl implements Rhombus
         return this.shape.getColor();
     }
 
+    public double getTotalArea()
+    {
+        return this.shape.getTotalArea();
+    }
+
     public String toString()
     {
         return new StringBuilder(Rhombus.class.getSimpleName())
                    .append('(')
-                   .append("p=").append(String.format("\"%s\"", getP())).append(", ")
-                   .append("q=").append(String.format("\"%s\"", getQ())).append(", ")
-                   .append("area=").append(String.format("\"%s\"", getArea())).append(", ")
-                   .append("color=").append(String.format("\"%s\"", getColor()))
+                   .append("p=").append(String.format("\"%s\"", this.actual_self.getP())).append(", ")
+                   .append("q=").append(String.format("\"%s\"", this.actual_self.getQ())).append(", ")
+                   .append("area=").append(String.format("\"%s\"", this.actual_self.getArea())).append(", ")
+                   .append("color=").append(String.format("\"%s\"", this.actual_self.getColor())).append(", ")
+                   .append("totalArea=").append(String.format("\"%s\"", this.actual_self.getTotalArea()))
                    .append(')')
                    .toString();
     }

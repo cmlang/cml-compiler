@@ -40,8 +40,8 @@ public class Product
     {
         return new StringBuilder(Product.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
-                   .append("price=").append(String.format("\"%s\"", getPrice()))
+                   .append("name=").append(String.format("\"%s\"", this.getName())).append(", ")
+                   .append("price=").append(String.format("\"%s\"", this.getPrice()))
                    .append(')')
                    .toString();
     }

@@ -72,15 +72,19 @@ to_string_field(property) ::= <<
 >>
 
 to_string_field_value_required(property) ::= <<
-.append(String.format("\"%s\"", <getter_call(property)>))
+.append(String.format("\"%s\"", <to_string_getter_call(property)>))
 >>
 
 to_string_field_value_optional(property) ::= <<
-.append(<getter_call(property)>.isPresent() ? String.format("\"%s\"", <getter_call(property)>) : "not present")
+.append(<to_string_getter_call(property)>.isPresent() ? String.format("\"%s\"", <to_string_getter_call(property)>) : "not present")
 >>
 
 to_string_field_value_sequence(property) ::= <<
-.append(<getter_call(property)>)
+.append(<to_string_getter_call(property)>)
+>>
+
+to_string_getter_call(property) ::= <<
+<actual_self_field()>.<getter_call(property)>
 >>
 
 // Operations
@@ -319,7 +323,7 @@ path_expr(path) ::= <<
 <elseif(!lambda.parameters && lambda.innerExpression)><\\>
 <path_getter_call({<lambda_var_name()>.}, path)><\\>
 <else><\\>
-<path_getter_call("", path)><\\>
+<path_getter_call({<actual_self_field()>.}, path)><\\>
 <endif>
 >>
 

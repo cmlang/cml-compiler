@@ -35,7 +35,7 @@ public class Order
     {
         return new StringBuilder(Order.class.getSimpleName())
                    .append('(')
-                   .append("customer=").append(String.format("\"%s\"", getCustomer()))
+                   .append("customer=").append(String.format("\"%s\"", this.getCustomer()))
                    .append(')')
                    .toString();
     }

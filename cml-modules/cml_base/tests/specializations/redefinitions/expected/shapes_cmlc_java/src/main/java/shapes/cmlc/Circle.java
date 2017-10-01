@@ -73,16 +73,22 @@ class CircleImpl implements Circle
 
     public double getArea()
     {
-        return (3.14159 * (Math.pow(getRadius(), 2.0)));
+        return (3.14159 * (Math.pow(this.actual_self.getRadius(), 2.0)));
+    }
+
+    public double getTotalArea()
+    {
+        return this.shape.getTotalArea();
     }
 
     public String toString()
     {
         return new StringBuilder(Circle.class.getSimpleName())
                    .append('(')
-                   .append("radius=").append(String.format("\"%s\"", getRadius())).append(", ")
-                   .append("area=").append(String.format("\"%s\"", getArea())).append(", ")
-                   .append("color=").append(String.format("\"%s\"", getColor()))
+                   .append("radius=").append(String.format("\"%s\"", this.actual_self.getRadius())).append(", ")
+                   .append("area=").append(String.format("\"%s\"", this.actual_self.getArea())).append(", ")
+                   .append("color=").append(String.format("\"%s\"", this.actual_self.getColor())).append(", ")
+                   .append("totalArea=").append(String.format("\"%s\"", this.actual_self.getTotalArea()))
                    .append(')')
                    .toString();
     }

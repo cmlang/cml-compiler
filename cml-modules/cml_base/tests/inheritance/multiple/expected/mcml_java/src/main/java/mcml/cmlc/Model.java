@@ -58,7 +58,7 @@ class ModelImpl implements Model
     {
         return new StringBuilder(Model.class.getSimpleName())
                    .append('(')
-                   .append("parent=").append(getParent().isPresent() ? String.format("\"%s\"", getParent()) : "not present")
+                   .append("parent=").append(this.actual_self.getParent().isPresent() ? String.format("\"%s\"", this.actual_self.getParent()) : "not present")
                    .append(')')
                    .toString();
     }

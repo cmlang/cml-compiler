@@ -35,8 +35,8 @@ public class Item
     {
         return new StringBuilder(Item.class.getSimpleName())
                    .append('(')
-                   .append("book=").append(String.format("\"%s\"", getBook())).append(", ")
-                   .append("quantity=").append(String.format("\"%s\"", getQuantity()))
+                   .append("book=").append(String.format("\"%s\"", this.getBook())).append(", ")
+                   .append("quantity=").append(String.format("\"%s\"", this.getQuantity()))
                    .append(')')
                    .toString();
     }

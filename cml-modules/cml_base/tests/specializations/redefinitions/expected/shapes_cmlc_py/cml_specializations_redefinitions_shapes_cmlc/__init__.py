@@ -14,6 +14,10 @@ class Shape(ABC):
     def area(self) -> 'float':
         pass
 
+    @abstractproperty
+    def total_area(self) -> 'float':
+        pass
+
     @staticmethod
     def extend_shape(actual_self: 'Optional[Shape]', color: 'str') -> 'Shape':
         return ShapeImpl(actual_self, color)
@@ -37,11 +41,16 @@ class ShapeImpl(Shape):
     def area(self) -> 'float':
         return 0
 
+    @property
+    def total_area(self) -> 'float':
+        return self.__actual_self.area
+
     def __str__(self) -> 'str':
-        return "%s(color=%s, area=%s)" % (
+        return "%s(color=%s, area=%s, total_area=%s)" % (
             type(self).__name__,
-            self.color,
-            self.area
+            self.__actual_self.color,
+            self.__actual_self.area,
+            self.__actual_self.total_area
         )
 
 
@@ -93,19 +102,24 @@ class RectangleImpl(Rectangle):
 
     @property
     def area(self) -> 'float':
-        return (self.width * self.height)
+        return (self.__actual_self.width * self.__actual_self.height)
 
     @property
     def color(self) -> 'str':
         return self.__shape.color
 
+    @property
+    def total_area(self) -> 'float':
+        return self.__shape.total_area
+
     def __str__(self) -> 'str':
-        return "%s(width=%s, height=%s, area=%s, color=%s)" % (
+        return "%s(width=%s, height=%s, area=%s, color=%s, total_area=%s)" % (
             type(self).__name__,
-            self.width,
-            self.height,
-            self.area,
-            self.color
+            self.__actual_self.width,
+            self.__actual_self.height,
+            self.__actual_self.area,
+            self.__actual_self.color,
+            self.__actual_self.total_area
         )
 
 
@@ -157,19 +171,24 @@ class RhombusImpl(Rhombus):
 
     @property
     def area(self) -> 'float':
-        return ((self.p * self.q) / 2.0)
+        return ((self.__actual_self.p * self.__actual_self.q) / 2.0)
 
     @property
     def color(self) -> 'str':
         return self.__shape.color
 
+    @property
+    def total_area(self) -> 'float':
+        return self.__shape.total_area
+
     def __str__(self) -> 'str':
-        return "%s(p=%s, q=%s, area=%s, color=%s)" % (
+        return "%s(p=%s, q=%s, area=%s, color=%s, total_area=%s)" % (
             type(self).__name__,
-            self.p,
-            self.q,
-            self.area,
-            self.color
+            self.__actual_self.p,
+            self.__actual_self.q,
+            self.__actual_self.area,
+            self.__actual_self.color,
+            self.__actual_self.total_area
         )
 
 
@@ -236,38 +255,43 @@ class SquareImpl(Square):
 
     @property
     def width(self) -> 'float':
-        return self.side_length
+        return self.__actual_self.side_length
 
     @property
     def height(self) -> 'float':
-        return self.side_length
+        return self.__actual_self.side_length
 
     @property
     def p(self) -> 'float':
-        return (self.side_length * 1.41421356237)
+        return (self.__actual_self.side_length * 1.41421356237)
 
     @property
     def q(self) -> 'float':
-        return self.p
+        return self.__actual_self.p
 
     @property
     def area(self) -> 'float':
-        return (self.side_length ** 2.0)
+        return (self.__actual_self.side_length ** 2.0)
 
     @property
     def color(self) -> 'str':
         return self.__shape.color
 
+    @property
+    def total_area(self) -> 'float':
+        return self.__shape.total_area
+
     def __str__(self) -> 'str':
-        return "%s(side_length=%s, width=%s, height=%s, p=%s, q=%s, area=%s, color=%s)" % (
+        return "%s(side_length=%s, width=%s, height=%s, p=%s, q=%s, area=%s, color=%s, total_area=%s)" % (
             type(self).__name__,
-            self.side_length,
-            self.width,
-            self.height,
-            self.p,
-            self.q,
-            self.area,
-            self.color
+            self.__actual_self.side_length,
+            self.__actual_self.width,
+            self.__actual_self.height,
+            self.__actual_self.p,
+            self.__actual_self.q,
+            self.__actual_self.area,
+            self.__actual_self.color,
+            self.__actual_self.total_area
         )
 
 
@@ -319,14 +343,19 @@ class CircleImpl(Circle):
 
     @property
     def area(self) -> 'float':
-        return (3.14159 * (self.radius ** 2.0))
+        return (3.14159 * (self.__actual_self.radius ** 2.0))
+
+    @property
+    def total_area(self) -> 'float':
+        return self.__shape.total_area
 
     def __str__(self) -> 'str':
-        return "%s(radius=%s, area=%s, color=%s)" % (
+        return "%s(radius=%s, area=%s, color=%s, total_area=%s)" % (
             type(self).__name__,
-            self.radius,
-            self.area,
-            self.color
+            self.__actual_self.radius,
+            self.__actual_self.area,
+            self.__actual_self.color,
+            self.__actual_self.total_area
         )
 
 
@@ -379,12 +408,17 @@ class UnitCircleImpl(UnitCircle):
     def color(self) -> 'str':
         return self.__circle.color
 
+    @property
+    def total_area(self) -> 'float':
+        return self.__shape.total_area
+
     def __str__(self) -> 'str':
-        return "%s(area=%s, radius=%s, color=%s)" % (
+        return "%s(area=%s, radius=%s, color=%s, total_area=%s)" % (
             type(self).__name__,
-            self.area,
-            self.radius,
-            self.color
+            self.__actual_self.area,
+            self.__actual_self.radius,
+            self.__actual_self.color,
+            self.__actual_self.total_area
         )
 
 
@@ -437,10 +471,15 @@ class RedUnitCircleImpl(RedUnitCircle):
     def radius(self) -> 'float':
         return self.__unit_circle.radius
 
+    @property
+    def total_area(self) -> 'float':
+        return self.__shape.total_area
+
     def __str__(self) -> 'str':
-        return "%s(color=%s, area=%s, radius=%s)" % (
+        return "%s(color=%s, area=%s, radius=%s, total_area=%s)" % (
             type(self).__name__,
-            self.color,
-            self.area,
-            self.radius
+            self.__actual_self.color,
+            self.__actual_self.area,
+            self.__actual_self.radius,
+            self.__actual_self.total_area
         )

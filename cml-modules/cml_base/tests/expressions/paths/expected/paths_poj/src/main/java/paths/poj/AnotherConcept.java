@@ -28,7 +28,7 @@ public class AnotherConcept
     {
         return new StringBuilder(AnotherConcept.class.getSimpleName())
                    .append('(')
-                   .append("etc=").append(String.format("\"%s\"", getEtc()))
+                   .append("etc=").append(String.format("\"%s\"", this.getEtc()))
                    .append(')')
                    .toString();
     }

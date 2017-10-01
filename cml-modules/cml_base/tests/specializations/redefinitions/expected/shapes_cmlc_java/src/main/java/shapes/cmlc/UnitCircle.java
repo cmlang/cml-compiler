@@ -74,13 +74,19 @@ class UnitCircleImpl implements UnitCircle
         return this.circle.getColor();
     }
 
+    public double getTotalArea()
+    {
+        return this.shape.getTotalArea();
+    }
+
     public String toString()
     {
         return new StringBuilder(UnitCircle.class.getSimpleName())
                    .append('(')
-                   .append("area=").append(String.format("\"%s\"", getArea())).append(", ")
-                   .append("radius=").append(String.format("\"%s\"", getRadius())).append(", ")
-                   .append("color=").append(String.format("\"%s\"", getColor()))
+                   .append("area=").append(String.format("\"%s\"", this.actual_self.getArea())).append(", ")
+                   .append("radius=").append(String.format("\"%s\"", this.actual_self.getRadius())).append(", ")
+                   .append("color=").append(String.format("\"%s\"", this.actual_self.getColor())).append(", ")
+                   .append("totalArea=").append(String.format("\"%s\"", this.actual_self.getTotalArea()))
                    .append(')')
                    .toString();
     }

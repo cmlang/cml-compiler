@@ -28,7 +28,7 @@ public class Customer
     {
         return new StringBuilder(Customer.class.getSimpleName())
                    .append('(')
-                   .append("name=").append(String.format("\"%s\"", getName()))
+                   .append("name=").append(String.format("\"%s\"", this.getName()))
                    .append(')')
                    .toString();
     }

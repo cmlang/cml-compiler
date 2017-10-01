@@ -72,27 +72,27 @@ class SquareImpl implements Square
 
     public double getWidth()
     {
-        return getSideLength();
+        return this.actual_self.getSideLength();
     }
 
     public double getHeight()
     {
-        return getSideLength();
+        return this.actual_self.getSideLength();
     }
 
     public double getP()
     {
-        return (getSideLength() * 1.41421356237);
+        return (this.actual_self.getSideLength() * 1.41421356237);
     }
 
     public double getQ()
     {
-        return getP();
+        return this.actual_self.getP();
     }
 
     public double getArea()
     {
-        return (Math.pow(getSideLength(), 2.0));
+        return (Math.pow(this.actual_self.getSideLength(), 2.0));
     }
 
     public String getColor()
@@ -100,17 +100,23 @@ class SquareImpl implements Square
         return this.shape.getColor();
     }
 
+    public double getTotalArea()
+    {
+        return this.shape.getTotalArea();
+    }
+
     public String toString()
     {
         return new StringBuilder(Square.class.getSimpleName())
                    .append('(')
-                   .append("sideLength=").append(String.format("\"%s\"", getSideLength())).append(", ")
-                   .append("width=").append(String.format("\"%s\"", getWidth())).append(", ")
-                   .append("height=").append(String.format("\"%s\"", getHeight())).append(", ")
-                   .append("p=").append(String.format("\"%s\"", getP())).append(", ")
-                   .append("q=").append(String.format("\"%s\"", getQ())).append(", ")
-                   .append("area=").append(String.format("\"%s\"", getArea())).append(", ")
-                   .append("color=").append(String.format("\"%s\"", getColor()))
+                   .append("sideLength=").append(String.format("\"%s\"", this.actual_self.getSideLength())).append(", ")
+                   .append("width=").append(String.format("\"%s\"", this.actual_self.getWidth())).append(", ")
+                   .append("height=").append(String.format("\"%s\"", this.actual_self.getHeight())).append(", ")
+                   .append("p=").append(String.format("\"%s\"", this.actual_self.getP())).append(", ")
+                   .append("q=").append(String.format("\"%s\"", this.actual_self.getQ())).append(", ")
+                   .append("area=").append(String.format("\"%s\"", this.actual_self.getArea())).append(", ")
+                   .append("color=").append(String.format("\"%s\"", this.actual_self.getColor())).append(", ")
+                   .append("totalArea=").append(String.format("\"%s\"", this.actual_self.getTotalArea()))
                    .append(')')
                    .toString();
     }

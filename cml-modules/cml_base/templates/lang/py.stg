@@ -53,7 +53,7 @@ type(self).__name__,
 >>
 
 to_string_field(property) ::= <<
-self.<getter_call(property)>
+<actual_self_field()>.<getter_call(property)>
 >>
 
 // Operations
@@ -302,7 +302,7 @@ item.<path_property(path)><\\>
 >>
 
 path_getter_call(path) ::= <<
-self.<path_property(path)>
+<actual_self_field()>.<path_property(path)>
 >>
 
 path_base_call(path) ::= <<

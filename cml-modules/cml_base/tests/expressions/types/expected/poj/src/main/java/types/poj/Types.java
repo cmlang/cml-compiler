@@ -40,82 +40,82 @@ public class Types
 
     public boolean isTypeCheckIs()
     {
-        return getReq() instanceof Descendant;
+        return this.getReq() instanceof Descendant;
     }
 
     public boolean isTypeCheckIsNot()
     {
-        return !(getReq() instanceof Descendant);
+        return !(this.getReq() instanceof Descendant);
     }
 
     public Descendant getReqToReqTypeCastAsb()
     {
-        return (Descendant)getReq();
+        return (Descendant)this.getReq();
     }
 
     public Optional<Descendant> getReqToOptTypeCastAsb()
     {
-        return seq(asList(getReq())).cast(Descendant.class).findFirst();
+        return seq(asList(this.getReq())).cast(Descendant.class).findFirst();
     }
 
     public Optional<Descendant> getReqToOptTypeCastAsq()
     {
-        return seq(asList(getReq())).ofType(Descendant.class).findFirst();
+        return seq(asList(this.getReq())).ofType(Descendant.class).findFirst();
     }
 
     public Optional<Descendant> getOptToOptTypeCastAsb()
     {
-        return seq(getOpt()).cast(Descendant.class).findFirst();
+        return seq(this.getOpt()).cast(Descendant.class).findFirst();
     }
 
     public Optional<Descendant> getOptToOptTypeCastAsq()
     {
-        return seq(getOpt()).ofType(Descendant.class).findFirst();
+        return seq(this.getOpt()).ofType(Descendant.class).findFirst();
     }
 
     public List<Descendant> getReqToSeqTypeCastAsb()
     {
-        return seq(asList(getReq())).cast(Descendant.class).toList();
+        return seq(asList(this.getReq())).cast(Descendant.class).toList();
     }
 
     public List<Descendant> getOptToSeqTypeCastAsb()
     {
-        return seq(getOpt()).cast(Descendant.class).toList();
+        return seq(this.getOpt()).cast(Descendant.class).toList();
     }
 
     public List<Descendant> getSeqToSeqTypeCastAsb()
     {
-        return seq(getSeq()).cast(Descendant.class).toList();
+        return seq(this.getSeq()).cast(Descendant.class).toList();
     }
 
     public List<Descendant> getReqToSeqTypeCastAsq()
     {
-        return seq(asList(getReq())).ofType(Descendant.class).toList();
+        return seq(asList(this.getReq())).ofType(Descendant.class).toList();
     }
 
     public List<Descendant> getOptToSeqTypeCastAsq()
     {
-        return seq(getOpt()).ofType(Descendant.class).toList();
+        return seq(this.getOpt()).ofType(Descendant.class).toList();
     }
 
     public List<Descendant> getSeqToSeqTypeCastAsq()
     {
-        return seq(getSeq()).ofType(Descendant.class).toList();
+        return seq(this.getSeq()).ofType(Descendant.class).toList();
     }
 
     public List<Ancestor> getDescendants()
     {
-        return seq(getSeq()).filter(a -> a instanceof Descendant).toList();
+        return seq(this.getSeq()).filter(a -> a instanceof Descendant).toList();
     }
 
     public String toString()
     {
         return new StringBuilder(Types.class.getSimpleName())
                    .append('(')
-                   .append("req=").append(String.format("\"%s\"", getReq())).append(", ")
-                   .append("opt=").append(getOpt().isPresent() ? String.format("\"%s\"", getOpt()) : "not present").append(", ")
-                   .append("typeCheckIs=").append(String.format("\"%s\"", isTypeCheckIs())).append(", ")
-                   .append("typeCheckIsNot=").append(String.format("\"%s\"", isTypeCheckIsNot()))
+                   .append("req=").append(String.format("\"%s\"", this.getReq())).append(", ")
+                   .append("opt=").append(this.getOpt().isPresent() ? String.format("\"%s\"", this.getOpt()) : "not present").append(", ")
+                   .append("typeCheckIs=").append(String.format("\"%s\"", this.isTypeCheckIs())).append(", ")
+                   .append("typeCheckIsNot=").append(String.format("\"%s\"", this.isTypeCheckIsNot()))
                    .append(')')
                    .toString();
     }

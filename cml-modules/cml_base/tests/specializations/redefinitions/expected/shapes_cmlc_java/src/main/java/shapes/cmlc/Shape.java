@@ -16,6 +16,8 @@ public interface Shape
 
     double getArea();
 
+    double getTotalArea();
+
     static Shape extendShape(@Nullable Shape actual_self, String color)
     {
         return new ShapeImpl(actual_self, color);
@@ -45,12 +47,18 @@ class ShapeImpl implements Shape
         return 0.0f;
     }
 
+    public double getTotalArea()
+    {
+        return this.actual_self.getArea();
+    }
+
     public String toString()
     {
         return new StringBuilder(Shape.class.getSimpleName())
                    .append('(')
-                   .append("color=").append(String.format("\"%s\"", getColor())).append(", ")
-                   .append("area=").append(String.format("\"%s\"", getArea()))
+                   .append("color=").append(String.format("\"%s\"", this.actual_self.getColor())).append(", ")
+                   .append("area=").append(String.format("\"%s\"", this.actual_self.getArea())).append(", ")
+                   .append("totalArea=").append(String.format("\"%s\"", this.actual_self.getTotalArea()))
                    .append(')')
                    .toString();
     }

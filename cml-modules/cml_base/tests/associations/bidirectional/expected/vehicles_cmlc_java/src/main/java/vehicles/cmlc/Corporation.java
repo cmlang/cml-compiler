@@ -95,9 +95,9 @@ class CorporationImpl implements Corporation
     {
         return new StringBuilder(Corporation.class.getSimpleName())
                    .append('(')
-                   .append("stock=").append(String.format("\"%s\"", isStock())).append(", ")
-                   .append("profit=").append(String.format("\"%s\"", isProfit())).append(", ")
-                   .append("name=").append(String.format("\"%s\"", getName()))
+                   .append("stock=").append(String.format("\"%s\"", this.actual_self.isStock())).append(", ")
+                   .append("profit=").append(String.format("\"%s\"", this.actual_self.isProfit())).append(", ")
+                   .append("name=").append(String.format("\"%s\"", this.actual_self.getName()))
                    .append(')')
                    .toString();
     }

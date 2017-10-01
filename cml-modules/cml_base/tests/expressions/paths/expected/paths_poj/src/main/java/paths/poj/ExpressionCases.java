@@ -45,40 +45,40 @@ public class ExpressionCases
 
     public String getSingleVar()
     {
-        return getFoo();
+        return this.getFoo();
     }
 
     public int getPathVar()
     {
-        return getSomePath().getBar();
+        return this.getSomePath().getBar();
     }
 
     public BigDecimal getPathVar2()
     {
-        return getSomePath().getOneMorePath().getEtc();
+        return this.getSomePath().getOneMorePath().getEtc();
     }
 
     public List<BigDecimal> getPathVar3()
     {
-        return seq(getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getOneMorePath()))).flatMap(anotherConcept -> seq(asList(anotherConcept.getEtc()))).toList();
+        return seq(this.getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getOneMorePath()))).flatMap(anotherConcept -> seq(asList(anotherConcept.getEtc()))).toList();
     }
 
     public List<Integer> getPathBars()
     {
-        return seq(getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getBar()))).toList();
+        return seq(this.getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getBar()))).toList();
     }
 
     public String toString()
     {
         return new StringBuilder(ExpressionCases.class.getSimpleName())
                    .append('(')
-                   .append("foo=").append(String.format("\"%s\"", getFoo())).append(", ")
-                   .append("somePath=").append(String.format("\"%s\"", getSomePath())).append(", ")
-                   .append("singleVar=").append(String.format("\"%s\"", getSingleVar())).append(", ")
-                   .append("pathVar=").append(String.format("\"%s\"", getPathVar())).append(", ")
-                   .append("pathVar2=").append(String.format("\"%s\"", getPathVar2())).append(", ")
-                   .append("pathVar3=").append(getPathVar3()).append(", ")
-                   .append("pathBars=").append(getPathBars())
+                   .append("foo=").append(String.format("\"%s\"", this.getFoo())).append(", ")
+                   .append("somePath=").append(String.format("\"%s\"", this.getSomePath())).append(", ")
+                   .append("singleVar=").append(String.format("\"%s\"", this.getSingleVar())).append(", ")
+                   .append("pathVar=").append(String.format("\"%s\"", this.getPathVar())).append(", ")
+                   .append("pathVar2=").append(String.format("\"%s\"", this.getPathVar2())).append(", ")
+                   .append("pathVar3=").append(this.getPathVar3()).append(", ")
+                   .append("pathBars=").append(this.getPathBars())
                    .append(')')
                    .toString();
     }

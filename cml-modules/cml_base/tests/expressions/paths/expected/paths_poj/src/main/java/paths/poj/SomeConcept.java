@@ -35,8 +35,8 @@ public class SomeConcept
     {
         return new StringBuilder(SomeConcept.class.getSimpleName())
                    .append('(')
-                   .append("bar=").append(String.format("\"%s\"", getBar())).append(", ")
-                   .append("oneMorePath=").append(String.format("\"%s\"", getOneMorePath()))
+                   .append("bar=").append(String.format("\"%s\"", this.getBar())).append(", ")
+                   .append("oneMorePath=").append(String.format("\"%s\"", this.getOneMorePath()))
                    .append(')')
                    .toString();
     }

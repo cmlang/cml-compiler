@@ -68,7 +68,7 @@ class RectangleImpl implements Rectangle
 
     public double getArea()
     {
-        return (getWidth() * getHeight());
+        return (this.actual_self.getWidth() * this.actual_self.getHeight());
     }
 
     public String getColor()
@@ -76,14 +76,20 @@ class RectangleImpl implements Rectangle
         return this.shape.getColor();
     }
 
+    public double getTotalArea()
+    {
+        return this.shape.getTotalArea();
+    }
+
     public String toString()
     {
         return new StringBuilder(Rectangle.class.getSimpleName())
                    .append('(')
-                   .append("width=").append(String.format("\"%s\"", getWidth())).append(", ")
-                   .append("height=").append(String.format("\"%s\"", getHeight())).append(", ")
-                   .append("area=").append(String.format("\"%s\"", getArea())).append(", ")
-                   .append("color=").append(String.format("\"%s\"", getColor()))
+                   .append("width=").append(String.format("\"%s\"", this.actual_self.getWidth())).append(", ")
+                   .append("height=").append(String.format("\"%s\"", this.actual_self.getHeight())).append(", ")
+                   .append("area=").append(String.format("\"%s\"", this.actual_self.getArea())).append(", ")
+                   .append("color=").append(String.format("\"%s\"", this.actual_self.getColor())).append(", ")
+                   .append("totalArea=").append(String.format("\"%s\"", this.actual_self.getTotalArea()))
                    .append(')')
                    .toString();
     }

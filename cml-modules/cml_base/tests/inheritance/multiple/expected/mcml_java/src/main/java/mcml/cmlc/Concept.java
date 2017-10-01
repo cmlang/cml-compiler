@@ -79,9 +79,9 @@ class ConceptImpl implements Concept
     {
         return new StringBuilder(Concept.class.getSimpleName())
                    .append('(')
-                   .append("abstracted=").append(String.format("\"%s\"", isAbstracted())).append(", ")
-                   .append("name=").append(String.format("\"%s\"", getName())).append(", ")
-                   .append("parent=").append(getParent().isPresent() ? String.format("\"%s\"", getParent()) : "not present")
+                   .append("abstracted=").append(String.format("\"%s\"", this.actual_self.isAbstracted())).append(", ")
+                   .append("name=").append(String.format("\"%s\"", this.actual_self.getName())).append(", ")
+                   .append("parent=").append(this.actual_self.getParent().isPresent() ? String.format("\"%s\"", this.actual_self.getParent()) : "not present")
                    .append(')')
                    .toString();
     }

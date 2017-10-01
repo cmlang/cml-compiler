@@ -68,12 +68,12 @@ public class LiteralExpressions
     {
         return new StringBuilder(LiteralExpressions.class.getSimpleName())
                    .append('(')
-                   .append("literalTrueBoolean=").append(String.format("\"%s\"", isLiteralTrueBoolean())).append(", ")
-                   .append("literalFalseBoolean=").append(String.format("\"%s\"", isLiteralFalseBoolean())).append(", ")
-                   .append("literalStringInit=").append(String.format("\"%s\"", getLiteralStringInit())).append(", ")
-                   .append("literalIntegerInit=").append(String.format("\"%s\"", getLiteralIntegerInit())).append(", ")
-                   .append("literalDecimalInit=").append(String.format("\"%s\"", getLiteralDecimalInit())).append(", ")
-                   .append("literalDecimalInit2=").append(String.format("\"%s\"", getLiteralDecimalInit2()))
+                   .append("literalTrueBoolean=").append(String.format("\"%s\"", this.isLiteralTrueBoolean())).append(", ")
+                   .append("literalFalseBoolean=").append(String.format("\"%s\"", this.isLiteralFalseBoolean())).append(", ")
+                   .append("literalStringInit=").append(String.format("\"%s\"", this.getLiteralStringInit())).append(", ")
+                   .append("literalIntegerInit=").append(String.format("\"%s\"", this.getLiteralIntegerInit())).append(", ")
+                   .append("literalDecimalInit=").append(String.format("\"%s\"", this.getLiteralDecimalInit())).append(", ")
+                   .append("literalDecimalInit2=").append(String.format("\"%s\"", this.getLiteralDecimalInit2()))
                    .append(')')
                    .toString();
     }
