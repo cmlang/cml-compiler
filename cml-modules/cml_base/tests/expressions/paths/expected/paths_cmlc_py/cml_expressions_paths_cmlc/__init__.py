@@ -47,32 +47,41 @@ class SomeConcept(ABC):
         pass
 
     @abstractproperty
+    def foos(self) -> 'List[AnotherConcept]':
+        pass
+
+    @abstractproperty
     def one_more_path(self) -> 'AnotherConcept':
         pass
 
     @staticmethod
-    def create_some_concept(bar: 'int', one_more_path: 'AnotherConcept') -> 'SomeConcept':
-        return SomeConceptImpl(None, bar, one_more_path)
+    def create_some_concept(bar: 'int', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'SomeConcept':
+        return SomeConceptImpl(None, bar, foos, one_more_path)
 
     @staticmethod
-    def extend_some_concept(actual_self: 'Optional[SomeConcept]', bar: 'int', one_more_path: 'AnotherConcept') -> 'SomeConcept':
-        return SomeConceptImpl(actual_self, bar, one_more_path)
+    def extend_some_concept(actual_self: 'Optional[SomeConcept]', bar: 'int', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'SomeConcept':
+        return SomeConceptImpl(actual_self, bar, foos, one_more_path)
 
 
 class SomeConceptImpl(SomeConcept):
 
-    def __init__(self, actual_self: 'Optional[SomeConcept]', bar: 'int', one_more_path: 'AnotherConcept') -> 'None':
+    def __init__(self, actual_self: 'Optional[SomeConcept]', bar: 'int', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'None':
         if actual_self is None:
             self.__actual_self = self  # type: Optional[SomeConcept]
         else:
             self.__actual_self = actual_self
 
         self.__bar = bar
+        self.__foos = foos
         self.__one_more_path = one_more_path
 
     @property
     def bar(self) -> 'int':
         return self.__bar
+
+    @property
+    def foos(self) -> 'List[AnotherConcept]':
+        return self.__foos
 
     @property
     def one_more_path(self) -> 'AnotherConcept':
@@ -126,6 +135,10 @@ class ExpressionCases(ABC):
 
     @abstractproperty
     def path_bars(self) -> 'List[int]':
+        pass
+
+    @abstractproperty
+    def path_foos(self) -> 'List[AnotherConcept]':
         pass
 
     @staticmethod
@@ -200,6 +213,15 @@ class ExpressionCasesImpl(ExpressionCases):
                 lambda some_concept: some_concept.bar,
                 self.__actual_self.some_path_list
             )
+        )
+
+    @property
+    def path_foos(self) -> 'List[AnotherConcept]':
+        return list(
+            itertools.chain.from_iterable(map(
+                lambda some_concept: some_concept.foos,
+                self.__actual_self.some_path_list
+            ))
         )
 
     def __str__(self) -> 'str':

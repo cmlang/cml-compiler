@@ -8,3 +8,4 @@ path_var2 = 10
 
 path_var3 = [10, 20]
 path_bars = [-1, 2]
+path_foos = [AnotherConcept(etc="10"), AnotherConcept(etc="20"), AnotherConcept(etc="20"), AnotherConcept(etc="10")]

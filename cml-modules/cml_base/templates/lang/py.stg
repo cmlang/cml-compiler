@@ -316,10 +316,12 @@ path_base_call(path) ::= <<
 >>
 
 path_map_call(path) ::= <<
+<if(path.originalType.sequence)>itertools.chain.from_iterable(<endif><\\>
 map(
 <indent()>lambda <field_name(path.base.type)>: <field_name(path.base.type)>.<path_property(path)>,
 <indent()><path_expr(path.base)>
-)
+)<\\>
+<if(path.originalType.sequence)>)<endif>
 >>
 
 path_property(path) ::= <<

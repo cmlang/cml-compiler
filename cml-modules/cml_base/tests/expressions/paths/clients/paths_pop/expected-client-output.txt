@@ -8,3 +8,4 @@ path_var_2 = 10.0
 
 path_var_3 = [10.0, 20.0]
 path_bars = [-1, 2]
+path_foos = ['AnotherConcept(etc=10.0)', 'AnotherConcept(etc=20.0)', 'AnotherConcept(etc=20.0)', 'AnotherConcept(etc=10.0)']

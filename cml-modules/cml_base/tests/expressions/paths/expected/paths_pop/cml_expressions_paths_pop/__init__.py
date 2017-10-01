@@ -22,13 +22,18 @@ class AnotherConcept:
 
 class SomeConcept:
 
-    def __init__(self, bar: 'int', one_more_path: 'AnotherConcept') -> 'None':
+    def __init__(self, bar: 'int', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'None':
         self.__bar = bar
+        self.__foos = foos
         self.__one_more_path = one_more_path
 
     @property
     def bar(self) -> 'int':
         return self.__bar
+
+    @property
+    def foos(self) -> 'List[AnotherConcept]':
+        return self.__foos
 
     @property
     def one_more_path(self) -> 'AnotherConcept':
@@ -100,6 +105,15 @@ class ExpressionCases:
                 lambda some_concept: some_concept.bar,
                 self.some_path_list
             )
+        )
+
+    @property
+    def path_foos(self) -> 'List[AnotherConcept]':
+        return list(
+            itertools.chain.from_iterable(map(
+                lambda some_concept: some_concept.foos,
+                self.some_path_list
+            ))
         )
 
     def __str__(self) -> 'str':

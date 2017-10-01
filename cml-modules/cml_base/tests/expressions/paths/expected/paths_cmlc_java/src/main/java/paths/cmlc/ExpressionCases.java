@@ -32,6 +32,8 @@ public interface ExpressionCases
 
     List<Integer> getPathBars();
 
+    List<AnotherConcept> getPathFoos();
+
     static ExpressionCases createExpressionCases(String foo, SomeConcept somePath, List<SomeConcept> somePathList)
     {
         return new ExpressionCasesImpl(null, foo, somePath, somePathList);
@@ -108,6 +110,11 @@ class ExpressionCasesImpl implements ExpressionCases
     public List<Integer> getPathBars()
     {
         return seq(this.actual_self.getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getBar()))).toList();
+    }
+
+    public List<AnotherConcept> getPathFoos()
+    {
+        return seq(this.actual_self.getSomePathList()).flatMap(someConcept -> seq(someConcept.getFoos())).toList();
     }
 
     public String toString()

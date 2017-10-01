@@ -14,16 +14,18 @@ public interface SomeConcept
 {
     int getBar();
 
+    List<AnotherConcept> getFoos();
+
     AnotherConcept getOneMorePath();
 
-    static SomeConcept createSomeConcept(int bar, AnotherConcept oneMorePath)
+    static SomeConcept createSomeConcept(int bar, List<AnotherConcept> foos, AnotherConcept oneMorePath)
     {
-        return new SomeConceptImpl(null, bar, oneMorePath);
+        return new SomeConceptImpl(null, bar, foos, oneMorePath);
     }
 
-    static SomeConcept extendSomeConcept(@Nullable SomeConcept actual_self, int bar, AnotherConcept oneMorePath)
+    static SomeConcept extendSomeConcept(@Nullable SomeConcept actual_self, int bar, List<AnotherConcept> foos, AnotherConcept oneMorePath)
     {
-        return new SomeConceptImpl(actual_self, bar, oneMorePath);
+        return new SomeConceptImpl(actual_self, bar, foos, oneMorePath);
     }
 }
 
@@ -32,19 +34,26 @@ class SomeConceptImpl implements SomeConcept
     private final @Nullable SomeConcept actual_self;
 
     private final int bar;
+    private final List<AnotherConcept> foos;
     private final AnotherConcept oneMorePath;
 
-    SomeConceptImpl(@Nullable SomeConcept actual_self, int bar, AnotherConcept oneMorePath)
+    SomeConceptImpl(@Nullable SomeConcept actual_self, int bar, List<AnotherConcept> foos, AnotherConcept oneMorePath)
     {
         this.actual_self = actual_self == null ? this : actual_self;
 
         this.bar = bar;
+        this.foos = foos;
         this.oneMorePath = oneMorePath;
     }
 
     public int getBar()
     {
         return this.bar;
+    }
+
+    public List<AnotherConcept> getFoos()
+    {
+        return Collections.unmodifiableList(this.foos);
     }
 
     public AnotherConcept getOneMorePath()

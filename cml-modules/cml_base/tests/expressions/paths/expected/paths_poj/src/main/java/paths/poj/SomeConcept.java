@@ -13,17 +13,24 @@ import static org.jooq.lambda.Seq.*;
 public class SomeConcept
 {
     private final int bar;
+    private final List<AnotherConcept> foos;
     private final AnotherConcept oneMorePath;
 
-    public SomeConcept(int bar, AnotherConcept oneMorePath)
+    public SomeConcept(int bar, List<AnotherConcept> foos, AnotherConcept oneMorePath)
     {
         this.bar = bar;
+        this.foos = foos;
         this.oneMorePath = oneMorePath;
     }
 
     public int getBar()
     {
         return this.bar;
+    }
+
+    public List<AnotherConcept> getFoos()
+    {
+        return Collections.unmodifiableList(this.foos);
     }
 
     public AnotherConcept getOneMorePath()

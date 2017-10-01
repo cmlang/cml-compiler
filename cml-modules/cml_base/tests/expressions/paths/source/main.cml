@@ -14,11 +14,13 @@
     /path_var2 = somePath.oneMorePath.etc;
     /path_var3 = somePathList.oneMorePath.etc;
     /path_bars = somePathList.bar;
+    /path_foos = somePathList.foos;
 }
 
 @concept SomeConcept
 {
     bar: Integer;
+    foos: AnotherConcept*;
     oneMorePath: AnotherConcept;
 }
 

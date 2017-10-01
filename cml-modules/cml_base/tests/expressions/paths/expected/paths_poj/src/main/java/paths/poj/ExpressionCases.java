@@ -73,6 +73,11 @@ public class ExpressionCases
         return seq(this.getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getBar()))).toList();
     }
 
+    public List<AnotherConcept> getPathFoos()
+    {
+        return seq(this.getSomePathList()).flatMap(someConcept -> seq(someConcept.getFoos())).toList();
+    }
+
     public String toString()
     {
         return new StringBuilder(ExpressionCases.class.getSimpleName())
