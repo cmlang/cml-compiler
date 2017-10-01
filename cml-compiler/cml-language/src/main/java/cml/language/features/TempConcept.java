@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static org.jooq.lambda.Seq.seq;
 
-public interface TempConcept extends NamedElement, TempPropertyList
+public interface TempConcept extends Concept, TempPropertyList
 {
     boolean isAbstract();
 
@@ -286,17 +286,17 @@ public interface TempConcept extends NamedElement, TempPropertyList
 
 class ConceptImpl implements TempConcept
 {
-    private final ModelElement modelElement;
-    private final NamedElement namedElement;
-    private final Scope scope;
+    private final Concept concept;
     private final List<TempConcept> directAncestors = new ArrayList<>();
     private final boolean _abstract;
 
-    ConceptImpl(TempModule module, String name, boolean _abstract, final List<TempProperty> propertyList, Location location)
+    ConceptImpl(TempModule module, String name, boolean _abstract, final List<TempProperty> properties, Location location)
     {
-        this.modelElement = extendModelElement(this, module, location);
-        this.namedElement = extendNamedElement(this, modelElement, name);
-        this.scope = extendScope(this, modelElement, seq(propertyList).map(p -> (ModelElement)p).toList());
+        final ModelElement modelElement = extendModelElement(this, module, location);
+        final NamedElement namedElement = extendNamedElement(this, modelElement, name);
+        final Scope scope = extendScope(this, modelElement, seq(properties).map(p -> (ModelElement)p).toList());
+        final PropertyList propertyList = PropertyList.extendPropertyList(this, modelElement, scope);
+        this.concept = Concept.extendConcept(this, modelElement, scope, namedElement, propertyList);
         this._abstract = _abstract;
     }
 
@@ -309,37 +309,37 @@ class ConceptImpl implements TempConcept
     @Override
     public Optional<Location> getLocation()
     {
-        return modelElement.getLocation();
+        return concept.getLocation();
     }
 
     @Override
     public Optional<Scope> getParent()
     {
-        return modelElement.getParent();
+        return concept.getParent();
     }
 
     @Override
     public Optional<Model> getModel()
     {
-        return modelElement.getModel();
+        return concept.getModel();
     }
 
     @Override
     public Optional<Module> getModule()
     {
-        return modelElement.getModule();
+        return concept.getModule();
     }
 
     @Override
     public String getName()
     {
-        return namedElement.getName();
+        return concept.getName();
     }
 
     @Override
     public List<ModelElement> getMembers()
     {
-        return scope.getMembers();
+        return concept.getMembers();
     }
 
     @Override

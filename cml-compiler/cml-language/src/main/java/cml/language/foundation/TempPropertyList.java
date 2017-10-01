@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.generated.PropertyList;
 import cml.language.generated.Scope;
 
 import java.util.Comparator;
@@ -7,7 +8,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public interface TempPropertyList extends Scope
+public interface TempPropertyList extends PropertyList
 {
     default List<TempProperty> getDerivedProperties()
     {
