@@ -88,11 +88,5 @@ class TaskImpl implements Task
     {
         return propertyList.getProperties();
     }
-
-    @Override
-    public List<Property> getDerivedProperties()
-    {
-        return propertyList.getDerivedProperties();
-    }
 }
 

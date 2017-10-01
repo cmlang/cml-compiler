@@ -26,6 +26,5 @@
 @abstraction PROPERTY_LIST: SCOPE
 {
     /properties = members as? PROPERTY*;
-    /derivedProperties = properties | select: derived;
 }
 
