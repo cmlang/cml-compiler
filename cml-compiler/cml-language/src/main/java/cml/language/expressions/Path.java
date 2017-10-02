@@ -115,8 +115,7 @@ public class Path extends ExpressionBase
 
                         type = withCardinality(
                                 memberType.get(),
-                                memberType.get().isRequired() && type.isSequence() ? "*" :
-                                    (memberType.get().isRequired() && type.isOptional() ? "?" : cardinality));
+                                type.isSequence() ? "*" : (memberType.get().isRequired() && type.isOptional() ? "?" : cardinality));
                     }
                     else
                     {
