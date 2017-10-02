@@ -6,8 +6,6 @@
     value: EXPRESSION?;
 
 /*
-    type_required: BOOLEAN;
-    type_allowed: BOOLEAN;
 
     /model = concept.model;
     /concept = for p in parent | select: p is CONCEPT;

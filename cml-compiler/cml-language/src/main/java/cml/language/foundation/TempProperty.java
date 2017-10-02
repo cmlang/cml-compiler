@@ -46,18 +46,6 @@ public interface TempProperty extends Property
         return getAssociation().isPresent();
     }
 
-    @SuppressWarnings("unused")
-    boolean isTypeRequired();
-
-    @SuppressWarnings("unused")
-    void setTypeRequired(boolean typeRequired);
-
-    @SuppressWarnings("unused")
-    boolean isTypeAllowed();
-
-    @SuppressWarnings("unused")
-    void setTypeAllowed(boolean typeAllowed);
-
     default TempConcept getConcept()
     {
         assert getParent().isPresent();
@@ -112,9 +100,6 @@ class PropertyImpl implements TempProperty
 {
     private final Property property;
 
-    private boolean typeRequired;
-    private boolean typeAllowed;
-
     PropertyImpl(String name, @Nullable TempType type, @Nullable Expression value, boolean derived, Location location)
     {
         final ModelElement modelElement = ModelElement.extendModelElement(this, null, location);
@@ -141,30 +126,6 @@ class PropertyImpl implements TempProperty
     public Optional<Expression> getValue()
     {
         return property.getValue();
-    }
-
-    @Override
-    public boolean isTypeRequired()
-    {
-        return typeRequired;
-    }
-
-    @Override
-    public void setTypeRequired(boolean typeRequired)
-    {
-        this.typeRequired = typeRequired;
-    }
-
-    @Override
-    public boolean isTypeAllowed()
-    {
-        return typeAllowed;
-    }
-
-    @Override
-    public void setTypeAllowed(boolean typeAllowed)
-    {
-        this.typeAllowed = typeAllowed;
     }
 
     @Override
