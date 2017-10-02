@@ -2,6 +2,8 @@
 @concept ASSOCIATION: NAMED_ELEMENT, SCOPE
 {
     /association_ends = members as? ASSOCIATION_END*;
+
+    /property_types = association_ends.associated_property.type;
 }
 
 @concept ASSOCIATION_END: MODEL_ELEMENT

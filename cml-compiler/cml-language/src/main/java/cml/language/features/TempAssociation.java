@@ -5,7 +5,6 @@ import cml.language.foundation.Invariant;
 import cml.language.foundation.InvariantValidator;
 import cml.language.foundation.TempProperty;
 import cml.language.generated.*;
-import cml.language.types.TempType;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,6 @@ import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.seq;
 
 public interface TempAssociation extends Association
@@ -30,19 +28,7 @@ public interface TempAssociation extends Association
                                    .findFirst();
     }
 
-    default List<TempType> getPropertyTypes()
-    {
-        return getAssociationEnds()
-            .stream()
-            .map(AssociationEnd::getAssociatedProperty)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(Property::getType)
-            .map(t -> (TempType)t)
-            .collect(toList());
-    }
-
-    default List<TempType> getReversedPropertyTypes()
+    default List<Type> getReversedPropertyTypes()
     {
         return seq(getPropertyTypes()).reverse().toList();
     }
@@ -188,6 +174,12 @@ class AssociationImpl implements TempAssociation
     public List<AssociationEnd> getAssociationEnds()
     {
         return association.getAssociationEnds();
+    }
+
+    @Override
+    public List<Type> getPropertyTypes()
+    {
+        return association.getPropertyTypes();
     }
 
     @Override
