@@ -6,6 +6,7 @@ import cml.language.features.TempConcept;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.InvariantValidator;
 import cml.language.foundation.TempProperty;
+import cml.language.generated.AssociationEnd;
 import cml.language.generated.Expression;
 import cml.language.invariants.ExpressionInvariant;
 
@@ -47,9 +48,9 @@ public class ModelValidator implements ModelVisitor
     }
 
     @Override
-    public void visit(TempAssociationEnd associationEnd)
+    public void visit(AssociationEnd associationEnd)
     {
-        associationEndInvariantValidator.validate(associationEnd, diagnostics);
+        associationEndInvariantValidator.validate((TempAssociationEnd) associationEnd, diagnostics);
     }
 
     @Override

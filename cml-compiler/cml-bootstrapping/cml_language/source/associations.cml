@@ -1,7 +1,7 @@
 
 @concept ASSOCIATION: NAMED_ELEMENT, SCOPE
 {
-//    ends: ASSOCIATION_END*;
+    /association_ends = members as? ASSOCIATION_END*;
 }
 
 @concept ASSOCIATION_END: MODEL_ELEMENT
