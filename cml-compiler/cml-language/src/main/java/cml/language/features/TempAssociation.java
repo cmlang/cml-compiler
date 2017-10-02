@@ -22,10 +22,9 @@ import static org.jooq.lambda.Seq.seq;
 
 public interface TempAssociation extends Association
 {
-    default Optional<TempAssociationEnd> getAssociationEnd(String conceptName, String propertyName)
+    default Optional<AssociationEnd> getAssociationEnd(String conceptName, String propertyName)
     {
         return getAssociationEnds().stream()
-                                   .map(e -> (TempAssociationEnd)e)
                                    .filter(associationEnd -> associationEnd.getConceptName().equals(conceptName))
                                    .filter(associationEnd -> associationEnd.getPropertyName().equals(propertyName))
                                    .findFirst();
@@ -35,8 +34,7 @@ public interface TempAssociation extends Association
     {
         return getAssociationEnds()
             .stream()
-            .map(e -> (TempAssociationEnd)e)
-            .map(TempAssociationEnd::getAssociatedProperty)
+            .map(AssociationEnd::getAssociatedProperty)
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(Property::getType)
@@ -52,9 +50,9 @@ public interface TempAssociation extends Association
     @SuppressWarnings("unused")
     default boolean isOneToMany()
     {
-        final List<TempAssociationEnd> ends = seq(getAssociationEnds()).map(e -> (TempAssociationEnd) e).toList();
-        final TempAssociationEnd end0 = ends.get(0);
-        final TempAssociationEnd end1 = ends.get(1);
+        final List<AssociationEnd> ends = getAssociationEnds();
+        final AssociationEnd end0 = ends.get(0);
+        final AssociationEnd end1 = ends.get(1);
 
         return oneToMany(end0, end1) || oneToMany(end1, end0);
     }
@@ -62,18 +60,18 @@ public interface TempAssociation extends Association
     @SuppressWarnings("unused")
     default boolean isOneToOne()
     {
-        final List<TempAssociationEnd> ends = seq(getAssociationEnds()).map(e -> (TempAssociationEnd) e).toList();
-        final TempAssociationEnd end0 = ends.get(0);
-        final TempAssociationEnd end1 = ends.get(1);
+        final List<AssociationEnd> ends = getAssociationEnds();
+        final AssociationEnd end0 = ends.get(0);
+        final AssociationEnd end1 = ends.get(1);
 
         return oneToOne(end0, end1);
     }
 
     default Optional<TempProperty> getOneProperty()
     {
-        final List<TempAssociationEnd> ends = seq(getAssociationEnds()).map(e -> (TempAssociationEnd) e).toList();
-        final TempAssociationEnd end0 = ends.get(0);
-        final TempAssociationEnd end1 = ends.get(1);
+        final List<AssociationEnd> ends = getAssociationEnds();
+        final AssociationEnd end0 = ends.get(0);
+        final AssociationEnd end1 = ends.get(1);
 
         if (oneToMany(end0, end1))
         {
@@ -90,9 +88,9 @@ public interface TempAssociation extends Association
 
     default Optional<TempProperty> getManyProperty()
     {
-        final List<TempAssociationEnd> ends = seq(getAssociationEnds()).map(e -> (TempAssociationEnd) e).toList();
-        final TempAssociationEnd end0 = ends.get(0);
-        final TempAssociationEnd end1 = ends.get(1);
+        final List<AssociationEnd> ends = getAssociationEnds();
+        final AssociationEnd end0 = ends.get(0);
+        final AssociationEnd end1 = ends.get(1);
 
         if (oneToMany(end0, end1))
         {
@@ -107,7 +105,7 @@ public interface TempAssociation extends Association
         return Optional.empty();
     }
 
-    static boolean oneToMany(TempAssociationEnd end1, TempAssociationEnd end2)
+    static boolean oneToMany(AssociationEnd end1, AssociationEnd end2)
     {
         assert end1.getAssociatedProperty().isPresent();
         assert end2.getAssociatedProperty().isPresent();
@@ -115,7 +113,7 @@ public interface TempAssociation extends Association
         return !end1.getAssociatedProperty().get().getType().isSequence() && end2.getAssociatedProperty().get().getType().isSequence();
     }
 
-    static boolean oneToOne(TempAssociationEnd end1, TempAssociationEnd end2)
+    static boolean oneToOne(AssociationEnd end1, AssociationEnd end2)
     {
         assert end1.getAssociatedProperty().isPresent();
         assert end2.getAssociatedProperty().isPresent();
@@ -224,16 +222,16 @@ class AssociationEndTypesMustMatch implements Invariant<TempAssociation>
             return true;
         }
 
-        final Optional<TempAssociationEnd> first = self.getAssociationEnds().stream().map(e -> (TempAssociationEnd) e).findFirst();
-        final Optional<TempAssociationEnd> last = self.getAssociationEnds().stream().map(e -> (TempAssociationEnd) e).reduce((previous, next) -> next);
+        final Optional<AssociationEnd> first = self.getAssociationEnds().stream().findFirst();
+        final Optional<AssociationEnd> last = self.getAssociationEnds().stream().reduce((previous, next) -> next);
 
         if (!first.isPresent() || !last.isPresent())
         {
             return true;
         }
 
-        final TempAssociationEnd end1 = first.get();
-        final TempAssociationEnd end2 = last.get();
+        final AssociationEnd end1 = first.get();
+        final AssociationEnd end2 = last.get();
 
         if (!end1.getAssociatedConcept().isPresent() || !end1.getAssociatedProperty().isPresent() ||
             !end2.getAssociatedConcept().isPresent() || !end2.getAssociatedProperty().isPresent())

@@ -1,6 +1,5 @@
 package cml.language.loader;
 
-import cml.language.features.TempAssociationEnd;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempProperty;
@@ -23,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static cml.language.functions.ModuleFunctions.conceptOf;
+import static cml.language.generated.AssociationEnd.createAssociationEnd;
 import static org.jooq.lambda.Seq.seq;
 
 class ModelAugmenter extends CMLBaseListener
@@ -95,7 +95,7 @@ class ModelAugmenter extends CMLBaseListener
                                                             .filter(p -> p.getName().equals(propertyName))
                                                             .findFirst();
 
-        TempAssociationEnd.create(association, conceptName, propertyName, propertyType, concept.orElse(null), property.orElse(null), locationOf(ctx));
+        createAssociationEnd(association, locationOf(ctx), conceptName, propertyName, propertyType, concept.orElse(null), property.orElse(null));
     }
 
     @Override
