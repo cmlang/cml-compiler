@@ -6,7 +6,6 @@ import cml.language.foundation.InvariantValidator;
 import cml.language.foundation.TempProperty;
 import cml.language.generated.*;
 import cml.language.types.TempType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -23,14 +22,11 @@ import static java.util.stream.Stream.of;
 public interface TempAssociationEnd extends AssociationEnd
 {
     Optional<TempConcept> getConcept();
-    void setConcept(@NotNull TempConcept concept);
-
     Optional<TempProperty> getProperty();
-    void setProperty(@NotNull TempProperty property);
 
-    static TempAssociationEnd create(String conceptName, String propertyName, @Nullable TempType propertyType, Location location)
+    static TempAssociationEnd create(Association association, String conceptName, String propertyName, @Nullable TempType propertyType, @Nullable TempConcept concept, @Nullable TempProperty property, Location location)
     {
-        return new AssociationEndImpl(conceptName, propertyName, propertyType, location);
+        return new AssociationEndImpl(association, conceptName, propertyName, propertyType, concept, property, location);
     }
 
     static InvariantValidator<TempAssociationEnd> invariantValidator()
@@ -46,13 +42,16 @@ class AssociationEndImpl implements TempAssociationEnd
 {
     private final AssociationEnd associationEnd;
 
-    private @Nullable TempConcept concept;
-    private @Nullable TempProperty property;
+    private final @Nullable TempConcept concept;
+    private final @Nullable TempProperty property;
 
-    AssociationEndImpl(String conceptName, String propertyName, @Nullable TempType propertyType, Location location)
+    AssociationEndImpl(Association association, String conceptName, String propertyName, @Nullable TempType propertyType, @Nullable TempConcept concept, @Nullable TempProperty property, Location location)
     {
-        final ModelElement modelElement = ModelElement.extendModelElement(this, null, location);
+        final ModelElement modelElement = ModelElement.extendModelElement(this, association, location);
         associationEnd = AssociationEnd.extendAssociationEnd(this, modelElement, conceptName, propertyName, propertyType);
+
+        this.concept = concept;
+        this.property = property;
     }
 
     @Override
@@ -80,25 +79,9 @@ class AssociationEndImpl implements TempAssociationEnd
     }
 
     @Override
-    public void setConcept(@NotNull TempConcept concept)
-    {
-        assert this.concept == null;
-
-        this.concept = concept;
-    }
-
-    @Override
     public Optional<TempProperty> getProperty()
     {
         return Optional.ofNullable(property);
-    }
-
-    @Override
-    public void setProperty(@NotNull TempProperty property)
-    {
-        assert this.property == null;
-
-        this.property = property;
     }
 
     @Override

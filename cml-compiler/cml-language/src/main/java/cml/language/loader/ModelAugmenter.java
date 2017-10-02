@@ -3,22 +3,33 @@ package cml.language.loader;
 import cml.language.features.TempAssociationEnd;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
+import cml.language.foundation.TempProperty;
+import cml.language.generated.Association;
+import cml.language.generated.Location;
+import cml.language.generated.ModelElement;
 import cml.language.generated.NamedElement;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
 import cml.language.types.NamedType;
 import cml.language.types.TempType;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static cml.language.functions.ModuleFunctions.conceptOf;
+import static org.jooq.lambda.Seq.seq;
 
 class ModelAugmenter extends CMLBaseListener
 {
+    private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
+    private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
+
     private final TempModule module;
 
     ModelAugmenter(TempModule module)
@@ -65,19 +76,26 @@ class ModelAugmenter extends CMLBaseListener
     @Override
     public void enterAssociationEndDeclaration(CMLParser.AssociationEndDeclarationContext ctx)
     {
-        final TempAssociationEnd associationEnd = ctx.associationEnd;
-
-        conceptOf(module, associationEnd.getConceptName())
-              .ifPresent(associationEnd::setConcept);
-
-        if (associationEnd.getConcept().isPresent())
+        if (ctx.conceptName == null)
         {
-            associationEnd.getConcept().get().getAllProperties()
-                                             .stream()
-                                             .filter(property -> property.getName().equals(associationEnd.getPropertyName()))
-                                             .findFirst()
-                                             .ifPresent(associationEnd::setProperty);
+            throw new ModelSynthesisException(NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END);
         }
+
+        if (ctx.propertyName == null)
+        {
+            throw new ModelSynthesisException(NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END);
+        }
+
+        final Association association = ctx.association;
+        final String conceptName = ctx.conceptName.getText();
+        final String propertyName = ctx.propertyName.getText();
+        final @Nullable TempType propertyType = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final Optional<TempConcept> concept = conceptOf(module, conceptName);
+        final Optional<TempProperty> property = seq(concept).flatMap(c -> c.getAllProperties().stream())
+                                                            .filter(p -> p.getName().equals(propertyName))
+                                                            .findFirst();
+
+        TempAssociationEnd.create(association, conceptName, propertyName, propertyType, concept.orElse(null), property.orElse(null), locationOf(ctx));
     }
 
     @Override
@@ -91,5 +109,17 @@ class ModelAugmenter extends CMLBaseListener
 
             conceptOf(module, namedType.getName()).ifPresent(type::setConcept);
         }
+    }
+
+    private Location locationOf(ParserRuleContext ctx)
+    {
+        return createLocation(ctx, null);
+    }
+
+    private Location createLocation(ParserRuleContext ctx, ModelElement element)
+    {
+        final Token token = ctx.getStart();
+
+        return Location.createLocation(token.getLine(), token.getCharPositionInLine() + 1, element);
     }
 }

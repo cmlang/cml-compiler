@@ -16,6 +16,7 @@ import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.seq;
 
@@ -122,9 +123,9 @@ public interface TempAssociation extends Association
         return end1.getProperty().get().getType().isSingle() && end2.getProperty().get().getType().isSingle();
     }
 
-    static TempAssociation create(TempModule module, String name, List<TempAssociationEnd> associationEnds, Location location)
+    static TempAssociation create(TempModule module, String name, Location location)
     {
-        return new AssociationImpl(module, name, associationEnds, location);
+        return new AssociationImpl(module, name, location);
     }
 
     static InvariantValidator<TempAssociation> invariantValidator()
@@ -141,11 +142,11 @@ class AssociationImpl implements TempAssociation
 {
     private final Association association;
 
-    AssociationImpl(TempModule module, String name, List<TempAssociationEnd> associationEnds, Location location)
+    AssociationImpl(TempModule module, String name, Location location)
     {
         final ModelElement modelElement = extendModelElement(this, module, location);
         final NamedElement namedElement = extendNamedElement(this, modelElement, name);
-        final Scope scope = extendScope(this, modelElement, seq(associationEnds).map(end -> (ModelElement)end).toList());
+        final Scope scope = extendScope(this, modelElement, emptyList());
         this.association = Association.extendAssociation(this, modelElement, namedElement, scope);
     }
 

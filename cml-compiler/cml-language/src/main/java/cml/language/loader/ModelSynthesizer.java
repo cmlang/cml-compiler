@@ -13,7 +13,6 @@ import cml.language.types.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 
 import java.util.List;
@@ -37,8 +36,6 @@ class ModelSynthesizer extends CMLBaseListener
     private static final String NO_NAME_PROVIDED_FOR_ASSOCIATION = "No name provided for association.";
     private static final String NO_NAME_PROVIDED_FOR_PROPERTY = "No name provided for property.";
     private static final String NO_NAME_PROVIDED_FOR_TARGET = "No name provided for task.";
-    private static final String NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END = "No concept name provided for association end.";
-    private static final String NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END = "No property name provided for association end.";
 
     private final TempModule module;
 
@@ -93,31 +90,11 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final List<TempAssociationEnd> associationEnds = seq(ctx.associationEndDeclaration() == null ? empty() : ctx.associationEndDeclaration())
-            .map(node -> node.associationEnd)
-            .toList();
 
-        ctx.association = TempAssociation.create(module, name, associationEnds, locationOf(ctx));
-    }
+        ctx.association = TempAssociation.create(module, name, locationOf(ctx));
 
-    @Override
-    public void exitAssociationEndDeclaration(AssociationEndDeclarationContext ctx)
-    {
-        if (ctx.conceptName == null)
-        {
-            throw new ModelSynthesisException(NO_CONCEPT_NAME_PROVIDED_FOR_ASSOCIATION_END);
-        }
-
-        if (ctx.propertyName == null)
-        {
-            throw new ModelSynthesisException(NO_PROPERTY_NAME_PROVIDED_FOR_ASSOCIATION_END);
-        }
-
-        final String conceptName = ctx.conceptName.getText();
-        final String propertyName = ctx.propertyName.getText();
-        final @Nullable TempType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
-
-        ctx.associationEnd = TempAssociationEnd.create(conceptName, propertyName, type, locationOf(ctx));
+        seq(ctx.associationEndDeclaration() == null ? empty() : ctx.associationEndDeclaration())
+            .forEach(node -> node.association = ctx.association);
     }
 
     @Override
