@@ -46,7 +46,7 @@ public interface TempProperty extends Property
         return getAssociation().isPresent();
     }
 
-    Optional<TempType> getDeclaredType();
+    Optional<Type> getDeclaredType();
 
     Optional<Expression> getValue();
 
@@ -119,19 +119,17 @@ class PropertyImpl implements TempProperty
     private boolean typeRequired;
     private boolean typeAllowed;
 
-    private final @Nullable TempType type;
     private final @Nullable Expression value;
 
     PropertyImpl(String name, @Nullable TempType type, @Nullable Expression value, boolean derived, Location location)
     {
         final ModelElement modelElement = ModelElement.extendModelElement(this, null, location);
         final NamedElement namedElement = NamedElement.extendNamedElement(this, modelElement, name);
-        final TypedElement typedElement = TypedElement.extendTypedElement(this, modelElement, namedElement, type);
+        final TypedElement typedElement = TypedElement.extendTypedElement(this, modelElement, namedElement, null);
 
         final Scope scope = Scope.extendScope(this, modelElement, singletonList(value));
-        property = Property.extendProperty(this, modelElement, namedElement, typedElement, scope, derived);
+        property = Property.extendProperty(this, modelElement, namedElement, typedElement, scope, derived, type);
 
-        this.type = type;
         this.value = value;
     }
 
@@ -142,9 +140,9 @@ class PropertyImpl implements TempProperty
     }
 
     @Override
-    public Optional<TempType> getDeclaredType()
+    public Optional<Type> getDeclaredType()
     {
-        return Optional.ofNullable(type);
+        return property.getDeclaredType();
     }
 
     @Override
@@ -180,7 +178,11 @@ class PropertyImpl implements TempProperty
     @Override
     public Type getType()
     {
-        if (type == null)
+        if (getDeclaredType().isPresent())
+        {
+            return getDeclaredType().get();
+        }
+        else
         {
             if (value == null)
             {
@@ -190,10 +192,6 @@ class PropertyImpl implements TempProperty
             {
                 return value.getType();
             }
-        }
-        else
-        {
-            return type;
         }
     }
 

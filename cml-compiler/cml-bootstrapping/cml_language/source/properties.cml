@@ -2,10 +2,10 @@
 @concept PROPERTY: TYPED_ELEMENT, SCOPE
 {
     derived: BOOLEAN;
+    declared_type: TYPE?;
 
 /*
     value: EXPRESSION?;
-    declared_type: TYPE?;
     type_required: BOOLEAN;
     type_allowed: BOOLEAN;
 
