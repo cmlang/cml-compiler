@@ -5,16 +5,17 @@
     declared_type: TYPE?;
     value: EXPRESSION?;
 
+    /concrete = not abstract;
+    /abstract = derived and empty(value);
+    /init = present(value) and not derived;
+    /non_init = empty(value) and not derived;
+
 /*
 
     /model = concept.model;
     /concept = for p in parent | select: p is CONCEPT;
     /association = model.associations | select: (association_ends | exists: property == self) | first;
 
-    /concrete = not abstract;
-    /abstract = derived and empty(value);
-    /init = present(value) and not derived;
-    /non_init = empty(value) and not derived;
     /slot = not (derived or associationEnd);
     /association_end = present(association);
     /printable = (slot and not type.sequence) or type.primitive;

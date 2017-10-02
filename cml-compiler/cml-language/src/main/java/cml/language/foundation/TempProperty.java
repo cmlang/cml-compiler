@@ -21,21 +21,6 @@ import static org.jooq.lambda.Seq.seq;
 
 public interface TempProperty extends Property
 {
-    default boolean isConcrete()
-    {
-        return !isAbstract();
-    }
-
-    default boolean isAbstract()
-    {
-        return isDerived() && !getValue().isPresent();
-    }
-
-    default boolean isInit()
-    {
-        return getValue().isPresent() && !isDerived();
-    }
-
     default boolean isSlot()
     {
         return !isDerived() && !isAssociationEnd();
@@ -126,6 +111,30 @@ class PropertyImpl implements TempProperty
     public Optional<Expression> getValue()
     {
         return property.getValue();
+    }
+
+    @Override
+    public boolean isConcrete()
+    {
+        return property.isConcrete();
+    }
+
+    @Override
+    public boolean isAbstract()
+    {
+        return property.isAbstract();
+    }
+
+    @Override
+    public boolean isInit()
+    {
+        return property.isInit();
+    }
+
+    @Override
+    public boolean isNonInit()
+    {
+        return property.isNonInit();
     }
 
     @Override
