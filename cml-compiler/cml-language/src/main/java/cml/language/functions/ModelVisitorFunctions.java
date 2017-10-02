@@ -1,6 +1,6 @@
 package cml.language.functions;
 
-import cml.language.features.Association;
+import cml.language.features.TempAssociation;
 import cml.language.features.TempConcept;
 import cml.language.foundation.TempModel;
 import cml.language.foundation.TempProperty;
@@ -28,7 +28,7 @@ public class ModelVisitorFunctions
         seq(concept.getProperties()).map(p -> (TempProperty)p).forEach(p -> visitProperty(p, visitor));
     }
 
-    public static void visitAssociation(Association association, ModelVisitor visitor)
+    public static void visitAssociation(TempAssociation association, ModelVisitor visitor)
     {
         visitor.visit(association);
 

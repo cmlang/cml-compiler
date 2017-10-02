@@ -1,6 +1,6 @@
 package templates.lang.common;
 
-import cml.language.features.Association;
+import cml.language.features.TempAssociation;
 import cml.language.features.TempConcept;
 import cml.language.foundation.TempProperty;
 import cml.language.generated.NamedElement;
@@ -56,7 +56,7 @@ public abstract class LangTest extends TemplateTest
         return format(LANG_GROUP_PATH, targetLanguageExtension);
     }
 
-    void testAssociationClass(Association association, String expectedOutputPath) throws IOException
+    void testAssociationClass(TempAssociation association, String expectedOutputPath) throws IOException
     {
         final String templateName = "association_class";
         final ST template = getTemplate(templateName);

@@ -1,10 +1,8 @@
 
-/*
-@concept ASSOCIATION: NAMED_ELEMENT
+@concept ASSOCIATION: NAMED_ELEMENT, SCOPE
 {
-    ends: ASSOCIATION_END*;
+//    ends: ASSOCIATION_END*;
 }
-*/
 
 @concept ASSOCIATION_END: MODEL_ELEMENT
 {
@@ -12,8 +10,8 @@
     property_name: string;
     property_type: TYPE?;
 
-//    concept: CONCEPT;
-//    property: PROPERTY;
+//    concept: CONCEPT?;
+//    property: PROPERTY?;
 }
 
 /*

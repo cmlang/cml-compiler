@@ -28,11 +28,6 @@ public interface TempAssociationEnd extends AssociationEnd
     Optional<TempProperty> getProperty();
     void setProperty(@NotNull TempProperty property);
 
-    static TempAssociationEnd create(String conceptName, String propertyName)
-    {
-        return create(conceptName, propertyName, null, null);
-    }
-
     static TempAssociationEnd create(String conceptName, String propertyName, @Nullable TempType propertyType, Location location)
     {
         return new AssociationEndImpl(conceptName, propertyName, propertyType, location);

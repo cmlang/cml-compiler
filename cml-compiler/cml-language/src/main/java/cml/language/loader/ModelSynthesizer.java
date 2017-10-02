@@ -97,7 +97,7 @@ class ModelSynthesizer extends CMLBaseListener
             .map(node -> node.associationEnd)
             .toList();
 
-        ctx.association = Association.create(module, name, associationEnds, locationOf(ctx));
+        ctx.association = TempAssociation.create(module, name, associationEnds, locationOf(ctx));
     }
 
     @Override

@@ -273,7 +273,7 @@ public interface TempConcept extends Concept, PropertyList
         .collect(toList());
     }
 
-    default List<Association> getAssociations()
+    default List<TempAssociation> getAssociations()
     {
         return seq(getModel()).flatMap(m -> seq(((TempModel) m).getAssociations()))
                          .filter(assoc -> assoc.getAssociationEnds()

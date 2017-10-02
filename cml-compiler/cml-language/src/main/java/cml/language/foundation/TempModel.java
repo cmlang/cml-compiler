@@ -1,6 +1,6 @@
 package cml.language.foundation;
 
-import cml.language.features.Association;
+import cml.language.features.TempAssociation;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.features.Template;
@@ -60,7 +60,7 @@ public interface TempModel extends NamedElement, Scope, Model
                            .collect(toList());
     }
 
-    default List<Association> getAssociations()
+    default List<TempAssociation> getAssociations()
     {
         return getModules().stream()
                            .map(m -> (TempModule)m)

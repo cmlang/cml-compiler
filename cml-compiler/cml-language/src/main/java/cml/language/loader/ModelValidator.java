@@ -1,6 +1,6 @@
 package cml.language.loader;
 
-import cml.language.features.Association;
+import cml.language.features.TempAssociation;
 import cml.language.features.TempAssociationEnd;
 import cml.language.features.TempConcept;
 import cml.language.foundation.Diagnostic;
@@ -18,7 +18,7 @@ public class ModelValidator implements ModelVisitor
 {
     private final InvariantValidator<TempConcept> conceptInvariantValidator = TempConcept.invariantValidator();
     private final InvariantValidator<TempProperty> propertyInvariantValidator = TempProperty.invariantValidator();
-    private final InvariantValidator<Association> associationInvariantValidator = Association.invariantValidator();
+    private final InvariantValidator<TempAssociation> associationInvariantValidator = TempAssociation.invariantValidator();
     private final InvariantValidator<TempAssociationEnd> associationEndInvariantValidator = TempAssociationEnd.invariantValidator();
     private final InvariantValidator<Expression> expressionInvariantValidator = () -> singletonList(new ExpressionInvariant());
     private final List<Diagnostic> diagnostics = new ArrayList<>();
@@ -41,7 +41,7 @@ public class ModelValidator implements ModelVisitor
     }
 
     @Override
-    public void visit(Association association)
+    public void visit(TempAssociation association)
     {
         associationInvariantValidator.validate(association, diagnostics);
     }

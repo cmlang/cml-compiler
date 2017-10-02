@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.seq;
 
-public interface Association extends NamedElement, Scope
+public interface TempAssociation extends Association
 {
     default Optional<TempAssociationEnd> getAssociationEnd(String conceptName, String propertyName)
     {
@@ -113,12 +113,12 @@ public interface Association extends NamedElement, Scope
         return end1.getProperty().get().getType().isSingle() && end2.getProperty().get().getType().isSingle();
     }
 
-    static Association create(TempModule module, String name, List<TempAssociationEnd> associationEnds, Location location)
+    static TempAssociation create(TempModule module, String name, List<TempAssociationEnd> associationEnds, Location location)
     {
         return new AssociationImpl(module, name, associationEnds, location);
     }
 
-    static InvariantValidator<Association> invariantValidator()
+    static InvariantValidator<TempAssociation> invariantValidator()
     {
         return () -> asList(
             new AssociationMustHaveTwoAssociationEnds(),
@@ -128,53 +128,52 @@ public interface Association extends NamedElement, Scope
 
 }
 
-class AssociationImpl implements Association
+class AssociationImpl implements TempAssociation
 {
-    private final ModelElement modelElement;
-    private final NamedElement namedElement;
-    private final Scope scope;
+    private final Association association;
 
     AssociationImpl(TempModule module, String name, List<TempAssociationEnd> associationEnds, Location location)
     {
-        this.modelElement = extendModelElement(this, module, location);
-        this.namedElement = extendNamedElement(this, modelElement, name);
-        this.scope = extendScope(this, modelElement, seq(associationEnds).map(end -> (ModelElement)end).toList());
+        final ModelElement modelElement = extendModelElement(this, module, location);
+        final NamedElement namedElement = extendNamedElement(this, modelElement, name);
+        final Scope scope = extendScope(this, modelElement, seq(associationEnds).map(end -> (ModelElement)end).toList());
+        this.association = Association.extendAssociation(this, modelElement, namedElement, scope);
     }
 
     @Override
     public Optional<Location> getLocation()
     {
-        return modelElement.getLocation();
+        return association.getLocation();
     }
 
     @Override
     public Optional<Scope> getParent()
     {
-        return modelElement.getParent();
+        return association.getParent();
     }
 
     @Override
     public Optional<Model> getModel()
     {
-        return modelElement.getModel();
+        return association.getModel();
     }
 
     @Override
     public Optional<Module> getModule()
     {
-        return modelElement.getModule();
+        return association.getModule();
     }
 
     @Override
     public String getName()
     {
-        return namedElement.getName();
+        return association.getName();
     }
 
     @Override
     public List<ModelElement> getMembers()
     {
-        return scope.getMembers();
+        return association.getMembers();
     }
 
     @Override
@@ -184,25 +183,25 @@ class AssociationImpl implements Association
     }
 }
 
-class AssociationMustHaveTwoAssociationEnds implements Invariant<Association>
+class AssociationMustHaveTwoAssociationEnds implements Invariant<TempAssociation>
 {
     @Override
-    public boolean evaluate(Association self)
+    public boolean evaluate(TempAssociation self)
     {
         return self.getAssociationEnds().size() == 2;
     }
 
     @Override
-    public Diagnostic createDiagnostic(Association self)
+    public Diagnostic createDiagnostic(TempAssociation self)
     {
         return new Diagnostic("association_must_have_two_association_ends", self, self.getAssociationEnds());
     }
 }
 
-class AssociationEndTypesMustMatch implements Invariant<Association>
+class AssociationEndTypesMustMatch implements Invariant<TempAssociation>
 {
     @Override
-    public boolean evaluate(Association self)
+    public boolean evaluate(TempAssociation self)
     {
         if (self.getAssociationEnds().size() != 2)
         {
@@ -240,7 +239,7 @@ class AssociationEndTypesMustMatch implements Invariant<Association>
     }
 
     @Override
-    public Diagnostic createDiagnostic(Association self)
+    public Diagnostic createDiagnostic(TempAssociation self)
     {
         return new Diagnostic("association_end_types_must_match", self, self.getAssociationEnds());
     }
