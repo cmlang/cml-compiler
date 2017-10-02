@@ -279,7 +279,7 @@ public interface TempConcept extends Concept, PropertyList
                          .filter(assoc -> assoc.getAssociationEnds()
                                                .stream()
                                                .map(e -> (TempAssociationEnd) e)
-                                               .anyMatch(end -> end.getConcept().isPresent() && end.getConcept().get() == this))
+                                               .anyMatch(end -> end.getAssociatedConcept().isPresent() && end.getAssociatedConcept().get() == this))
                          .collect(toList());
     }
 

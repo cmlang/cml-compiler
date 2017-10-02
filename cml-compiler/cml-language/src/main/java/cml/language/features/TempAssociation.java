@@ -36,10 +36,10 @@ public interface TempAssociation extends Association
         return getAssociationEnds()
             .stream()
             .map(e -> (TempAssociationEnd)e)
-            .map(TempAssociationEnd::getProperty)
+            .map(TempAssociationEnd::getAssociatedProperty)
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(TempProperty::getType)
+            .map(Property::getType)
             .map(t -> (TempType)t)
             .collect(toList());
     }
@@ -77,12 +77,12 @@ public interface TempAssociation extends Association
 
         if (oneToMany(end0, end1))
         {
-            return end0.getProperty();
+            return end0.getAssociatedProperty().map(p -> (TempProperty) p);
         }
 
         if (oneToMany(end1, end0))
         {
-            return end1.getProperty();
+            return end1.getAssociatedProperty().map(p -> (TempProperty) p);
         }
 
         return Optional.empty();
@@ -96,12 +96,12 @@ public interface TempAssociation extends Association
 
         if (oneToMany(end0, end1))
         {
-            return end1.getProperty();
+            return end1.getAssociatedProperty().map(p -> (TempProperty) p);
         }
 
         if (oneToMany(end1, end0))
         {
-            return end0.getProperty();
+            return end0.getAssociatedProperty().map(p -> (TempProperty) p);
         }
 
         return Optional.empty();
@@ -109,18 +109,18 @@ public interface TempAssociation extends Association
 
     static boolean oneToMany(TempAssociationEnd end1, TempAssociationEnd end2)
     {
-        assert end1.getProperty().isPresent();
-        assert end2.getProperty().isPresent();
+        assert end1.getAssociatedProperty().isPresent();
+        assert end2.getAssociatedProperty().isPresent();
 
-        return !end1.getProperty().get().getType().isSequence() && end2.getProperty().get().getType().isSequence();
+        return !end1.getAssociatedProperty().get().getType().isSequence() && end2.getAssociatedProperty().get().getType().isSequence();
     }
 
     static boolean oneToOne(TempAssociationEnd end1, TempAssociationEnd end2)
     {
-        assert end1.getProperty().isPresent();
-        assert end2.getProperty().isPresent();
+        assert end1.getAssociatedProperty().isPresent();
+        assert end2.getAssociatedProperty().isPresent();
 
-        return end1.getProperty().get().getType().isSingle() && end2.getProperty().get().getType().isSingle();
+        return end1.getAssociatedProperty().get().getType().isSingle() && end2.getAssociatedProperty().get().getType().isSingle();
     }
 
     static TempAssociation create(TempModule module, String name, Location location)
@@ -235,16 +235,16 @@ class AssociationEndTypesMustMatch implements Invariant<TempAssociation>
         final TempAssociationEnd end1 = first.get();
         final TempAssociationEnd end2 = last.get();
 
-        if (!end1.getConcept().isPresent() || !end1.getProperty().isPresent() ||
-            !end2.getConcept().isPresent() || !end2.getProperty().isPresent())
+        if (!end1.getAssociatedConcept().isPresent() || !end1.getAssociatedProperty().isPresent() ||
+            !end2.getAssociatedConcept().isPresent() || !end2.getAssociatedProperty().isPresent())
         {
             return true;
         }
 
-        final TempConcept firstConcept = end1.getConcept().get();
-        final TempConcept secondConcept = end2.getConcept().get();
-        final TempProperty firstProperty = end1.getProperty().get();
-        final TempProperty secondProperty = end2.getProperty().get();
+        final TempConcept firstConcept = end1.getAssociatedConcept().map(c -> (TempConcept) c).get();
+        final TempConcept secondConcept = end2.getAssociatedConcept().map(c -> (TempConcept) c).get();
+        final TempProperty firstProperty = end1.getAssociatedProperty().map(p -> (TempProperty) p).get();
+        final TempProperty secondProperty = end2.getAssociatedProperty().map(p -> (TempProperty) p).get();
 
         return typesMatch(firstConcept, secondProperty) && typesMatch(secondConcept, firstProperty);
     }

@@ -40,7 +40,7 @@ association_constructor_statements(association) ::= <<
 >>
 
 association_field_init(association_end) ::= <<
-<field_access(association_end.property)> = {}  # type: Dict[<field_type(association_end.concept)>, <field_type(association_end.property)>]
+<field_access(association_end.associatedProperty)> = {}  # type: Dict[<field_type(association_end.associatedConcept)>, <field_type(association_end.associatedProperty)>]
 >>
 
 association_link_statement_seq(association_end) ::= <<

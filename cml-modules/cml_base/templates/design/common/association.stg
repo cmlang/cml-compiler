@@ -82,7 +82,7 @@ association_link_method_statements(association_ends) ::= <<
 >>
 
 association_link_statement(association_end) ::= <<
-<if(association_end.property.type.sequence)><\\>
+<if(association_end.associatedProperty.type.sequence)><\\>
 <association_link_statement_seq(association_end)><\\>
 <else><\\>
 <association_link_statement_non_seq(association_end)><\\>
@@ -94,15 +94,15 @@ association_link_seq(association_end) ::= <<
 >>
 
 association_link_target(association_end) ::= <<
-<field_name(association_end.property.type)>
+<field_name(association_end.associatedProperty.type)>
 >>
 
 association_link_source(association_end) ::= <<
-<field_name(association_end.concept)>
+<field_name(association_end.associatedConcept)>
 >>
 
 association_link_field(association_end) ::= <<
-<field_access(association_end.property)>
+<field_access(association_end.associatedProperty)>
 >>
 
 association_getters(association) ::= <<
@@ -112,23 +112,23 @@ association_getters(association) ::= <<
 association_getter(association_end) ::= <<
 <modifier("synchronized")><\\>
 <instance_operation(
-    name=association_getter_name(association_end.property),
-    params=[association_end.concept],
+    name=association_getter_name(association_end.associatedProperty),
+    params=[association_end.associatedConcept],
     result_type=association_getter_result_type(association_end),
     statements=association_getter_statements(association_end)
 )>
 >>
 
 association_getter_result_type(association_end) ::= <<
-<if(association_end.property.type.sequence)><\\>
-<getter_type_sequence(association_end.property.type)><\\>
+<if(association_end.associatedProperty.type.sequence)><\\>
+<getter_type_sequence(association_end.associatedProperty.type)><\\>
 <else><\\>
-<getter_type_optional(association_end.property.type)><\\>
+<getter_type_optional(association_end.associatedProperty.type)><\\>
 <endif>
 >>
 
 association_getter_statements(association_end) ::= <<
-<if(association_end.property.type.sequence)><\\>
+<if(association_end.associatedProperty.type.sequence)><\\>
 <association_getter_statements_seq(association_end)><\\>
 <else><\\>
 <association_getter_statements_non_seq(association_end)><\\>

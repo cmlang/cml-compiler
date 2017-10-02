@@ -46,7 +46,7 @@ public interface TempProperty extends Property
                          .filter(assoc -> assoc.getAssociationEnds()
                                                .stream()
                                                .map(e -> (TempAssociationEnd) e)
-                                               .anyMatch(end -> end.getProperty().isPresent() && end.getProperty().get() == this))
+                                               .anyMatch(end -> end.getAssociatedProperty().isPresent() && end.getAssociatedProperty().get() == this))
                          .findFirst();
     }
 

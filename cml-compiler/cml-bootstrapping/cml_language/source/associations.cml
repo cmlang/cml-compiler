@@ -10,8 +10,8 @@
     property_name: string;
     property_type: TYPE?;
 
-//    concept: CONCEPT?;
-//    property: PROPERTY?;
+    associated_concept: CONCEPT?;
+    associated_property: PROPERTY?;
 }
 
 /*

@@ -8,9 +8,9 @@ association_new(association) ::= ""
 association_init_param() ::= "Class\<?> cls"
 
 association_init_statement(association_end, association) ::= <<
-if (<type_name(association_end.concept)>.class.isAssignableFrom(cls))
+if (<type_name(association_end.associatedConcept)>.class.isAssignableFrom(cls))
 {
-<indent()><type_name(association_end.concept)><class_name_suffix>.set<type_name(association)>(singleton);
+<indent()><type_name(association_end.associatedConcept)><class_name_suffix>.set<type_name(association)>(singleton);
 }
 >>
 
@@ -19,13 +19,13 @@ association_name(association) ::= <<
 >>
 
 association_field_decl(association_end) ::= <<
-private final Map\<<field_type(association_end.concept)>, <field_type(association_end.property)>\> <field_name(association_end.property)> = new HashMap\<>();
+private final Map\<<field_type(association_end.associatedConcept)>, <field_type(association_end.associatedProperty)>\> <field_name(association_end.associatedProperty)> = new HashMap\<>();
 >>
 
 association_constructor(association) ::= ""
 
 association_link_statement_seq(association_end) ::= <<
-final <field_type(association_end.property)> <association_link_seq(association_end)> = <association_link_field(association_end)>.computeIfAbsent(<association_link_source(association_end)>, key -> new ArrayList\<>());
+final <field_type(association_end.associatedProperty)> <association_link_seq(association_end)> = <association_link_field(association_end)>.computeIfAbsent(<association_link_source(association_end)>, key -> new ArrayList\<>());
 if (!<association_link_seq(association_end)>.contains(<association_link_target(association_end)>))
 {
 <indent()><association_link_seq(association_end)>.add(<association_link_target(association_end)>);
@@ -43,7 +43,7 @@ association_getter_name(property) ::= <<
 >>
 
 association_getter_statements_seq(association_end) ::= <<
-final <field_type(association_end.property)> <association_link_seq(association_end)> = <association_link_field(association_end)>.get(<association_link_source(association_end)>);
+final <field_type(association_end.associatedProperty)> <association_link_seq(association_end)> = <association_link_field(association_end)>.get(<association_link_source(association_end)>);
 
 return (<association_link_seq(association_end)> == null) ? Collections.emptyList() : new ArrayList\<>(<association_link_seq(association_end)>);
 >>

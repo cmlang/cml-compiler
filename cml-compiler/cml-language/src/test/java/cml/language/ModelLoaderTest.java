@@ -8,8 +8,8 @@ import cml.language.features.TempAssociation;
 import cml.language.features.TempAssociationEnd;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
-import cml.language.foundation.TempProperty;
 import cml.language.foundation.TempModel;
+import cml.language.foundation.TempProperty;
 import cml.language.generated.Import;
 import cml.language.loader.ModelLoader;
 import cml.language.types.NamedType;
@@ -192,8 +192,8 @@ public class ModelLoaderTest
     {
         final TempAssociationEnd associationEnd = association.getAssociationEnd(conceptName, propertyName).orElse(null);
         assertNotNull(conceptName + "." + propertyName, associationEnd);
-        assertTrue(conceptName, associationEnd.getConcept().isPresent());
-        assertTrue(conceptName + "." + propertyName, associationEnd.getProperty().isPresent());
+        assertTrue(conceptName, associationEnd.getAssociatedConcept().isPresent());
+        assertTrue(conceptName + "." + propertyName, associationEnd.getAssociatedProperty().isPresent());
 
         if (expectedType == null)
         {
@@ -205,10 +205,10 @@ public class ModelLoaderTest
             assertTrue("Expected matching type for: " + conceptName + "." + propertyName, isEqualTo(expectedType, associationEnd.getPropertyType().get()));
         }
 
-        final TempConcept concept = associationEnd.getConcept().get();
+        final TempConcept concept = associationEnd.getAssociatedConcept().map(c -> (TempConcept) c).get();
         assertEquals(conceptName, concept.getName(), conceptName);
 
-        final TempProperty property = associationEnd.getProperty().get();
+        final TempProperty property = associationEnd.getAssociatedProperty().map(p -> (TempProperty) p).get();
         assertEquals(conceptName + "." + propertyName, property.getName(), propertyName);
 
         assertTrue(conceptName + "." + propertyName, concept.getMembers().contains(property));
