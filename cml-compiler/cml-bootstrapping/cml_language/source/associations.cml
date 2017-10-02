@@ -17,7 +17,7 @@
 /*
 @association ASSOCIATION_END_PROPERTY
 {
-    ASSOCIATION_END.property;
+    ASSOCIATION_END.associated_property;
     PROPERTY.association_end;
 }
 */
