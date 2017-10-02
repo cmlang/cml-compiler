@@ -4,6 +4,7 @@ import cml.language.expressions.Invocation;
 import cml.language.expressions.Lambda;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
+import cml.language.generated.AssociationEnd;
 import cml.language.generated.Import;
 import cml.language.generated.ModelElement;
 import cml.language.types.NamedType;
@@ -91,6 +92,21 @@ public class ModelElementFunctions
             if (namedType.getErrorMessage().isPresent())
             {
                 return namedType + " - " + namedType.getErrorMessage().get();
+            }
+        }
+        else if (element instanceof AssociationEnd)
+        {
+            final AssociationEnd associationEnd = (AssociationEnd) element;
+
+            if (associationEnd.getPropertyType().isPresent())
+            {
+                return format(
+                    "association end %s.%s: %s",
+                    associationEnd.getConceptName(), associationEnd.getPropertyName(), associationEnd.getPropertyType().get());
+            }
+            else
+            {
+                return format("association end %s.%s", associationEnd.getConceptName(), associationEnd.getPropertyName());
             }
         }
 
