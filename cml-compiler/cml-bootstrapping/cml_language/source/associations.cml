@@ -1,0 +1,25 @@
+
+/*
+@concept ASSOCIATION: NAMED_ELEMENT
+{
+    ends: ASSOCIATION_END*;
+}
+*/
+
+@concept ASSOCIATION_END: MODEL_ELEMENT
+{
+    concept_name: string;
+    property_name: string;
+    property_type: TYPE?;
+
+//    concept: CONCEPT;
+//    property: PROPERTY;
+}
+
+/*
+@association ASSOCIATION_END_PROPERTY
+{
+    ASSOCIATION_END.property;
+    PROPERTY.association_end;
+}
+*/

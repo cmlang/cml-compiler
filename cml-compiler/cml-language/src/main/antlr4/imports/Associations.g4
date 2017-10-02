@@ -8,7 +8,7 @@ associationDeclaration
     '{' (associationEndDeclaration ';')* '}';
 
 associationEndDeclaration
-    returns [AssociationEnd associationEnd]:
+    returns [TempAssociationEnd associationEnd]:
     conceptName=NAME '.' propertyName=NAME
     (':' typeDeclaration)?;
 

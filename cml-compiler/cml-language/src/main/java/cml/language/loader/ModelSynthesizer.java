@@ -93,7 +93,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final List<AssociationEnd> associationEnds = seq(ctx.associationEndDeclaration() == null ? empty() : ctx.associationEndDeclaration())
+        final List<TempAssociationEnd> associationEnds = seq(ctx.associationEndDeclaration() == null ? empty() : ctx.associationEndDeclaration())
             .map(node -> node.associationEnd)
             .toList();
 
@@ -117,7 +117,7 @@ class ModelSynthesizer extends CMLBaseListener
         final String propertyName = ctx.propertyName.getText();
         final @Nullable TempType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
 
-        ctx.associationEnd = AssociationEnd.create(conceptName, propertyName, type, locationOf(ctx));
+        ctx.associationEnd = TempAssociationEnd.create(conceptName, propertyName, type, locationOf(ctx));
     }
 
     @Override

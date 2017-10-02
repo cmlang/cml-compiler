@@ -21,7 +21,7 @@ import static org.jooq.lambda.Seq.seq;
 
 public interface Association extends NamedElement, Scope
 {
-    default Optional<AssociationEnd> getAssociationEnd(String conceptName, String propertyName)
+    default Optional<TempAssociationEnd> getAssociationEnd(String conceptName, String propertyName)
     {
         return getAssociationEnds().stream()
                                    .filter(associationEnd -> associationEnd.getConceptName().equals(conceptName))
@@ -29,11 +29,11 @@ public interface Association extends NamedElement, Scope
                                    .findFirst();
     }
 
-    default List<AssociationEnd> getAssociationEnds()
+    default List<TempAssociationEnd> getAssociationEnds()
     {
         return getMembers().stream()
-                           .filter(e -> e instanceof AssociationEnd)
-                           .map(e -> (AssociationEnd)e)
+                           .filter(e -> e instanceof TempAssociationEnd)
+                           .map(e -> (TempAssociationEnd)e)
                            .collect(toList());
     }
 
@@ -41,7 +41,7 @@ public interface Association extends NamedElement, Scope
     {
         return getAssociationEnds()
             .stream()
-            .map(AssociationEnd::getProperty)
+            .map(TempAssociationEnd::getProperty)
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(TempProperty::getType)
@@ -97,7 +97,7 @@ public interface Association extends NamedElement, Scope
         return Optional.empty();
     }
 
-    static boolean oneToMany(AssociationEnd end1, AssociationEnd end2)
+    static boolean oneToMany(TempAssociationEnd end1, TempAssociationEnd end2)
     {
         assert end1.getProperty().isPresent();
         assert end2.getProperty().isPresent();
@@ -105,7 +105,7 @@ public interface Association extends NamedElement, Scope
         return !end1.getProperty().get().getType().isSequence() && end2.getProperty().get().getType().isSequence();
     }
 
-    static boolean oneToOne(AssociationEnd end1, AssociationEnd end2)
+    static boolean oneToOne(TempAssociationEnd end1, TempAssociationEnd end2)
     {
         assert end1.getProperty().isPresent();
         assert end2.getProperty().isPresent();
@@ -113,7 +113,7 @@ public interface Association extends NamedElement, Scope
         return end1.getProperty().get().getType().isSingle() && end2.getProperty().get().getType().isSingle();
     }
 
-    static Association create(TempModule module, String name, List<AssociationEnd> associationEnds, Location location)
+    static Association create(TempModule module, String name, List<TempAssociationEnd> associationEnds, Location location)
     {
         return new AssociationImpl(module, name, associationEnds, location);
     }
@@ -134,7 +134,7 @@ class AssociationImpl implements Association
     private final NamedElement namedElement;
     private final Scope scope;
 
-    AssociationImpl(TempModule module, String name, List<AssociationEnd> associationEnds, Location location)
+    AssociationImpl(TempModule module, String name, List<TempAssociationEnd> associationEnds, Location location)
     {
         this.modelElement = extendModelElement(this, module, location);
         this.namedElement = extendNamedElement(this, modelElement, name);
@@ -209,16 +209,16 @@ class AssociationEndTypesMustMatch implements Invariant<Association>
             return true;
         }
 
-        final Optional<AssociationEnd> first = self.getAssociationEnds().stream().findFirst();
-        final Optional<AssociationEnd> last = self.getAssociationEnds().stream().reduce((previous, next) -> next);
+        final Optional<TempAssociationEnd> first = self.getAssociationEnds().stream().findFirst();
+        final Optional<TempAssociationEnd> last = self.getAssociationEnds().stream().reduce((previous, next) -> next);
 
         if (!first.isPresent() || !last.isPresent())
         {
             return true;
         }
 
-        final AssociationEnd end1 = first.get();
-        final AssociationEnd end2 = last.get();
+        final TempAssociationEnd end1 = first.get();
+        final TempAssociationEnd end2 = last.get();
 
         if (!end1.getConcept().isPresent() || !end1.getProperty().isPresent() ||
             !end2.getConcept().isPresent() || !end2.getProperty().isPresent())

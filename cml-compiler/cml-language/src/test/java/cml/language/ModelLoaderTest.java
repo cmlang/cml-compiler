@@ -5,7 +5,7 @@ import cml.io.FileSystem;
 import cml.io.ModuleManager;
 import cml.language.expressions.Literal;
 import cml.language.features.Association;
-import cml.language.features.AssociationEnd;
+import cml.language.features.TempAssociationEnd;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempProperty;
@@ -190,7 +190,7 @@ public class ModelLoaderTest
         String conceptName, String propertyName,
         @Nullable NamedType expectedType)
     {
-        final AssociationEnd associationEnd = association.getAssociationEnd(conceptName, propertyName).orElse(null);
+        final TempAssociationEnd associationEnd = association.getAssociationEnd(conceptName, propertyName).orElse(null);
         assertNotNull(conceptName + "." + propertyName, associationEnd);
         assertTrue(conceptName, associationEnd.getConcept().isPresent());
         assertTrue(conceptName + "." + propertyName, associationEnd.getProperty().isPresent());

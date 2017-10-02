@@ -1,6 +1,6 @@
 package cml.language.loader;
 
-import cml.language.features.AssociationEnd;
+import cml.language.features.TempAssociationEnd;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.generated.NamedElement;
@@ -65,7 +65,7 @@ class ModelAugmenter extends CMLBaseListener
     @Override
     public void enterAssociationEndDeclaration(CMLParser.AssociationEndDeclarationContext ctx)
     {
-        final AssociationEnd associationEnd = ctx.associationEnd;
+        final TempAssociationEnd associationEnd = ctx.associationEnd;
 
         conceptOf(module, associationEnd.getConceptName())
               .ifPresent(associationEnd::setConcept);

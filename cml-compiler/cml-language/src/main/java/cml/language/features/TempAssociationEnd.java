@@ -20,29 +20,25 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
-public interface AssociationEnd extends ModelElement
+public interface TempAssociationEnd extends AssociationEnd
 {
-    String getConceptName();
-    String getPropertyName();
-    Optional<TempType> getPropertyType();
-
     Optional<TempConcept> getConcept();
     void setConcept(@NotNull TempConcept concept);
 
     Optional<TempProperty> getProperty();
     void setProperty(@NotNull TempProperty property);
 
-    static AssociationEnd create(String conceptName, String propertyName)
+    static TempAssociationEnd create(String conceptName, String propertyName)
     {
         return create(conceptName, propertyName, null, null);
     }
 
-    static AssociationEnd create(String conceptName, String propertyName, @Nullable TempType propertyType, Location location)
+    static TempAssociationEnd create(String conceptName, String propertyName, @Nullable TempType propertyType, Location location)
     {
         return new AssociationEndImpl(conceptName, propertyName, propertyType, location);
     }
 
-    static InvariantValidator<AssociationEnd> invariantValidator()
+    static InvariantValidator<TempAssociationEnd> invariantValidator()
     {
         return () -> asList(
             new AssociationEndPropertyFoundInModel(),
@@ -51,40 +47,35 @@ public interface AssociationEnd extends ModelElement
     }
 }
 
-class AssociationEndImpl implements AssociationEnd
+class AssociationEndImpl implements TempAssociationEnd
 {
-    private final ModelElement modelElement;
-    private final String conceptName;
-    private final String propertyName;
-    private final @Nullable TempType propertyType;
+    private final AssociationEnd associationEnd;
 
     private @Nullable TempConcept concept;
     private @Nullable TempProperty property;
 
     AssociationEndImpl(String conceptName, String propertyName, @Nullable TempType propertyType, Location location)
     {
-        this.modelElement = ModelElement.extendModelElement(this, null, location);
-        this.conceptName = conceptName;
-        this.propertyName = propertyName;
-        this.propertyType = propertyType;
+        final ModelElement modelElement = ModelElement.extendModelElement(this, null, location);
+        associationEnd = AssociationEnd.extendAssociationEnd(this, modelElement, conceptName, propertyName, propertyType);
     }
 
     @Override
     public String getConceptName()
     {
-        return conceptName;
+        return associationEnd.getConceptName();
     }
 
     @Override
     public String getPropertyName()
     {
-        return propertyName;
+        return associationEnd.getPropertyName();
     }
 
     @Override
-    public Optional<TempType> getPropertyType()
+    public Optional<Type> getPropertyType()
     {
-        return Optional.ofNullable(propertyType);
+        return associationEnd.getPropertyType();
     }
 
     @Override
@@ -118,25 +109,25 @@ class AssociationEndImpl implements AssociationEnd
     @Override
     public Optional<Location> getLocation()
     {
-        return modelElement.getLocation();
+        return associationEnd.getLocation();
     }
 
     @Override
     public Optional<Scope> getParent()
     {
-        return modelElement.getParent();
+        return associationEnd.getParent();
     }
 
     @Override
     public Optional<Model> getModel()
     {
-        return modelElement.getModel();
+        return associationEnd.getModel();
     }
 
     @Override
     public Optional<Module> getModule()
     {
-        return modelElement.getModule();
+        return associationEnd.getModule();
     }
 
     @Override
@@ -153,16 +144,16 @@ class AssociationEndImpl implements AssociationEnd
     }
 }
 
-class AssociationEndPropertyFoundInModel implements Invariant<AssociationEnd>
+class AssociationEndPropertyFoundInModel implements Invariant<TempAssociationEnd>
 {
     @Override
-    public boolean evaluate(AssociationEnd self)
+    public boolean evaluate(TempAssociationEnd self)
     {
         return self.getConcept().isPresent() && self.getProperty().isPresent();
     }
 
     @Override
-    public Diagnostic createDiagnostic(AssociationEnd self)
+    public Diagnostic createDiagnostic(TempAssociationEnd self)
     {
         @SuppressWarnings("ConstantConditions")
         final List<ModelElement> participants = concat(of(self.getConcept()), of(self.getProperty()))
@@ -174,10 +165,10 @@ class AssociationEndPropertyFoundInModel implements Invariant<AssociationEnd>
     }
 }
 
-class AssociationEndTypeMatchesPropertyType implements Invariant<AssociationEnd>
+class AssociationEndTypeMatchesPropertyType implements Invariant<TempAssociationEnd>
 {
     @Override
-    public boolean evaluate(AssociationEnd self)
+    public boolean evaluate(TempAssociationEnd self)
     {
         return !self.getPropertyType().isPresent() ||
                !self.getProperty().isPresent() ||
@@ -185,7 +176,7 @@ class AssociationEndTypeMatchesPropertyType implements Invariant<AssociationEnd>
     }
 
     @Override
-    public Diagnostic createDiagnostic(AssociationEnd self)
+    public Diagnostic createDiagnostic(TempAssociationEnd self)
     {
         assert self.getProperty().isPresent();
 

@@ -1,6 +1,9 @@
 model files:
 - pom.xml
 
+ASSOCIATION_END files:
+- src/main/java/cml/language/generated/AssociationEnd.java
+
 CONCEPT files:
 - src/main/java/cml/language/generated/Concept.java
 
