@@ -3,9 +3,9 @@
 {
     derived: BOOLEAN;
     declared_type: TYPE?;
+    value: EXPRESSION?;
 
 /*
-    value: EXPRESSION?;
     type_required: BOOLEAN;
     type_allowed: BOOLEAN;
 

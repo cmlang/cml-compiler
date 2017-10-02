@@ -46,10 +46,6 @@ public interface TempProperty extends Property
         return getAssociation().isPresent();
     }
 
-    Optional<Type> getDeclaredType();
-
-    Optional<Expression> getValue();
-
     @SuppressWarnings("unused")
     boolean isTypeRequired();
 
@@ -119,8 +115,6 @@ class PropertyImpl implements TempProperty
     private boolean typeRequired;
     private boolean typeAllowed;
 
-    private final @Nullable Expression value;
-
     PropertyImpl(String name, @Nullable TempType type, @Nullable Expression value, boolean derived, Location location)
     {
         final ModelElement modelElement = ModelElement.extendModelElement(this, null, location);
@@ -128,9 +122,7 @@ class PropertyImpl implements TempProperty
         final TypedElement typedElement = TypedElement.extendTypedElement(this, modelElement, namedElement, null);
 
         final Scope scope = Scope.extendScope(this, modelElement, singletonList(value));
-        property = Property.extendProperty(this, modelElement, namedElement, typedElement, scope, derived, type);
-
-        this.value = value;
+        property = Property.extendProperty(this, modelElement, namedElement, typedElement, scope, derived, type, value);
     }
 
     @Override
@@ -148,7 +140,7 @@ class PropertyImpl implements TempProperty
     @Override
     public Optional<Expression> getValue()
     {
-        return Optional.ofNullable(value);
+        return property.getValue();
     }
 
     @Override
@@ -184,13 +176,13 @@ class PropertyImpl implements TempProperty
         }
         else
         {
-            if (value == null)
+            if (getValue().isPresent())
             {
-                return NamedType.createUndefined("No type or expression defined for property: " + getName());
+                return getValue().get().getType();
             }
             else
             {
-                return value.getType();
+                return NamedType.createUndefined("No type or expression defined for property: " + getName());
             }
         }
     }
