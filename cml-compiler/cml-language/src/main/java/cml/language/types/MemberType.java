@@ -21,6 +21,12 @@ public class MemberType extends NamedElementBase implements TempType
         return baseType;
     }
 
+    @Override
+    public boolean isString()
+    {
+        return false;
+    }
+
     public long getParamIndex()
     {
         return paramIndex;

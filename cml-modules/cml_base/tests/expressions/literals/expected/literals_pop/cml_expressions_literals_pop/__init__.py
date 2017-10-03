@@ -38,13 +38,18 @@ class LiteralExpressions:
     def literal_decimal_init_2(self) -> 'Decimal':
         return self.__literal_decimal_init_2
 
+    @property
+    def compared_strings(self) -> 'bool':
+        return (self.literal_string_init == "another string")
+
     def __str__(self) -> 'str':
-        return "%s(literal_true_boolean=%s, literal_false_boolean=%s, literal_string_init=%s, literal_integer_init=%s, literal_decimal_init=%s, literal_decimal_init_2=%s)" % (
+        return "%s(literal_true_boolean=%s, literal_false_boolean=%s, literal_string_init=%s, literal_integer_init=%s, literal_decimal_init=%s, literal_decimal_init_2=%s, compared_strings=%s)" % (
             type(self).__name__,
             self.literal_true_boolean,
             self.literal_false_boolean,
             self.literal_string_init,
             self.literal_integer_init,
             self.literal_decimal_init,
-            self.literal_decimal_init_2
+            self.literal_decimal_init_2,
+            self.compared_strings
         )

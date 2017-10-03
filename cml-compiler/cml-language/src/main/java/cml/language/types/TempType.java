@@ -51,11 +51,6 @@ public interface TempType extends Type
         return false;
     }
 
-    default boolean isString()
-    {
-        return false;
-    }
-
     default boolean isNumeric()
     {
         return false;

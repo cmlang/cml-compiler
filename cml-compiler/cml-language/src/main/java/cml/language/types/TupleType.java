@@ -50,6 +50,12 @@ public class TupleType extends ModelElementBase implements TempType
     }
 
     @Override
+    public boolean isString()
+    {
+        return false;
+    }
+
+    @Override
     public String toString()
     {
         return format("(%s)", seq(elements).toString(",")) + (getCardinality().isPresent() ? getCardinality().get() : "");

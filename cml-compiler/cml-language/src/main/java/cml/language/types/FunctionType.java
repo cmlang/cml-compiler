@@ -55,6 +55,12 @@ public class FunctionType extends ModelElementBase implements TempType
     }
 
     @Override
+    public boolean isString()
+    {
+        return false;
+    }
+
+    @Override
     public TempType getElementType()
     {
         assert !getCardinality().isPresent();

@@ -22,5 +22,7 @@
     /required = kind == "required";
     /optional = kind == "optional";
     /sequence = kind == "sequence";
+
+    /string = false;
 }
 
