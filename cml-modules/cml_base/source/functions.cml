@@ -13,7 +13,7 @@
 
 @template @function collect<T>(seq: T*, expr: (T) -> R*) -> R*;
 
-//@template @function reverse<T>(seq: T*) -> T*;
+@template @function reverse<T>(seq: T*) -> T*;
 
 @template @function sort<T>(seq: T*, expr: (T, T) -> integer) -> T*;
 @template @function compare<T>(expr1: T, expr2: T) -> integer;

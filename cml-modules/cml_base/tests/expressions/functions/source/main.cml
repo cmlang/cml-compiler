@@ -46,6 +46,7 @@
     /required_item_collect = required_item | collect: size;
 
     /sorted_items = items | sort: i1, i2 -> compare(i1.size, i2.size);
+    /reversed_items = reverse(items);
 }
 
 @concept Item

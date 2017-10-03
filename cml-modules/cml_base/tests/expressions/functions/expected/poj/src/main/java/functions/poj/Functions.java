@@ -178,6 +178,11 @@ public class Functions
         return seq(this.getItems()).sorted((i1, i2) -> (i1.getSize() < i2.getSize()) ? -1 : ((i2.getSize() < i1.getSize()) ? +1 : 0)).toList();
     }
 
+    public List<Item> getReversedItems()
+    {
+        return seq(this.getItems()).reverse().toList();
+    }
+
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())

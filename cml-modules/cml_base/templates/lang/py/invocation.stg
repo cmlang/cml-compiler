@@ -118,3 +118,7 @@ sorted(<expression(args.seq)>, key=functools.cmp_to_key(<expression(args.expr)>)
 invocation_compare(args) ::= <<
 -1 if (<expression(args.expr1)> \< <expression(args.expr2)>) else +1 if (<expression(args.expr2)> \< <expression(args.expr1)>) else 0
 >>
+
+invocation_sequence_reverse(args) ::= <<
+reversed(<expression(args.seq)>)
+>>

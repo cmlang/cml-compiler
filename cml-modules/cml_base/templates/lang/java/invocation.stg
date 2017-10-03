@@ -114,3 +114,7 @@ invocation_sequence_sort(args) ::= <<
 invocation_compare(args) ::= <<
 (<expression(args.expr1)> \< <expression(args.expr2)>) ? -1 : ((<expression(args.expr2)> \< <expression(args.expr1)>) ? +1 : 0)
 >>
+
+invocation_sequence_reverse(args) ::= <<
+<expression(args.seq)>.reverse()
+>>

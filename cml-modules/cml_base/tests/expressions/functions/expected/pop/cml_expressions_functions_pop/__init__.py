@@ -171,6 +171,12 @@ class Functions:
             sorted(self.items, key=functools.cmp_to_key(lambda i_1, i_2: -1 if (i_1.size < i_2.size) else +1 if (i_2.size < i_1.size) else 0))
         )
 
+    @property
+    def reversed_items(self) -> 'List[Item]':
+        return list(
+            reversed(self.items)
+        )
+
     def __str__(self) -> 'str':
         return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, large_item_exists=%s, large_item_all=%s, required_item_exists=%s, required_item_all=%s, items_collect=%s, single_item_collect=%s, required_item_collect=%s)" % (
             type(self).__name__,
