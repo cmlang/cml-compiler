@@ -110,3 +110,11 @@ map(<expression(args.expr)>, [<expression(args.seq)>])
 optional_list(args) ::= <<
 [] if <expression(args.seq)> is None else [<expression(args.seq)>]
 >>
+
+invocation_sequence_sort(args) ::= <<
+sorted(<expression(args.seq)>, key=functools.cmp_to_key(<expression(args.expr)>))
+>>
+
+invocation_compare(args) ::= <<
+-1 if (<expression(args.expr1)> \< <expression(args.expr2)>) else +1 if (<expression(args.expr2)> \< <expression(args.expr1)>) else 0
+>>

@@ -2,7 +2,7 @@ from typing import *
 from abc import *
 from decimal import *
 
-import itertools
+import functools, itertools
 
 class Product:
 

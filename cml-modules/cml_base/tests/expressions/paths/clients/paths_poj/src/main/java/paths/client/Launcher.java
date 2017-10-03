@@ -17,7 +17,7 @@ public class Launcher
         final AnotherConcept anotherConcept2 = new AnotherConcept(BigDecimal.TEN.add(BigDecimal.TEN));
         final SomeConcept someConcept = new SomeConcept(-1, asList(anotherConcept, anotherConcept2), anotherConcept);
         final SomeConcept someConcept2 = new SomeConcept(2, asList(anotherConcept2, anotherConcept), anotherConcept2);
-        final ExpressionCases cases = new ExpressionCases("foo", someConcept, asList(someConcept, someConcept2));
+        final ExpressionCases cases = new ExpressionCases("foo", someConcept, asList(someConcept2, someConcept));
         
         System.out.println("self_var = " + cases.getSelfVar());
         System.out.println("single_var = " + cases.getSingleVar());
@@ -30,5 +30,9 @@ public class Launcher
         System.out.println("path_var3 = " + cases.getPathVar3());
         System.out.println("path_bars = " + cases.getPathBars());
         System.out.println("path_foos = " + cases.getPathFoos());
+        System.out.println();
+
+        System.out.println("somePathList = " + cases.getSomePathList());
+        System.out.println("sorted_list = " + cases.getSortedList());
     }
 }

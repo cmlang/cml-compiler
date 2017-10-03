@@ -2,7 +2,7 @@ from typing import *
 from abc import *
 from decimal import *
 
-import itertools
+import functools, itertools
 
 class Item:
 
@@ -163,6 +163,12 @@ class Functions:
     def required_item_collect(self) -> 'List[int]':
         return list(
             map(lambda item: item.size, [self.required_item])
+        )
+
+    @property
+    def sorted_items(self) -> 'List[Item]':
+        return list(
+            sorted(self.items, key=functools.cmp_to_key(lambda i_1, i_2: -1 if (i_1.size < i_2.size) else +1 if (i_2.size < i_1.size) else 0))
         )
 
     def __str__(self) -> 'str':

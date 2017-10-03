@@ -105,7 +105,7 @@ public class Types
 
     public List<Ancestor> getDescendants()
     {
-        return seq(this.getSeq()).filter(a -> a instanceof Descendant).toList();
+        return seq(this.getSeq()).filter((a) -> a instanceof Descendant).toList();
     }
 
     public String toString()

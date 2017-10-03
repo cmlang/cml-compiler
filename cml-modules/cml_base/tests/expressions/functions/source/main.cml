@@ -44,6 +44,8 @@
     /items_collect = items | collect: size;
     /single_item_collect = single_item | collect: size;
     /required_item_collect = required_item | collect: size;
+
+    /sorted_items = items | sort: i1, i2 -> compare(i1.size, i2.size);
 }
 
 @concept Item

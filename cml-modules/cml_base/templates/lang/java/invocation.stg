@@ -106,3 +106,11 @@ seq(<expression(args.seq)>).map(<expression(args.expr)>)
 invocation_required_collect(args) ::= <<
 seq(asList(<expression(args.seq)>)).map(<expression(args.expr)>)
 >>
+
+invocation_sequence_sort(args) ::= <<
+<expression(args.seq)>.sorted(<expression(args.expr)>)
+>>
+
+invocation_compare(args) ::= <<
+(<expression(args.expr1)> \< <expression(args.expr2)>) ? -1 : ((<expression(args.expr2)> \< <expression(args.expr1)>) ? +1 : 0)
+>>

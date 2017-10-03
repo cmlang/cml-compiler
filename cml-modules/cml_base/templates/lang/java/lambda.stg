@@ -1,5 +1,5 @@
 
 expression_lambda(lambda) ::= <<
-<if(lambda.parameters)><lambda.parameters; separator=", "><else><lambda_new_var_name()><endif><\\>
+<if(lambda.parameters)>(<lambda.parameters; separator=", ", format="camel-case">)<else><lambda_new_var_name()><endif><\\>
 <\ >-><\ ><expression(lambda.innerExpression)>
 >>

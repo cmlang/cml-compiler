@@ -2,7 +2,7 @@ from typing import *
 from abc import *
 from decimal import *
 
-import itertools
+import functools, itertools
 
 class AnotherConcept:
 
@@ -114,6 +114,12 @@ class ExpressionCases:
                 lambda some_concept: some_concept.foos,
                 self.some_path_list
             ))
+        )
+
+    @property
+    def sorted_list(self) -> 'List[SomeConcept]':
+        return list(
+            sorted(self.some_path_list, key=functools.cmp_to_key(lambda item_1, item_2: -1 if (item_1.bar < item_2.bar) else +1 if (item_2.bar < item_1.bar) else 0))
         )
 
     def __str__(self) -> 'str':

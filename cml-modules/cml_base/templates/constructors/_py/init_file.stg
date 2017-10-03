@@ -4,7 +4,7 @@ from typing import *
 from abc import *
 from decimal import *
 
-import itertools
+import functools, itertools
 
 <if(model.associations)>
 <model.associations:py_association_class();separator="\n\n\n">

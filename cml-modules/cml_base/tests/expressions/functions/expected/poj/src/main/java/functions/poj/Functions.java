@@ -173,6 +173,11 @@ public class Functions
         return seq(asList(this.getRequiredItem())).map(item15 -> item15.getSize()).toList();
     }
 
+    public List<Item> getSortedItems()
+    {
+        return seq(this.getItems()).sorted((i1, i2) -> (i1.getSize() < i2.getSize()) ? -1 : ((i2.getSize() < i1.getSize()) ? +1 : 0)).toList();
+    }
+
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())
