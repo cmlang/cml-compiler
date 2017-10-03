@@ -16,7 +16,6 @@ import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.jooq.lambda.Seq.seq;
 
 public interface TempAssociation extends Association
 {
@@ -26,11 +25,6 @@ public interface TempAssociation extends Association
                                    .filter(associationEnd -> associationEnd.getConceptName().equals(conceptName))
                                    .filter(associationEnd -> associationEnd.getPropertyName().equals(propertyName))
                                    .findFirst();
-    }
-
-    default List<Type> getReversedPropertyTypes()
-    {
-        return seq(getPropertyTypes()).reverse().toList();
     }
 
     @SuppressWarnings("unused")
@@ -180,6 +174,12 @@ class AssociationImpl implements TempAssociation
     public List<Type> getPropertyTypes()
     {
         return association.getPropertyTypes();
+    }
+
+    @Override
+    public List<Type> getReversedPropertyTypes()
+    {
+        return association.getReversedPropertyTypes();
     }
 
     @Override

@@ -4,6 +4,7 @@
     /association_ends = members as? ASSOCIATION_END*;
 
     /property_types = association_ends.associated_property.type;
+    /reversed_property_types = reverse(property_types);
 }
 
 @concept ASSOCIATION_END: MODEL_ELEMENT
