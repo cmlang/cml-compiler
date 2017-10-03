@@ -136,7 +136,11 @@ getter_type_required(type) ::= <<
 >>
 
 getter_type_optional(type) ::= <<
-Optional[<type_name(type)>]
+<if(type.boolean)><\\>
+<type_name(type)><\\>
+<else><\\>
+Optional[<type_name(type)>]<\\>
+<endif>
 >>
 
 getter_type_sequence(type) ::= <<
@@ -310,6 +314,8 @@ path_getter_call(path) ::= <<
 path_base_call(path) ::= <<
 <if(path.base.type.sequence)><\\>
 <path_map_call(path); anchor><\\>
+<elseif(path.base.type.optional)><\\>
+False if <path_expr(path.base)> is None else <path_expr(path.base)>.<path_property(path)><\\>
 <else><\\>
 <path_expr(path.base)>.<path_property(path)><\\>
 <endif>

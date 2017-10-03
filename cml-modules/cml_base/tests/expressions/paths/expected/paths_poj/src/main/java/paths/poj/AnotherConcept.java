@@ -13,10 +13,17 @@ import static org.jooq.lambda.Seq.*;
 public class AnotherConcept
 {
     private final BigDecimal etc;
+    private final boolean flag;
 
     public AnotherConcept(BigDecimal etc)
     {
+        this(etc, true);
+    }
+
+    public AnotherConcept(BigDecimal etc, boolean flag)
+    {
         this.etc = etc;
+        this.flag = flag;
     }
 
     public BigDecimal getEtc()
@@ -24,11 +31,17 @@ public class AnotherConcept
         return this.etc;
     }
 
+    public boolean isFlag()
+    {
+        return this.flag;
+    }
+
     public String toString()
     {
         return new StringBuilder(AnotherConcept.class.getSimpleName())
                    .append('(')
-                   .append("etc=").append(String.format("\"%s\"", this.getEtc()))
+                   .append("etc=").append(String.format("\"%s\"", this.getEtc())).append(", ")
+                   .append("flag=").append(String.format("\"%s\"", this.isFlag()))
                    .append(')')
                    .toString();
     }

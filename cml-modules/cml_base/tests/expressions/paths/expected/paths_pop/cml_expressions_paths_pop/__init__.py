@@ -6,17 +6,23 @@ import functools, itertools
 
 class AnotherConcept:
 
-    def __init__(self, etc: 'Decimal') -> 'None':
+    def __init__(self, etc: 'Decimal', flag: 'bool' = True) -> 'None':
         self.__etc = etc
+        self.__flag = flag
 
     @property
     def etc(self) -> 'Decimal':
         return self.__etc
 
+    @property
+    def flag(self) -> 'bool':
+        return self.__flag
+
     def __str__(self) -> 'str':
-        return "%s(etc=%s)" % (
+        return "%s(etc=%s, flag=%s)" % (
             type(self).__name__,
-            self.etc
+            self.etc,
+            self.flag
         )
 
 
@@ -49,10 +55,11 @@ class SomeConcept:
 
 class ExpressionCases:
 
-    def __init__(self, foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]') -> 'None':
+    def __init__(self, foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]', opt_prop: 'Optional[AnotherConcept]') -> 'None':
         self.__foo = foo
         self.__some_path = some_path
         self.__some_path_list = some_path_list
+        self.__opt_prop = opt_prop
 
     @property
     def foo(self) -> 'str':
@@ -65,6 +72,10 @@ class ExpressionCases:
     @property
     def some_path_list(self) -> 'List[SomeConcept]':
         return self.__some_path_list
+
+    @property
+    def opt_prop(self) -> 'Optional[AnotherConcept]':
+        return self.__opt_prop
 
     @property
     def self_var(self) -> 'ExpressionCases':
@@ -122,8 +133,12 @@ class ExpressionCases:
             sorted(self.some_path_list, key=functools.cmp_to_key(lambda item_1, item_2: -1 if (item_1.bar < item_2.bar) else +1 if (item_2.bar < item_1.bar) else 0))
         )
 
+    @property
+    def opt_flag(self) -> 'bool':
+        return False if self.opt_prop is None else self.opt_prop.flag
+
     def __str__(self) -> 'str':
-        return "%s(foo=%s, some_path=%s, single_var=%s, path_var=%s, path_var_2=%s, path_var_3=%s, path_bars=%s)" % (
+        return "%s(foo=%s, some_path=%s, single_var=%s, path_var=%s, path_var_2=%s, path_var_3=%s, path_bars=%s, opt_prop=%s, opt_flag=%s)" % (
             type(self).__name__,
             self.foo,
             self.some_path,
@@ -131,5 +146,7 @@ class ExpressionCases:
             self.path_var,
             self.path_var_2,
             self.path_var_3,
-            self.path_bars
+            self.path_bars,
+            self.opt_prop,
+            self.opt_flag
         )

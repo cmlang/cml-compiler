@@ -5,7 +5,7 @@ anotherConcept = AnotherConcept(10.0)
 anotherConcept2 = AnotherConcept(20.0)
 someConcept = SomeConcept(-1, [anotherConcept, anotherConcept2], anotherConcept)
 someConcept2 = SomeConcept(2, [anotherConcept2, anotherConcept], anotherConcept2)
-cases = ExpressionCases("foo", someConcept, [someConcept2, someConcept])
+cases = ExpressionCases("foo", someConcept, [someConcept2, someConcept], None)
 
 print("Paths Client (pop)\n")
 

@@ -15,12 +15,14 @@ public class ExpressionCases
     private final String foo;
     private final SomeConcept somePath;
     private final List<SomeConcept> somePathList;
+    private final @Nullable AnotherConcept optProp;
 
-    public ExpressionCases(String foo, SomeConcept somePath, List<SomeConcept> somePathList)
+    public ExpressionCases(String foo, SomeConcept somePath, List<SomeConcept> somePathList, @Nullable AnotherConcept optProp)
     {
         this.foo = foo;
         this.somePath = somePath;
         this.somePathList = somePathList;
+        this.optProp = optProp;
     }
 
     public String getFoo()
@@ -36,6 +38,11 @@ public class ExpressionCases
     public List<SomeConcept> getSomePathList()
     {
         return Collections.unmodifiableList(this.somePathList);
+    }
+
+    public Optional<AnotherConcept> getOptProp()
+    {
+        return Optional.ofNullable(this.optProp);
     }
 
     public ExpressionCases getSelfVar()
@@ -83,6 +90,11 @@ public class ExpressionCases
         return seq(this.getSomePathList()).sorted((item1, item2) -> (item1.getBar() < item2.getBar()) ? -1 : ((item2.getBar() < item1.getBar()) ? +1 : 0)).toList();
     }
 
+    public boolean isOptFlag()
+    {
+        return seq(this.getOptProp()).flatMap(anotherConcept -> seq(asList(anotherConcept.isFlag()))).findFirst().orElse(false);
+    }
+
     public String toString()
     {
         return new StringBuilder(ExpressionCases.class.getSimpleName())
@@ -93,7 +105,9 @@ public class ExpressionCases
                    .append("pathVar=").append(String.format("\"%s\"", this.getPathVar())).append(", ")
                    .append("pathVar2=").append(String.format("\"%s\"", this.getPathVar2())).append(", ")
                    .append("pathVar3=").append(this.getPathVar3()).append(", ")
-                   .append("pathBars=").append(this.getPathBars())
+                   .append("pathBars=").append(this.getPathBars()).append(", ")
+                   .append("optProp=").append(this.getOptProp().isPresent() ? String.format("\"%s\"", this.getOptProp()) : "not present").append(", ")
+                   .append("optFlag=").append(String.format("\"%s\"", this.isOptFlag()))
                    .append(')')
                    .toString();
     }

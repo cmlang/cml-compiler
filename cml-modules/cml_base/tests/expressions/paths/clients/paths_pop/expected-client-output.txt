@@ -1,6 +1,6 @@
 Paths Client (pop)
 
-self_var = ExpressionCases(foo=foo, some_path=SomeConcept(bar=-1, one_more_path=AnotherConcept(etc=10.0)), single_var=foo, path_var=-1, path_var_2=10.0, path_var_3=[20.0, 10.0], path_bars=[2, -1])
+self_var = ExpressionCases(foo=foo, some_path=SomeConcept(bar=-1, one_more_path=AnotherConcept(etc=10.0, flag=True)), single_var=foo, path_var=-1, path_var_2=10.0, path_var_3=[20.0, 10.0], path_bars=[2, -1], opt_prop=None, opt_flag=False)
 single_var = foo
 
 path_var = -1
@@ -8,6 +8,6 @@ path_var_2 = 10.0
 
 path_var_3 = [20.0, 10.0]
 path_bars = [2, -1]
-path_foos = ['AnotherConcept(etc=20.0)', 'AnotherConcept(etc=10.0)', 'AnotherConcept(etc=10.0)', 'AnotherConcept(etc=20.0)']
-some_path_list = ['SomeConcept(bar=2, one_more_path=AnotherConcept(etc=20.0))', 'SomeConcept(bar=-1, one_more_path=AnotherConcept(etc=10.0))']
-sorted_list = ['SomeConcept(bar=-1, one_more_path=AnotherConcept(etc=10.0))', 'SomeConcept(bar=2, one_more_path=AnotherConcept(etc=20.0))']
+path_foos = ['AnotherConcept(etc=20.0, flag=True)', 'AnotherConcept(etc=10.0, flag=True)', 'AnotherConcept(etc=10.0, flag=True)', 'AnotherConcept(etc=20.0, flag=True)']
+some_path_list = ['SomeConcept(bar=2, one_more_path=AnotherConcept(etc=20.0, flag=True))', 'SomeConcept(bar=-1, one_more_path=AnotherConcept(etc=10.0, flag=True))']
+sorted_list = ['SomeConcept(bar=-1, one_more_path=AnotherConcept(etc=10.0, flag=True))', 'SomeConcept(bar=2, one_more_path=AnotherConcept(etc=20.0, flag=True))']

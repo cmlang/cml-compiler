@@ -76,7 +76,11 @@ to_string_field_value_required(property) ::= <<
 >>
 
 to_string_field_value_optional(property) ::= <<
-.append(<to_string_getter_call(property)>.isPresent() ? String.format("\"%s\"", <to_string_getter_call(property)>) : "not present")
+<if(property.type.boolean)><\\>
+<to_string_field_value_required(property)><\\>
+<else><\\>
+.append(<to_string_getter_call(property)>.isPresent() ? String.format("\"%s\"", <to_string_getter_call(property)>) : "not present")<\\>
+<endif>
 >>
 
 to_string_field_value_sequence(property) ::= <<
@@ -163,7 +167,11 @@ getter_type_required(type) ::= <<
 >>
 
 getter_type_optional(type) ::= <<
-Optional\<<type_name(type)>\>
+<if(type.boolean)><\\>
+<type_name(type)><\\>
+<else><\\>
+Optional\<<type_name(type)>\><\\>
+<endif>
 >>
 
 getter_type_sequence(type) ::= <<
@@ -369,7 +377,7 @@ asList(<field_name(path.base.type)>.<getter_name(path)>())<\\>
 <endif><\\>
 ))<\\>
 <endif><\\>
-<if(!path.base.base && path.type.optional)>.findFirst()<endif>
+<if(!path.base.base && path.type.optional)>.findFirst()<if(path.type.boolean)>.orElse(false)<endif><endif>
 >>
 
 to_list(expr) ::= <<

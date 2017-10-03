@@ -10,33 +10,43 @@ class AnotherConcept(ABC):
     def etc(self) -> 'Decimal':
         pass
 
-    @staticmethod
-    def create_another_concept(etc: 'Decimal') -> 'AnotherConcept':
-        return AnotherConceptImpl(None, etc)
+    @abstractproperty
+    def flag(self) -> 'bool':
+        pass
 
     @staticmethod
-    def extend_another_concept(actual_self: 'Optional[AnotherConcept]', etc: 'Decimal') -> 'AnotherConcept':
-        return AnotherConceptImpl(actual_self, etc)
+    def create_another_concept(etc: 'Decimal', flag: 'bool' = True) -> 'AnotherConcept':
+        return AnotherConceptImpl(None, etc, flag)
+
+    @staticmethod
+    def extend_another_concept(actual_self: 'Optional[AnotherConcept]', etc: 'Decimal', flag: 'bool' = True) -> 'AnotherConcept':
+        return AnotherConceptImpl(actual_self, etc, flag)
 
 
 class AnotherConceptImpl(AnotherConcept):
 
-    def __init__(self, actual_self: 'Optional[AnotherConcept]', etc: 'Decimal') -> 'None':
+    def __init__(self, actual_self: 'Optional[AnotherConcept]', etc: 'Decimal', flag: 'bool' = True) -> 'None':
         if actual_self is None:
             self.__actual_self = self  # type: Optional[AnotherConcept]
         else:
             self.__actual_self = actual_self
 
         self.__etc = etc
+        self.__flag = flag
 
     @property
     def etc(self) -> 'Decimal':
         return self.__etc
 
+    @property
+    def flag(self) -> 'bool':
+        return self.__flag
+
     def __str__(self) -> 'str':
-        return "%s(etc=%s)" % (
+        return "%s(etc=%s, flag=%s)" % (
             type(self).__name__,
-            self.__actual_self.etc
+            self.__actual_self.etc,
+            self.__actual_self.flag
         )
 
 
@@ -145,18 +155,26 @@ class ExpressionCases(ABC):
     def sorted_list(self) -> 'List[SomeConcept]':
         pass
 
-    @staticmethod
-    def create_expression_cases(foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]') -> 'ExpressionCases':
-        return ExpressionCasesImpl(None, foo, some_path, some_path_list)
+    @abstractproperty
+    def opt_prop(self) -> 'Optional[AnotherConcept]':
+        pass
+
+    @abstractproperty
+    def opt_flag(self) -> 'bool':
+        pass
 
     @staticmethod
-    def extend_expression_cases(actual_self: 'Optional[ExpressionCases]', foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]') -> 'ExpressionCases':
-        return ExpressionCasesImpl(actual_self, foo, some_path, some_path_list)
+    def create_expression_cases(foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]', opt_prop: 'Optional[AnotherConcept]') -> 'ExpressionCases':
+        return ExpressionCasesImpl(None, foo, some_path, some_path_list, opt_prop)
+
+    @staticmethod
+    def extend_expression_cases(actual_self: 'Optional[ExpressionCases]', foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]', opt_prop: 'Optional[AnotherConcept]') -> 'ExpressionCases':
+        return ExpressionCasesImpl(actual_self, foo, some_path, some_path_list, opt_prop)
 
 
 class ExpressionCasesImpl(ExpressionCases):
 
-    def __init__(self, actual_self: 'Optional[ExpressionCases]', foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]') -> 'None':
+    def __init__(self, actual_self: 'Optional[ExpressionCases]', foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]', opt_prop: 'Optional[AnotherConcept]') -> 'None':
         if actual_self is None:
             self.__actual_self = self  # type: Optional[ExpressionCases]
         else:
@@ -165,6 +183,7 @@ class ExpressionCasesImpl(ExpressionCases):
         self.__foo = foo
         self.__some_path = some_path
         self.__some_path_list = some_path_list
+        self.__opt_prop = opt_prop
 
     @property
     def foo(self) -> 'str':
@@ -177,6 +196,10 @@ class ExpressionCasesImpl(ExpressionCases):
     @property
     def some_path_list(self) -> 'List[SomeConcept]':
         return self.__some_path_list
+
+    @property
+    def opt_prop(self) -> 'Optional[AnotherConcept]':
+        return self.__opt_prop
 
     @property
     def self_var(self) -> 'ExpressionCases':
@@ -234,8 +257,12 @@ class ExpressionCasesImpl(ExpressionCases):
             sorted(self.__actual_self.some_path_list, key=functools.cmp_to_key(lambda item_1, item_2: -1 if (item_1.bar < item_2.bar) else +1 if (item_2.bar < item_1.bar) else 0))
         )
 
+    @property
+    def opt_flag(self) -> 'bool':
+        return False if self.__actual_self.opt_prop is None else self.__actual_self.opt_prop.flag
+
     def __str__(self) -> 'str':
-        return "%s(foo=%s, some_path=%s, single_var=%s, path_var=%s, path_var_2=%s, path_var_3=%s, path_bars=%s)" % (
+        return "%s(foo=%s, some_path=%s, single_var=%s, path_var=%s, path_var_2=%s, path_var_3=%s, path_bars=%s, opt_prop=%s, opt_flag=%s)" % (
             type(self).__name__,
             self.__actual_self.foo,
             self.__actual_self.some_path,
@@ -243,5 +270,7 @@ class ExpressionCasesImpl(ExpressionCases):
             self.__actual_self.path_var,
             self.__actual_self.path_var_2,
             self.__actual_self.path_var_3,
-            self.__actual_self.path_bars
+            self.__actual_self.path_bars,
+            self.__actual_self.opt_prop,
+            self.__actual_self.opt_flag
         )

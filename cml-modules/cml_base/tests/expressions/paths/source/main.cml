@@ -17,6 +17,9 @@
     /path_foos = somePathList.foos;
 
     /sorted_list = somePathList | sort: item1, item2 -> compare(item1.bar, item2.bar);
+
+    opt_prop: AnotherConcept?;
+    /opt_flag = opt_prop.flag;
 }
 
 @concept SomeConcept
@@ -29,6 +32,7 @@
 @concept AnotherConcept
 {
     etc: Decimal;
+    flag: boolean = true;
 }
 
 @task paths_poj: poj

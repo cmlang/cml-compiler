@@ -36,14 +36,18 @@ public interface ExpressionCases
 
     List<SomeConcept> getSortedList();
 
-    static ExpressionCases createExpressionCases(String foo, SomeConcept somePath, List<SomeConcept> somePathList)
+    Optional<AnotherConcept> getOptProp();
+
+    boolean isOptFlag();
+
+    static ExpressionCases createExpressionCases(String foo, SomeConcept somePath, List<SomeConcept> somePathList, @Nullable AnotherConcept optProp)
     {
-        return new ExpressionCasesImpl(null, foo, somePath, somePathList);
+        return new ExpressionCasesImpl(null, foo, somePath, somePathList, optProp);
     }
 
-    static ExpressionCases extendExpressionCases(@Nullable ExpressionCases actual_self, String foo, SomeConcept somePath, List<SomeConcept> somePathList)
+    static ExpressionCases extendExpressionCases(@Nullable ExpressionCases actual_self, String foo, SomeConcept somePath, List<SomeConcept> somePathList, @Nullable AnotherConcept optProp)
     {
-        return new ExpressionCasesImpl(actual_self, foo, somePath, somePathList);
+        return new ExpressionCasesImpl(actual_self, foo, somePath, somePathList, optProp);
     }
 }
 
@@ -54,14 +58,16 @@ class ExpressionCasesImpl implements ExpressionCases
     private final String foo;
     private final SomeConcept somePath;
     private final List<SomeConcept> somePathList;
+    private final @Nullable AnotherConcept optProp;
 
-    ExpressionCasesImpl(@Nullable ExpressionCases actual_self, String foo, SomeConcept somePath, List<SomeConcept> somePathList)
+    ExpressionCasesImpl(@Nullable ExpressionCases actual_self, String foo, SomeConcept somePath, List<SomeConcept> somePathList, @Nullable AnotherConcept optProp)
     {
         this.actual_self = actual_self == null ? this : actual_self;
 
         this.foo = foo;
         this.somePath = somePath;
         this.somePathList = somePathList;
+        this.optProp = optProp;
     }
 
     public String getFoo()
@@ -77,6 +83,11 @@ class ExpressionCasesImpl implements ExpressionCases
     public List<SomeConcept> getSomePathList()
     {
         return Collections.unmodifiableList(this.somePathList);
+    }
+
+    public Optional<AnotherConcept> getOptProp()
+    {
+        return Optional.ofNullable(this.optProp);
     }
 
     public ExpressionCases getSelfVar()
@@ -124,6 +135,11 @@ class ExpressionCasesImpl implements ExpressionCases
         return seq(this.actual_self.getSomePathList()).sorted((item1, item2) -> (item1.getBar() < item2.getBar()) ? -1 : ((item2.getBar() < item1.getBar()) ? +1 : 0)).toList();
     }
 
+    public boolean isOptFlag()
+    {
+        return seq(this.actual_self.getOptProp()).flatMap(anotherConcept -> seq(asList(anotherConcept.isFlag()))).findFirst().orElse(false);
+    }
+
     public String toString()
     {
         return new StringBuilder(ExpressionCases.class.getSimpleName())
@@ -134,7 +150,9 @@ class ExpressionCasesImpl implements ExpressionCases
                    .append("pathVar=").append(String.format("\"%s\"", this.actual_self.getPathVar())).append(", ")
                    .append("pathVar2=").append(String.format("\"%s\"", this.actual_self.getPathVar2())).append(", ")
                    .append("pathVar3=").append(this.actual_self.getPathVar3()).append(", ")
-                   .append("pathBars=").append(this.actual_self.getPathBars())
+                   .append("pathBars=").append(this.actual_self.getPathBars()).append(", ")
+                   .append("optProp=").append(this.actual_self.getOptProp().isPresent() ? String.format("\"%s\"", this.actual_self.getOptProp()) : "not present").append(", ")
+                   .append("optFlag=").append(String.format("\"%s\"", this.actual_self.isOptFlag()))
                    .append(')')
                    .toString();
     }

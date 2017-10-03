@@ -1,6 +1,6 @@
 Paths Client (poj)
 
-self_var = ExpressionCases(foo="foo", somePath="SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10")")", singleVar="foo", pathVar="-1", pathVar2="10", pathVar3=[20, 10], pathBars=[2, -1])
+self_var = ExpressionCases(foo="foo", somePath="SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10", flag="true")")", singleVar="foo", pathVar="-1", pathVar2="10", pathVar3=[20, 10], pathBars=[2, -1], optProp=not present, optFlag="false")
 single_var = foo
 
 path_var = -1
@@ -8,7 +8,7 @@ path_var2 = 10
 
 path_var3 = [20, 10]
 path_bars = [2, -1]
-path_foos = [AnotherConcept(etc="20"), AnotherConcept(etc="10"), AnotherConcept(etc="10"), AnotherConcept(etc="20")]
+path_foos = [AnotherConcept(etc="20", flag="true"), AnotherConcept(etc="10", flag="true"), AnotherConcept(etc="10", flag="true"), AnotherConcept(etc="20", flag="true")]
 
-somePathList = [SomeConcept(bar="2", oneMorePath="AnotherConcept(etc="20")"), SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10")")]
-sorted_list = [SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10")"), SomeConcept(bar="2", oneMorePath="AnotherConcept(etc="20")")]
+somePathList = [SomeConcept(bar="2", oneMorePath="AnotherConcept(etc="20", flag="true")"), SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10", flag="true")")]
+sorted_list = [SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10", flag="true")"), SomeConcept(bar="2", oneMorePath="AnotherConcept(etc="20", flag="true")")]
