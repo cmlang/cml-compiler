@@ -19,13 +19,6 @@ import static java.util.Collections.emptyList;
 
 public interface TempAssociation extends Association
 {
-    default Optional<AssociationEnd> getAssociationEnd(String conceptName, String propertyName)
-    {
-        return getAssociationEnds().stream()
-                                   .filter(associationEnd -> associationEnd.getConceptName().equals(conceptName))
-                                   .filter(associationEnd -> associationEnd.getPropertyName().equals(propertyName))
-                                   .findFirst();
-    }
 
     @SuppressWarnings("unused")
     default boolean isOneToMany()

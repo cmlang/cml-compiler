@@ -190,7 +190,11 @@ public class ModelLoaderTest
         String conceptName, String propertyName,
         @Nullable NamedType expectedType)
     {
-        final AssociationEnd associationEnd = association.getAssociationEnd(conceptName, propertyName).orElse(null);
+        final AssociationEnd associationEnd = association.getAssociationEnds().stream()
+                                                         .filter(associationEnd1 -> associationEnd1.getConceptName().equals(conceptName))
+                                                         .filter(associationEnd2 -> associationEnd2.getPropertyName().equals(propertyName))
+                                                         .findFirst().orElse(null);
+
         assertNotNull(conceptName + "." + propertyName, associationEnd);
         assertTrue(conceptName, associationEnd.getAssociatedConcept().isPresent());
         assertTrue(conceptName + "." + propertyName, associationEnd.getAssociatedProperty().isPresent());
