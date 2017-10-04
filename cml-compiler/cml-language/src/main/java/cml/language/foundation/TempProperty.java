@@ -1,6 +1,5 @@
 package cml.language.foundation;
 
-import cml.language.features.TempAssociation;
 import cml.language.features.TempConcept;
 import cml.language.generated.*;
 import cml.language.types.NamedType;
@@ -40,7 +39,7 @@ public interface TempProperty extends Property
         return (TempConcept) getParent().get();
     }
 
-    default Optional<TempAssociation> getAssociation()
+    default Optional<Association> getAssociation()
     {
         return seq(getModel()).flatMap(m -> seq(((TempModel) m).getAssociations()))
                          .filter(assoc -> assoc.getAssociationEnds()

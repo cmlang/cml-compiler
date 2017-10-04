@@ -4,11 +4,11 @@ import cml.io.Console;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
 import cml.language.expressions.Literal;
-import cml.language.features.TempAssociation;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
 import cml.language.foundation.TempProperty;
+import cml.language.generated.Association;
 import cml.language.generated.AssociationEnd;
 import cml.language.generated.Import;
 import cml.language.loader.ModelLoader;
@@ -126,11 +126,11 @@ public class ModelLoaderTest
     @Test
     public void associations()
     {
-        final TempAssociation employment = loadAssociation("Employment");
+        final Association employment = loadAssociation("Employment");
         assertAssociationEndFound(employment, "Employee", "employer");
         assertAssociationEndFound(employment, "Organization", "employees");
 
-        final TempAssociation vehicleOwnership = loadAssociation("VehicleOwnership");
+        final Association vehicleOwnership = loadAssociation("VehicleOwnership");
         assertAssociationEndFound(vehicleOwnership, "Vehicle", "owner", NamedType.create("Organization"));
         assertAssociationEndFound(vehicleOwnership, "Organization", "fleet", NamedType.create("Vehicle", "*"));
     }
@@ -145,9 +145,9 @@ public class ModelLoaderTest
         return loadModel(sourceFileName).getConcepts().get(0);
     }
 
-    private TempAssociation loadAssociation(String name)
+    private Association loadAssociation(String name)
     {
-        final Optional<TempAssociation> association = associationOf(loadModel("associations"), name);
+        final Optional<Association> association = associationOf(loadModel("associations"), name);
 
         assert association.isPresent();
         
@@ -180,13 +180,13 @@ public class ModelLoaderTest
         assertThat(propertyName, literal.getText(), is(propertyValue));
     }
 
-    private void assertAssociationEndFound(TempAssociation association, String conceptName, String propertyName)
+    private void assertAssociationEndFound(Association association, String conceptName, String propertyName)
     {
         assertAssociationEndFound(association, conceptName, propertyName, null);
     }
 
     private void assertAssociationEndFound(
-        TempAssociation association,
+        Association association,
         String conceptName, String propertyName,
         @Nullable NamedType expectedType)
     {

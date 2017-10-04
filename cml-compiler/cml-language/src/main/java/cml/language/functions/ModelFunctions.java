@@ -1,10 +1,10 @@
 package cml.language.functions;
 
-import cml.language.features.TempAssociation;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.features.Template;
 import cml.language.foundation.TempModel;
+import cml.language.generated.Association;
 import cml.language.generated.Module;
 import cml.language.generated.Task;
 
@@ -34,7 +34,7 @@ public class ModelFunctions
                     .findFirst();
     }
 
-    public static Optional<TempAssociation> associationOf(TempModel model, String name)
+    public static Optional<Association> associationOf(TempModel model, String name)
     {
         return model.getAssociations()
                     .stream()

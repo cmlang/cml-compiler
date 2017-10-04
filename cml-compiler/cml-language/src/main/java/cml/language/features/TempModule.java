@@ -47,11 +47,11 @@ public interface TempModule extends NamedElement, Scope, Module
             .collect(toList());
     }
 
-    default List<TempAssociation> getAssociations()
+    default List<Association> getAssociations()
     {
         return getMembers().stream()
-                           .filter(e -> e instanceof TempAssociation)
-                           .map(e -> (TempAssociation)e)
+                           .filter(e -> e instanceof Association)
+                           .map(e -> (Association)e)
                            .collect(toList());
     }
 

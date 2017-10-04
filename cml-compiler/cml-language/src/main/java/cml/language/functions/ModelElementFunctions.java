@@ -4,6 +4,7 @@ import cml.language.expressions.Invocation;
 import cml.language.expressions.Lambda;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
+import cml.language.generated.Association;
 import cml.language.generated.AssociationEnd;
 import cml.language.generated.Import;
 import cml.language.generated.ModelElement;
@@ -108,6 +109,12 @@ public class ModelElementFunctions
             {
                 return format("association end %s.%s", associationEnd.getConceptName(), associationEnd.getPropertyName());
             }
+        }
+        else if (element instanceof Association)
+        {
+            final Association association = (Association) element;
+
+            return "association " + association.getName();
         }
 
         return element.toString();

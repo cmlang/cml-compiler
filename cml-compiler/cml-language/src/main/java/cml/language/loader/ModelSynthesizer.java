@@ -21,8 +21,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static cml.language.functions.ModuleFunctions.createImportOfModule;
+import static cml.language.generated.Association.createAssociation;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.empty;
@@ -91,7 +93,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
 
-        ctx.association = TempAssociation.create(module, name, locationOf(ctx));
+        ctx.association = createAssociation(name, module, locationOf(ctx), emptyList());
 
         seq(ctx.associationEndDeclaration() == null ? empty() : ctx.associationEndDeclaration())
             .forEach(node -> node.association = ctx.association);

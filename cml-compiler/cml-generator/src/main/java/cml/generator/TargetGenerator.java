@@ -1,8 +1,8 @@
 package cml.generator;
 
-import cml.language.features.TempAssociation;
 import cml.language.features.TempConcept;
 import cml.language.foundation.TempModel;
+import cml.language.generated.Association;
 import cml.language.generated.NamedElement;
 import cml.language.generated.Task;
 import cml.language.loader.ModelVisitor;
@@ -40,7 +40,7 @@ class TargetGenerator implements ModelVisitor
     }
 
     @Override
-    public void visit(TempAssociation association)
+    public void visit(Association association)
     {
         generateTargetFiles(ASSOCIATION, association);
     }
