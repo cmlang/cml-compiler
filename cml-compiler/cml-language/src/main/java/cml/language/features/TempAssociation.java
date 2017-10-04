@@ -19,60 +19,6 @@ import static java.util.Collections.emptyList;
 
 public interface TempAssociation extends Association
 {
-    default Optional<TempProperty> getOneProperty()
-    {
-        final List<AssociationEnd> ends = getAssociationEnds();
-        final AssociationEnd end0 = ends.get(0);
-        final AssociationEnd end1 = ends.get(1);
-
-        if (oneToMany(end0, end1))
-        {
-            return end0.getAssociatedProperty().map(p -> (TempProperty) p);
-        }
-
-        if (oneToMany(end1, end0))
-        {
-            return end1.getAssociatedProperty().map(p -> (TempProperty) p);
-        }
-
-        return Optional.empty();
-    }
-
-    default Optional<TempProperty> getManyProperty()
-    {
-        final List<AssociationEnd> ends = getAssociationEnds();
-        final AssociationEnd end0 = ends.get(0);
-        final AssociationEnd end1 = ends.get(1);
-
-        if (oneToMany(end0, end1))
-        {
-            return end1.getAssociatedProperty().map(p -> (TempProperty) p);
-        }
-
-        if (oneToMany(end1, end0))
-        {
-            return end0.getAssociatedProperty().map(p -> (TempProperty) p);
-        }
-
-        return Optional.empty();
-    }
-
-    static boolean oneToMany(AssociationEnd end1, AssociationEnd end2)
-    {
-        assert end1.getAssociatedProperty().isPresent();
-        assert end2.getAssociatedProperty().isPresent();
-
-        return !end1.getAssociatedProperty().get().getType().isSequence() && end2.getAssociatedProperty().get().getType().isSequence();
-    }
-
-    static boolean oneToOne(AssociationEnd end1, AssociationEnd end2)
-    {
-        assert end1.getAssociatedProperty().isPresent();
-        assert end2.getAssociatedProperty().isPresent();
-
-        return end1.getAssociatedProperty().get().getType().isSingle() && end2.getAssociatedProperty().get().getType().isSingle();
-    }
-
     static TempAssociation create(TempModule module, String name, Location location)
     {
         return new AssociationImpl(module, name, location);
@@ -176,6 +122,30 @@ class AssociationImpl implements TempAssociation
     public boolean isOneToMany()
     {
         return association.isOneToMany();
+    }
+
+    @Override
+    public boolean isFirstOneToLastMany()
+    {
+        return association.isFirstOneToLastMany();
+    }
+
+    @Override
+    public boolean isFirstManyToLastOne()
+    {
+        return association.isFirstManyToLastOne();
+    }
+
+    @Override
+    public Optional<Property> getOneProperty()
+    {
+        return association.getOneProperty();
+    }
+
+    @Override
+    public Optional<Property> getManyProperty()
+    {
+        return association.getManyProperty();
     }
 
     @Override

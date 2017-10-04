@@ -10,7 +10,13 @@
     /reversed_property_types = reverse(property_types);
 
     /one_to_one = association_ends | all: one;
-    /one_to_many = (first_end.one and last_end.many) or (first_end.many and last_end.one);
+    /one_to_many = first_one_to_last_many or first_many_to_last_one;
+
+    /first_one_to_last_many = first_end.one and last_end.many;
+    /first_many_to_last_one = first_end.many and last_end.one;
+
+    /one_property = if first_one_to_last_many then first_end.associated_property else last_end.associated_property;
+    /many_property = if first_many_to_last_one then first_end.associated_property else last_end.associated_property;
 }
 
 @concept ASSOCIATION_END: MODEL_ELEMENT
