@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
+import static cml.language.functions.TypeFunctions.withCardinality;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -148,7 +149,9 @@ class PropertyImpl implements TempProperty
         {
             if (getValue().isPresent())
             {
-                return getValue().get().getType();
+                final TempType inferredType = (TempType) getValue().get().getType();
+
+                return withCardinality(inferredType, !inferredType.getCardinality().isPresent() || (inferredType.isOptional() && inferredType.isBoolean()) ? null : inferredType.getCardinality().get());
             }
             else
             {
