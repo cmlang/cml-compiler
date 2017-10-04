@@ -3,8 +3,14 @@
 {
     /association_ends = members as? ASSOCIATION_END*;
 
+    /first_end = first(association_ends);
+    /last_end = last(association_ends);
+
     /property_types = association_ends.associated_property.type;
     /reversed_property_types = reverse(property_types);
+
+    /one_to_one = association_ends | all: one;
+    /one_to_many = (first_end.one and last_end.many) or (first_end.many and last_end.one);
 }
 
 @concept ASSOCIATION_END: MODEL_ELEMENT
@@ -15,6 +21,11 @@
 
     associated_concept: CONCEPT?;
     associated_property: PROPERTY?;
+
+    /associated_property_type = associated_property.type;
+
+    /one = associated_property_type.single;
+    /many = associated_property_type.sequence;
 }
 
 /*

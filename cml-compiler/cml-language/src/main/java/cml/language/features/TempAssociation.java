@@ -19,27 +19,6 @@ import static java.util.Collections.emptyList;
 
 public interface TempAssociation extends Association
 {
-
-    @SuppressWarnings("unused")
-    default boolean isOneToMany()
-    {
-        final List<AssociationEnd> ends = getAssociationEnds();
-        final AssociationEnd end0 = ends.get(0);
-        final AssociationEnd end1 = ends.get(1);
-
-        return oneToMany(end0, end1) || oneToMany(end1, end0);
-    }
-
-    @SuppressWarnings("unused")
-    default boolean isOneToOne()
-    {
-        final List<AssociationEnd> ends = getAssociationEnds();
-        final AssociationEnd end0 = ends.get(0);
-        final AssociationEnd end1 = ends.get(1);
-
-        return oneToOne(end0, end1);
-    }
-
     default Optional<TempProperty> getOneProperty()
     {
         final List<AssociationEnd> ends = getAssociationEnds();
@@ -164,6 +143,18 @@ class AssociationImpl implements TempAssociation
     }
 
     @Override
+    public Optional<AssociationEnd> getFirstEnd()
+    {
+        return association.getFirstEnd();
+    }
+
+    @Override
+    public Optional<AssociationEnd> getLastEnd()
+    {
+        return association.getLastEnd();
+    }
+
+    @Override
     public List<Type> getPropertyTypes()
     {
         return association.getPropertyTypes();
@@ -173,6 +164,18 @@ class AssociationImpl implements TempAssociation
     public List<Type> getReversedPropertyTypes()
     {
         return association.getReversedPropertyTypes();
+    }
+
+    @Override
+    public boolean isOneToOne()
+    {
+        return association.isOneToOne();
+    }
+
+    @Override
+    public boolean isOneToMany()
+    {
+        return association.isOneToMany();
     }
 
     @Override
