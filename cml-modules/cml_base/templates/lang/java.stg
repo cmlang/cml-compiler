@@ -383,3 +383,8 @@ asList(<field_name(path.base.type)>.<getter_name(path)>())<\\>
 to_list(expr) ::= <<
 <expr>.toList()
 >>
+
+expression_conditional(expr) ::= <<
+(<expression(expr.cond)> ? <expression(expr.then)> : <expression(expr.else_)>)
+>>
+

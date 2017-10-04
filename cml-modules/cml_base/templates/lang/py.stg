@@ -337,3 +337,8 @@ path_property(path) ::= <<
 to_list(expr) ::= <<
 list(<\n><indent()><expr><\n>)
 >>
+
+expression_conditional(expr) ::= <<
+(<expression(expr.then)> if <expression(expr.cond)> else <expression(expr.else_)>)
+>>
+
