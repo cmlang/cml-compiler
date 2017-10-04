@@ -314,7 +314,7 @@ path_getter_call(path) ::= <<
 path_base_call(path) ::= <<
 <if(path.base.type.sequence)><\\>
 <path_map_call(path); anchor><\\>
-<elseif(path.base.type.optional)><\\>
+<elseif(path.base.type.optional && path.type.boolean)><\\>
 False if <path_expr(path.base)> is None else <path_expr(path.base)>.<path_property(path)><\\>
 <else><\\>
 <path_expr(path.base)>.<path_property(path)><\\>
