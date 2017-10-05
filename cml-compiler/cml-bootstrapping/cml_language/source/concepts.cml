@@ -1,7 +1,8 @@
 
 @concept CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
 {
-    /derivedProperties = properties | select: derived;
+    /derived_properties = properties | select: derived;
+    /slot_properties = properties | select: slot;
 
 /*
 
@@ -24,7 +25,6 @@
 
     /associations = model.associations | select: (association_ends | exists: concept == self);
 
-    /slot_properties = properties | select: slot;
     /association_properties = properties | select: present(association);
 
     /init_properties = all_properties | select: init;

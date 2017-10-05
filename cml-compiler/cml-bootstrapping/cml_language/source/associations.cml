@@ -28,16 +28,16 @@
     associated_concept: CONCEPT?;
     associated_property: PROPERTY?;
 
+    /association = parent as? ASSOCIATION?;
+
     /associated_property_type = associated_property.type;
 
     /one = associated_property_type.single;
     /many = associated_property_type.sequence;
 }
 
-/*
 @association ASSOCIATION_END_PROPERTY
 {
     ASSOCIATION_END.associated_property;
     PROPERTY.association_end;
 }
-*/

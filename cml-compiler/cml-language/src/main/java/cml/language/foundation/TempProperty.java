@@ -17,37 +17,9 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.jooq.lambda.Seq.seq;
 
 public interface TempProperty extends Property
 {
-    default boolean isSlot()
-    {
-        return !isDerived() && !isAssociationEnd();
-    }
-
-    default boolean isAssociationEnd()
-    {
-        return getAssociation().isPresent();
-    }
-
-    default TempConcept getConcept()
-    {
-        assert getParent().isPresent();
-        assert getParent().get() instanceof TempConcept;
-
-        return (TempConcept) getParent().get();
-    }
-
-    default Optional<Association> getAssociation()
-    {
-        return seq(getModel()).flatMap(m -> seq(((TempModel) m).getAssociations()))
-                         .filter(assoc -> assoc.getAssociationEnds()
-                                               .stream()
-                                               .anyMatch(end -> end.getAssociatedProperty().isPresent() && end.getAssociatedProperty().get() == this))
-                         .findFirst();
-    }
-
     static TempProperty create(String name, @Nullable NamedType type)
     {
         return create(name, type, null, false, null);
@@ -92,7 +64,7 @@ class PropertyImpl implements TempProperty
         final TypedElement typedElement = TypedElement.extendTypedElement(this, modelElement, namedElement, null);
 
         final Scope scope = Scope.extendScope(this, modelElement, singletonList(value));
-        property = Property.extendProperty(this, modelElement, namedElement, typedElement, scope, derived, type, value);
+        property = Property.extendProperty(this, modelElement, namedElement, typedElement, scope, derived, type, value, null);
     }
 
     @Override
@@ -111,6 +83,24 @@ class PropertyImpl implements TempProperty
     public Optional<Expression> getValue()
     {
         return property.getValue();
+    }
+
+    @Override
+    public Optional<AssociationEnd> getAssociationEnd()
+    {
+        return property.getAssociationEnd();
+    }
+
+    @Override
+    public Optional<Concept> getConcept()
+    {
+        return property.getConcept();
+    }
+
+    @Override
+    public Optional<Association> getAssociation()
+    {
+        return property.getAssociation();
     }
 
     @Override
@@ -135,6 +125,18 @@ class PropertyImpl implements TempProperty
     public boolean isNonInit()
     {
         return property.isNonInit();
+    }
+
+    @Override
+    public boolean isSlot()
+    {
+        return property.isSlot();
+    }
+
+    @Override
+    public boolean isPrintable()
+    {
+        return property.isPrintable();
     }
 
     @Override

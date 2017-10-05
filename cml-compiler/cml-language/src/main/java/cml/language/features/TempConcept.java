@@ -212,14 +212,6 @@ public interface TempConcept extends Concept, PropertyList
                               .collect(toList());
     }
 
-    default List<TempProperty> getSlotProperties()
-    {
-        return getProperties().stream()
-                              .map(p -> (TempProperty)p)
-                              .filter(TempProperty::isSlot)
-                              .collect(toList());
-    }
-
     default List<TempProperty> getPrintableProperties()
     {
         return getAllProperties().stream()
@@ -376,6 +368,12 @@ class ConceptImpl implements TempConcept
     public List<Property> getDerivedProperties()
     {
         return concept.getDerivedProperties();
+    }
+
+    @Override
+    public List<Property> getSlotProperties()
+    {
+        return concept.getSlotProperties();
     }
 
     @Override

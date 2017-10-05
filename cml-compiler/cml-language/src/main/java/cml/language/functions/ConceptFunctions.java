@@ -39,7 +39,8 @@ public class ConceptFunctions
             final List<PropertyRedef> propertyRedefs = c.getNonDerivedProperties()
                                                         .stream()
                                                         .map(p -> propertyOf(concept, p.getName()).orElse(p))
-                                                        .map(p -> new PropertyRedef(p, p.getConcept() == redefBase))
+                                                        .filter(p -> p.getConcept().isPresent())
+                                                        .map(p -> new PropertyRedef(p, p.getConcept().get() == redefBase))
                                                         .collect(toList());
 
             return new ConceptRedef(c, propertyRedefs);
