@@ -2,6 +2,7 @@ package cml.language.functions;
 
 import cml.language.expressions.Invocation;
 import cml.language.expressions.Lambda;
+import cml.language.expressions.Path;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.generated.Association;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import static cml.language.functions.ScopeFunctions.memberNamed;
 import static java.lang.String.format;
 import static java.util.Optional.empty;
+import static java.util.stream.Collectors.joining;
 
 @SuppressWarnings("WeakerAccess")
 public class ModelElementFunctions
@@ -115,6 +117,12 @@ public class ModelElementFunctions
             final Association association = (Association) element;
 
             return "association " + association.getName();
+        }
+        else if (element instanceof Path)
+        {
+            final Path path = (Path) element;
+
+            return path.getNames().stream().collect(joining(".")) + ": " + path.getType();
         }
 
         return element.toString();
