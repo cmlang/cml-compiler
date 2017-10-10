@@ -2,6 +2,7 @@ package cml.language.expressions;
 
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
+import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.generated.Concept;
 import cml.language.generated.Expression;
@@ -16,12 +17,12 @@ import org.jooq.lambda.tuple.Tuple2;
 import java.util.*;
 
 import static cml.language.functions.ModelElementFunctions.moduleOf;
-import static cml.language.functions.TypeFunctions.isAssignableFrom;
-import static cml.language.functions.TypeFunctions.withCardinality;
+import static cml.language.functions.TypeFunctions.*;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
+import static org.jooq.lambda.Seq.concat;
 import static org.jooq.lambda.Seq.seq;
 
 public interface Invocation extends Expression, NamedElement
@@ -33,18 +34,31 @@ public interface Invocation extends Expression, NamedElement
     List<Expression> getArguments();
     Map<String, Expression> getNamedArguments();
 
-    default Map<FunctionParameter, Expression> getParameterizedArguments()
+    default List<FunctionParameter> getParameters()
     {
         if (getFunction().isPresent())
         {
-            return seq(getFunction().get().getParameters())
-                .zip(getArguments())
-                .collect(toMap(Tuple2::v1, Tuple2::v2));
+            return getFunction().get().getParameters();
+        }
+        else if (getConcept().isPresent())
+        {
+            final TempConcept concept = getConcept().get();
+
+            return concat(concept.getSuperProperties(), concept.getNonDerivedProperties())
+                .map(p -> new FunctionParameter(p.getName(), p.getType()))
+                .toList();
         }
         else
         {
-            return emptyMap();
+            return emptyList();
         }
+    }
+
+    default Map<FunctionParameter, Expression> getParameterizedArguments()
+    {
+        return seq(getParameters())
+            .zip(getArguments())
+            .collect(toMap(Tuple2::v1, Tuple2::v2));
     }
 
     default Map<FunctionType, Lambda> getTypedLambdaArguments()
@@ -58,13 +72,30 @@ public interface Invocation extends Expression, NamedElement
     Optional<Function> getFunction();
     void setFunction(@NotNull Function function);
 
+    Optional<TempConcept> getConcept();
+    void setConcept(@NotNull TempConcept concept);
+
+    default TempType getInferredType()
+    {
+        if (getFunction().isPresent())
+        {
+            final TempType resultType = getFunction().get().getType();
+
+            return getMatchingTypeOf(resultType);
+        }
+        else if (getConcept().isPresent())
+        {
+            return NamedType.create(getConcept().get().getName());
+        }
+        else
+        {
+            return NamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
+        }
+    }
+
     default TempType getMatchingTypeOf(final TempType type)
     {
-        assert getFunction().isPresent();
-
-        final Function function = getFunction().get();
-
-        if (function.getParameters().size() == getArguments().size())
+        if (getParameters().size() == getArguments().size())
         {
             if (type instanceof TupleType)
             {
@@ -76,7 +107,7 @@ public interface Invocation extends Expression, NamedElement
             }
             else if (type.isParameter())
             {
-                int paramIndex = function.getParamIndexOfMatchingType(type);
+                int paramIndex = getParamIndexOfMatchingType(getParameters(), type);
 
                 if (paramIndex < getArguments().size())
                 {
@@ -84,7 +115,7 @@ public interface Invocation extends Expression, NamedElement
 
                     if (paramType.isUndefined())
                     {
-                        paramIndex = function.getParamIndexOfMatchingType(type, paramIndex);
+                        paramIndex = getParamIndexOfMatchingType(getParameters(), type, paramIndex);
 
                         if (paramIndex < getArguments().size())
                         {
@@ -102,7 +133,7 @@ public interface Invocation extends Expression, NamedElement
                                              .orElse(NamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
                     }
 
-                    return (TempType) withCardinality(paramType, type.getCardinality().orElse(null));
+                    return withCardinality(paramType, type.getCardinality().orElse(null));
                 }
                 else
                 {
@@ -177,6 +208,7 @@ class InvocationImpl extends ExpressionBase implements Invocation
     private final List<Expression> arguments;
 
     private @Nullable Function function;
+    private @Nullable TempConcept concept;
 
     InvocationImpl(String name, List<Expression> arguments)
     {
@@ -196,16 +228,9 @@ class InvocationImpl extends ExpressionBase implements Invocation
     @Override
     public Map<String, Expression> getNamedArguments()
     {
-        if (getFunction().isPresent())
-        {
-            return seq(getFunction().get().getParameters())
-                .zip(getArguments())
-                .collect(toMap(t -> t.v1().getName(), Tuple2::v2));
-        }
-        else
-        {
-            return emptyMap();
-        }
+        return seq(getParameters())
+            .zip(getArguments())
+            .collect(toMap(t -> t.v1().getName(), Tuple2::v2));
     }
 
     @Override
@@ -223,24 +248,29 @@ class InvocationImpl extends ExpressionBase implements Invocation
     }
 
     @Override
+    public Optional<TempConcept> getConcept()
+    {
+        return Optional.ofNullable(concept);
+    }
+
+    @Override
+    public void setConcept(@NotNull final TempConcept concept)
+    {
+        assert this.concept == null;
+
+        this.concept = concept;
+    }
+
+    @Override
     public String getKind()
     {
         return "invocation";
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
-        if (getFunction().isPresent())
-        {
-            final TempType resultType = getFunction().get().getType();
-
-            return getMatchingTypeOf(resultType);
-        }
-        else
-        {
-            return NamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
-        }
+        return getInferredType();
     }
 
     @Override
@@ -269,6 +299,7 @@ class ParameterizedInvocation extends ExpressionBase implements Invocation
     private final LinkedHashMap<String, Expression> namedArguments;
 
     private @Nullable Function function;
+    private @Nullable TempConcept concept;
 
     ParameterizedInvocation(String name, LinkedHashMap<String, Expression> namedArguments)
     {
@@ -306,24 +337,27 @@ class ParameterizedInvocation extends ExpressionBase implements Invocation
     }
 
     @Override
+    public Optional<TempConcept> getConcept()
+    {
+        return Optional.ofNullable(concept);
+    }
+
+    @Override
+    public void setConcept(@NotNull final TempConcept concept)
+    {
+        this.concept = concept;
+    }
+
+    @Override
     public String getKind()
     {
         return "invocation";
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
-        if (getFunction().isPresent())
-        {
-            final TempType resultType = getFunction().get().getType();
-
-            return getMatchingTypeOf(resultType);
-        }
-        else
-        {
-            return NamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
-        }
+        return getInferredType();
     }
 
     @Override

@@ -1,10 +1,12 @@
 package cml.language.functions;
 
 import cml.language.expressions.TypeCast;
+import cml.language.features.FunctionParameter;
 import cml.language.features.TempConcept;
 import cml.language.generated.Type;
 import cml.language.types.*;
 
+import java.util.List;
 import java.util.Objects;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
@@ -211,5 +213,27 @@ public class TypeFunctions
             return isElementTypeAssignableFrom(exprType.getElementType(), castType.getElementType()) &&
                    isCardinalityAssignableFrom(castType, exprType);
         }
+    }
+
+    public static int getParamIndexOfMatchingType(List<FunctionParameter> parameters, TempType type)
+    {
+        return getParamIndexOfMatchingType(parameters, type, -1);
+    }
+
+    public static int getParamIndexOfMatchingType(List<FunctionParameter> parameters, TempType type, int skipIndex)
+    {
+        assert type.isParameter(): "Must be called only when type is a parameter.";
+
+        int index = 0;
+        for (FunctionParameter parameter: parameters)
+        {
+            if (isElementTypeAssignableFrom(parameter.getMatchingResultType().getElementType(), type.getBaseType().getElementType()))
+            {
+                if (index != skipIndex) break;
+            }
+            index++;
+        }
+
+        return index;
     }
 }

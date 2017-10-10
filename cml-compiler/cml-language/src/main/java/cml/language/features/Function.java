@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static cml.language.functions.TypeFunctions.isElementTypeAssignableFrom;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static org.jooq.lambda.Seq.seq;
@@ -32,28 +31,6 @@ public class Function extends TypedElementBase
     {
         return seq(parameters).filter(p -> p.getName().equals(name))
                               .findFirst();
-    }
-
-    public int getParamIndexOfMatchingType(final TempType type)
-    {
-        return getParamIndexOfMatchingType(type, -1);
-    }
-
-    public int getParamIndexOfMatchingType(final TempType type, final int skipIndex)
-    {
-        assert type.isParameter(): "Must be called only when type is a parameter.";
-
-        int index = 0;
-        for (FunctionParameter parameter: getParameters())
-        {
-            if (isElementTypeAssignableFrom(parameter.getMatchingResultType().getElementType(), type.getBaseType().getElementType()))
-            {
-                if (index != skipIndex) break;
-            }
-            index++;
-        }
-
-        return index;
     }
 
     @Override
