@@ -1,7 +1,6 @@
 package cml.language.types;
 
-import cml.language.features.TempConcept;
-import cml.language.foundation.ModelElementBase;
+import cml.language.generated.Type;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 
@@ -11,7 +10,7 @@ import java.util.Optional;
 import static java.lang.String.format;
 import static org.jooq.lambda.Seq.seq;
 
-public class TupleType extends ModelElementBase implements TempType
+public class TupleType extends BaseType
 {
     private final List<TupleTypeElement> elements;
     private final @Nullable String cardinality;
@@ -27,9 +26,15 @@ public class TupleType extends ModelElementBase implements TempType
         return seq(elements);
     }
 
-    public Seq<TempType> getElementTypes()
+    public Seq<Type> getElementTypes()
     {
         return seq(elements).map(TupleTypeElement::getType);
+    }
+
+    @Override
+    public Optional<String> getErrorMessage()
+    {
+        return Optional.empty();
     }
 
     @Override
@@ -39,20 +44,15 @@ public class TupleType extends ModelElementBase implements TempType
     }
 
     @Override
-    public TempType getElementType()
+    public Type getElementType()
     {
-        final TupleType tupleType = new TupleType(seq(elements), null);
-
-        getConcept().map(c -> (TempConcept)c)
-                    .ifPresent(tupleType::setConcept);
-
-        return tupleType;
+        return new TupleType(seq(elements), null);
     }
 
     @Override
-    public boolean isString()
+    public String getKind()
     {
-        return false;
+        return "tuple";
     }
 
     @Override

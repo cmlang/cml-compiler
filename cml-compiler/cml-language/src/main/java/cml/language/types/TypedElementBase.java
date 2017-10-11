@@ -11,12 +11,13 @@ public abstract class TypedElementBase extends NamedElementBase implements Typed
     public TypedElementBase(final String name, final Type type)
     {
         super(name);
+
         this.type = type;
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
-        return (TempType) type;
+        return type;
     }
 }

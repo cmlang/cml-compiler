@@ -2,7 +2,6 @@ package cml.language.features;
 
 import cml.language.foundation.*;
 import cml.language.generated.*;
-import cml.language.types.TempType;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -101,7 +100,7 @@ public interface TempConcept extends Concept, PropertyList
     {
         return getPropertyTypes().stream()
                                  .filter(type -> !type.isPrimitive())
-                                 .map(TempType::getConcept)
+                                 .map(Type::getConcept)
                                  .filter(Optional::isPresent)
                                  .map(Optional::get)
                                  .map(c -> (TempConcept)c)
@@ -109,11 +108,11 @@ public interface TempConcept extends Concept, PropertyList
                                  .collect(toList());
     }
 
-    default List<TempType> getPropertyTypes()
+    default List<Type> getPropertyTypes()
     {
         return getAllProperties().stream()
                                  .map(TempProperty::getType)
-                                 .map(c -> (TempType)c)
+                                 .map(c -> (Type)c)
                                  .collect(toList());
     }
 

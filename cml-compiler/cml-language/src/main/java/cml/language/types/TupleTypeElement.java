@@ -2,6 +2,7 @@ package cml.language.types;
 
 import cml.language.foundation.ModelElementBase;
 import cml.language.functions.TypeFunctions;
+import cml.language.generated.Type;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -11,16 +12,16 @@ import static java.util.Optional.ofNullable;
 
 public class TupleTypeElement extends ModelElementBase
 {
-    private final TempType type;
+    private final Type type;
     private final @Nullable String name;
 
-    public TupleTypeElement(final TempType type, final @Nullable String name)
+    public TupleTypeElement(final Type type, final @Nullable String name)
     {
         this.type = type;
         this.name = name;
     }
 
-    public TempType getType()
+    public Type getType()
     {
         return type;
     }

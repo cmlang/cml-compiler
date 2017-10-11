@@ -1,18 +1,18 @@
 package cml.language.types;
 
-import cml.language.foundation.ModelElementBase;
+import cml.language.generated.Type;
 import org.jooq.lambda.Seq;
 
 import java.util.Optional;
 
 import static java.lang.String.format;
 
-public class FunctionType extends ModelElementBase implements TempType
+public class FunctionType extends BaseType
 {
     private final TupleType params;
-    private final TempType result;
+    private final Type result;
 
-    public FunctionType(final TupleType params, final TempType result)
+    public FunctionType(final TupleType params, final Type result)
     {
         this.params = params;
         this.result = result;
@@ -23,12 +23,12 @@ public class FunctionType extends ModelElementBase implements TempType
         return params;
     }
 
-    public TempType getResult()
+    public Type getResult()
     {
         return result;
     }
 
-    public Seq<TempType> getParamTypes()
+    public Seq<Type> getParamTypes()
     {
         return params.getElements().map(TupleTypeElement::getType);
     }
@@ -38,7 +38,7 @@ public class FunctionType extends ModelElementBase implements TempType
         return getParams().getElements().count() == 1;
     }
 
-    public TempType getSingleParamType()
+    public Type getSingleParamType()
     {
         assert isSingleParam();
 
@@ -49,7 +49,7 @@ public class FunctionType extends ModelElementBase implements TempType
         return single.get().getType();
     }
 
-    public TempType getMatchingResultType()
+    public Type getMatchingResultType()
     {
         return getResult();
     }
@@ -61,11 +61,23 @@ public class FunctionType extends ModelElementBase implements TempType
     }
 
     @Override
-    public TempType getElementType()
+    public Optional<String> getErrorMessage()
+    {
+        return Optional.empty();
+    }
+
+    @Override
+    public Type getElementType()
     {
         assert !getCardinality().isPresent();
 
         return this;
+    }
+
+    @Override
+    public String getKind()
+    {
+        return "function";
     }
 
     @Override

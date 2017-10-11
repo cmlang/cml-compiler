@@ -1,10 +1,10 @@
 package cml.language.expressions;
 
 import cml.language.generated.Expression;
+import cml.language.generated.Type;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
@@ -63,7 +63,7 @@ public class Lambda extends ExpressionBase
         this.functionType = functionType;
     }
 
-    public Map<String, TempType> getTypedParameters()
+    public Map<String, Type> getTypedParameters()
     {
         if (functionType == null)
         {
@@ -96,7 +96,7 @@ public class Lambda extends ExpressionBase
         }
     }
 
-    public Seq<Tuple2<String, TempType>> getUntypedParams()
+    public Seq<Tuple2<String, Type>> getUntypedParams()
     {
         return getTypeUndefinedParams().zip(getTypeUndefinedParams().map(p -> NamedType.UNDEFINED));
     }
@@ -111,7 +111,7 @@ public class Lambda extends ExpressionBase
         return getParameters().skip(getParamTypeCount());
     }
 
-    public Seq<TempType> getParamTypes()
+    public Seq<Type> getParamTypes()
     {
         assert functionType != null;
 
@@ -123,7 +123,7 @@ public class Lambda extends ExpressionBase
         return getParamTypes().count();
     }
 
-    public Optional<TempType> getExpectedScopeType()
+    public Optional<Type> getExpectedScopeType()
     {
         if (parameters.isEmpty() && functionType != null && functionType.isSingleParam())
         {
@@ -142,15 +142,15 @@ public class Lambda extends ExpressionBase
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
         return functionType == null ? NamedType.createUndefined("Function type not specified for: " + this) : functionType;
     }
 
     @Override
-    public TempType getMatchingResultType()
+    public Type getMatchingResultType()
     {
-        return (TempType) innerExpression.getType();
+        return (Type) innerExpression.getType();
     }
 
     public boolean isInnerExpressionInSomeScope()
@@ -168,8 +168,8 @@ public class Lambda extends ExpressionBase
 
     private String stringOf(final String parameter)
     {
-        final Optional<TempType> actualType = typeOfVariableNamed(parameter, innerExpression);
-        final TempType formalType = getTypedParameters().get(parameter);
+        final Optional<Type> actualType = typeOfVariableNamed(parameter, innerExpression);
+        final Type formalType = getTypedParameters().get(parameter);
 
         return actualType.map(t -> parameter + ": " + t)
                    .orElseGet(() -> formalType == null ? parameter : formalType.toString());

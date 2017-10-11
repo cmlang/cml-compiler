@@ -3,15 +3,11 @@ package cml.language.loader;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempProperty;
-import cml.language.generated.Association;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.NamedElement;
+import cml.language.generated.*;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -89,7 +85,7 @@ class ModelAugmenter extends CMLBaseListener
         final Association association = ctx.association;
         final String conceptName = ctx.conceptName.getText();
         final String propertyName = ctx.propertyName.getText();
-        final @Nullable TempType propertyType = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final @Nullable Type propertyType = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Optional<TempConcept> concept = conceptOf(module, conceptName);
         final Optional<TempProperty> property = seq(concept).flatMap(c -> c.getAllProperties().stream())
                                                             .filter(p -> p.getName().equals(propertyName))
@@ -101,13 +97,13 @@ class ModelAugmenter extends CMLBaseListener
     @Override
     public void enterTypeDeclaration(CMLParser.TypeDeclarationContext ctx)
     {
-        final TempType type = ctx.type;
+        final Type type = ctx.type;
 
         if (type != null && type instanceof NamedType && !type.isPrimitive())
         {
             final NamedType namedType = (NamedType)type;
 
-            conceptOf(module, namedType.getName()).ifPresent(type::setConcept);
+            conceptOf(module, namedType.getName()).ifPresent(namedType::setConcept);
         }
     }
 

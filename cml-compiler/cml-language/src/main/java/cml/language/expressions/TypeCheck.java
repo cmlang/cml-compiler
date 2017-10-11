@@ -3,7 +3,6 @@ package cml.language.expressions;
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.lang.String.format;
@@ -13,9 +12,9 @@ public class TypeCheck extends ExpressionBase
 {
     private final Expression expr;
     private final String operator;
-    private final TempType checkedType;
+    private final Type checkedType;
 
-    public TypeCheck(Expression expr, final String operator, final TempType checkedType)
+    public TypeCheck(Expression expr, final String operator, final Type checkedType)
     {
         super(singletonList(expr));
         this.expr = expr;
@@ -33,7 +32,7 @@ public class TypeCheck extends ExpressionBase
         return operator;
     }
 
-    public TempType getCheckedType()
+    public Type getCheckedType()
     {
         return checkedType;
     }
@@ -47,7 +46,7 @@ public class TypeCheck extends ExpressionBase
     @Override
     public Type getType()
     {
-        final TempType exprType = (TempType) expr.getType();
+        final Type exprType = (Type) expr.getType();
 
         if (exprType.isReferential() && checkedType.isReferential() && isAssignableFrom(exprType, checkedType))
         {

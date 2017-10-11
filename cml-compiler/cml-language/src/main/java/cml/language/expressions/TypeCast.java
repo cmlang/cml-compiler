@@ -3,7 +3,6 @@ package cml.language.expressions;
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 
 import static cml.language.functions.TypeFunctions.isCastAllowed;
 import static java.lang.String.format;
@@ -16,9 +15,9 @@ public class TypeCast extends ExpressionBase
 
     private final Expression expr;
     private final String operator;
-    private final TempType castType;
+    private final Type castType;
 
-    public TypeCast(Expression expr, final String operator, final TempType castType)
+    public TypeCast(Expression expr, final String operator, final Type castType)
     {
         super(singletonList(expr));
         this.expr = expr;
@@ -36,7 +35,7 @@ public class TypeCast extends ExpressionBase
         return operator;
     }
 
-    public TempType getCastType()
+    public Type getCastType()
     {
         return castType;
     }
@@ -61,11 +60,11 @@ public class TypeCast extends ExpressionBase
             return NamedType.createUndefined(
                 format(
                     "%s:\n- left operand is '%s: %s'\n- right operand is '%s'",
-                    diagnosticMessage(operator, (TempType) exprType, castType), expr, exprType, castType));
+                    diagnosticMessage(operator, (Type) exprType, castType), expr, exprType, castType));
         }
     }
 
-    private static String diagnosticMessage(String operator, TempType exprType, TempType castType)
+    private static String diagnosticMessage(String operator, Type exprType, Type castType)
     {
         if (operator.equals(ASQ) && castType.isRequired())
         {

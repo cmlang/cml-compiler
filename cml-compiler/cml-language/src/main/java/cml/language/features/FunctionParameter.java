@@ -1,7 +1,6 @@
 package cml.language.features;
 
 import cml.language.generated.Type;
-import cml.language.types.TempType;
 import cml.language.types.TypedElementBase;
 
 import static java.lang.String.format;
@@ -13,7 +12,7 @@ public class FunctionParameter extends TypedElementBase
         super(name, type);
     }
 
-    public TempType getMatchingResultType()
+    public Type getMatchingResultType()
     {
         return getType().getMatchingResultType();
     }

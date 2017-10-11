@@ -75,11 +75,11 @@ public interface Invocation extends Expression, NamedElement
     Optional<TempConcept> getConcept();
     void setConcept(@NotNull TempConcept concept);
 
-    default TempType getInferredType()
+    default Type getInferredType()
     {
         if (getFunction().isPresent())
         {
-            final TempType resultType = getFunction().get().getType();
+            final Type resultType = getFunction().get().getType();
 
             return getMatchingTypeOf(resultType);
         }
@@ -93,7 +93,7 @@ public interface Invocation extends Expression, NamedElement
         }
     }
 
-    default TempType getMatchingTypeOf(final TempType type)
+    default Type getMatchingTypeOf(final Type type)
     {
         if (getParameters().size() == getArguments().size())
         {
@@ -111,7 +111,7 @@ public interface Invocation extends Expression, NamedElement
 
                 if (paramIndex < getArguments().size())
                 {
-                    TempType paramType = (TempType) getArguments().get(paramIndex).getMatchingResultType();
+                    Type paramType = (Type) getArguments().get(paramIndex).getMatchingResultType();
 
                     if (paramType.isUndefined())
                     {
@@ -119,7 +119,7 @@ public interface Invocation extends Expression, NamedElement
 
                         if (paramIndex < getArguments().size())
                         {
-                            paramType = (TempType) getArguments().get(paramIndex).getMatchingResultType();
+                            paramType = (Type) getArguments().get(paramIndex).getMatchingResultType();
                         }
                     }
 
@@ -155,11 +155,11 @@ public interface Invocation extends Expression, NamedElement
     {
         assert lambda.getFunctionType().isPresent() && !lambda.isInnerExpressionInSomeScope();
 
-        final Optional<TempType> scopeType = lambda.getExpectedScopeType();
+        final Optional<Type> scopeType = lambda.getExpectedScopeType();
 
         if (scopeType.isPresent())
         {
-            final TempType matchingType = getMatchingTypeOf(scopeType.get());
+            final Type matchingType = getMatchingTypeOf(scopeType.get());
 
             assert matchingType.getConcept().isPresent(): "Expected concept but found '" + matchingType + "' for lambda: " + lambda + " - " + scopeType.get();
 
@@ -184,8 +184,8 @@ public interface Invocation extends Expression, NamedElement
 
     default boolean typeMatches(final FunctionParameter param, final Expression argument)
     {
-        final TempType paramType = param.getMatchingResultType();
-        final TempType argumentType = (TempType) argument.getMatchingResultType();
+        final Type paramType = (Type) param.getMatchingResultType();
+        final Type argumentType = (Type) argument.getMatchingResultType();
 
         return !argumentType.isUndefined() && isAssignableFrom(getMatchingTypeOf(paramType), argumentType);
     }

@@ -3,10 +3,7 @@ package cml.language.loader;
 import cml.language.expressions.*;
 import cml.language.features.*;
 import cml.language.foundation.TempProperty;
-import cml.language.generated.Expression;
-import cml.language.generated.Location;
-import cml.language.generated.ModelElement;
-import cml.language.generated.Task;
+import cml.language.generated.*;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.*;
@@ -131,7 +128,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final TempType type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
+        final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
 
         ctx.property = TempProperty.create(name, type, value, ctx.DERIVED() != null, locationOf(ctx));
@@ -167,7 +164,7 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitTupleTypeElementDeclaration(final TupleTypeElementDeclarationContext ctx)
     {
-        final TempType type = ctx.type.type;
+        final Type type = ctx.type.type;
         final Optional<String> name = ofNullable(ctx.name).map(Token::getText);
 
         ctx.element = new TupleTypeElement(type, name.orElse(null));
@@ -183,7 +180,7 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitFunctionDeclaration(final FunctionDeclarationContext ctx)
     {
         final String name = ctx.name.getText();
-        final TempType type = ctx.resultType.type;
+        final Type type = ctx.resultType.type;
         final Stream<FunctionParameter> params = ctx.functionParameterList().params;
 
         ctx.function = new Function(name, type, params);
@@ -237,12 +234,12 @@ class ModelSynthesizer extends CMLBaseListener
 
         if (operator.equals(TypeCast.ASB) || operator.equals(TypeCast.ASQ))
         {
-            final TempType castType = ctx.type.type;
+            final Type castType = ctx.type.type;
             return new TypeCast(expr, operator, castType);
         }
         else
         {
-            final TempType checkedType = ctx.type.type;
+            final Type checkedType = ctx.type.type;
             return new TypeCheck(expr, operator, checkedType);
         }
     }

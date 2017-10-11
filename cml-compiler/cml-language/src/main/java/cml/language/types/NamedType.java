@@ -11,11 +11,12 @@ import java.util.Optional;
 
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
+import static cml.language.generated.Type.extendType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
 
-public interface NamedType extends TempType, NamedElement
+public interface NamedType extends Type, NamedElement
 {
     NamedType UNDEFINED = NamedType.create("UNDEFINED");
     NamedType BOOLEAN = NamedType.create("BOOLEAN");
@@ -86,6 +87,8 @@ public interface NamedType extends TempType, NamedElement
         return elementType;
     }
 
+    void setConcept(@NotNull Concept concept);
+
     static NamedType create(String name)
     {
         return new NamedTypeImpl(name, null, null);
@@ -104,43 +107,110 @@ public interface NamedType extends TempType, NamedElement
 
 class NamedTypeImpl implements NamedType
 {
-    private final ModelElement modelElement;
     private final NamedElement namedElement;
-    private final @Nullable String cardinality;
-    private final @Nullable String errorMessage;
+    private final Type type;
 
-    private @Nullable TempConcept concept;
+    private final @Nullable String cardinality;
+
+    private @Nullable Concept concept;
 
     NamedTypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
     {
-        this.modelElement = extendModelElement(this, null, null);
+        final ModelElement modelElement = extendModelElement(this, null, null);
+
         this.namedElement = extendNamedElement(this, modelElement, name);
+        this.type = extendType(this, modelElement, errorMessage);
+
         this.cardinality = cardinality;
-        this.errorMessage = errorMessage;
     }
 
     @Override
     public Optional<Location> getLocation()
     {
-        return modelElement.getLocation();
+        return type.getLocation();
     }
 
     @Override
     public Optional<Scope> getParent()
     {
-        return modelElement.getParent();
+        return type.getParent();
     }
 
     @Override
     public Optional<Model> getModel()
     {
-        return modelElement.getModel();
+        return type.getModel();
     }
 
     @Override
     public Optional<Module> getModule()
     {
-        return modelElement.getModule();
+        return type.getModule();
+    }
+
+    public Optional<String> getErrorMessage()
+    {
+        return type.getErrorMessage();
+    }
+
+    @Override
+    public String getKind()
+    {
+        return type.getKind();
+    }
+
+    @Override
+    public Type getMatchingResultType()
+    {
+        return type.getMatchingResultType();
+    }
+
+    @Override
+    public Type getBaseType()
+    {
+        return type.getBaseType();
+    }
+
+    @Override
+    public boolean isParameter()
+    {
+        return type.isParameter();
+    }
+
+    @Override
+    public boolean isRelational()
+    {
+        return type.isRelational();
+    }
+
+    @Override
+    public boolean isReferential()
+    {
+        return type.isReferential();
+    }
+
+    @Override
+    public boolean isSingle()
+    {
+        return type.isSingle();
+    }
+
+    @Override
+    public boolean isRequired()
+    {
+        return type.isRequired();
+    }
+
+    @Override
+    public boolean isOptional()
+    {
+        return type.isOptional();
+    }
+
+    @Override
+    public boolean isSequence()
+    {
+        return type.isSequence();
     }
 
     @Override
@@ -155,19 +225,13 @@ class NamedTypeImpl implements NamedType
         return Optional.ofNullable(cardinality);
     }
 
-    public Optional<String> getErrorMessage()
-    {
-        return Optional.ofNullable(errorMessage);
-    }
-
     @Override
     public Optional<Concept> getConcept()
     {
         return Optional.ofNullable(concept);
     }
 
-    @Override
-    public void setConcept(@NotNull TempConcept concept)
+    public void setConcept(@NotNull Concept concept)
     {
         assert this.concept == null;
 

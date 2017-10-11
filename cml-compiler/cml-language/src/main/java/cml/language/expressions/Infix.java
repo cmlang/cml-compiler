@@ -3,7 +3,6 @@ package cml.language.expressions;
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -111,8 +110,8 @@ public class Infix extends ExpressionBase
     @Override
     public Type getType()
     {
-        final TempType leftType = (TempType) left.getType();
-        final TempType rightType = (TempType) right.getType();
+        final Type leftType = left.getType();
+        final Type rightType = right.getType();
 
         assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + left.getKind();
         assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + right.getKind();

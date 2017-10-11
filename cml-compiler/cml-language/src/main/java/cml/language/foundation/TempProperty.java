@@ -3,7 +3,6 @@ package cml.language.foundation;
 import cml.language.features.TempConcept;
 import cml.language.generated.*;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -31,12 +30,12 @@ public interface TempProperty extends Property
         return create(name, null, value, false, null);
     }
 
-    static TempProperty create(String name, @Nullable TempType type, @Nullable Expression value)
+    static TempProperty create(String name, @Nullable Type type, @Nullable Expression value)
     {
         return create(name, type, value, false, null);
     }
 
-    static TempProperty create(String name, @Nullable TempType type, @Nullable Expression value, boolean derived, Location location)
+    static TempProperty create(String name, @Nullable Type type, @Nullable Expression value, boolean derived, Location location)
     {
         return new PropertyImpl(name, type, value, derived, location);
     }
@@ -57,7 +56,7 @@ class PropertyImpl implements TempProperty
 {
     private final Property property;
 
-    PropertyImpl(String name, @Nullable TempType type, @Nullable Expression value, boolean derived, Location location)
+    PropertyImpl(String name, @Nullable Type type, @Nullable Expression value, boolean derived, Location location)
     {
         final ModelElement modelElement = ModelElement.extendModelElement(this, null, location);
         final NamedElement namedElement = NamedElement.extendNamedElement(this, modelElement, name);
@@ -150,7 +149,7 @@ class PropertyImpl implements TempProperty
         {
             if (getValue().isPresent())
             {
-                final TempType inferredType = (TempType) getValue().get().getType();
+                final Type inferredType = getValue().get().getType();
 
                 if (inferredType.isUndefined())
                 {

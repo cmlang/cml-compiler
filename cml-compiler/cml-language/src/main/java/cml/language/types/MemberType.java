@@ -1,22 +1,28 @@
 package cml.language.types;
 
-import cml.language.foundation.NamedElementBase;
+import cml.language.generated.NamedElement;
+import cml.language.generated.Type;
+
+import java.util.Optional;
 
 import static java.lang.String.format;
 
-public class MemberType extends NamedElementBase implements TempType
+public class MemberType extends BaseType implements NamedElement
 {
-    private final TempType baseType;
+    private final NamedElement namedElement;
+
+    private final Type baseType;
     private final long paramIndex;
 
-    public MemberType(final TempType baseType, final String name, final long paramIndex)
+    public MemberType(final Type baseType, final String name, final long paramIndex)
     {
-        super(name);
+        namedElement = NamedElement.extendNamedElement(this, modelElement, name);
+
         this.baseType = baseType;
         this.paramIndex = paramIndex;
     }
 
-    public TempType getBaseType()
+    public Type getBaseType()
     {
         return baseType;
     }
@@ -33,11 +39,23 @@ public class MemberType extends NamedElementBase implements TempType
     }
 
     @Override
-    public TempType getElementType()
+    public Type getElementType()
     {
         assert !getCardinality().isPresent();
 
         return this;
+    }
+
+    @Override
+    public String getKind()
+    {
+        return "member";
+    }
+
+    @Override
+    public String getName()
+    {
+        return namedElement.getName();
     }
 
     @Override

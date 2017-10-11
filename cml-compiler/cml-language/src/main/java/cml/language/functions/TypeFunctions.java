@@ -4,7 +4,10 @@ import cml.language.expressions.TypeCast;
 import cml.language.features.FunctionParameter;
 import cml.language.features.TempConcept;
 import cml.language.generated.Type;
-import cml.language.types.*;
+import cml.language.types.FunctionType;
+import cml.language.types.MemberType;
+import cml.language.types.NamedType;
+import cml.language.types.TupleType;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +21,7 @@ import static org.jooq.lambda.Seq.zip;
 @SuppressWarnings("WeakerAccess")
 public class TypeFunctions
 {
-    public static TempType withCardinality(Type type, String cardinality)
+    public static Type withCardinality(Type type, String cardinality)
     {
         if (type instanceof NamedType)
         {
@@ -32,11 +35,7 @@ public class TypeFunctions
         else if (type instanceof TupleType)
         {
             final TupleType tupleType = (TupleType) type;
-            final TupleType newType = new TupleType(seq(tupleType.getElements()), cardinality);
-
-            tupleType.getConcept().map(c -> (TempConcept)c).ifPresent(newType::setConcept);
-
-            return newType;
+            return new TupleType(seq(tupleType.getElements()), cardinality);
         }
         else
         {
@@ -215,12 +214,12 @@ public class TypeFunctions
         }
     }
 
-    public static int getParamIndexOfMatchingType(List<FunctionParameter> parameters, TempType type)
+    public static int getParamIndexOfMatchingType(List<FunctionParameter> parameters, Type type)
     {
         return getParamIndexOfMatchingType(parameters, type, -1);
     }
 
-    public static int getParamIndexOfMatchingType(List<FunctionParameter> parameters, TempType type, int skipIndex)
+    public static int getParamIndexOfMatchingType(List<FunctionParameter> parameters, Type type, int skipIndex)
     {
         assert type.isParameter(): "Must be called only when type is a parameter.";
 

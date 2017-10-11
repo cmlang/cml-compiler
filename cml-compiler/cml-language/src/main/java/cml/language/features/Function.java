@@ -1,6 +1,6 @@
 package cml.language.features;
 
-import cml.language.types.TempType;
+import cml.language.generated.Type;
 import cml.language.types.TypedElementBase;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class Function extends TypedElementBase
 {
     private List<FunctionParameter> parameters;
 
-    public Function(final String name, final TempType type, final Stream<FunctionParameter> parameters)
+    public Function(final String name, final Type type, final Stream<FunctionParameter> parameters)
     {
         super(name, type);
 

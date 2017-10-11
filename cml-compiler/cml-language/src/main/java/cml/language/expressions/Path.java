@@ -1,8 +1,8 @@
 package cml.language.expressions;
 
 import cml.language.generated.Scope;
+import cml.language.generated.Type;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
-import static cml.language.functions.ScopeFunctions.*;
+import static cml.language.functions.ScopeFunctions.scopeOfType;
+import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
 import static cml.language.functions.TypeFunctions.withCardinality;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static org.jooq.lambda.Seq.seq;
 
 public class Path extends ExpressionBase
 {
@@ -79,7 +79,7 @@ public class Path extends ExpressionBase
     }
 
     @Override
-    public TempType getType()
+    public Type getType()
     {
         assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
         assert getParent().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames() + " " + getLocation();
@@ -89,13 +89,13 @@ public class Path extends ExpressionBase
         if (isSelf()) return selfTypeOf(scope);
 
         final String variableName = getNames().get(0);
-        final Optional<TempType> variableType = typeOfVariableNamed(variableName, scope);
+        final Optional<Type> variableType = typeOfVariableNamed(variableName, scope);
 
         StringBuilder intermediatePath = new StringBuilder(variableName);
 
         if (variableType.isPresent())
         {
-            TempType type = variableType.get();
+            Type type = variableType.get();
 
             for (final String memberName: getMemberNames())
             {
@@ -107,7 +107,7 @@ public class Path extends ExpressionBase
                 {
                     scope = optionalScope.get();
 
-                    final Optional<TempType> memberType = typeOfVariableNamed(memberName, scope);
+                    final Optional<Type> memberType = typeOfVariableNamed(memberName, scope);
 
                     if (memberType.isPresent())
                     {
@@ -136,7 +136,7 @@ public class Path extends ExpressionBase
         }
     }
 
-    public TempType getOriginalType()
+    public Type getOriginalType()
     {
         assert getNames().size() >= 1: "In order to be able to determine its type, path must have at least one name.";
         assert getParent().isPresent(): "In order to be able to determine its type, path must be bound to a scope: " + getNames() + " " + getLocation();
@@ -146,13 +146,13 @@ public class Path extends ExpressionBase
         if (isSelf()) return selfTypeOf(scope);
 
         final String variableName = getNames().get(0);
-        final Optional<TempType> variableType = typeOfVariableNamed(variableName, scope);
+        final Optional<Type> variableType = typeOfVariableNamed(variableName, scope);
 
         StringBuilder intermediatePath = new StringBuilder(variableName);
 
         if (variableType.isPresent())
         {
-            TempType type = variableType.get();
+            Type type = variableType.get();
 
             for (final String memberName: getMemberNames())
             {
@@ -164,7 +164,7 @@ public class Path extends ExpressionBase
                 {
                     scope = optionalScope.get();
 
-                    final Optional<TempType> memberType = typeOfVariableNamed(memberName, scope);
+                    final Optional<Type> memberType = typeOfVariableNamed(memberName, scope);
 
                     if (memberType.isPresent())
                     {
@@ -187,11 +187,6 @@ public class Path extends ExpressionBase
         {
             return NamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
         }
-    }
-
-    public TempType getElementType()
-    {
-        return getType().getElementType();
     }
 
     public boolean isSelf()

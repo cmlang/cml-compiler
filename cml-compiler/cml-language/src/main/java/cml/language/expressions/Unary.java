@@ -3,7 +3,6 @@ package cml.language.expressions;
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.NamedType;
-import cml.language.types.TempType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,7 +69,7 @@ public class Unary extends ExpressionBase
     @Override
     public Type getType()
     {
-        final TempType subExprType = (TempType) subExpr.getType();
+        final Type subExprType = (Type) subExpr.getType();
 
         if (subExprType.isUndefined())
         {

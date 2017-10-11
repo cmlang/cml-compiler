@@ -1,12 +1,17 @@
 
 @abstraction TYPE: MODEL_ELEMENT
 {
-    concept: CONCEPT?;
-    cardinality: STRING?;
-    kind: STRING;
     error_message: STRING?;
 
+    /cardinality: STRING?;
+    /concept: CONCEPT?;
     /element_type: TYPE;
+
+    /kind = if empty(cardinality) then "required"
+            else if cardinality == "?" then "optional"
+            else if cardinality == "*" then "sequence"
+            else "unknown";
+
     /matching_result_type = self;
     /base_type = self;
 
@@ -14,15 +19,19 @@
     /defined = not undefined;
     /undefined = false;
 
+    /relational = string or numeric or binary_floating_point;
+    /referential = present(concept) and not sequence;
+
     /primitive = false;
     /numeric = false;
     /binary_floating_point = false;
+
+    /boolean = false;
+    /string = false;
 
     /single = (required or optional) and not sequence;
     /required = kind == "required";
     /optional = kind == "optional";
     /sequence = kind == "sequence";
-
-    /string = false;
 }
 
