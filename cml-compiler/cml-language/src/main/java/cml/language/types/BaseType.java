@@ -64,6 +64,18 @@ public class BaseType extends ModelElementBase implements Type
     }
 
     @Override
+    public boolean isSomething()
+    {
+        return type.isSomething();
+    }
+
+    @Override
+    public boolean isNothing()
+    {
+        return type.isNothing();
+    }
+
+    @Override
     public boolean isRelational()
     {
         return type.isRelational();

@@ -88,6 +88,8 @@ public class Path extends ExpressionBase
 
         if (isSelf()) return selfTypeOf(scope);
 
+        if (isNone()) return TempNamedType.NOTHING;
+
         final String variableName = getNames().get(0);
         final Optional<Type> variableType = typeOfVariableNamed(variableName, scope);
 
@@ -192,6 +194,11 @@ public class Path extends ExpressionBase
     public boolean isSelf()
     {
         return getNames().size() == 1 && getNames().get(0).equals("self");
+    }
+
+    public boolean isNone()
+    {
+        return getNames().size() == 1 && getNames().get(0).equals("none");
     }
 
     public Optional<Path> getBase()

@@ -335,7 +335,9 @@ operation_not_ref_eq_optional_optional(left, right) ::= "(<expression(left)>.isP
 // Paths
 
 path_expr(path) ::= <<
-<if(path.self)><\\>
+<if(path.none)><\\>
+Optional.empty()<\\>
+<elseif(path.self)><\\>
 <actual_self_field()><\\>
 <elseif(path.base)><\\>
 <path_base_call(path)><\\>

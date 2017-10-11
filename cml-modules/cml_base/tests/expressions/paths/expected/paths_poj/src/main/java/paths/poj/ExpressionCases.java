@@ -95,6 +95,11 @@ public class ExpressionCases
         return seq(this.getOptProp()).flatMap(anotherConcept -> seq(asList(anotherConcept.isFlag()))).findFirst().orElse(false);
     }
 
+    public Optional<SomeConcept> getNoneProp()
+    {
+        return Optional.empty();
+    }
+
     public String toString()
     {
         return new StringBuilder(ExpressionCases.class.getSimpleName())

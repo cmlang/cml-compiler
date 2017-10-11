@@ -19,6 +19,7 @@ import static java.util.Collections.unmodifiableList;
 public interface TempNamedType extends NamedType
 {
     TempNamedType UNDEFINED = TempNamedType.create("UNDEFINED");
+    TempNamedType NOTHING = TempNamedType.create("NOTHING");
     TempNamedType BOOLEAN = TempNamedType.create("BOOLEAN");
     TempNamedType STRING = TempNamedType.create("STRING");
 
@@ -69,6 +70,11 @@ public interface TempNamedType extends NamedType
     default boolean isUndefined()
     {
         return getName().toUpperCase().equals(UNDEFINED.getName());
+    }
+
+    default boolean isNothing()
+    {
+        return getName().toUpperCase().equals(NOTHING.getName());
     }
 
     @Override
@@ -175,6 +181,12 @@ class NamedTypeImpl implements TempNamedType
     public boolean isDefined()
     {
         return type.isDefined();
+    }
+
+    @Override
+    public boolean isSomething()
+    {
+        return type.isSomething();
     }
 
     @Override

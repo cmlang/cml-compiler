@@ -125,8 +125,15 @@ public class TypeFunctions
 
     public static boolean isAssignableFrom(Type thisType, Type thatType)
     {
-        return isElementTypeAssignableFrom(thisType.getElementType(), thatType.getElementType()) &&
-               isCardinalityAssignableFrom(thisType, thatType);
+        if (thatType.isNothing())
+        {
+            return thisType.isSomething() && !thisType.isRequired();
+        }
+        else
+        {
+            return isElementTypeAssignableFrom(thisType.getElementType(), thatType.getElementType()) &&
+                isCardinalityAssignableFrom(thisType, thatType);
+        }
     }
 
     public static boolean isEqualTo(Type thisType, Type thatType)

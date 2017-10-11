@@ -40,6 +40,8 @@ public interface ExpressionCases
 
     boolean isOptFlag();
 
+    Optional<SomeConcept> getNoneProp();
+
     static ExpressionCases createExpressionCases(String foo, SomeConcept somePath, List<SomeConcept> somePathList, @Nullable AnotherConcept optProp)
     {
         return new ExpressionCasesImpl(null, foo, somePath, somePathList, optProp);
@@ -138,6 +140,11 @@ class ExpressionCasesImpl implements ExpressionCases
     public boolean isOptFlag()
     {
         return seq(this.actual_self.getOptProp()).flatMap(anotherConcept -> seq(asList(anotherConcept.isFlag()))).findFirst().orElse(false);
+    }
+
+    public Optional<SomeConcept> getNoneProp()
+    {
+        return Optional.empty();
     }
 
     public String toString()

@@ -163,6 +163,10 @@ class ExpressionCases(ABC):
     def opt_flag(self) -> 'bool':
         pass
 
+    @abstractproperty
+    def none_prop(self) -> 'Optional[SomeConcept]':
+        pass
+
     @staticmethod
     def create_expression_cases(foo: 'str', some_path: 'SomeConcept', some_path_list: 'List[SomeConcept]', opt_prop: 'Optional[AnotherConcept]') -> 'ExpressionCases':
         return ExpressionCasesImpl(None, foo, some_path, some_path_list, opt_prop)
@@ -260,6 +264,10 @@ class ExpressionCasesImpl(ExpressionCases):
     @property
     def opt_flag(self) -> 'bool':
         return False if self.__actual_self.opt_prop is None else self.__actual_self.opt_prop.flag
+
+    @property
+    def none_prop(self) -> 'Optional[SomeConcept]':
+        return None
 
     def __str__(self) -> 'str':
         return "%s(foo=%s, some_path=%s, single_var=%s, path_var=%s, path_var_2=%s, path_var_3=%s, path_bars=%s, opt_prop=%s, opt_flag=%s)" % (

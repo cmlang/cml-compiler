@@ -18,6 +18,8 @@
     /parameter = defined and not primitive and empty(concept);
     /defined = not undefined;
     /undefined = false;
+    /something = defined and not nothing;
+    /nothing = false;
 
     /relational = string or numeric or binary_floating_point;
     /referential = present(concept) and not sequence;

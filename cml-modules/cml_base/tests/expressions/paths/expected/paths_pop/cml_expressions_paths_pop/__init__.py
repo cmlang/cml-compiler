@@ -137,6 +137,10 @@ class ExpressionCases:
     def opt_flag(self) -> 'bool':
         return False if self.opt_prop is None else self.opt_prop.flag
 
+    @property
+    def none_prop(self) -> 'Optional[SomeConcept]':
+        return None
+
     def __str__(self) -> 'str':
         return "%s(foo=%s, some_path=%s, single_var=%s, path_var=%s, path_var_2=%s, path_var_3=%s, path_bars=%s, opt_prop=%s, opt_flag=%s)" % (
             type(self).__name__,
