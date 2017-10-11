@@ -16,7 +16,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
 
-public interface TempNamedType extends Type, NamedElement
+public interface TempNamedType extends NamedType
 {
     TempNamedType UNDEFINED = TempNamedType.create("UNDEFINED");
     TempNamedType BOOLEAN = TempNamedType.create("BOOLEAN");
@@ -63,12 +63,6 @@ public interface TempNamedType extends Type, NamedElement
     default boolean isBinaryFloatingPoint()
     {
         return BINARY_FLOATING_POINT_TYPE_NAMES.contains(getName().toUpperCase());
-    }
-
-    @Override
-    default boolean isDefined()
-    {
-        return !isUndefined();
     }
 
     @Override
@@ -175,6 +169,12 @@ class NamedTypeImpl implements TempNamedType
     public boolean isParameter()
     {
         return type.isParameter();
+    }
+
+    @Override
+    public boolean isDefined()
+    {
+        return type.isDefined();
     }
 
     @Override

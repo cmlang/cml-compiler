@@ -49,6 +49,9 @@ TASK files:
 TYPE files:
 - src/main/java/cml/language/generated/Type.java
 
+NAMED_TYPE files:
+- src/main/java/cml/language/generated/NamedType.java
+
 ASSOCIATION_END_PROPERTY files:
 - src/main/java/cml/language/generated/AssociationEndProperty.java
 

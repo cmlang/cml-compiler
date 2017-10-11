@@ -35,3 +35,4 @@
     /sequence = kind == "sequence";
 }
 
+@abstraction NAMED_TYPE: TYPE, NAMED_ELEMENT;
