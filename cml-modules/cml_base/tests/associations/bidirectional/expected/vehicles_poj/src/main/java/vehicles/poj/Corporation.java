@@ -42,6 +42,11 @@ public class Corporation extends Organization
         return this;
     }
 
+    public Vehicle getNewVehicle()
+    {
+        return new Vehicle("NEW", seq(this.getEmployees()).findFirst().orElse(null), this);
+    }
+
     public String toString()
     {
         return new StringBuilder(Corporation.class.getSimpleName())

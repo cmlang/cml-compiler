@@ -301,6 +301,10 @@ class Corporation(Organization, ABC):
     def myself(self) -> 'Corporation':
         pass
 
+    @abstractproperty
+    def new_vehicle(self) -> 'Vehicle':
+        pass
+
     @staticmethod
     def create_corporation(name: 'str', employees: 'List[Employee]', fleet: 'List[Vehicle]', stock: 'bool' = True, profit: 'bool' = True) -> 'Corporation':
         return CorporationImpl(None, None, stock, profit, name=name, employees=employees, fleet=fleet)
@@ -336,6 +340,10 @@ class CorporationImpl(Corporation):
     @property
     def myself(self) -> 'Corporation':
         return self.__actual_self
+
+    @property
+    def new_vehicle(self) -> 'Vehicle':
+        return Vehicle.create_vehicle("NEW", (list(self.__actual_self.employees) or [None])[0], self.__actual_self)
 
     @property
     def name(self) -> 'str':

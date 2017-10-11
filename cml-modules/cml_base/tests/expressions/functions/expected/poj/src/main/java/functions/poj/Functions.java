@@ -183,6 +183,11 @@ public class Functions
         return seq(this.getItems()).reverse().toList();
     }
 
+    public Item getNewItem()
+    {
+        return new Item(12);
+    }
+
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())

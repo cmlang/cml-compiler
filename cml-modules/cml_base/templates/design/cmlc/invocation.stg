@@ -1,0 +1,5 @@
+
+invocation_concept(concept, args) ::= <<
+<type_name(concept)>.<interface_create_name(type_name(concept))>(<args:invocation_concept_arg(); separator=", ">)
+>>
+

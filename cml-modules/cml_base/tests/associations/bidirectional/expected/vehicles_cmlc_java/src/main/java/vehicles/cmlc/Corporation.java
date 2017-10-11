@@ -18,6 +18,8 @@ public interface Corporation extends Organization
 
     Corporation getMyself();
 
+    Vehicle getNewVehicle();
+
     static Corporation createCorporation(String name, List<Employee> employees, List<Vehicle> fleet)
     {
         return createCorporation(name, employees, fleet, true, true);
@@ -74,6 +76,11 @@ class CorporationImpl implements Corporation
     public Corporation getMyself()
     {
         return this.actual_self;
+    }
+
+    public Vehicle getNewVehicle()
+    {
+        return Vehicle.createVehicle("NEW", seq(this.actual_self.getEmployees()).findFirst().orElse(null), this.actual_self);
     }
 
     public String getName()

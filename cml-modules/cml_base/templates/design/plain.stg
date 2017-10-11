@@ -1,3 +1,4 @@
 
 import "/design/plain/actual_self.stg"
 import "/design/plain/class.stg"
+import "/design/plain/invocation.stg"

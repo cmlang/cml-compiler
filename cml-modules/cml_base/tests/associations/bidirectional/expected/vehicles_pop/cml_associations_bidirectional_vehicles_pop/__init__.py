@@ -226,6 +226,10 @@ class Corporation(Organization):
     def myself(self) -> 'Corporation':
         return self
 
+    @property
+    def new_vehicle(self) -> 'Vehicle':
+        return Vehicle("NEW", (list(self.employees) or [None])[0], self)
+
     def __str__(self) -> 'str':
         return "%s(stock=%s, profit=%s, name=%s)" % (
             type(self).__name__,

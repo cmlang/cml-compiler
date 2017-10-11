@@ -24,7 +24,10 @@
 {
     stock: Boolean = true;
     profit: Boolean = true;
+
     /myself = self;
+
+    /new_vehicle = Vehicle("NEW", first(employees), self);
 }
 
 @association Employment

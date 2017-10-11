@@ -1,3 +1,4 @@
 
 import "/design/cmlc/actual_self.stg"
 import "/design/cmlc/class.stg"
+import "/design/cmlc/invocation.stg"

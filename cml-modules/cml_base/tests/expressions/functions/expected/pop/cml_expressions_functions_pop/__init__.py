@@ -177,6 +177,10 @@ class Functions:
             reversed(self.items)
         )
 
+    @property
+    def new_item(self) -> 'Item':
+        return Item(12)
+
     def __str__(self) -> 'str':
         return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, large_item_exists=%s, large_item_all=%s, required_item_exists=%s, required_item_all=%s, items_collect=%s, single_item_collect=%s, required_item_collect=%s)" % (
             type(self).__name__,
