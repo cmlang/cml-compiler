@@ -16,6 +16,7 @@ import java.util.OptionalLong;
 import java.util.function.Function;
 
 import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.*;
@@ -144,7 +145,7 @@ public class Lambda extends ExpressionBase
     @Override
     public Type getType()
     {
-        return functionType == null ? TempNamedType.createUndefined("Function type not specified for: " + this) : functionType;
+        return functionType == null ? createUndefinedType("Function type not specified for: " + this) : functionType;
     }
 
     @Override

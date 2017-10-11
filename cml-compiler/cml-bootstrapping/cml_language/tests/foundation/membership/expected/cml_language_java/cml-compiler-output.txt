@@ -52,6 +52,9 @@ TYPE files:
 NAMED_TYPE files:
 - src/main/java/cml/language/generated/NamedType.java
 
+UNDEFINED_TYPE files:
+- src/main/java/cml/language/generated/UndefinedType.java
+
 ASSOCIATION_END_PROPERTY files:
 - src/main/java/cml/language/generated/AssociationEndProperty.java
 

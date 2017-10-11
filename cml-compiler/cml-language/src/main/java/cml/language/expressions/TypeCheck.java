@@ -5,6 +5,7 @@ import cml.language.generated.Type;
 import cml.language.types.TempNamedType;
 
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 
@@ -46,7 +47,7 @@ public class TypeCheck extends ExpressionBase
     @Override
     public Type getType()
     {
-        final Type exprType = (Type) expr.getType();
+        final Type exprType = expr.getType();
 
         if (exprType.isReferential() && checkedType.isReferential() && isAssignableFrom(exprType, checkedType))
         {
@@ -54,7 +55,7 @@ public class TypeCheck extends ExpressionBase
         }
         else
         {
-            return TempNamedType.createUndefined(
+            return createUndefinedType(
                 format(
                     "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s'",
                     getOperator(), expr, exprType, checkedType));

@@ -13,6 +13,7 @@ import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static cml.language.functions.ScopeFunctions.scopeOfType;
 import static cml.language.functions.ScopeFunctions.typeOfVariableNamed;
 import static cml.language.functions.TypeFunctions.withCardinality;
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
@@ -121,12 +122,12 @@ public class Path extends ExpressionBase
                     }
                     else
                     {
-                        return TempNamedType.createUndefined("Unable to find type of member: " + intermediatePath);
+                        return createUndefinedType("Unable to find type of member: " + intermediatePath);
                     }
                 }
                 else
                 {
-                    return TempNamedType.createUndefined("Unable to find type: " + type);
+                    return createUndefinedType("Unable to find type: " + type);
                 }
             }
 
@@ -134,7 +135,7 @@ public class Path extends ExpressionBase
         }
         else
         {
-            return TempNamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
+            return createUndefinedType("Unable to find type of variable: " + intermediatePath);
         }
     }
 
@@ -174,12 +175,12 @@ public class Path extends ExpressionBase
                     }
                     else
                     {
-                        return TempNamedType.createUndefined("Unable to find type of member: " + intermediatePath);
+                        return createUndefinedType("Unable to find type of member: " + intermediatePath);
                     }
                 }
                 else
                 {
-                    return TempNamedType.createUndefined("Unable to find type: " + type);
+                    return createUndefinedType("Unable to find type: " + type);
                 }
             }
 
@@ -187,7 +188,7 @@ public class Path extends ExpressionBase
         }
         else
         {
-            return TempNamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
+            return createUndefinedType("Unable to find type of variable: " + intermediatePath);
         }
     }
 

@@ -1,11 +1,11 @@
 package cml.language.expressions;
 
 import cml.language.generated.Type;
-import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 
@@ -32,7 +32,7 @@ public class InvalidExpression extends ExpressionBase
     @Override
     public Type getType()
     {
-        return TempNamedType.createUndefined(format("Unable to infer type of invalid expression: '%s'", text));
+        return createUndefinedType(format("Unable to infer type of invalid expression: '%s'", text));
     }
 
     @Override

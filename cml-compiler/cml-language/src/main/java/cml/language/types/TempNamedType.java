@@ -98,11 +98,6 @@ public interface TempNamedType extends NamedType
     {
         return new NamedTypeImpl(name, cardinality, null);
     }
-
-    static TempNamedType createUndefined(String errorMessage)
-    {
-        return new NamedTypeImpl(TempNamedType.UNDEFINED.getName(), null, errorMessage);
-    }
 }
 
 class NamedTypeImpl implements TempNamedType

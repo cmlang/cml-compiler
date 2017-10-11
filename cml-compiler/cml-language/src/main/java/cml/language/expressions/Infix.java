@@ -2,6 +2,7 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
+import cml.language.generated.UndefinedType;
 import cml.language.types.TempNamedType;
 
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 import static cml.language.functions.TypeFunctions.isBinaryFloatingPointWiderThan;
 import static cml.language.functions.TypeFunctions.isNumericWiderThan;
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
@@ -146,10 +148,9 @@ public class Infix extends ExpressionBase
         }
         else
         {
-            return TempNamedType.createUndefined(
-                format(
-                    "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s: %s'",
-                    getOperator(), getLeft(), leftType, getRight(), rightType));
+            return createUndefinedType(format(
+                "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s: %s'",
+                getOperator(), getLeft(), leftType, getRight(), rightType));
         }
     }
 

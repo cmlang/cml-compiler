@@ -10,8 +10,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static cml.language.functions.TypeFunctions.withCardinality;
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -163,7 +165,7 @@ class PropertyImpl implements TempProperty
             }
             else
             {
-                return TempNamedType.createUndefined("No type or expression defined for property: " + getName());
+                return createUndefinedType("No type or expression defined for property: " + getName());
             }
         }
     }
@@ -211,11 +213,11 @@ class PropertyImpl implements TempProperty
         {
             final NamedElement namedElement = (NamedElement)getParent().get();
 
-            return format("property %s.%s: %s",  namedElement.getName(), getName(), getType());
+            return format("property %s.%s: %s",  namedElement.getName(), getName(), diagnosticIdentificationOf(getType()));
         }
         else
         {
-            return format("property %s: %s",  getName(), getType());
+            return format("property %s: %s",  getName(), diagnosticIdentificationOf(getType()));
         }
     }
 }

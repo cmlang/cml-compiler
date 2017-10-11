@@ -19,6 +19,7 @@ import java.util.*;
 import static cml.language.functions.ModelElementFunctions.moduleOf;
 import static cml.language.functions.TypeFunctions.*;
 import static cml.language.generated.NamedElement.extendNamedElement;
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
@@ -89,7 +90,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else
         {
-            return TempNamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
+            return createUndefinedType(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
         }
     }
 
@@ -130,14 +131,14 @@ public interface Invocation extends Expression, NamedElement
 
                         paramType = tupleType.getElementTypes()
                                              .get(memberType.getParamIndex())
-                                             .orElse(TempNamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
+                                             .orElse(createUndefinedType(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
                     }
 
                     return withCardinality(paramType, type.getCardinality().orElse(null));
                 }
                 else
                 {
-                    return TempNamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName());
+                    return createUndefinedType(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName());
                 }
             }
             else
@@ -147,7 +148,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else
         {
-            return TempNamedType.createUndefined(MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION + getName());
+            return createUndefinedType(MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION + getName());
         }
     }
 

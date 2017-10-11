@@ -3,6 +3,7 @@ package cml.language.features;
 import cml.language.generated.Type;
 import cml.language.types.TypedElementBase;
 
+import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
 import static java.lang.String.format;
 
 public class FunctionParameter extends TypedElementBase
@@ -20,6 +21,6 @@ public class FunctionParameter extends TypedElementBase
     @Override
     public String toString()
     {
-        return format("%s: %s", getName(), getType());
+        return format("%s: %s", getName(), diagnosticIdentificationOf(getType()));
     }
 }

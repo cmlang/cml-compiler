@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -85,7 +86,7 @@ public class Unary extends ExpressionBase
         }
         else
         {
-            return TempNamedType.createUndefined(
+            return createUndefinedType(
                 format(
                     "Incompatible operand '%s' of type '%s' for operator '%s'.",
                     getSubExpr(), subExprType, getOperator()));

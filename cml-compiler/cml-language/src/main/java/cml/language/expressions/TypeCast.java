@@ -2,9 +2,9 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.types.TempNamedType;
 
 import static cml.language.functions.TypeFunctions.isCastAllowed;
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 
@@ -57,10 +57,10 @@ public class TypeCast extends ExpressionBase
         }
         else
         {
-            return TempNamedType.createUndefined(
+            return createUndefinedType(
                 format(
                     "%s:\n- left operand is '%s: %s'\n- right operand is '%s'",
-                    diagnosticMessage(operator, (Type) exprType, castType), expr, exprType, castType));
+                    diagnosticMessage(operator, exprType, castType), expr, exprType, castType));
         }
     }
 

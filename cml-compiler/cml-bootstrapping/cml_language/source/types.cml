@@ -3,9 +3,9 @@
 {
     error_message: STRING?;
 
-    /cardinality: STRING?;
-    /concept: CONCEPT?;
-    /element_type: TYPE;
+    /cardinality: STRING? = none;
+    /concept: CONCEPT? = none;
+    /element_type: TYPE = self;
 
     /kind = if empty(cardinality) then "required"
             else if cardinality == "?" then "optional"
@@ -38,3 +38,11 @@
 }
 
 @abstraction NAMED_TYPE: TYPE, NAMED_ELEMENT;
+
+@concept UNDEFINED_TYPE: NAMED_TYPE
+{
+    /name = "UNDEFINED";
+    /undefined = true;
+    /parent: SCOPE? = none;
+    /location: LOCATION? = none;
+}

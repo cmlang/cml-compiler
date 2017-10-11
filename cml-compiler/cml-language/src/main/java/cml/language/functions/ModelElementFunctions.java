@@ -5,10 +5,7 @@ import cml.language.expressions.Lambda;
 import cml.language.expressions.Path;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
-import cml.language.generated.Association;
-import cml.language.generated.AssociationEnd;
-import cml.language.generated.Import;
-import cml.language.generated.ModelElement;
+import cml.language.generated.*;
 import cml.language.types.TempNamedType;
 
 import java.util.Optional;
@@ -80,13 +77,13 @@ public class ModelElementFunctions
         {
             final Invocation invocation = (Invocation) element;
 
-            return format("%s -> %s", invocation, invocation.getType());
+            return format("%s -> %s", invocation, diagnosticIdentificationOf(invocation.getType()));
         }
         else if (element instanceof Lambda)
         {
             final Lambda lambda = (Lambda) element;
 
-            return lambda + " - inferred result type: " + lambda.getMatchingResultType();
+            return lambda + " - inferred result type: " + diagnosticIdentificationOf(lambda.getMatchingResultType());
         }
         else if (element instanceof TempNamedType)
         {
@@ -94,7 +91,7 @@ public class ModelElementFunctions
 
             if (namedType.getErrorMessage().isPresent())
             {
-                return namedType + " - " + namedType.getErrorMessage().get();
+                return diagnosticIdentificationOf(namedType) + " - " + namedType.getErrorMessage().get();
             }
         }
         else if (element instanceof AssociationEnd)
@@ -105,7 +102,9 @@ public class ModelElementFunctions
             {
                 return format(
                     "association end %s.%s: %s",
-                    associationEnd.getConceptName(), associationEnd.getPropertyName(), associationEnd.getPropertyType().get());
+                    associationEnd.getConceptName(),
+                    associationEnd.getPropertyName(),
+                    diagnosticIdentificationOf(associationEnd.getPropertyType().get()));
             }
             else
             {
@@ -122,7 +121,11 @@ public class ModelElementFunctions
         {
             final Path path = (Path) element;
 
-            return path.getNames().stream().collect(joining(".")) + ": " + path.getType();
+            return path.getNames().stream().collect(joining(".")) + ": " + diagnosticIdentificationOf(path.getType());
+        }
+        else if (element instanceof UndefinedType)
+        {
+            return "UNDEFINED";
         }
 
         return element.toString();

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static org.jooq.lambda.Seq.seq;
@@ -36,6 +37,6 @@ public class Function extends TypedElementBase
     @Override
     public String toString()
     {
-        return format("function %s(%s) -> %s", getName(), seq(parameters).toString(", "), getType());
+        return format("function %s(%s) -> %s", getName(), seq(parameters).toString(", "), diagnosticIdentificationOf(getType()));
     }
 }
