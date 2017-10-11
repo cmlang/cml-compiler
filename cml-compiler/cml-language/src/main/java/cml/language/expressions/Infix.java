@@ -2,7 +2,7 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -126,15 +126,15 @@ public class Infix extends ExpressionBase
         }
         else if (BOOLEAN_OPERATORS.contains(operator) && leftType.isBoolean() && rightType.isBoolean())
         {
-            return NamedType.BOOLEAN;
+            return TempNamedType.BOOLEAN;
         }
         else if (RELATIONAL_OPERATORS.contains(operator) && leftType.isRelational() && rightType.isRelational())
         {
-            return NamedType.BOOLEAN;
+            return TempNamedType.BOOLEAN;
         }
         else if (REFERENTIAL_OPERATORS.contains(operator) && leftType.isReferential() && rightType.isReferential())
         {
-            return NamedType.BOOLEAN;
+            return TempNamedType.BOOLEAN;
         }
         else if (ARITHMETIC_OPERATORS.contains(operator) && leftType.isNumeric() && rightType.isNumeric())
         {
@@ -146,7 +146,7 @@ public class Infix extends ExpressionBase
         }
         else
         {
-            return NamedType.createUndefined(
+            return TempNamedType.createUndefined(
                 format(
                     "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s: %s'",
                     getOperator(), getLeft(), leftType, getRight(), rightType));

@@ -6,15 +6,15 @@ import cml.language.features.TempConcept;
 import cml.language.generated.Type;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import cml.language.types.TupleType;
 
 import java.util.List;
 import java.util.Objects;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
-import static cml.language.types.NamedType.BINARY_FLOATING_POINT_TYPE_NAMES;
-import static cml.language.types.NamedType.NUMERIC_TYPE_NAMES;
+import static cml.language.types.TempNamedType.BINARY_FLOATING_POINT_TYPE_NAMES;
+import static cml.language.types.TempNamedType.NUMERIC_TYPE_NAMES;
 import static org.jooq.lambda.Seq.seq;
 import static org.jooq.lambda.Seq.zip;
 
@@ -23,10 +23,10 @@ public class TypeFunctions
 {
     public static Type withCardinality(Type type, String cardinality)
     {
-        if (type instanceof NamedType)
+        if (type instanceof TempNamedType)
         {
-            final NamedType namedType = (NamedType) type;
-            final NamedType newType = NamedType.create(namedType.getName(), cardinality);
+            final TempNamedType namedType = (TempNamedType) type;
+            final TempNamedType newType = TempNamedType.create(namedType.getName(), cardinality);
 
             namedType.getConcept().map(c -> (TempConcept)c).ifPresent(newType::setConcept);
 
@@ -48,13 +48,13 @@ public class TypeFunctions
         assert !thisElementType.getCardinality().isPresent();
         assert !thatElementType.getCardinality().isPresent();
 
-        if (thisElementType instanceof NamedType)
+        if (thisElementType instanceof TempNamedType)
         {
-            final NamedType thisNamedType = (NamedType) thisElementType;
+            final TempNamedType thisNamedType = (TempNamedType) thisElementType;
 
-            if (thatElementType instanceof NamedType)
+            if (thatElementType instanceof TempNamedType)
             {
-                final NamedType thatNamedType = (NamedType) thatElementType;
+                final TempNamedType thatNamedType = (TempNamedType) thatElementType;
 
                 if (isNameEquals(thisNamedType, thatNamedType))
                 {
@@ -131,10 +131,10 @@ public class TypeFunctions
 
     public static boolean isEqualTo(Type thisType, Type thatType)
     {
-        if (thisType instanceof NamedType && thatType instanceof NamedType)
+        if (thisType instanceof TempNamedType && thatType instanceof TempNamedType)
         {
-            final NamedType thisNamedType = (NamedType) thisType;
-            final NamedType thatNamedType = (NamedType) thatType;
+            final TempNamedType thisNamedType = (TempNamedType) thisType;
+            final TempNamedType thatNamedType = (TempNamedType) thatType;
 
             return isNameEquals(thisNamedType, thatNamedType) && isCardinalityEquals(thisNamedType, thatNamedType);
         }
@@ -142,7 +142,7 @@ public class TypeFunctions
         return false;
     }
 
-    public static boolean isNameEquals(final NamedType thisType, final NamedType thatType)
+    public static boolean isNameEquals(final TempNamedType thisType, final TempNamedType thatType)
     {
         assert thisType.getName() != null;
         assert thatType.getName() != null;
@@ -157,17 +157,17 @@ public class TypeFunctions
         }
     }
 
-    public static boolean isCardinalityEquals(final NamedType thisType, final NamedType thatType)
+    public static boolean isCardinalityEquals(final TempNamedType thisType, final TempNamedType thatType)
     {
         return Objects.equals(thisType.getCardinality(), thatType.getCardinality());
     }
 
     public static boolean isNumericWiderThan(Type thisType, Type thatType)
     {
-        if (thisType instanceof NamedType && thatType instanceof NamedType)
+        if (thisType instanceof TempNamedType && thatType instanceof TempNamedType)
         {
-            final NamedType thisNamedType = (NamedType) thisType;
-            final NamedType thatNamedType = (NamedType) thatType;
+            final TempNamedType thisNamedType = (TempNamedType) thisType;
+            final TempNamedType thatNamedType = (TempNamedType) thatType;
 
             assert thisNamedType.isNumeric() && thatNamedType.isNumeric()
                 : "Both types must be numeric in order to be compared: " + thisNamedType.getName() + " & " + thatNamedType.getName();
@@ -183,10 +183,10 @@ public class TypeFunctions
 
     public static boolean isBinaryFloatingPointWiderThan(Type thisType, Type thatType)
     {
-        if (thisType instanceof NamedType && thatType instanceof NamedType)
+        if (thisType instanceof TempNamedType && thatType instanceof TempNamedType)
         {
-            final NamedType thisNamedType = (NamedType) thisType;
-            final NamedType thatNamedType = (NamedType) thatType;
+            final TempNamedType thisNamedType = (TempNamedType) thisType;
+            final TempNamedType thatNamedType = (TempNamedType) thatType;
 
             assert thisNamedType.isBinaryFloatingPoint() && thatNamedType.isBinaryFloatingPoint()
                 : "Both types must be binary floating-point in order to be compared: " + thisNamedType.getName() + " & " + thatNamedType.getName();

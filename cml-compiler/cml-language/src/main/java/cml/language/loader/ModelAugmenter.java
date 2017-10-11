@@ -7,7 +7,7 @@ import cml.language.generated.*;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.ConceptDeclarationContext;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -99,9 +99,9 @@ class ModelAugmenter extends CMLBaseListener
     {
         final Type type = ctx.type;
 
-        if (type != null && type instanceof NamedType && !type.isPrimitive())
+        if (type != null && type instanceof TempNamedType && !type.isPrimitive())
         {
-            final NamedType namedType = (NamedType)type;
+            final TempNamedType namedType = (TempNamedType)type;
 
             conceptOf(module, namedType.getName()).ifPresent(namedType::setConcept);
         }

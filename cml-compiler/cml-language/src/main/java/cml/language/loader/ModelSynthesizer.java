@@ -148,7 +148,7 @@ class ModelSynthesizer extends CMLBaseListener
             final String name = ctx.NAME().getText();
             final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
 
-            ctx.type = NamedType.create(name, cardinality);
+            ctx.type = TempNamedType.create(name, cardinality);
         }
     }
 
@@ -289,7 +289,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         if (text != null)
         {
-            final NamedType type = NamedType.create(getPrimitiveTypeName(ctx), null);
+            final TempNamedType type = TempNamedType.create(getPrimitiveTypeName(ctx), null);
             ctx.literal = new Literal(text, type);
         }
     }

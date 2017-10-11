@@ -1,7 +1,7 @@
 package templates.lang.common;
 
 import cml.language.foundation.TempProperty;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class GetterTest extends LangTest
     @Test
     public void getter_type__sequence_integer() throws IOException
     {
-        testTemplateWithType("getter_type", NamedType.create("Integer", "*"), "sequence_integer.txt");
+        testTemplateWithType("getter_type", TempNamedType.create("Integer", "*"), "sequence_integer.txt");
     }
 
     @Test
@@ -125,7 +125,7 @@ public class GetterTest extends LangTest
     {
         for (String name : commonNameFormats)
         {
-            testTemplateWithType("getter_type", NamedType.create(name, cardinality), expectedOutput);
+            testTemplateWithType("getter_type", TempNamedType.create(name, cardinality), expectedOutput);
         }
     }
 
@@ -146,6 +146,6 @@ public class GetterTest extends LangTest
 
     private static TempProperty createProperty(String cardinality)
     {
-        return TempProperty.create("SomeProperty", NamedType.create("someType", cardinality));
+        return TempProperty.create("SomeProperty", TempNamedType.create("someType", cardinality));
     }
 }

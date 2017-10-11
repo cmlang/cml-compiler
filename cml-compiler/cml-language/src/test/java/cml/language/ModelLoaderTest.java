@@ -12,7 +12,7 @@ import cml.language.generated.Association;
 import cml.language.generated.AssociationEnd;
 import cml.language.generated.Import;
 import cml.language.loader.ModelLoader;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
@@ -131,8 +131,8 @@ public class ModelLoaderTest
         assertAssociationEndFound(employment, "Organization", "employees");
 
         final Association vehicleOwnership = loadAssociation("VehicleOwnership");
-        assertAssociationEndFound(vehicleOwnership, "Vehicle", "owner", NamedType.create("Organization"));
-        assertAssociationEndFound(vehicleOwnership, "Organization", "fleet", NamedType.create("Vehicle", "*"));
+        assertAssociationEndFound(vehicleOwnership, "Vehicle", "owner", TempNamedType.create("Organization"));
+        assertAssociationEndFound(vehicleOwnership, "Organization", "fleet", TempNamedType.create("Vehicle", "*"));
     }
 
     private TempModule loadModule(String sourceFileName)
@@ -188,7 +188,7 @@ public class ModelLoaderTest
     private void assertAssociationEndFound(
         Association association,
         String conceptName, String propertyName,
-        @Nullable NamedType expectedType)
+        @Nullable TempNamedType expectedType)
     {
         final AssociationEnd associationEnd = association.getAssociationEnds().stream()
                                                          .filter(associationEnd1 -> associationEnd1.getConceptName().equals(conceptName))

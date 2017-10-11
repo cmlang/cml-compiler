@@ -4,7 +4,7 @@ import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
@@ -98,7 +98,7 @@ public class Lambda extends ExpressionBase
 
     public Seq<Tuple2<String, Type>> getUntypedParams()
     {
-        return getTypeUndefinedParams().zip(getTypeUndefinedParams().map(p -> NamedType.UNDEFINED));
+        return getTypeUndefinedParams().zip(getTypeUndefinedParams().map(p -> TempNamedType.UNDEFINED));
     }
 
     public Seq<String> getTypeDefinedParams()
@@ -144,7 +144,7 @@ public class Lambda extends ExpressionBase
     @Override
     public Type getType()
     {
-        return functionType == null ? NamedType.createUndefined("Function type not specified for: " + this) : functionType;
+        return functionType == null ? TempNamedType.createUndefined("Function type not specified for: " + this) : functionType;
     }
 
     @Override

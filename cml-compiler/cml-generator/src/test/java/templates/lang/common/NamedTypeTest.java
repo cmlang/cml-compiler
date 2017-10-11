@@ -1,6 +1,6 @@
 package templates.lang.common;
 
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
 
@@ -35,7 +35,7 @@ public class NamedTypeTest extends LangTest
     {
         for (String typeName : primitiveTypeNames)
         {
-            final NamedType type = NamedType.create(typeName, null);
+            final TempNamedType type = TempNamedType.create(typeName, null);
 
             testTemplateWithNamedElement("type_name", type, typeName + ".txt");
         }
@@ -54,7 +54,7 @@ public class NamedTypeTest extends LangTest
     {
         final ST template = getTemplate("type_name");
 
-        template.add("named_element", NamedType.create(name, null));
+        template.add("named_element", TempNamedType.create(name, null));
 
         final String result = template.render();
 

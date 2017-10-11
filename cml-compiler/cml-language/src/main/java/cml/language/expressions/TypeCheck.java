@@ -2,7 +2,7 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.lang.String.format;
@@ -50,11 +50,11 @@ public class TypeCheck extends ExpressionBase
 
         if (exprType.isReferential() && checkedType.isReferential() && isAssignableFrom(exprType, checkedType))
         {
-            return NamedType.BOOLEAN;
+            return TempNamedType.BOOLEAN;
         }
         else
         {
-            return NamedType.createUndefined(
+            return TempNamedType.createUndefined(
                 format(
                     "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s'",
                     getOperator(), expr, exprType, checkedType));

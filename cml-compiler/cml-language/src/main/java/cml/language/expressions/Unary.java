@@ -2,7 +2,7 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,7 +77,7 @@ public class Unary extends ExpressionBase
         }
         else if (LOGIC_OPERATORS.contains(operator) && subExprType.isBoolean())
         {
-            return NamedType.BOOLEAN;
+            return TempNamedType.BOOLEAN;
         }
         else if (NUMERIC_OPERATORS.contains(operator) && (subExprType.isNumeric() || subExprType.isBinaryFloatingPoint()))
         {
@@ -85,7 +85,7 @@ public class Unary extends ExpressionBase
         }
         else
         {
-            return NamedType.createUndefined(
+            return TempNamedType.createUndefined(
                 format(
                     "Incompatible operand '%s' of type '%s' for operator '%s'.",
                     getSubExpr(), subExprType, getOperator()));

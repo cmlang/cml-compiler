@@ -2,7 +2,7 @@ package cml.language.foundation;
 
 import cml.language.features.TempConcept;
 import cml.language.generated.*;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import static java.util.Collections.singletonList;
 
 public interface TempProperty extends Property
 {
-    static TempProperty create(String name, @Nullable NamedType type)
+    static TempProperty create(String name, @Nullable TempNamedType type)
     {
         return create(name, type, null, false, null);
     }
@@ -163,7 +163,7 @@ class PropertyImpl implements TempProperty
             }
             else
             {
-                return NamedType.createUndefined("No type or expression defined for property: " + getName());
+                return TempNamedType.createUndefined("No type or expression defined for property: " + getName());
             }
         }
     }

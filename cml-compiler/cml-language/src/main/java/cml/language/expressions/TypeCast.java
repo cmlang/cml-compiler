@@ -2,7 +2,7 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 
 import static cml.language.functions.TypeFunctions.isCastAllowed;
 import static java.lang.String.format;
@@ -57,7 +57,7 @@ public class TypeCast extends ExpressionBase
         }
         else
         {
-            return NamedType.createUndefined(
+            return TempNamedType.createUndefined(
                 format(
                     "%s:\n- left operand is '%s: %s'\n- right operand is '%s'",
                     diagnosticMessage(operator, (Type) exprType, castType), expr, exprType, castType));

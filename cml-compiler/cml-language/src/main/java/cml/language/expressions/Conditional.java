@@ -2,7 +2,7 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.util.Arrays.asList;
@@ -59,7 +59,7 @@ public class Conditional extends ExpressionBase
         }
         else
         {
-            return NamedType.create(thenType + "|" + elseType);
+            return TempNamedType.create(thenType + "|" + elseType);
         }
     }
 }

@@ -85,11 +85,11 @@ public interface Invocation extends Expression, NamedElement
         }
         else if (getConcept().isPresent())
         {
-            return NamedType.create(getConcept().get().getName());
+            return TempNamedType.create(getConcept().get().getName());
         }
         else
         {
-            return NamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
+            return TempNamedType.createUndefined(MESSAGE__UNABLE_TO_FIND_FUNCTION_OF_INVOCATION + getName());
         }
     }
 
@@ -130,14 +130,14 @@ public interface Invocation extends Expression, NamedElement
 
                         paramType = tupleType.getElementTypes()
                                              .get(memberType.getParamIndex())
-                                             .orElse(NamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
+                                             .orElse(TempNamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
                     }
 
                     return withCardinality(paramType, type.getCardinality().orElse(null));
                 }
                 else
                 {
-                    return NamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName());
+                    return TempNamedType.createUndefined(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName());
                 }
             }
             else
@@ -147,7 +147,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else
         {
-            return NamedType.createUndefined(MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION + getName());
+            return TempNamedType.createUndefined(MESSAGE__SHOULD_MATCH_NUMBER_OF_PARAMS_IN_FUNCTION + getName());
         }
     }
 

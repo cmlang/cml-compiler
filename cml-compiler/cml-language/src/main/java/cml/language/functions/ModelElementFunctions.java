@@ -9,7 +9,7 @@ import cml.language.generated.Association;
 import cml.language.generated.AssociationEnd;
 import cml.language.generated.Import;
 import cml.language.generated.ModelElement;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 
 import java.util.Optional;
 
@@ -43,12 +43,12 @@ public class ModelElementFunctions
         }
     }
 
-    public static NamedType selfTypeOf(ModelElement element)
+    public static TempNamedType selfTypeOf(ModelElement element)
     {
         if (element instanceof TempConcept)
         {
             final TempConcept concept = (TempConcept) element;
-            final NamedType namedType = NamedType.create(concept.getName());
+            final TempNamedType namedType = TempNamedType.create(concept.getName());
 
             namedType.setConcept(concept);
 
@@ -88,9 +88,9 @@ public class ModelElementFunctions
 
             return lambda + " - inferred result type: " + lambda.getMatchingResultType();
         }
-        else if (element instanceof NamedType)
+        else if (element instanceof TempNamedType)
         {
-            final NamedType namedType = (NamedType) element;
+            final TempNamedType namedType = (TempNamedType) element;
 
             if (namedType.getErrorMessage().isPresent())
             {

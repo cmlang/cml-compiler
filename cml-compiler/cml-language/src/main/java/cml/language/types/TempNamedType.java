@@ -16,11 +16,11 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
 
-public interface NamedType extends Type, NamedElement
+public interface TempNamedType extends Type, NamedElement
 {
-    NamedType UNDEFINED = NamedType.create("UNDEFINED");
-    NamedType BOOLEAN = NamedType.create("BOOLEAN");
-    NamedType STRING = NamedType.create("STRING");
+    TempNamedType UNDEFINED = TempNamedType.create("UNDEFINED");
+    TempNamedType BOOLEAN = TempNamedType.create("BOOLEAN");
+    TempNamedType STRING = TempNamedType.create("STRING");
 
     Collection<String> PRIMITIVE_TYPE_NAMES = unmodifiableCollection(asList(
         "BOOLEAN", "INTEGER", "DECIMAL", "STRING", "REGEX", // main primitive types
@@ -78,9 +78,9 @@ public interface NamedType extends Type, NamedElement
     }
 
     @Override
-    default NamedType getElementType()
+    default TempNamedType getElementType()
     {
-        final NamedType elementType = NamedType.create(getName());
+        final TempNamedType elementType = TempNamedType.create(getName());
 
         getConcept().map(c -> (TempConcept)c).ifPresent(elementType::setConcept);
 
@@ -89,23 +89,23 @@ public interface NamedType extends Type, NamedElement
 
     void setConcept(@NotNull Concept concept);
 
-    static NamedType create(String name)
+    static TempNamedType create(String name)
     {
         return new NamedTypeImpl(name, null, null);
     }
 
-    static NamedType create(String name, @Nullable String cardinality)
+    static TempNamedType create(String name, @Nullable String cardinality)
     {
         return new NamedTypeImpl(name, cardinality, null);
     }
 
-    static NamedType createUndefined(String errorMessage)
+    static TempNamedType createUndefined(String errorMessage)
     {
-        return new NamedTypeImpl(NamedType.UNDEFINED.getName(), null, errorMessage);
+        return new NamedTypeImpl(TempNamedType.UNDEFINED.getName(), null, errorMessage);
     }
 }
 
-class NamedTypeImpl implements NamedType
+class NamedTypeImpl implements TempNamedType
 {
     private final NamedElement namedElement;
     private final Type type;

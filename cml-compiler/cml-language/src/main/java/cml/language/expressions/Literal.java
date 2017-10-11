@@ -1,13 +1,13 @@
 package cml.language.expressions;
 
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 
 public class Literal extends ExpressionBase
 {
     private final String text;
-    private final NamedType type;
+    private final TempNamedType type;
 
-    public Literal(String text, NamedType type)
+    public Literal(String text, TempNamedType type)
     {
         this.text = text;
         this.type = type;
@@ -18,7 +18,7 @@ public class Literal extends ExpressionBase
         return this.text;
     }
 
-    public NamedType getType()
+    public TempNamedType getType()
     {
         return type;
     }

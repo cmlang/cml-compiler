@@ -7,7 +7,7 @@ import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import cml.language.generated.Type;
 import cml.language.generated.TypedElement;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,9 +66,9 @@ public class ScopeFunctions
 
     public static Optional<Scope> scopeOfType(Type type, Scope scope)
     {
-        if (type instanceof NamedType)
+        if (type instanceof TempNamedType)
         {
-            final NamedType namedType = (NamedType)type;
+            final TempNamedType namedType = (TempNamedType)type;
             return elementNamed(namedType.getName(), scope, Scope.class);
         }
 

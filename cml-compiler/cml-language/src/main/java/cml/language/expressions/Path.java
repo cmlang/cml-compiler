@@ -2,7 +2,7 @@ package cml.language.expressions;
 
 import cml.language.generated.Scope;
 import cml.language.generated.Type;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -119,12 +119,12 @@ public class Path extends ExpressionBase
                     }
                     else
                     {
-                        return NamedType.createUndefined("Unable to find type of member: " + intermediatePath);
+                        return TempNamedType.createUndefined("Unable to find type of member: " + intermediatePath);
                     }
                 }
                 else
                 {
-                    return NamedType.createUndefined("Unable to find type: " + type);
+                    return TempNamedType.createUndefined("Unable to find type: " + type);
                 }
             }
 
@@ -132,7 +132,7 @@ public class Path extends ExpressionBase
         }
         else
         {
-            return NamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
+            return TempNamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
         }
     }
 
@@ -172,12 +172,12 @@ public class Path extends ExpressionBase
                     }
                     else
                     {
-                        return NamedType.createUndefined("Unable to find type of member: " + intermediatePath);
+                        return TempNamedType.createUndefined("Unable to find type of member: " + intermediatePath);
                     }
                 }
                 else
                 {
-                    return NamedType.createUndefined("Unable to find type: " + type);
+                    return TempNamedType.createUndefined("Unable to find type: " + type);
                 }
             }
 
@@ -185,7 +185,7 @@ public class Path extends ExpressionBase
         }
         else
         {
-            return NamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
+            return TempNamedType.createUndefined("Unable to find type of variable: " + intermediatePath);
         }
     }
 

@@ -1,7 +1,7 @@
 package cml.language.expressions;
 
 import cml.language.generated.Expression;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 
@@ -72,7 +72,7 @@ public class Comprehension extends ExpressionBase
     }
 
     @Override
-    public NamedType getType()
+    public TempNamedType getType()
     {
         return null;
     }

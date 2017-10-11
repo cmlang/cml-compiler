@@ -1,7 +1,7 @@
 package templates.lang.common;
 
 import cml.language.foundation.TempProperty;
-import cml.language.types.NamedType;
+import cml.language.types.TempNamedType;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class FieldTest extends LangTest
     {
         for (String name : commonNameFormats)
         {
-            final TempProperty property = TempProperty.create(name, NamedType.create(name, cardinality));
+            final TempProperty property = TempProperty.create(name, TempNamedType.create(name, cardinality));
 
             testTemplateWithNamedElement("field_type", property, expectedOutputPath);
         }
