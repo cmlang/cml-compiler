@@ -304,10 +304,14 @@ operation_exp(left, right) ::= "Math.pow(<expression(left)>, <expression(right)>
 
 operation_eq(left, right) ::= <<
 <if(left.type.string || right.type.string)><\\>
-Objects.equals(<expression(left)>, <expression(right)>)<\\>
+Objects.equals(<operation_eq_operand(left)>, <operation_eq_operand(right)>)<\\>
 <else><\\>
-<expression(left)> == <expression(right)><\\>
+<operation_eq_operand(left)> == <operation_eq_operand(right)><\\>
 <endif>
+>>
+
+operation_eq_operand(operand) ::= <<
+<expression(operand)><if(operand.type.optional)>.orElse(<field_default_value(operand.type)>)<endif>
 >>
 
 operation_ineq(left, right) ::= "<expression(left)> != <expression(right)>"
