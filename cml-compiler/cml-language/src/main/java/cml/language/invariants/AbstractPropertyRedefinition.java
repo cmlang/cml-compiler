@@ -7,16 +7,16 @@ import cml.language.generated.Property;
 
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.jooq.lambda.Seq.seq;
 
 public class AbstractPropertyRedefinition implements Invariant<TempConcept>
 {
     @Override
     public boolean evaluate(TempConcept self)
     {
-        return self.isAbstraction() || getInheritedAbstractProperties(self).allMatch(abstractPropertyRedefinedIn(self));
+        return self.isAbstraction() || seq(self.getInheritedAbstractProperties()).allMatch(abstractPropertyRedefinedIn(self));
     }
 
     private Predicate<Property> abstractPropertyRedefinedIn(TempConcept self)
@@ -31,18 +31,10 @@ public class AbstractPropertyRedefinition implements Invariant<TempConcept>
     @Override
     public Diagnostic createDiagnostic(TempConcept self)
     {
-        final List<Property> abstractProperties = getInheritedAbstractProperties(self)
+        final List<Property> abstractProperties = seq(self.getInheritedAbstractProperties())
             .filter(abstractPropertyRedefinedIn(self).negate())
             .collect(toList());
 
         return new Diagnostic("abstract_property_redefinition", self, abstractProperties);
-    }
-
-    private Stream<Property> getInheritedAbstractProperties(TempConcept self)
-    {
-        return self.getAncestors()
-                   .stream()
-                   .flatMap(c -> c.getAllProperties().stream())
-                   .filter(Property::isAbstract);
     }
 }

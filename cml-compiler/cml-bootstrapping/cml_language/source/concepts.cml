@@ -27,6 +27,7 @@
 
     /inherited_ancestors = distinct(ancestors.all_ancestors);
     /inherited_properties = distinct(ancestors.all_properties);
+    /inherited_abstract_properties = inherited_properties | select: abstract;
 
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
@@ -53,8 +54,6 @@
     /transitive_property_concepts = self | recurse_depth: property_concepts;
     /property_concepts = property_types | reject: primitive | yield: concept | distinct;
     /property_types = all_properties | yield: type;
-
-    /all_ancestors = self | recurse_depth: ancestors | distinct;
 
     /redefined_ancestors: CONCEPT_REDEF*;
     /redefined_inherited_concrete_properties: PROPERTY*;

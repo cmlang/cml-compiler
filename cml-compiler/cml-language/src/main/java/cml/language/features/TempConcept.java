@@ -371,6 +371,12 @@ class ConceptImpl implements TempConcept
     }
 
     @Override
+    public List<Property> getInheritedAbstractProperties()
+    {
+        return concept.getInheritedAbstractProperties();
+    }
+
+    @Override
     public String toString()
     {
         return "concept " + getName();
