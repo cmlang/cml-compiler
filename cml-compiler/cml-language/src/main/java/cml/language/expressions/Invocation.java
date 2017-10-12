@@ -181,7 +181,7 @@ public interface Invocation extends Expression, NamedElement
 
             assert module.isPresent();
 
-            final LambdaScope lambdaScope = new LambdaScope(module.get(), lambda);
+            final LambdaScope lambdaScope = new LambdaScope(this, lambda);
 
             lambda.getTypedParameters()
                   .forEach((name, type) -> lambdaScope.addParameter(name, getMatchingTypeOf(type)));
