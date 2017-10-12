@@ -57,7 +57,7 @@
 
 }
 
-@concept INHERITANCE: MODEL_ELEMENT
+@concept INHERITANCE
 {
     ancestor: CONCEPT;
     descendant: CONCEPT;

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static cml.language.functions.ModuleFunctions.conceptOf;
 import static cml.language.generated.AssociationEnd.createAssociationEnd;
+import static cml.language.generated.Inheritance.createInheritance;
 import static org.jooq.lambda.Seq.seq;
 
 class ModelAugmenter extends CMLBaseListener
@@ -52,7 +53,10 @@ class ModelAugmenter extends CMLBaseListener
                                                                   .map(NamedElement::getName)
                                                                   .collect(Collectors.toList());
 
-            foundAncestors.forEach(ancestor -> ctx.concept.addDirectAncestor(ancestor));
+            foundAncestors.forEach(ancestor -> {
+                ctx.concept.addDirectAncestor(ancestor);
+                createInheritance(ancestor, ctx.concept);
+            });
 
             final List<String> missingAncestorNames = ancestorNames.stream()
                                                                    .filter(name -> !foundAncestorNames.contains(name))
