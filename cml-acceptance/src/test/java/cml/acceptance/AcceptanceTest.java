@@ -61,15 +61,10 @@ public class AcceptanceTest
     @DataPoints("validation-modules")
     public static String[] validationModules = {
         "abstract_property_in_abstract_concept",
-        "abstract_property_redefinition",
         "association_end_property_found_in_model",
         "association_end_type_matches_property_type",
         "association_end_types_must_match",
         "association_must_have_two_association_ends",
-        "compatible_generalizations",
-        "conflict_redefinition",
-        "generalization_compatible_redefinition",
-        "not_own_generalization",
         "property_type_specified_or_inferred",
         "property_type_assignable_from_expression_type",
         "unique_property_name"
