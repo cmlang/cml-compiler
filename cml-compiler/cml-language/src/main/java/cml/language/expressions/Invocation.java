@@ -86,7 +86,12 @@ public interface Invocation extends Expression, NamedElement
         }
         else if (getConcept().isPresent())
         {
-            return TempNamedType.create(getConcept().get().getName());
+            final TempConcept concept = getConcept().get();
+            final TempNamedType namedType = TempNamedType.create(concept.getName());
+
+            namedType.setConcept(concept);
+
+            return namedType;
         }
         else
         {
