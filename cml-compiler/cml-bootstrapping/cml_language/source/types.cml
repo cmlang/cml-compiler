@@ -37,6 +37,7 @@
     /sequence = kind == "sequence";
 
     /inferred_cardinality = if empty(cardinality) or (optional and boolean) then none else cardinality;
+    /inferred_type: TYPE = self;
 }
 
 @abstraction NAMED_TYPE: TYPE, NAMED_ELEMENT;

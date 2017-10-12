@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.functions.TypeFunctions.withCardinality;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Type.extendType;
@@ -52,6 +53,12 @@ public interface TempNamedType extends NamedType
     default boolean isString()
     {
         return STRING.getName().equalsIgnoreCase(getName());
+    }
+
+    @Override
+    default Type getInferredType()
+    {
+        return withCardinality(this, getInferredCardinality().orElse(null));
     }
 
     @Override

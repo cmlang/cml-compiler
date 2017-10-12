@@ -151,16 +151,7 @@ class PropertyImpl implements TempProperty
         {
             if (getValue().isPresent())
             {
-                final Type inferredType = getValue().get().getType();
-
-                if (inferredType.isUndefined())
-                {
-                    return inferredType;
-                }
-                else
-                {
-                    return withCardinality(inferredType, inferredType.getInferredCardinality().orElse(null));
-                }
+                return getValue().get().getType().getInferredType();
             }
             else
             {

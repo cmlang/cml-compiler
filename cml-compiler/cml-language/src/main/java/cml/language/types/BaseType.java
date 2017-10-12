@@ -158,4 +158,10 @@ public class BaseType extends ModelElementBase implements Type
     {
         return type.getInferredCardinality();
     }
+
+    @Override
+    public Type getInferredType()
+    {
+        return type.getInferredType();
+    }
 }
