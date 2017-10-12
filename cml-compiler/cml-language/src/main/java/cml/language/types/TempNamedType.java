@@ -221,6 +221,12 @@ class NamedTypeImpl implements TempNamedType
     }
 
     @Override
+    public Optional<String> getInferredCardinality()
+    {
+        return type.getInferredCardinality();
+    }
+
+    @Override
     public String getName()
     {
         return namedElement.getName();

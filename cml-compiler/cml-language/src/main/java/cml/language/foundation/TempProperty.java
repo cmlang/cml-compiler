@@ -159,8 +159,7 @@ class PropertyImpl implements TempProperty
                 }
                 else
                 {
-                    final String newCardinality = !inferredType.getCardinality().isPresent() || (inferredType.isOptional() && inferredType.isBoolean()) ? null : inferredType.getCardinality().get();
-                    return withCardinality(inferredType, newCardinality);
+                    return withCardinality(inferredType, inferredType.getInferredCardinality().orElse(null));
                 }
             }
             else

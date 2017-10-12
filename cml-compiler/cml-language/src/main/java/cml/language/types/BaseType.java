@@ -152,4 +152,10 @@ public class BaseType extends ModelElementBase implements Type
     {
         return type.isSequence();
     }
+
+    @Override
+    public Optional<String> getInferredCardinality()
+    {
+        return type.getInferredCardinality();
+    }
 }
