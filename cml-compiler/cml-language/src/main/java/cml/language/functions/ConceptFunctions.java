@@ -93,9 +93,9 @@ public class ConceptFunctions
                                                         .map(conceptRedefined(concept, redefBase))
                                                         .collect(toList());
 
-        final Stream<ConceptRedef> inheritedRedefinitions = concept.getDirectAncestors()
+        final Stream<ConceptRedef> inheritedRedefinitions = concept.getAncestors()
                                                                    .stream()
-                                                                   .flatMap(c -> redefinedAncestors(c, redefBase)
+                                                                   .flatMap(c -> redefinedAncestors((TempConcept) c, redefBase)
                                                                    .stream())
                                                                    .map(overridden(redefinitions));
 
