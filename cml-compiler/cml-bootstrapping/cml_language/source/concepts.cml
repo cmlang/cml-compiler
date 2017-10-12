@@ -24,6 +24,8 @@
 
     /all_properties: PROPERTY*;
 
+//    /inherited_properties = ancestors | collect: all_properties | distinct;
+
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
 
@@ -38,7 +40,6 @@
                                     | reject: p1.name == p2.name
                                     | yield: p1
                                     | distinct;
-    /inherited_properties = ancestors | yield: all_properties | distinct;
     /super_properties = non_redefined_properties | select: not derived;
 
     /dependencies = distinct(concat(inherited_dependencies, property_dependencies));

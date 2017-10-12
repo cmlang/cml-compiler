@@ -134,3 +134,7 @@ invocation_concat(args) ::= <<
 invocation_sequence_count(args) ::= <<
 len(<expression(args.seq)>)
 >>
+
+invocation_sequence_distinct(args) ::= <<
+functools.reduce(lambda l, x: l if x in l else list(l)+[x], <expression(args.seq)>, [])
+>>

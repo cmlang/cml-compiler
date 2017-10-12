@@ -205,6 +205,11 @@ public class Functions
         return seq(this.getItems()).count();
     }
 
+    public List<Item> getDistinctItems()
+    {
+        return seq(this.getItems()).distinct().toList();
+    }
+
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())

@@ -134,3 +134,7 @@ concat(<expression(args.seq1)>, <expression(args.seq2)>)
 invocation_sequence_count(args) ::= <<
 <expression(args.seq)>.count()
 >>
+
+invocation_sequence_distinct(args) ::= <<
+<expression(args.seq)>.distinct()
+>>

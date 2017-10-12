@@ -53,6 +53,7 @@
     /concat_items = concat(items, items2);
 
     /count_items = count(items);
+    /distinct_items = distinct(items);
 }
 
 @concept Item
