@@ -133,11 +133,6 @@ public interface TempConcept extends Concept, PropertyList
 
     default List<Property> getInheritedProperties()
     {
-        if (getAllGeneralizations().contains(this))
-        {
-            throw new IllegalStateException("Concept should not be its own generalization: " + getName());
-        }
-
         return getDirectAncestors().stream()
                                    .flatMap(concept -> concept.getAllProperties().stream())
                                    .distinct()
