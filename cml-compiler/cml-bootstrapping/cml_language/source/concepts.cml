@@ -38,14 +38,14 @@
     /all_properties = concat(properties, non_redefined_properties);
     /non_redefined_properties = for p1 in inherited_properties, p2 in properties
                                     | reject: p1.name == p2.name
-                                    | yield: p1
+                                    | collect: p1
                                     | distinct;
     /super_properties = non_redefined_properties | select: not derived;
 
     /dependencies = distinct(concat(inherited_dependencies, property_dependencies));
     /property_dependencies = distinct(concat(
-                                transitive_property_concepts | yield: inherited_dependencies,
-                                transitive_property_concepts | yield: name));
+                                transitive_property_concepts | collect: inherited_dependencies,
+                                transitive_property_concepts | collect: name));
     /inherited_dependencies = all_ancestors | select: name | distinct;
 
     /transitive_property_concepts = self | recurse_depth: property_concepts;
