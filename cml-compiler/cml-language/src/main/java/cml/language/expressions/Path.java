@@ -114,11 +114,18 @@ public class Path extends ExpressionBase
 
                     if (memberType.isPresent())
                     {
-                        final String cardinality = memberType.get().getCardinality().orElse(null);
+                        if (memberType.get().isUndefined())
+                        {
+                            return memberType.get();
+                        }
+                        else
+                        {
+                            final String cardinality = memberType.get().getCardinality().orElse(null);
 
-                        type = withCardinality(
+                            type = withCardinality(
                                 memberType.get(),
                                 type.isSequence() ? "*" : (memberType.get().isRequired() && type.isOptional() ? "?" : cardinality));
+                        }
                     }
                     else
                     {
