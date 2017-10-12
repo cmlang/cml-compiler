@@ -22,8 +22,10 @@
     /ancestors = generalizations.ancestor;
     /descendants = specializations.descendant;
 
+    /all_ancestors: CONCEPT* = distinct(concat(inherited_ancestors, ancestors));
     /all_properties: PROPERTY*;
 
+    /inherited_ancestors = distinct(ancestors.all_ancestors);
     /inherited_properties = distinct(ancestors.all_properties);
 
 /*

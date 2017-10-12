@@ -89,6 +89,7 @@ public class ConceptFunctions
     {
         final List<ConceptRedef> redefinitions = concept.getAllAncestors()
                                                         .stream()
+                                                        .map(c -> (TempConcept)c)
                                                         .map(conceptRedefined(concept, redefBase))
                                                         .collect(toList());
 

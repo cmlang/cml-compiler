@@ -53,7 +53,7 @@ public interface TempConcept extends Concept, PropertyList
     default List<String> getGeneralizationDependencies()
     {
         return getAllAncestors().stream()
-                                .map(TempConcept::getName)
+                                .map(Concept::getName)
                                 .filter(name -> !name.equals(getName()))
                                 .distinct()
                                 .collect(toList());
@@ -115,17 +115,6 @@ public interface TempConcept extends Concept, PropertyList
     default List<ConceptRedef> getRedefinedAncestors()
     {
         return redefinedAncestors(this, this);
-    }
-
-    default List<TempConcept> getAllAncestors()
-    {
-        final List<TempConcept> inheritedAncestors = getDirectAncestors().stream()
-                                                                         .flatMap(concept -> concept.getAllAncestors().stream())
-                                                                         .collect(toList());
-
-        return concat(inheritedAncestors.stream(), getDirectAncestors().stream())
-            .distinct()
-            .collect(toList());
     }
 
     List<TempConcept> getDirectAncestors();
@@ -366,6 +355,18 @@ class ConceptImpl implements TempConcept
     public List<Concept> getDescendants()
     {
         return concept.getDescendants();
+    }
+
+    @Override
+    public List<Concept> getAllAncestors()
+    {
+        return concept.getAllAncestors();
+    }
+
+    @Override
+    public List<Concept> getInheritedAncestors()
+    {
+        return concept.getInheritedAncestors();
     }
 
     @Override
