@@ -64,7 +64,7 @@ public class ModelLoaderTest
         assertThat(_import.getName(), is(anotherModuleName));
         assertThat(anotherModule.getName(), is(anotherModuleName));
         assertThat(anotherConcept.getName(), is("AnotherConcept"));
-        assertThat(concept.getDirectAncestors().get(0), is(sameInstance(anotherConcept)));
+        assertThat(concept.getAncestors().get(0), is(sameInstance(anotherConcept)));
     }
 
     @Test
