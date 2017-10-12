@@ -89,7 +89,7 @@ public class ModelLoaderTest
         final TempConcept concept = loadConcept("concrete_concept");
 
         assertThat(concept.getName(), is("ModelElement"));
-        assertFalse("Concept should be concrete.", concept.isAbstract());
+        assertFalse("Concept should be concrete.", concept.isAbstraction());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class ModelLoaderTest
         final TempConcept concept = loadConcept("abstract_concept");
 
         assertThat(concept.getName(), is("ModelElement"));
-        assertTrue("Concept should be abstract.", concept.isAbstract());
+        assertTrue("Concept should be abstract.", concept.isAbstraction());
     }
 
     @Test

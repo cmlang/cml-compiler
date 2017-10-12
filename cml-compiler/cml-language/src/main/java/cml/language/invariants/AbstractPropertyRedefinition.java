@@ -16,7 +16,7 @@ public class AbstractPropertyRedefinition implements Invariant<TempConcept>
     @Override
     public boolean evaluate(TempConcept self)
     {
-        return self.isAbstract() || getInheritedAbstractProperties(self).allMatch(abstractPropertyRedefinedIn(self));
+        return self.isAbstraction() || getInheritedAbstractProperties(self).allMatch(abstractPropertyRedefinedIn(self));
     }
 
     private Predicate<Property> abstractPropertyRedefinedIn(TempConcept self)

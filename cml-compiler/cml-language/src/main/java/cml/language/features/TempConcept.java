@@ -24,8 +24,6 @@ import static org.jooq.lambda.Seq.seq;
 
 public interface TempConcept extends Concept, PropertyList
 {
-    boolean isAbstract();
-
     default List<Property> getNonDerivedProperties()
     {
         return getProperties().stream()
@@ -289,22 +287,14 @@ class ConceptImpl implements TempConcept
 {
     private final Concept concept;
     private final List<TempConcept> directAncestors = new ArrayList<>();
-    private final boolean _abstract;
 
-    ConceptImpl(TempModule module, String name, boolean _abstract, final List<Property> properties, Location location)
+    ConceptImpl(TempModule module, String name, boolean abstraction, final List<Property> properties, Location location)
     {
         final ModelElement modelElement = extendModelElement(this, module, location);
         final NamedElement namedElement = extendNamedElement(this, modelElement, name);
         final Scope scope = extendScope(this, modelElement, seq(properties).map(p -> (ModelElement)p).toList());
         final PropertyList propertyList = PropertyList.extendPropertyList(this, modelElement, scope);
-        this.concept = Concept.extendConcept(this, modelElement, scope, namedElement, propertyList);
-        this._abstract = _abstract;
-    }
-
-    @Override
-    public boolean isAbstract()
-    {
-        return _abstract;
+        this.concept = Concept.extendConcept(this, modelElement, scope, namedElement, propertyList, abstraction);
     }
 
     @Override
@@ -347,6 +337,12 @@ class ConceptImpl implements TempConcept
     public List<Property> getProperties()
     {
         return concept.getProperties();
+    }
+
+    @Override
+    public boolean isAbstraction()
+    {
+        return concept.isAbstraction();
     }
 
     @Override

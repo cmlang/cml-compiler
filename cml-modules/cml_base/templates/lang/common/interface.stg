@@ -29,7 +29,7 @@ interface_getters(concept) ::= <<
 interface_secondary_create_method(concept) ::= ""
 
 interface_primary_create_method(concept) ::= <<
-<if(!concept.abstract && class_name_suffix)><\\>
+<if(!concept.abstraction && class_name_suffix)><\\>
 <static_operation(
     name=interface_create_name(interface_name()),
     params=[concept.superProperties, concept.nonDerivedProperties],

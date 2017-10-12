@@ -16,7 +16,7 @@ public class AbstractPropertyInAbstractConcept implements Invariant<Property>
         {
             final TempConcept concept = (TempConcept) self.getParent().get();
 
-            return self.isConcrete() || concept.isAbstract();
+            return self.isConcrete() || concept.isAbstraction();
         }
         else
         {

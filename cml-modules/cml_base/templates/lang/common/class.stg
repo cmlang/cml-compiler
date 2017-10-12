@@ -8,7 +8,7 @@ class(concept) ::= <<
 <class7(
     concept=concept,
     class_name_suffix="",
-    abstract=concept.abstract,
+    abstract=concept.abstraction,
     ancestors=concept.directAncestors,
     interfaces=[],
     field_ancestors=[],

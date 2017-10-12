@@ -1,6 +1,8 @@
 
 @concept CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
 {
+    abstraction: BOOLEAN;
+
     /derived_properties = properties | select: derived;
     /slot_properties = properties | select: slot;
 
@@ -15,13 +17,11 @@
 */
 
 /*
-    abstract: BOOLEAN;
-
     generalizations: INHERITANCE*;
     specializations: INHERITANCE*;
 
-    ancestors = generalizations.ancestor;
-    descendants = specializations.descendant;
+    /ancestors = generalizations.ancestor;
+    /descendants = specializations.descendant;
 
     /associations = model.associations | select: (association_ends | exists: concept == self);
 
