@@ -17,7 +17,6 @@ import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static org.jooq.lambda.Seq.seq;
@@ -116,9 +115,6 @@ public interface TempConcept extends Concept, PropertyList
     {
         return redefinedAncestors(this, this);
     }
-
-    List<TempConcept> getDirectAncestors();
-    void addDirectAncestor(TempConcept concept);
 
     @SuppressWarnings("unused")
     default List<Property> getRedefinedInheritedConcreteProperties()
@@ -262,7 +258,6 @@ public interface TempConcept extends Concept, PropertyList
 class ConceptImpl implements TempConcept
 {
     private final Concept concept;
-    private final List<TempConcept> directAncestors = new ArrayList<>();
 
     ConceptImpl(TempModule module, String name, boolean abstraction, final List<Property> properties, Location location)
     {
@@ -373,20 +368,6 @@ class ConceptImpl implements TempConcept
     public List<Property> getInheritedProperties()
     {
         return concept.getInheritedProperties();
-    }
-
-    @Override
-    public List<TempConcept> getDirectAncestors()
-    {
-        return unmodifiableList(directAncestors);
-    }
-
-    @Override
-    public void addDirectAncestor(TempConcept concept)
-    {
-        assert !directAncestors.contains(concept);
-
-        directAncestors.add(concept);
     }
 
     @Override

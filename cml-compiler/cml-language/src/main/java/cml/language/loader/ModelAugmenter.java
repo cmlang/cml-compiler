@@ -53,10 +53,7 @@ class ModelAugmenter extends CMLBaseListener
                                                                   .map(NamedElement::getName)
                                                                   .collect(Collectors.toList());
 
-            foundAncestors.forEach(ancestor -> {
-                ctx.concept.addDirectAncestor(ancestor);
-                createInheritance(ancestor, ctx.concept);
-            });
+            foundAncestors.forEach(ancestor -> createInheritance(ancestor, ctx.concept));
 
             final List<String> missingAncestorNames = ancestorNames.stream()
                                                                    .filter(name -> !foundAncestorNames.contains(name))
