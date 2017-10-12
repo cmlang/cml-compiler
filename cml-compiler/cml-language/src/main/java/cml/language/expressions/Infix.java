@@ -38,6 +38,10 @@ public class Infix extends ExpressionBase
         REFERENTIAL_EQUALITY, REFERENTIAL_INEQUALITY
     ));
 
+    private static final Collection<String> STRING_OPERATORS = unmodifiableCollection(asList(
+        "+", "%"
+    ));
+
     private static Map<String, String> OPERATIONS =
         new HashMap<String, String>()
         {{
@@ -145,6 +149,10 @@ public class Infix extends ExpressionBase
         else if (ARITHMETIC_OPERATORS.contains(operator) && leftType.isBinaryFloatingPoint() && rightType.isBinaryFloatingPoint())
         {
             return isBinaryFloatingPointWiderThan(leftType, rightType) ? leftType : rightType;
+        }
+        else if (STRING_OPERATORS.contains(operator) && leftType.isString() && rightType.isString())
+        {
+            return TempNamedType.STRING;
         }
         else
         {
