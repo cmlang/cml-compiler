@@ -15,6 +15,10 @@
     /non_init = empty(value) and not derived;
     /slot = not (derived or present(association_end));
     /printable = (slot and not type.sequence) or type.primitive;
+
+    /type = if present(declared_type) then declared_type as! TYPE
+            else if present(value) then value.type.inferred_type as! TYPE
+            else UNDEFINED_TYPE("No type or expression defined for property: " + name);
 }
 
 @abstraction PROPERTY_LIST: SCOPE

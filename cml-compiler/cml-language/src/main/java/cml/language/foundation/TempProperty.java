@@ -143,21 +143,7 @@ class PropertyImpl implements TempProperty
     @Override
     public Type getType()
     {
-        if (getDeclaredType().isPresent())
-        {
-            return getDeclaredType().get();
-        }
-        else
-        {
-            if (getValue().isPresent())
-            {
-                return getValue().get().getType().getInferredType();
-            }
-            else
-            {
-                return createUndefinedType("No type or expression defined for property: " + getName());
-            }
-        }
+        return property.getType();
     }
 
     @Override
