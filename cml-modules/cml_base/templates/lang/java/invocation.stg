@@ -150,3 +150,7 @@ invocation_sequence_count(args) ::= <<
 invocation_sequence_distinct(args) ::= <<
 <expression(args.seq)>.distinct()
 >>
+
+invocation_cross_join(args) ::= <<
+crossJoin(<expression(args.seq1)>, <expression(args.seq2)>)
+>>
