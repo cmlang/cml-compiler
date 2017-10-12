@@ -7,6 +7,7 @@
 
 @template @function exists<T>(seq: T*, expr: (T) -> boolean) -> boolean;
 @template @function all<T>(seq: T*, expr: (T) -> boolean) -> boolean;
+@template @function none<T>(seq: T*, expr: (T) -> boolean) -> boolean;
 
 @template @function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 @template @function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;

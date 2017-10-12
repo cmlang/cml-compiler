@@ -75,6 +75,18 @@ invocation_required_all(args) ::= <<
 all(map(<expression(args.expr)>, [<expression(args.seq)>]))
 >>
 
+invocation_sequence_none(args) ::= <<
+(len(list(filter(<expression(args.expr)>, <expression(args.seq)>))) == 0)
+>>
+
+invocation_optional_none(args) ::= <<
+(len(list(filter(<expression(args.expr)>, <optional_list(args)>))) == 0)
+>>
+
+invocation_required_none(args) ::= <<
+(len(list(filter(<expression(args.expr)>, [<expression(args.seq)>]))) == 0)
+>>
+
 invocation_sequence_select(args) ::= <<
 filter(<expression(args.expr)>, <expression(args.seq)>)
 >>

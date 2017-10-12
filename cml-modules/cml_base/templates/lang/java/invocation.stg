@@ -79,6 +79,18 @@ invocation_required_all(args) ::= <<
 seq(asList(<expression(args.seq)>)).allMatch(<expression(args.expr)>)
 >>
 
+invocation_sequence_none(args) ::= <<
+<expression(args.seq)>.noneMatch(<expression(args.expr)>)
+>>
+
+invocation_optional_none(args) ::= <<
+seq(<expression(args.seq)>).noneMatch(<expression(args.expr)>)
+>>
+
+invocation_required_none(args) ::= <<
+seq(asList(<expression(args.seq)>)).noneMatch(<expression(args.expr)>)
+>>
+
 invocation_sequence_select(args) ::= <<
 <expression(args.seq)>.filter(<expression(args.expr)>)
 >>
