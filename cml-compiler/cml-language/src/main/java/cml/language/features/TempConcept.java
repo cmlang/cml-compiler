@@ -192,7 +192,7 @@ public interface TempConcept extends Concept, PropertyList
     {
         final List<TempConcept> generalizations = new ArrayList<>();
 
-        getDirectAncestors().forEach(c -> c.appendToGeneralizations(generalizations));
+        getAncestors().forEach(c -> ((TempConcept) c).appendToGeneralizations(generalizations));
 
         return generalizations;
     }
@@ -203,16 +203,16 @@ public interface TempConcept extends Concept, PropertyList
         {
             generalizations.add(this);
 
-            getDirectAncestors().forEach(c -> c.appendToGeneralizations(generalizations));
+            getAncestors().forEach(c -> ((TempConcept) c).appendToGeneralizations(generalizations));
         }
     }
 
     default List<Pair<TempConcept>> getGeneralizationPairs()
     {
-        return getDirectAncestors().stream().flatMap(
-            c1 -> getDirectAncestors().stream()
+        return getAncestors().stream().flatMap(
+            c1 -> getAncestors().stream()
                                       .filter(c2 -> c1 != c2)
-                                      .map(c2 -> new Pair<>(c1, c2))
+                                      .map(c2 -> new Pair<>((TempConcept)c1, (TempConcept)c2))
         )
         .distinct()
         .collect(toList());
