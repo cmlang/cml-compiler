@@ -6,12 +6,12 @@
     <parent>
         <groupId>cml</groupId>
         <artifactId>cml-compiler</artifactId>
-        <version>master-SNAPSHOT</version>
+        <version>2017.10.12-alpha</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cml-package</artifactId>
-    <version>master-SNAPSHOT</version>
+    <version>2017.10.12-alpha</version>
 
     <dependencies>
         <dependency>
