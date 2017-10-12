@@ -40,7 +40,7 @@ public class AbstractPropertyRedefinition implements Invariant<TempConcept>
 
     private Stream<Property> getInheritedAbstractProperties(TempConcept self)
     {
-        return self.getDirectAncestors()
+        return self.getAncestors()
                    .stream()
                    .flatMap(c -> c.getAllProperties().stream())
                    .filter(Property::isAbstract);

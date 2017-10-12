@@ -1,5 +1,5 @@
 
-@concept CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
+@abstraction CONCEPT: NAMED_ELEMENT, PROPERTY_LIST
 {
     abstraction: BOOLEAN;
 
@@ -21,6 +21,8 @@
 
     /ancestors = generalizations.ancestor;
     /descendants = specializations.descendant;
+
+    /all_properties: PROPERTY*;
 
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
