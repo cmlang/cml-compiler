@@ -26,14 +26,6 @@ public class ConceptRedef
         return new ArrayList<>(propertyRedefs);
     }
 
-    public Optional<PropertyRedef> getPropertyRedef(final PropertyRedef propertyRedef)
-    {
-        return propertyRedefs.stream()
-                             .filter(p -> p.getProperty().getName().equals(propertyRedef.getProperty().getName()))
-                             .filter(p -> p.isRedefined())
-                             .findFirst();
-    }
-
     @Override
     public boolean equals(Object o)
     {

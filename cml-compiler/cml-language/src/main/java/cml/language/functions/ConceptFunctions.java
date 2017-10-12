@@ -57,7 +57,7 @@ public class ConceptFunctions
             {
                 final List<PropertyRedef> propertyRedefs = conceptRedef.getPropertyRedefs()
                                                                        .stream()
-                                                                       .map(p -> override.get().getPropertyRedef(p).orElse(p))
+                                                                       .map(p -> propertyRedefOf(override.get().getPropertyRedefs(), p).orElse(p))
                                                                        .collect(toList());
 
                 return new ConceptRedef(conceptRedef.getConcept(), propertyRedefs);
@@ -67,6 +67,14 @@ public class ConceptFunctions
                 return conceptRedef;
             }
         };
+    }
+
+    public static Optional<PropertyRedef> propertyRedefOf(List<PropertyRedef> propertyRedefs, PropertyRedef propertyRedef)
+    {
+        return propertyRedefs.stream()
+                             .filter(p -> p.getProperty().getName().equals(propertyRedef.getProperty().getName()))
+                             .filter(p -> p.isRedefined())
+                             .findFirst();
     }
 
     public static List<ConceptRedef> redefinedAncestors(TempConcept concept)
