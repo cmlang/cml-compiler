@@ -21,7 +21,7 @@ public class VehicleOwnership
     }
 
     private final Map<Vehicle, Organization> owner = new HashMap<>();
-    private final Map<Organization, List<Vehicle>> fleet = new HashMap<>();
+    private final Map<Organization, Set<Vehicle>> fleet = new HashMap<>();
 
     synchronized void linkMany(Organization owner, List<Vehicle> fleet)
     {
@@ -32,7 +32,7 @@ public class VehicleOwnership
     {
         this.owner.put(vehicle, organization);
 
-        final List<Vehicle> vehicleList = this.fleet.computeIfAbsent(organization, key -> new ArrayList<>());
+        final Set<Vehicle> vehicleList = this.fleet.computeIfAbsent(organization, key -> new LinkedHashSet<>());
         if (!vehicleList.contains(vehicle))
         {
             vehicleList.add(vehicle);
@@ -46,7 +46,7 @@ public class VehicleOwnership
 
     synchronized List<Vehicle> fleetOf(Organization organization)
     {
-        final List<Vehicle> vehicleList = this.fleet.get(organization);
+        final Set<Vehicle> vehicleList = this.fleet.get(organization);
 
         return (vehicleList == null) ? Collections.emptyList() : new ArrayList<>(vehicleList);
     }

@@ -21,7 +21,7 @@ public class Employment
     }
 
     private final Map<Employee, Organization> employer = new HashMap<>();
-    private final Map<Organization, List<Employee>> employees = new HashMap<>();
+    private final Map<Organization, Set<Employee>> employees = new HashMap<>();
 
     synchronized void linkMany(Organization employer, List<Employee> employees)
     {
@@ -32,7 +32,7 @@ public class Employment
     {
         this.employer.put(employee, organization);
 
-        final List<Employee> employeeList = this.employees.computeIfAbsent(organization, key -> new ArrayList<>());
+        final Set<Employee> employeeList = this.employees.computeIfAbsent(organization, key -> new LinkedHashSet<>());
         if (!employeeList.contains(employee))
         {
             employeeList.add(employee);
@@ -46,7 +46,7 @@ public class Employment
 
     synchronized List<Employee> employeesOf(Organization organization)
     {
-        final List<Employee> employeeList = this.employees.get(organization);
+        final Set<Employee> employeeList = this.employees.get(organization);
 
         return (employeeList == null) ? Collections.emptyList() : new ArrayList<>(employeeList);
     }
