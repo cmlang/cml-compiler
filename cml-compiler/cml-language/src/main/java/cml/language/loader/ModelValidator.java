@@ -17,7 +17,13 @@ import static java.util.Collections.singletonList;
 
 public class ModelValidator implements ModelVisitor
 {
-    private final InvariantValidator<TempConcept> conceptInvariantValidator = TempConcept.invariantValidator();
+    private final InvariantValidator<TempConcept> conceptInvariantValidator = () -> asList(
+        new NotOwnGeneralization(),
+        new CompatibleGeneralizations(),
+        new ConflictRedefinition(),
+        new AbstractPropertyRedefinition()
+    );
+
     private final InvariantValidator<Property> propertyInvariantValidator = () -> asList(
         new UniquePropertyName(),
         new PropertyTypeSpecifiedOrInferred(),
@@ -25,15 +31,19 @@ public class ModelValidator implements ModelVisitor
         new GeneralizationCompatibleRedefinition(),
         new AbstractPropertyInAbstractConcept()
     );
+
     private final InvariantValidator<Association> associationInvariantValidator = () -> asList(
         new AssociationMustHaveTwoAssociationEnds(),
         new AssociationEndTypesMustMatch()
     );
+
     private final InvariantValidator<AssociationEnd> associationEndInvariantValidator = () -> asList(
         new AssociationEndPropertyFoundInModel(),
         new AssociationEndTypeMatchesPropertyType()
     );
+
     private final InvariantValidator<Expression> expressionInvariantValidator = () -> singletonList(new ExpressionInvariant());
+
     private final List<Diagnostic> diagnostics = new ArrayList<>();
 
     List<Diagnostic> getDiagnostics()

@@ -1,6 +1,7 @@
 package cml.language.features;
 
-import cml.language.foundation.*;
+import cml.language.foundation.Pair;
+import cml.language.foundation.TempModel;
 import cml.language.generated.*;
 
 import java.util.ArrayList;
@@ -12,11 +13,9 @@ import java.util.stream.Stream;
 
 import static cml.language.functions.ConceptFunctions.redefinedAncestors;
 import static cml.language.functions.ConceptFunctions.redefinedInheritedConcreteProperties;
-import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
@@ -284,16 +283,6 @@ public interface TempConcept extends Concept, PropertyList
     {
         return new ConceptImpl(module, name, _abstract, propertyList, location);
     }
-
-    static InvariantValidator<TempConcept> invariantValidator()
-    {
-        return () -> asList(
-            new NotOwnGeneralization(),
-            new CompatibleGeneralizations(),
-            new ConflictRedefinition(),
-            new AbstractPropertyRedefinition()
-        );
-    }
 }
 
 class ConceptImpl implements TempConcept
@@ -390,123 +379,5 @@ class ConceptImpl implements TempConcept
     public String toString()
     {
         return "concept " + getName();
-    }
-}
-
-class NotOwnGeneralization implements Invariant<TempConcept>
-{
-    @Override
-    public boolean evaluate(TempConcept self)
-    {
-        return !self.getAllGeneralizations().contains(self);
-    }
-
-    @Override
-    public Diagnostic createDiagnostic(TempConcept self)
-    {
-        return new Diagnostic("not_own_generalization", self);
-    }
-
-    @Override
-    public boolean isCritical()
-    {
-        return true;
-    }
-}
-
-class CompatibleGeneralizations implements Invariant<TempConcept>
-{
-    @Override
-    public boolean evaluate(TempConcept self)
-    {
-        return self.getGeneralizationPropertyPairs()
-                   .stream()
-                   .allMatch(pair -> isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()));
-    }
-
-    @Override
-    public Diagnostic createDiagnostic(TempConcept self)
-    {
-        final List<Property> conflictingProperties = self.getGeneralizationPropertyPairs().stream()
-                                                         .filter(pair -> !isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
-                                                         .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
-                                                         .collect(toList());
-
-        return new Diagnostic("compatible_generalizations", self, conflictingProperties);
-    }
-}
-
-class ConflictRedefinition implements Invariant<TempConcept>
-{
-    @Override
-    public boolean evaluate(TempConcept self)
-    {
-        return getConflictingPropertyPairs(self)
-                   .map(Pair::getLeft)
-                   .allMatch(propertyRedefinedIn(self));
-    }
-
-    private Stream<Pair<Property>> getConflictingPropertyPairs(TempConcept self)
-    {
-        return self.getGeneralizationPropertyPairs().stream()
-                   .filter(pair -> isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
-                   .filter(pair -> pair.getLeft().isDerived() ||
-                                   pair.getLeft().getValue().isPresent() ||
-                                   pair.getRight().isDerived() ||
-                                   pair.getRight().getValue().isPresent());
-    }
-
-    private Predicate<Property> propertyRedefinedIn(TempConcept self)
-    {
-        return p1 -> self.getProperties()
-                         .stream()
-                         .anyMatch(p2 -> p1.getName().equals(p2.getName()));
-    }
-
-    @Override
-    public Diagnostic createDiagnostic(TempConcept self)
-    {
-        final List<Property> conflictingProperties = getConflictingPropertyPairs(self)
-                                                         .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
-                                                         .filter(propertyRedefinedIn(self).negate())
-                                                         .collect(toList());
-
-        return new Diagnostic("conflict_redefinition", self, conflictingProperties);
-    }
-}
-
-class AbstractPropertyRedefinition implements Invariant<TempConcept>
-{
-    @Override
-    public boolean evaluate(TempConcept self)
-    {
-        return self.isAbstract() || getInheritedAbstractProperties(self).allMatch(abstractPropertyRedefinedIn(self));
-    }
-
-    private Predicate<Property> abstractPropertyRedefinedIn(TempConcept self)
-    {
-        return p1 -> self.getProperties()
-                         .stream()
-                         .filter(p2 -> p1.getName().equals(p2.getName()))
-                         .filter(Property::isConcrete)
-                         .count() > 0;
-    }
-
-    @Override
-    public Diagnostic createDiagnostic(TempConcept self)
-    {
-        final List<Property> abstractProperties = getInheritedAbstractProperties(self)
-                                                      .filter(abstractPropertyRedefinedIn(self).negate())
-                                                      .collect(toList());
-
-        return new Diagnostic("abstract_property_redefinition", self, abstractProperties);
-    }
-
-    private Stream<Property> getInheritedAbstractProperties(TempConcept self)
-    {
-        return self.getDirectAncestors()
-                   .stream()
-                   .flatMap(c -> c.getAllProperties().stream())
-                   .filter(Property::isAbstract);
     }
 }
