@@ -126,3 +126,7 @@ invocation_compare(args) ::= <<
 invocation_sequence_reverse(args) ::= <<
 <expression(args.seq)>.reverse()
 >>
+
+invocation_concat(args) ::= <<
+concat(<expression(args.seq1)>, <expression(args.seq2)>)
+>>

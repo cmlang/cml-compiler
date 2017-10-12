@@ -22,10 +22,11 @@ class Item:
 
 class Functions:
 
-    def __init__(self, required_item: 'Item', single_item: 'Optional[Item]', items: 'List[Item]') -> 'None':
+    def __init__(self, required_item: 'Item', single_item: 'Optional[Item]', items: 'List[Item]', items_2: 'List[Item]') -> 'None':
         self.__required_item = required_item
         self.__single_item = single_item
         self.__items = items
+        self.__items_2 = items_2
 
     @property
     def required_item(self) -> 'Item':
@@ -38,6 +39,10 @@ class Functions:
     @property
     def items(self) -> 'List[Item]':
         return self.__items
+
+    @property
+    def items_2(self) -> 'List[Item]':
+        return self.__items_2
 
     @property
     def empty_items(self) -> 'bool':
@@ -180,6 +185,12 @@ class Functions:
     @property
     def new_item(self) -> 'Item':
         return Item(12)
+
+    @property
+    def concat_items(self) -> 'List[Item]':
+        return list(
+            (self.items + self.items_2)
+        )
 
     def __str__(self) -> 'str':
         return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, large_item_exists=%s, large_item_all=%s, required_item_exists=%s, required_item_all=%s, items_collect=%s, single_item_collect=%s, required_item_collect=%s)" % (

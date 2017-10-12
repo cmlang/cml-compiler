@@ -3,7 +3,7 @@
 {
     required_item: Item;
     single_item: Item?;
-    items: Item*;
+    items: Item*; items2: Item*;
 
     /empty_items = empty(items);
     /present_items = present(items);
@@ -49,6 +49,8 @@
     /reversed_items = reverse(items);
 
     /new_item = Item(12);
+
+    /concat_items = concat(items, items2);
 }
 
 @concept Item

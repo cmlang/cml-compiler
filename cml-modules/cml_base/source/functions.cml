@@ -17,3 +17,5 @@
 
 @template @function sort<T>(seq: T*, expr: (T, T) -> integer) -> T*;
 @template @function compare<T>(expr1: T, expr2: T) -> integer;
+
+@template @function concat<T>(seq1: T*, seq2: T*) -> T*;

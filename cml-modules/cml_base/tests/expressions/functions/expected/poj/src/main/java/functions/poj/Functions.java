@@ -15,12 +15,14 @@ public class Functions
     private final Item requiredItem;
     private final @Nullable Item singleItem;
     private final List<Item> items;
+    private final List<Item> items2;
 
-    public Functions(Item requiredItem, @Nullable Item singleItem, List<Item> items)
+    public Functions(Item requiredItem, @Nullable Item singleItem, List<Item> items, List<Item> items2)
     {
         this.requiredItem = requiredItem;
         this.singleItem = singleItem;
         this.items = items;
+        this.items2 = items2;
     }
 
     public Item getRequiredItem()
@@ -36,6 +38,11 @@ public class Functions
     public List<Item> getItems()
     {
         return Collections.unmodifiableList(this.items);
+    }
+
+    public List<Item> getItems2()
+    {
+        return Collections.unmodifiableList(this.items2);
     }
 
     public boolean isEmptyItems()
@@ -186,6 +193,11 @@ public class Functions
     public Item getNewItem()
     {
         return new Item(12);
+    }
+
+    public List<Item> getConcatItems()
+    {
+        return concat(seq(this.getItems()), seq(this.getItems2())).toList();
     }
 
     public String toString()
