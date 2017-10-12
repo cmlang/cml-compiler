@@ -51,7 +51,7 @@ expression_invocation(invocation) ::= <<
 <({invocation_<invocation.name>})(invocation.namedArguments)><\\>
 <endif><\\>
 <elseif(invocation.concept)><\\>
-<invocation_concept(type_name(invocation.concept), invocation.arguments)><\\>
+<invocation_concept(invocation.concept, invocation.arguments)><\\>
 <else><\\>
 <endif>
 >>
