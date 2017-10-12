@@ -19,17 +19,25 @@ association_name(association) ::= <<
 >>
 
 association_field_decl(association_end) ::= <<
-private final Map\<<field_type(association_end.associatedConcept)>, <field_type(association_end.associatedProperty)>\> <field_name(association_end.associatedProperty)> = new HashMap\<>();
+<if(association_end.associatedProperty.type.single)><\\>
+private final Map\<<field_type(association_end.associatedConcept)>, <field_type(association_end.associatedProperty)>\> <field_name(association_end.associatedProperty)> = new HashMap\<>();<\\>
+<else><\\>
+private final Map\<<field_type(association_end.associatedConcept)>, <association_link_seq_type(association_end)>\> <field_name(association_end.associatedProperty)> = new HashMap\<>();<\\>
+<endif>
 >>
 
 association_constructor(association) ::= ""
 
 association_link_statement_seq(association_end) ::= <<
-final <field_type(association_end.associatedProperty)> <association_link_seq(association_end)> = <association_link_field(association_end)>.computeIfAbsent(<association_link_source(association_end)>, key -> new ArrayList\<>());
+final <association_link_seq_type(association_end)> <association_link_seq(association_end)> = <association_link_field(association_end)>.computeIfAbsent(<association_link_source(association_end)>, key -> new LinkedHashSet\<>());
 if (!<association_link_seq(association_end)>.contains(<association_link_target(association_end)>))
 {
 <indent()><association_link_seq(association_end)>.add(<association_link_target(association_end)>);
 }
+>>
+
+association_link_seq_type(association_end) ::= <<
+Set\<<type_name(association_end.associatedProperty.type)>\>
 >>
 
 association_link_statement_non_seq(association_end) ::= <<
@@ -43,7 +51,7 @@ association_getter_name(property) ::= <<
 >>
 
 association_getter_statements_seq(association_end) ::= <<
-final <field_type(association_end.associatedProperty)> <association_link_seq(association_end)> = <association_link_field(association_end)>.get(<association_link_source(association_end)>);
+final <association_link_seq_type(association_end)> <association_link_seq(association_end)> = <association_link_field(association_end)>.get(<association_link_source(association_end)>);
 
 return (<association_link_seq(association_end)> == null) ? Collections.emptyList() : new ArrayList\<>(<association_link_seq(association_end)>);
 >>
