@@ -3,10 +3,7 @@ package cml.language.functions;
 import cml.language.expressions.LambdaScope;
 import cml.language.expressions.Path;
 import cml.language.features.TempConcept;
-import cml.language.generated.NamedElement;
-import cml.language.generated.Scope;
-import cml.language.generated.Type;
-import cml.language.generated.TypedElement;
+import cml.language.generated.*;
 import cml.language.types.TempNamedType;
 
 import java.util.List;
@@ -103,7 +100,7 @@ public class ScopeFunctions
 
             final TempConcept concept = (TempConcept) scope;
 
-            for (TempConcept ancestor: concept.getDirectAncestors())
+            for (Concept ancestor: concept.getAncestors())
             {
                 final Optional<Type> type = typeOfVariableNamed(name, ancestor);
 
