@@ -29,9 +29,6 @@
     /inherited_properties = distinct(ancestors.all_properties);
     /inherited_abstract_properties = inherited_properties | select: abstract;
 
-    /non_redefined_properties = for inherited in inherited_properties
-                                    | select: (for p in self.properties | none: p.name == inherited.name);
-
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
 
@@ -42,6 +39,10 @@
     /printable_properties = all_properties | select: printable;
 
     /all_properties = concat(properties, non_redefined_properties);
+    /non_redefined_properties = for p1 in inherited_properties, p2 in properties
+                                    | reject: p1.name == p2.name
+                                    | collect: p1
+                                    | distinct;
     /super_properties = non_redefined_properties | select: not derived;
 
     /dependencies = distinct(concat(inherited_dependencies, property_dependencies));
