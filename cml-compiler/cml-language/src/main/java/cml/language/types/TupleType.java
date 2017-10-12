@@ -50,12 +50,6 @@ public class TupleType extends BaseType
     }
 
     @Override
-    public String getKind()
-    {
-        return "tuple";
-    }
-
-    @Override
     public String toString()
     {
         return format("(%s)", seq(elements).toString(",")) + (getCardinality().isPresent() ? getCardinality().get() : "");
