@@ -16,13 +16,13 @@
             else 0;
 */
 
-/*
     generalizations: INHERITANCE*;
     specializations: INHERITANCE*;
 
     /ancestors = generalizations.ancestor;
     /descendants = specializations.descendant;
 
+/*
     /associations = model.associations | select: (association_ends | exists: concept == self);
 
     /association_properties = properties | select: present(association);
@@ -57,25 +57,23 @@
 
 }
 
-/*
-concept INHERITANCE: MODEL_ELEMENT
+@concept INHERITANCE: MODEL_ELEMENT
 {
     ancestor: CONCEPT;
     descendant: CONCEPT;
 }
 
-association GENERALIZATION
+@association GENERALIZATION
 {
-    CONCEPT.generalizations;
     INHERITANCE.descendant;
+    CONCEPT.generalizations;
 }
 
-association SPECIALIZATION
+@association SPECIALIZATION
 {
-    CONCEPT.specializations;
     INHERITANCE.ancestor;
+    CONCEPT.specializations;
 }
-*/
 
 @concept CONCEPT_REDEF
 {

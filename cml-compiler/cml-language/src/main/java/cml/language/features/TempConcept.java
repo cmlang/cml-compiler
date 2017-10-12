@@ -294,7 +294,7 @@ class ConceptImpl implements TempConcept
         final NamedElement namedElement = extendNamedElement(this, modelElement, name);
         final Scope scope = extendScope(this, modelElement, seq(properties).map(p -> (ModelElement)p).toList());
         final PropertyList propertyList = PropertyList.extendPropertyList(this, modelElement, scope);
-        this.concept = Concept.extendConcept(this, modelElement, scope, namedElement, propertyList, abstraction);
+        this.concept = Concept.extendConcept(this, modelElement, scope, namedElement, propertyList, abstraction, emptyList(), emptyList());
     }
 
     @Override
@@ -355,6 +355,30 @@ class ConceptImpl implements TempConcept
     public List<Property> getSlotProperties()
     {
         return concept.getSlotProperties();
+    }
+
+    @Override
+    public List<Inheritance> getGeneralizations()
+    {
+        return concept.getGeneralizations();
+    }
+
+    @Override
+    public List<Inheritance> getSpecializations()
+    {
+        return concept.getSpecializations();
+    }
+
+    @Override
+    public List<Concept> getAncestors()
+    {
+        return concept.getAncestors();
+    }
+
+    @Override
+    public List<Concept> getDescendants()
+    {
+        return concept.getDescendants();
     }
 
     @Override

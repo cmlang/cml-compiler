@@ -10,6 +10,9 @@ ASSOCIATION_END files:
 CONCEPT files:
 - src/main/java/cml/language/generated/Concept.java
 
+INHERITANCE files:
+- src/main/java/cml/language/generated/Inheritance.java
+
 CONCEPT_REDEF files:
 - src/main/java/cml/language/generated/ConceptRedef.java
 
@@ -63,6 +66,12 @@ UNDEFINED_TYPE files:
 
 ASSOCIATION_END_PROPERTY files:
 - src/main/java/cml/language/generated/AssociationEndProperty.java
+
+GENERALIZATION files:
+- src/main/java/cml/language/generated/Generalization.java
+
+SPECIALIZATION files:
+- src/main/java/cml/language/generated/Specialization.java
 
 MEMBERSHIP files:
 - src/main/java/cml/language/generated/Membership.java
