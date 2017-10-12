@@ -70,9 +70,9 @@ public class TypeCast extends ExpressionBase
         {
             return "Cannot use 'as?' to cast to required-cardinality type";
         }
-        else if (operator.equals(ASB) && !exprType.isRequired() && castType.isRequired())
+        else if (operator.equals(ASB) && exprType.isSequence() && castType.isRequired())
         {
-            return "Cannot cast from optional or sequence type to required-cardinality type";
+            return "Cannot cast from sequence type to required-cardinality type";
         }
         else if (exprType.isSequence() && castType.isOptional())
         {

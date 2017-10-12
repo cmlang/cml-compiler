@@ -53,6 +53,11 @@ public class Types
         return (Descendant)this.getReq();
     }
 
+    public Descendant getOptToReqTypeCastAsb()
+    {
+        return seq(this.getOpt()).cast(Descendant.class).findFirst().get();
+    }
+
     public Optional<Descendant> getReqToOptTypeCastAsb()
     {
         return seq(asList(this.getReq())).cast(Descendant.class).findFirst();

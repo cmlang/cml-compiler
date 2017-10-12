@@ -19,6 +19,10 @@ type_cast_asb_from_required_to_sequence(expr, type) ::= <<
 <from_required(expr)>.<cast(type)>
 >>
 
+type_cast_asb_from_optional_to_required(expr, type) ::= <<
+<type_cast_asb_from_optional_to_sequence(expr, type)>.findFirst().get()
+>>
+
 type_cast_asb_from_optional_to_optional(expr, type) ::= <<
 <type_cast_asb_from_optional_to_sequence(expr, type)>.findFirst()
 >>

@@ -14,13 +14,8 @@ Cannot use 'as?' to cast to required-cardinality type:
 - left operand is 'seq: Ancestor*'
 - right operand is 'Descendant'
 
-Failed validation: required property_type_specified_or_inferred: in property Types.opt_to_req_type_cast_asb: UNDEFINED (16:5)
-Cannot cast from optional or sequence type to required-cardinality type:
-- left operand is 'opt: Ancestor?'
-- right operand is 'Descendant'
-
 Failed validation: required property_type_specified_or_inferred: in property Types.seq_to_req_type_cast_asb: UNDEFINED (17:5)
-Cannot cast from optional or sequence type to required-cardinality type:
+Cannot cast from sequence type to required-cardinality type:
 - left operand is 'seq: Ancestor*'
 - right operand is 'Descendant'
 

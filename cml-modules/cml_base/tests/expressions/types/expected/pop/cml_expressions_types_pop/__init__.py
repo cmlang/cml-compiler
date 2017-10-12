@@ -48,6 +48,10 @@ class Types:
         return cast('Descendant', self.req)
 
     @property
+    def opt_to_req_type_cast_asb(self) -> 'Descendant':
+        return cast('Descendant', self.opt)
+
+    @property
     def req_to_opt_type_cast_asb(self) -> 'Optional[Descendant]':
         return cast('Optional[Descendant]', self.req)
 

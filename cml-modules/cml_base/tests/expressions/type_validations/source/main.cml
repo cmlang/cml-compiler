@@ -13,7 +13,7 @@
     /seq_to_req_type_cast_asq = seq as? Descendant; // <- error: cannot use 'as?' to cast to required type
 
     /req_to_req_type_cast_asb = req as! Descendant;
-    /opt_to_req_type_cast_asb = opt as! Descendant; // <- error: cannot cast from optional to required type
+    /opt_to_req_type_cast_asb = opt as! Descendant;
     /seq_to_req_type_cast_asb = seq as! Descendant; // <- error: cannot cast from sequence to required type
 
     /req_to_opt_type_cast_asb = req as! Descendant?;

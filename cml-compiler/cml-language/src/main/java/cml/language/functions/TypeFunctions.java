@@ -214,6 +214,10 @@ public class TypeFunctions
         {
             return false;
         }
+        else if (operator.equals(TypeCast.ASB) && castType.isRequired())
+        {
+            return isElementTypeAssignableFrom(exprType.getElementType(), castType.getElementType()) && exprType.isSingle();
+        }
         else
         {
             return isElementTypeAssignableFrom(exprType.getElementType(), castType.getElementType()) &&
