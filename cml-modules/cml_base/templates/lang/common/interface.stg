@@ -19,7 +19,7 @@ interface(concept, class_name_suffix) ::= <<
 >>
 
 interface_header(concept) ::= <<
-<type_name(concept)><ancestor_list(true, concept.directAncestors, [])>
+<type_name(concept)><ancestor_list(true, concept.ancestors, [])>
 >>
 
 interface_getters(concept) ::= <<
