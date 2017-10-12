@@ -131,14 +131,6 @@ public interface TempConcept extends Concept, PropertyList
     List<TempConcept> getDirectAncestors();
     void addDirectAncestor(TempConcept concept);
 
-    default List<Property> getInheritedProperties()
-    {
-        return getDirectAncestors().stream()
-                                   .flatMap(concept -> concept.getAllProperties().stream())
-                                   .distinct()
-                                   .collect(toList());
-    }
-
     @SuppressWarnings("unused")
     default List<Property> getRedefinedInheritedConcreteProperties()
     {
@@ -374,6 +366,12 @@ class ConceptImpl implements TempConcept
     public List<Concept> getDescendants()
     {
         return concept.getDescendants();
+    }
+
+    @Override
+    public List<Property> getInheritedProperties()
+    {
+        return concept.getInheritedProperties();
     }
 
     @Override

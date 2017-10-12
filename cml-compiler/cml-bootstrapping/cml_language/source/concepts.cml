@@ -24,7 +24,7 @@
 
     /all_properties: PROPERTY*;
 
-//    /inherited_properties = ancestors | collect: all_properties | distinct;
+    /inherited_properties = distinct(ancestors.all_properties);
 
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
