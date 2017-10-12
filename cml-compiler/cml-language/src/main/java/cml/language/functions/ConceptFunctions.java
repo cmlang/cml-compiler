@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
+import static org.jooq.lambda.Seq.seq;
 
 @SuppressWarnings("WeakerAccess")
 public class ConceptFunctions
@@ -95,8 +96,8 @@ public class ConceptFunctions
                                                                    .stream())
                                                                    .map(overridden(redefinitions));
 
-        return concat(inheritedRedefinitions, redefinitions.stream())
-            .distinct()
+        return seq(concat(inheritedRedefinitions, redefinitions.stream()))
+            .distinct(r -> r.getConcept())
             .collect(toList());
     }
 
