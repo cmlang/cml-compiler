@@ -17,4 +17,4 @@
 @concept E: B;
 @concept F: D, E;
 
-@task some_task;
+@task compatible_generalizations;

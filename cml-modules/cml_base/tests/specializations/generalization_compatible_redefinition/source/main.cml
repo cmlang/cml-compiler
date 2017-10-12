@@ -1,0 +1,67 @@
+@concept Base
+{
+    a: STRING;
+}
+
+@concept A: Base
+{
+    p1: INTEGER = 0;
+    p2: STRING;
+    q1: STRING;
+    r1: DECIMAL = 1.0;
+    s1: DECIMAL;
+    t1: STRING = "A";
+    t2: STRING = "A";
+}
+
+@concept B: Base
+{
+    p1: INTEGER = 1;
+    q2: STRING;
+}
+
+// Property "p1" should have been redefined as INTEGER
+// in order to resolve definition conflict between A and B:
+@concept C: A, B
+{
+    p1: STRING;
+    q3: STRING;
+    r1: DECIMAL = 2.0;
+    s1: DECIMAL;
+    t1: STRING = "D";
+}
+
+// Redefinition as expected:
+@concept D: A, B
+{
+    p1: INTEGER = 2;
+    p2: INTEGER; // Incompatible with A
+    q3: STRING;
+    r1: DECIMAL = 2.0;
+    s1: DECIMAL;
+    t1: STRING = "D";
+    t2: STRING = "D";
+}
+
+// Incorrect type in redefinition of "p1" and "r1":
+@concept E: A, D
+{
+    p1: STRING;
+    q4: STRING;
+    r1: STRING;
+    t1: STRING = "E";
+    t2: STRING = "E";
+}
+
+// Redefinitions as expected (except for "t1", which should be "STRING"):
+@concept F: A, D, Base
+{
+    p1: INTEGER = 3;
+    q4: STRING;
+    r1: DECIMAL;
+    t1: BOOLEAN;
+
+    // Also missing "t2" redefinition.
+}
+
+@task generalization_compatible_redefinition;

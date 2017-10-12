@@ -13,4 +13,4 @@
 @concept C: D;
 @concept D;
 
-@task some_task;
+@task not_own_generalization;

@@ -25,5 +25,4 @@
 -- OK to miss redefinition in this specialization because it is an abstraction:
 @abstraction UnitCircleD: Circle;
 
-
-
+@task abstract_property_redefinition;
