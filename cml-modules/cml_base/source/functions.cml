@@ -19,3 +19,6 @@
 @template @function compare<T>(expr1: T, expr2: T) -> integer;
 
 @template @function concat<T>(seq1: T*, seq2: T*) -> T*;
+
+@template @function count<T>(seq: T*) -> long;
+

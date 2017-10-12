@@ -192,8 +192,12 @@ class Functions:
             (self.items + self.items_2)
         )
 
+    @property
+    def count_items(self) -> 'int':
+        return len(self.items)
+
     def __str__(self) -> 'str':
-        return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, large_item_exists=%s, large_item_all=%s, required_item_exists=%s, required_item_all=%s, items_collect=%s, single_item_collect=%s, required_item_collect=%s)" % (
+        return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, large_item_exists=%s, large_item_all=%s, required_item_exists=%s, required_item_all=%s, items_collect=%s, single_item_collect=%s, required_item_collect=%s, count_items=%s)" % (
             type(self).__name__,
             self.required_item,
             self.single_item,
@@ -211,5 +215,6 @@ class Functions:
             self.required_item_all,
             self.items_collect,
             self.single_item_collect,
-            self.required_item_collect
+            self.required_item_collect,
+            self.count_items
         )

@@ -130,3 +130,7 @@ reversed(<expression(args.seq)>)
 invocation_concat(args) ::= <<
 (<expression(args.seq1)> + <expression(args.seq2)>)
 >>
+
+invocation_sequence_count(args) ::= <<
+len(<expression(args.seq)>)
+>>

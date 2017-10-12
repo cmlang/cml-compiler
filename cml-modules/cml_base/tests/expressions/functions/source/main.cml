@@ -51,6 +51,8 @@
     /new_item = Item(12);
 
     /concat_items = concat(items, items2);
+
+    /count_items = count(items);
 }
 
 @concept Item

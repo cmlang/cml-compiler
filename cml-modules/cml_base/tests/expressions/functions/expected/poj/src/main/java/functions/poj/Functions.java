@@ -200,6 +200,11 @@ public class Functions
         return concat(seq(this.getItems()), seq(this.getItems2())).toList();
     }
 
+    public long getCountItems()
+    {
+        return seq(this.getItems()).count();
+    }
+
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())
@@ -220,7 +225,8 @@ public class Functions
                    .append("requiredItemAll=").append(String.format("\"%s\"", this.isRequiredItemAll())).append(", ")
                    .append("itemsCollect=").append(this.getItemsCollect()).append(", ")
                    .append("singleItemCollect=").append(this.getSingleItemCollect()).append(", ")
-                   .append("requiredItemCollect=").append(this.getRequiredItemCollect())
+                   .append("requiredItemCollect=").append(this.getRequiredItemCollect()).append(", ")
+                   .append("countItems=").append(String.format("\"%s\"", this.getCountItems()))
                    .append(')')
                    .toString();
     }
