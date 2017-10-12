@@ -6,8 +6,8 @@ import cml.io.ModuleManager;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
-import cml.language.foundation.TempProperty;
 import cml.language.generated.Expression;
+import cml.language.generated.Property;
 import cml.language.generated.Type;
 import cml.language.loader.ModelLoader;
 import cml.templates.ModelAdaptor;
@@ -73,7 +73,7 @@ public class ExpressionTest
         final TempConcept concept = loadExpressions();
         final Properties expectedOCL = loadProperties("expected_ocl.properties");
 
-        for (final TempProperty property: seq(concept.getProperties()).map(p -> (TempProperty)p))
+        for (final Property property: seq(concept.getProperties()))
         {
             assertExpectedOCL(expectedOCL, property);
         }
@@ -85,7 +85,7 @@ public class ExpressionTest
         final TempConcept concept = loadExpressions();
         final Properties expectedType = loadProperties("expected_type.properties");
 
-        for (final TempProperty property: seq(concept.getProperties()).map(p -> (TempProperty)p))
+        for (final Property property: seq(concept.getProperties()))
         {
             assertExpectedType(expectedType, property);
         }
@@ -135,7 +135,7 @@ public class ExpressionTest
         return groupFile;
     }
 
-    private void assertExpectedOCL(Properties expectedOCL, TempProperty property)
+    private void assertExpectedOCL(Properties expectedOCL, Property property)
     {
         final String expectedOCLExpression = expectedOCL.getProperty(property.getName());
 
@@ -159,7 +159,7 @@ public class ExpressionTest
         }
     }
 
-    private void assertExpectedType(Properties expectedTypes, TempProperty property)
+    private void assertExpectedType(Properties expectedTypes, Property property)
     {
         final String expectedType = expectedTypes.getProperty(property.getName());
 

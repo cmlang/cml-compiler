@@ -27,18 +27,17 @@ public interface TempConcept extends Concept, PropertyList
 {
     boolean isAbstract();
 
-    default List<TempProperty> getNonDerivedProperties()
+    default List<Property> getNonDerivedProperties()
     {
         return getProperties().stream()
-                              .map(p -> (TempProperty)p)
                               .filter(p -> !p.isDerived())
                               .sorted(byInitOrder())
                               .collect(toList());
     }
 
-    static Comparator<TempProperty> byInitOrder()
+    static Comparator<Property> byInitOrder()
     {
-        return (TempProperty p1, TempProperty p2) -> {
+        return (Property p1, Property p2) -> {
             if (p1.getValue().isPresent() && !p2.getValue().isPresent()) return +1;
             else if (!p1.getValue().isPresent() && p2.getValue().isPresent()) return -1;
             else return 0;
@@ -111,8 +110,7 @@ public interface TempConcept extends Concept, PropertyList
     default List<Type> getPropertyTypes()
     {
         return getAllProperties().stream()
-                                 .map(TempProperty::getType)
-                                 .map(c -> (Type)c)
+                                 .map(Property::getType)
                                  .collect(toList());
     }
 
@@ -136,7 +134,7 @@ public interface TempConcept extends Concept, PropertyList
     List<TempConcept> getDirectAncestors();
     void addDirectAncestor(TempConcept concept);
 
-    default List<TempProperty> getInheritedProperties()
+    default List<Property> getInheritedProperties()
     {
         if (getAllGeneralizations().contains(this))
         {
@@ -150,13 +148,13 @@ public interface TempConcept extends Concept, PropertyList
     }
 
     @SuppressWarnings("unused")
-    default List<TempProperty> getRedefinedInheritedConcreteProperties()
+    default List<Property> getRedefinedInheritedConcreteProperties()
     {
         return redefinedInheritedConcreteProperties(this);
     }
 
     @SuppressWarnings("unused")
-    default List<TempProperty> getSuperProperties()
+    default List<Property> getSuperProperties()
     {
         return getDelegatedProperties()
             .stream()
@@ -164,7 +162,7 @@ public interface TempConcept extends Concept, PropertyList
             .collect(toList());
     }
 
-    default List<TempProperty> getDelegatedProperties()
+    default List<Property> getDelegatedProperties()
     {
         return getInheritedProperties()
             .stream()
@@ -172,46 +170,45 @@ public interface TempConcept extends Concept, PropertyList
             .collect(toList());
     }
 
-    default Predicate<TempProperty> nonRedefinedProperties()
+    default Predicate<Property> nonRedefinedProperties()
     {
         return p1 -> getProperties().stream()
                                     .filter(p2 -> p1.getName().equals(p2.getName()))
                                     .count() == 0;
     }
 
-    default List<TempProperty> getAllProperties()
+    default List<Property> getAllProperties()
     {
         return concat(
-            getProperties().stream().map(p -> (TempProperty)p),
+            getProperties().stream(),
             getDelegatedProperties().stream()
         ).collect(toList());
     }
 
     @SuppressWarnings("unused")
-    default List<TempProperty> getInitProperties()
+    default List<Property> getInitProperties()
     {
         return getAllProperties().stream()
-                                 .filter(TempProperty::isInit)
+                                 .filter(Property::isInit)
                                  .collect(toList());
     }
 
     @SuppressWarnings("unused")
-    default List<TempProperty> getNonInitProperties()
+    default List<Property> getNonInitProperties()
     {
         return getAllProperties().stream()
                                  .filter(p -> !p.getValue().isPresent())
                                  .collect(toList());
     }
 
-    default List<TempProperty> getAssociationProperties()
+    default List<Property> getAssociationProperties()
     {
         return getProperties().stream()
-                              .map(p -> (TempProperty)p)
                               .filter(p -> p.getAssociation().isPresent())
                               .collect(toList());
     }
 
-    default List<TempProperty> getPrintableProperties()
+    default List<Property> getPrintableProperties()
     {
         return getAllProperties().stream()
                                  .filter(property -> (property.isSlot() && !property.getType().isSequence()) || property.getType().isPrimitive())
@@ -248,7 +245,7 @@ public interface TempConcept extends Concept, PropertyList
         .collect(toList());
     }
 
-    default List<Pair<TempProperty>> getGeneralizationPropertyPairs()
+    default List<Pair<Property>> getGeneralizationPropertyPairs()
     {
         return getGeneralizationPairs().stream().flatMap(pair ->
             pair.getLeft().getAllProperties().stream().flatMap(p1 ->
@@ -278,12 +275,12 @@ public interface TempConcept extends Concept, PropertyList
         return create(module, name, false, emptyList(), null);
     }
 
-    static TempConcept create(TempModule module, String name, List<TempProperty> propertyList)
+    static TempConcept create(TempModule module, String name, List<Property> propertyList)
     {
         return new ConceptImpl(module, name, false, propertyList, null);
     }
 
-    static TempConcept create(TempModule module, String name, boolean _abstract, List<TempProperty> propertyList, Location location)
+    static TempConcept create(TempModule module, String name, boolean _abstract, List<Property> propertyList, Location location)
     {
         return new ConceptImpl(module, name, _abstract, propertyList, location);
     }
@@ -305,7 +302,7 @@ class ConceptImpl implements TempConcept
     private final List<TempConcept> directAncestors = new ArrayList<>();
     private final boolean _abstract;
 
-    ConceptImpl(TempModule module, String name, boolean _abstract, final List<TempProperty> properties, Location location)
+    ConceptImpl(TempModule module, String name, boolean _abstract, final List<Property> properties, Location location)
     {
         final ModelElement modelElement = extendModelElement(this, module, location);
         final NamedElement namedElement = extendNamedElement(this, modelElement, name);
@@ -430,10 +427,10 @@ class CompatibleGeneralizations implements Invariant<TempConcept>
     @Override
     public Diagnostic createDiagnostic(TempConcept self)
     {
-        final List<TempProperty> conflictingProperties = self.getGeneralizationPropertyPairs().stream()
-                                                             .filter(pair -> !isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
-                                                             .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
-                                                             .collect(toList());
+        final List<Property> conflictingProperties = self.getGeneralizationPropertyPairs().stream()
+                                                         .filter(pair -> !isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
+                                                         .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
+                                                         .collect(toList());
 
         return new Diagnostic("compatible_generalizations", self, conflictingProperties);
     }
@@ -449,7 +446,7 @@ class ConflictRedefinition implements Invariant<TempConcept>
                    .allMatch(propertyRedefinedIn(self));
     }
 
-    private Stream<Pair<TempProperty>> getConflictingPropertyPairs(TempConcept self)
+    private Stream<Pair<Property>> getConflictingPropertyPairs(TempConcept self)
     {
         return self.getGeneralizationPropertyPairs().stream()
                    .filter(pair -> isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
@@ -459,7 +456,7 @@ class ConflictRedefinition implements Invariant<TempConcept>
                                    pair.getRight().getValue().isPresent());
     }
 
-    private Predicate<TempProperty> propertyRedefinedIn(TempConcept self)
+    private Predicate<Property> propertyRedefinedIn(TempConcept self)
     {
         return p1 -> self.getProperties()
                          .stream()
@@ -469,7 +466,7 @@ class ConflictRedefinition implements Invariant<TempConcept>
     @Override
     public Diagnostic createDiagnostic(TempConcept self)
     {
-        final List<TempProperty> conflictingProperties = getConflictingPropertyPairs(self)
+        final List<Property> conflictingProperties = getConflictingPropertyPairs(self)
                                                          .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
                                                          .filter(propertyRedefinedIn(self).negate())
                                                          .collect(toList());
@@ -486,31 +483,30 @@ class AbstractPropertyRedefinition implements Invariant<TempConcept>
         return self.isAbstract() || getInheritedAbstractProperties(self).allMatch(abstractPropertyRedefinedIn(self));
     }
 
-    private Predicate<TempProperty> abstractPropertyRedefinedIn(TempConcept self)
+    private Predicate<Property> abstractPropertyRedefinedIn(TempConcept self)
     {
         return p1 -> self.getProperties()
                          .stream()
                          .filter(p2 -> p1.getName().equals(p2.getName()))
-                         .map(p -> (TempProperty)p)
-                         .filter(TempProperty::isConcrete)
+                         .filter(Property::isConcrete)
                          .count() > 0;
     }
 
     @Override
     public Diagnostic createDiagnostic(TempConcept self)
     {
-        final List<TempProperty> abstractProperties = getInheritedAbstractProperties(self)
+        final List<Property> abstractProperties = getInheritedAbstractProperties(self)
                                                       .filter(abstractPropertyRedefinedIn(self).negate())
                                                       .collect(toList());
 
         return new Diagnostic("abstract_property_redefinition", self, abstractProperties);
     }
 
-    private Stream<TempProperty> getInheritedAbstractProperties(TempConcept self)
+    private Stream<Property> getInheritedAbstractProperties(TempConcept self)
     {
         return self.getDirectAncestors()
                    .stream()
                    .flatMap(c -> c.getAllProperties().stream())
-                   .filter(TempProperty::isAbstract);
+                   .filter(Property::isAbstract);
     }
 }

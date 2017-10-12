@@ -5,7 +5,7 @@ import Names, Types, Expressions;
 propertyList:
     '{' (propertyDeclaration ';')* '}';
 
-propertyDeclaration returns [TempProperty property]:
+propertyDeclaration returns [Property property]:
    DERIVED? NAME (':' typeDeclaration)? ('=' expression)?;
 
 DERIVED: '/';

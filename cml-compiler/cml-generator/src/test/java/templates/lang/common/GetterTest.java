@@ -1,10 +1,12 @@
 package templates.lang.common;
 
-import cml.language.foundation.TempProperty;
+import cml.language.generated.Property;
 import cml.language.types.TempNamedType;
 import org.junit.Test;
 
 import java.io.IOException;
+
+import static java.util.Collections.emptyList;
 
 public class GetterTest extends LangTest
 {
@@ -144,8 +146,11 @@ public class GetterTest extends LangTest
         testTemplateWithProperty("field_getter", createProperty(cardinality), expectedOutputFileName);
     }
 
-    private static TempProperty createProperty(String cardinality)
+    private static Property createProperty(String cardinality)
     {
-        return TempProperty.create("SomeProperty", TempNamedType.create("someType", cardinality));
+        return Property.createProperty(
+             "SomeProperty",
+            null, null, emptyList(), false,
+            TempNamedType.create("someType", cardinality), null, null);
     }
 }

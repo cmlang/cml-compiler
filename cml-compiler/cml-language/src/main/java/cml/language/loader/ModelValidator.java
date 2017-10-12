@@ -3,10 +3,10 @@ package cml.language.loader;
 import cml.language.features.TempConcept;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.InvariantValidator;
-import cml.language.foundation.TempProperty;
 import cml.language.generated.Association;
 import cml.language.generated.AssociationEnd;
 import cml.language.generated.Expression;
+import cml.language.generated.Property;
 import cml.language.invariants.*;
 
 import java.util.ArrayList;
@@ -18,7 +18,13 @@ import static java.util.Collections.singletonList;
 public class ModelValidator implements ModelVisitor
 {
     private final InvariantValidator<TempConcept> conceptInvariantValidator = TempConcept.invariantValidator();
-    private final InvariantValidator<TempProperty> propertyInvariantValidator = TempProperty.invariantValidator();
+    private final InvariantValidator<Property> propertyInvariantValidator = () -> asList(
+        new UniquePropertyName(),
+        new PropertyTypeSpecifiedOrInferred(),
+        new PropertyTypeAssignableFromExpressionType(),
+        new GeneralizationCompatibleRedefinition(),
+        new AbstractPropertyInAbstractConcept()
+    );
     private final InvariantValidator<Association> associationInvariantValidator = () -> asList(
         new AssociationMustHaveTwoAssociationEnds(),
         new AssociationEndTypesMustMatch()
@@ -42,7 +48,7 @@ public class ModelValidator implements ModelVisitor
     }
 
     @Override
-    public void visit(TempProperty property)
+    public void visit(Property property)
     {
         propertyInvariantValidator.validate(property, diagnostics);
     }

@@ -1,19 +1,19 @@
 package cml.language.features;
 
-import cml.language.foundation.TempProperty;
+import cml.language.generated.Property;
 
 public class PropertyRedef
 {
-    private final TempProperty property;
+    private final Property property;
     private final boolean redefined;
 
-    public PropertyRedef(final TempProperty property, final boolean redefined)
+    public PropertyRedef(final Property property, final boolean redefined)
     {
         this.property = property;
         this.redefined = redefined;
     }
 
-    public TempProperty getProperty()
+    public Property getProperty()
     {
         return property;
     }

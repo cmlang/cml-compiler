@@ -3,7 +3,7 @@ package cml.language.functions;
 import cml.language.features.ConceptRedef;
 import cml.language.features.PropertyRedef;
 import cml.language.features.TempConcept;
-import cml.language.foundation.TempProperty;
+import cml.language.generated.Property;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,19 +16,18 @@ import static java.util.stream.Stream.concat;
 @SuppressWarnings("WeakerAccess")
 public class ConceptFunctions
 {
-    public static List<TempProperty> redefinedInheritedConcreteProperties(TempConcept concept)
+    public static List<Property> redefinedInheritedConcreteProperties(TempConcept concept)
     {
         return concept.getInheritedProperties()
                       .stream()
-                      .filter(TempProperty::isConcrete)
+                      .filter(Property::isConcrete)
                       .map(p -> propertyOf(concept, p.getName()).orElse(p))
                       .collect(toList());
     }
 
-    public static Optional<TempProperty> propertyOf(TempConcept concept, String propertyName)
+    public static Optional<Property> propertyOf(TempConcept concept, String propertyName)
     {
         return concept.getProperties().stream()
-                      .map(p -> (TempProperty)p)
                       .filter(p -> p.getName().equals(propertyName))
                       .findFirst();
     }

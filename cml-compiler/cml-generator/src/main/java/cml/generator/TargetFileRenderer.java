@@ -2,7 +2,6 @@ package cml.generator;
 
 import cml.io.Console;
 import cml.io.FileSystem;
-import cml.language.foundation.TempProperty;
 import cml.language.generated.NamedElement;
 import cml.language.generated.Task;
 import cml.templates.TemplateRenderer;
@@ -103,7 +102,6 @@ class TargetFileRendererImpl implements TargetFileRenderer
         //noinspection ConstantConditions
         task.getProperties()
             .stream()
-            .map(p -> (TempProperty)p)
             .filter(property -> property.getValue().isPresent())
             .forEach(property -> properties.put(property.getName(), property.getValue().get()));
 

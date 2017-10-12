@@ -3,9 +3,9 @@ package cml.language.invariants;
 import cml.language.features.TempConcept;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Invariant;
-import cml.language.foundation.TempProperty;
 import cml.language.generated.Association;
 import cml.language.generated.AssociationEnd;
+import cml.language.generated.Property;
 
 import java.util.Optional;
 
@@ -41,13 +41,13 @@ public class AssociationEndTypesMustMatch implements Invariant<Association>
 
         final TempConcept firstConcept = end1.getAssociatedConcept().map(c -> (TempConcept) c).get();
         final TempConcept secondConcept = end2.getAssociatedConcept().map(c -> (TempConcept) c).get();
-        final TempProperty firstProperty = end1.getAssociatedProperty().map(p -> (TempProperty) p).get();
-        final TempProperty secondProperty = end2.getAssociatedProperty().map(p -> (TempProperty) p).get();
+        final Property firstProperty = end1.getAssociatedProperty().get();
+        final Property secondProperty = end2.getAssociatedProperty().get();
 
         return typesMatch(firstConcept, secondProperty) && typesMatch(secondConcept, firstProperty);
     }
 
-    private static boolean typesMatch(TempConcept concept, TempProperty property)
+    private static boolean typesMatch(TempConcept concept, Property property)
     {
         return isEqualTo(property.getType().getElementType(), selfTypeOf(concept));
     }

@@ -2,7 +2,6 @@ package cml.language.loader;
 
 import cml.language.expressions.*;
 import cml.language.features.*;
-import cml.language.foundation.TempProperty;
 import cml.language.generated.*;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser.*;
@@ -19,8 +18,10 @@ import java.util.stream.Stream;
 
 import static cml.language.functions.ModuleFunctions.createImportOfModule;
 import static cml.language.generated.Association.createAssociation;
+import static cml.language.generated.Property.createProperty;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -73,7 +74,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         final String name = ctx.NAME().getText();
         final boolean _abstract = ctx.ABSTRACTION() != null;
-        final List<TempProperty> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
+        final List<Property> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
             .map(node -> node.property)
             .toList();
 
@@ -131,7 +132,7 @@ class ModelSynthesizer extends CMLBaseListener
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
 
-        ctx.property = TempProperty.create(name, type, value, ctx.DERIVED() != null, locationOf(ctx));
+        ctx.property = createProperty(name, null, locationOf(ctx), asList(value), ctx.DERIVED() != null, type, value, null);
     }
 
     @Override

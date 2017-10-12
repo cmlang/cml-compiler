@@ -2,9 +2,9 @@ package cml.language.functions;
 
 import cml.language.features.TempConcept;
 import cml.language.foundation.TempModel;
-import cml.language.foundation.TempProperty;
 import cml.language.generated.Association;
 import cml.language.generated.Expression;
+import cml.language.generated.Property;
 import cml.language.loader.ModelVisitor;
 
 import static org.jooq.lambda.Seq.seq;
@@ -25,7 +25,7 @@ public class ModelVisitorFunctions
     {
         visitor.visit(concept);
 
-        seq(concept.getProperties()).map(p -> (TempProperty)p).forEach(p -> visitProperty(p, visitor));
+        seq(concept.getProperties()).forEach(p -> visitProperty(p, visitor));
     }
 
     public static void visitAssociation(Association association, ModelVisitor visitor)
@@ -35,7 +35,7 @@ public class ModelVisitorFunctions
         association.getAssociationEnds().forEach(visitor::visit);
     }
 
-    public static void visitProperty(TempProperty property, ModelVisitor visitor)
+    public static void visitProperty(Property property, ModelVisitor visitor)
     {
         visitor.visit(property);
 

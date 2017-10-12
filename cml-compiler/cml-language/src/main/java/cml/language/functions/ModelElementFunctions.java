@@ -73,7 +73,22 @@ public class ModelElementFunctions
 
     public static String diagnosticIdentificationOf(ModelElement element)
     {
-        if (element instanceof Invocation)
+        if (element instanceof Property)
+        {
+            final Property property = (Property) element;
+
+            if (property.getParent().isPresent() && property.getParent().get() instanceof NamedElement)
+            {
+                final NamedElement namedElement = (NamedElement)property.getParent().get();
+
+                return format("property %s.%s: %s",  namedElement.getName(), property.getName(), diagnosticIdentificationOf(property.getType()));
+            }
+            else
+            {
+                return format("property %s: %s",  property.getName(), diagnosticIdentificationOf(property.getType()));
+            }
+        }
+        else if (element instanceof Invocation)
         {
             final Invocation invocation = (Invocation) element;
 

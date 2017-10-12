@@ -2,7 +2,6 @@ package cml.language.loader;
 
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
-import cml.language.foundation.TempProperty;
 import cml.language.generated.*;
 import cml.language.grammar.CMLBaseListener;
 import cml.language.grammar.CMLParser;
@@ -87,9 +86,9 @@ class ModelAugmenter extends CMLBaseListener
         final String propertyName = ctx.propertyName.getText();
         final @Nullable Type propertyType = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Optional<TempConcept> concept = conceptOf(module, conceptName);
-        final Optional<TempProperty> property = seq(concept).flatMap(c -> c.getAllProperties().stream())
-                                                            .filter(p -> p.getName().equals(propertyName))
-                                                            .findFirst();
+        final Optional<Property> property = seq(concept).flatMap(c -> c.getAllProperties().stream())
+                                                        .filter(p -> p.getName().equals(propertyName))
+                                                        .findFirst();
 
         createAssociationEnd(association, locationOf(ctx), conceptName, propertyName, propertyType, concept.orElse(null), property.orElse(null));
     }

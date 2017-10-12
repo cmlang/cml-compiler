@@ -7,10 +7,10 @@ import cml.language.expressions.Literal;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
-import cml.language.foundation.TempProperty;
 import cml.language.generated.Association;
 import cml.language.generated.AssociationEnd;
 import cml.language.generated.Import;
+import cml.language.generated.Property;
 import cml.language.loader.ModelLoader;
 import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
@@ -171,7 +171,7 @@ public class ModelLoaderTest
 
     private void assertPropertyFound(TempConcept concept, String propertyName, String propertyValue)
     {
-        final TempProperty str = propertyOf(concept, propertyName).orElse(null);
+        final Property str = propertyOf(concept, propertyName).orElse(null);
         assertNotNull(propertyName, str);
 
         final Literal literal = (Literal)str.getValue().orElse(null);
@@ -212,7 +212,7 @@ public class ModelLoaderTest
         final TempConcept concept = associationEnd.getAssociatedConcept().map(c -> (TempConcept) c).get();
         assertEquals(conceptName, concept.getName(), conceptName);
 
-        final TempProperty property = associationEnd.getAssociatedProperty().map(p -> (TempProperty) p).get();
+        final Property property = associationEnd.getAssociatedProperty().get();
         assertEquals(conceptName + "." + propertyName, property.getName(), propertyName);
 
         assertTrue(conceptName + "." + propertyName, concept.getMembers().contains(property));
