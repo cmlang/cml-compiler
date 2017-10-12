@@ -1,15 +1,17 @@
 package cml.language.functions;
 
-import cml.language.features.ConceptRedef;
-import cml.language.features.PropertyRedef;
 import cml.language.features.TempConcept;
+import cml.language.generated.ConceptRedef;
 import cml.language.generated.Property;
+import cml.language.generated.PropertyRedef;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static cml.language.generated.ConceptRedef.createConceptRedef;
+import static cml.language.generated.PropertyRedef.createPropertyRedef;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 import static org.jooq.lambda.Seq.seq;
@@ -40,10 +42,10 @@ public class ConceptFunctions
                                                         .stream()
                                                         .map(p -> propertyOf(concept, p.getName()).orElse(p))
                                                         .filter(p -> p.getConcept().isPresent())
-                                                        .map(p -> new PropertyRedef(p, p.getConcept().get() == redefBase))
+                                                        .map(p -> createPropertyRedef(p, p.getConcept().get() == redefBase))
                                                         .collect(toList());
 
-            return new ConceptRedef(c, propertyRedefs);
+            return createConceptRedef(c, propertyRedefs);
         };
     }
 
@@ -61,7 +63,7 @@ public class ConceptFunctions
                                                                        .map(p -> propertyRedefOf(override.get().getPropertyRedefs(), p).orElse(p))
                                                                        .collect(toList());
 
-                return new ConceptRedef(conceptRedef.getConcept(), propertyRedefs);
+                return createConceptRedef(conceptRedef.getConcept(), propertyRedefs);
             }
             else
             {
@@ -73,7 +75,7 @@ public class ConceptFunctions
     public static Optional<PropertyRedef> propertyRedefOf(List<PropertyRedef> propertyRedefs, PropertyRedef propertyRedef)
     {
         return propertyRedefs.stream()
-                             .filter(p -> p.getProperty().getName().equals(propertyRedef.getProperty().getName()))
+                             .filter(p -> p.getProp().getName().equals(propertyRedef.getProp().getName()))
                              .filter(p -> p.isRedefined())
                              .findFirst();
     }

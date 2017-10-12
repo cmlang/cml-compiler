@@ -53,11 +53,11 @@ else:
 >>
 
 extend_invocation_arg(propertyRedef) ::= <<
-<if(propertyRedef.property.derived)><\\>
-<field_default_value(propertyRedef.property.type)><\\>
+<if(propertyRedef.prop.derived)><\\>
+<field_default_value(propertyRedef.prop.type)><\\>
 <elseif(propertyRedef.redefined)><\\>
-<field_name(propertyRedef.property)><\\>
+<field_name(propertyRedef.prop)><\\>
 <else><\\>
-kwargs['<field_name(propertyRedef.property)>']<\\>
+kwargs['<field_name(propertyRedef.prop)>']<\\>
 <endif>
 >>

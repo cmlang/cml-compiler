@@ -10,6 +10,12 @@ ASSOCIATION_END files:
 CONCEPT files:
 - src/main/java/cml/language/generated/Concept.java
 
+CONCEPT_REDEF files:
+- src/main/java/cml/language/generated/ConceptRedef.java
+
+PROPERTY_REDEF files:
+- src/main/java/cml/language/generated/PropertyRedef.java
+
 MODEL_ELEMENT files:
 - src/main/java/cml/language/generated/ModelElement.java
 

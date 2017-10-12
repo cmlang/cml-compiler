@@ -40,6 +40,6 @@ actual_self_init() ::= <<
 >>
 
 extend_invocation_arg(propertyRedef) ::= <<
-<field_or_default_value(propertyRedef.property)>
+<field_or_default_value(propertyRedef.prop)>
 >>
 

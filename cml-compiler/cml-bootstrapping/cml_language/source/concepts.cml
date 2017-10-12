@@ -75,16 +75,16 @@ association SPECIALIZATION
     CONCEPT.specializations;
     INHERITANCE.ancestor;
 }
+*/
 
-concept CONCEPT_REDEF
+@concept CONCEPT_REDEF
 {
     concept: CONCEPT;
-    propertyRedefs: PROPERTY_REDEF*;
+    property_redefs: PROPERTY_REDEF*;
 }
 
-concept PROPERTY_REDEF
+@concept PROPERTY_REDEF
 {
-    property: PROPERTY;
+    prop: PROPERTY; // shortened name because Python gets confused with a property called "property".
     redefined: BOOLEAN;
 }
-*/
