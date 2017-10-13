@@ -8,6 +8,7 @@ import cml.language.generated.Property;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static cml.language.functions.ConceptFunctions.generalizationPropertyPairs;
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.util.stream.Collectors.toList;
 
@@ -16,7 +17,7 @@ public class CompatibleGeneralizations implements Invariant<TempConcept>
     @Override
     public boolean evaluate(TempConcept self)
     {
-        return self.getGeneralizationPropertyPairs()
+        return generalizationPropertyPairs(self)
                    .stream()
                    .allMatch(pair -> isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()));
     }
@@ -24,7 +25,8 @@ public class CompatibleGeneralizations implements Invariant<TempConcept>
     @Override
     public Diagnostic createDiagnostic(TempConcept self)
     {
-        final List<Property> conflictingProperties = self.getGeneralizationPropertyPairs().stream()
+        final List<Property> conflictingProperties = generalizationPropertyPairs(self)
+                                                         .stream()
                                                          .filter(pair -> !isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
                                                          .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
                                                          .collect(toList());

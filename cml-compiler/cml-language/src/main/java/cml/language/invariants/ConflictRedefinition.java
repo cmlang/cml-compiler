@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static cml.language.functions.ConceptFunctions.generalizationPropertyPairs;
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.util.stream.Collectors.toList;
 
@@ -25,7 +26,8 @@ public class ConflictRedefinition implements Invariant<TempConcept>
 
     private Stream<Pair<Property>> getConflictingPropertyPairs(TempConcept self)
     {
-        return self.getGeneralizationPropertyPairs().stream()
+        return generalizationPropertyPairs(self)
+                   .stream()
                    .filter(pair -> isAssignableFrom(pair.getLeft().getType(), pair.getRight().getType()))
                    .filter(pair -> pair.getLeft().isDerived() ||
                        pair.getLeft().getValue().isPresent() ||

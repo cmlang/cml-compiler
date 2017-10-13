@@ -1,6 +1,7 @@
 package cml.language.functions;
 
 import cml.language.features.TempConcept;
+import cml.language.foundation.Pair;
 import cml.language.generated.ConceptRedef;
 import cml.language.generated.Property;
 import cml.language.generated.PropertyRedef;
@@ -104,4 +105,30 @@ public class ConceptFunctions
             .collect(toList());
     }
 
+    public static List<Pair<TempConcept>> generalizationPairs(TempConcept concept)
+    {
+        return concept.getAncestors().stream().flatMap(
+            c1 -> concept.getAncestors().stream()
+                                .filter(c2 -> c1 != c2)
+                                .map(c2 -> new Pair<>((TempConcept)c1, (TempConcept)c2))
+        )
+                             .distinct()
+                             .collect(toList());
+    }
+
+    public static List<Pair<Property>> generalizationPropertyPairs(TempConcept concept)
+    {
+        return generalizationPairs(concept).stream().flatMap(pair ->
+            pair.getLeft().getAllProperties().stream().flatMap(p1 ->
+                pair.getRight()
+                    .getAllProperties()
+                    .stream()
+                    .filter(p2 -> p1 != p2)
+                    .filter(p2 -> p1.getName().equals(p2.getName()))
+                    .map(p2 -> new Pair<>(p1, p2))
+            )
+        )
+        .distinct()
+        .collect(toList());
+    }
 }

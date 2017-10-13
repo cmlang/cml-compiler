@@ -1,6 +1,5 @@
 package cml.language.features;
 
-import cml.language.foundation.Pair;
 import cml.language.foundation.TempModel;
 import cml.language.generated.*;
 
@@ -168,33 +167,6 @@ public interface TempConcept extends Concept, PropertyList
 
             getAncestors().forEach(c -> ((TempConcept) c).appendToGeneralizations(generalizations));
         }
-    }
-
-    default List<Pair<TempConcept>> getGeneralizationPairs()
-    {
-        return getAncestors().stream().flatMap(
-            c1 -> getAncestors().stream()
-                                      .filter(c2 -> c1 != c2)
-                                      .map(c2 -> new Pair<>((TempConcept)c1, (TempConcept)c2))
-        )
-        .distinct()
-        .collect(toList());
-    }
-
-    default List<Pair<Property>> getGeneralizationPropertyPairs()
-    {
-        return getGeneralizationPairs().stream().flatMap(pair ->
-            pair.getLeft().getAllProperties().stream().flatMap(p1 ->
-                pair.getRight()
-                    .getAllProperties()
-                    .stream()
-                    .filter(p2 -> p1 != p2)
-                    .filter(p2 -> p1.getName().equals(p2.getName()))
-                    .map(p2 -> new Pair<>(p1, p2))
-            )
-        )
-        .distinct()
-        .collect(toList());
     }
 
     default List<Association> getAssociations()
