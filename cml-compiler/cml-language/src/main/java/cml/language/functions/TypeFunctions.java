@@ -37,6 +37,10 @@ public class TypeFunctions
             final TupleType tupleType = (TupleType) type;
             return new TupleType(seq(tupleType.getElements()), cardinality);
         }
+        else if (type.isUndefined())
+        {
+            return type;
+        }
         else
         {
             throw new UnsupportedOperationException("withCardinality(" + type + ", " + cardinality + ")");
