@@ -32,12 +32,13 @@
 
     /property_types = all_properties | collect: type;
 
+    /init_properties = all_properties | select: init;
+
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
 
     /association_properties = properties | select: present(association);
 
-    /init_properties = all_properties | select: init;
     /non_init_properties = all_properties | select: non_init;
     /printable_properties = all_properties | select: printable;
 

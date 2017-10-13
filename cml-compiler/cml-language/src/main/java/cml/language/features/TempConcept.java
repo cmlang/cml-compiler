@@ -96,14 +96,6 @@ public interface TempConcept extends Concept, PropertyList
     }
 
     @SuppressWarnings("unused")
-    default List<Property> getInitProperties()
-    {
-        return getAllProperties().stream()
-                                 .filter(Property::isInit)
-                                 .collect(toList());
-    }
-
-    @SuppressWarnings("unused")
     default List<Property> getNonInitProperties()
     {
         return getAllProperties().stream()
@@ -240,6 +232,12 @@ class ConceptImpl implements TempConcept
     public List<Type> getPropertyTypes()
     {
         return concept.getPropertyTypes();
+    }
+
+    @Override
+    public List<Property> getInitProperties()
+    {
+        return concept.getInitProperties();
     }
 
     @Override
