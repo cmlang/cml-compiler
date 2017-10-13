@@ -377,6 +377,12 @@ class ConceptImpl implements TempConcept
     }
 
     @Override
+    public List<Property> getNonRedefinedProperties()
+    {
+        return concept.getNonRedefinedProperties();
+    }
+
+    @Override
     public String toString()
     {
         return "concept " + getName();
