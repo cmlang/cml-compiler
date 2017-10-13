@@ -28,8 +28,8 @@ public class Unary extends ExpressionBase
     private static Map<String, String> OPERATIONS =
         new HashMap<String, String>()
         {{
-            put("+", "add");
-            put("-", "sub");
+            put("+", "unary_add");
+            put("-", "unary_sub");
             put("not", "not");
         }};
 
