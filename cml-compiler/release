@@ -91,6 +91,9 @@ fi
 git pull --tags origin master
 if [ $? -ne 0 ]; then exit; fi
 
+mvn clean install
+if [ $? -ne 0 ]; then exit; fi
+
 mvn versions:set -DnewVersion=${CML_VERSION}
 if [ $? -ne 0 ]; then exit; fi
 
