@@ -1,6 +1,5 @@
 package cml.language.features;
 
-import cml.language.foundation.TempModel;
 import cml.language.generated.*;
 
 import java.util.ArrayList;
@@ -114,15 +113,6 @@ public interface TempConcept extends Concept, PropertyList
         }
     }
 
-    default List<Association> getAssociations()
-    {
-        return seq(getModel()).flatMap(m -> seq(((TempModel) m).getAssociations()))
-                         .filter(assoc -> assoc.getAssociationEnds()
-                                               .stream()
-                                               .anyMatch(end -> end.getAssociatedConcept().isPresent() && end.getAssociatedConcept().get() == this))
-                         .collect(toList());
-    }
-
     static TempConcept create(TempModule module, String name)
     {
         return create(module, name, false, emptyList(), null);
@@ -216,6 +206,12 @@ class ConceptImpl implements TempConcept
     public List<Type> getPropertyTypes()
     {
         return concept.getPropertyTypes();
+    }
+
+    @Override
+    public List<Association> getAssociations()
+    {
+        return concept.getAssociations();
     }
 
     @Override

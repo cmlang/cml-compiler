@@ -37,9 +37,9 @@
 
     /property_types = all_properties | collect: type;
 
-/*
-    /associations = model.associations | select: (association_ends | exists: concept == self);
+    /associations = model.associations | select: (association_ends | exists: associated_concept === self);
 
+/*
     /dependencies = distinct(concat(inherited_dependencies, property_dependencies));
     /property_dependencies = distinct(concat(
                                 transitive_property_concepts | collect: inherited_dependencies,
