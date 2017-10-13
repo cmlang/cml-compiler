@@ -137,14 +137,6 @@ public interface TempConcept extends Concept, PropertyList
                                     .count() == 0;
     }
 
-    default List<Property> getAllProperties()
-    {
-        return concat(
-            getProperties().stream(),
-            getDelegatedProperties().stream()
-        ).collect(toList());
-    }
-
     @SuppressWarnings("unused")
     default List<Property> getInitProperties()
     {
@@ -347,6 +339,12 @@ class ConceptImpl implements TempConcept
     public List<Concept> getAllAncestors()
     {
         return concept.getAllAncestors();
+    }
+
+    @Override
+    public List<Property> getAllProperties()
+    {
+        return concept.getAllProperties();
     }
 
     @Override

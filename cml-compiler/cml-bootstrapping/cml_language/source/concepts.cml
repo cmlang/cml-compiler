@@ -23,7 +23,7 @@
     /descendants = specializations.descendant;
 
     /all_ancestors: CONCEPT* = distinct(concat(inherited_ancestors, ancestors));
-    /all_properties: PROPERTY*;
+    /all_properties: PROPERTY* = concat(properties, inherited_non_redefined_properties);
 
     /inherited_ancestors = distinct(ancestors.all_ancestors);
     /inherited_properties = distinct(ancestors.all_properties);
