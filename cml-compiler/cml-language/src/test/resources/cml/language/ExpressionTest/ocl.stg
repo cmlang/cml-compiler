@@ -72,6 +72,9 @@ expr_operator(expr) ::= <<
 <endif>
 >>
 
+operator_unary_add() ::= "+"
+operator_unary_sub() ::= "-"
+
 operator_add() ::= "+"
 operator_sub() ::= "-"
 operator_mul() ::= "*"
