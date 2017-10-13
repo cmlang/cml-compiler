@@ -23,19 +23,12 @@ public interface TempModule extends NamedElement, Scope, Module
                            .collect(toList());
     }
 
-    default List<TempConcept> getConcepts()
-    {
-        return getMembers().stream()
-                           .filter(e -> e instanceof TempConcept)
-                           .map(e -> (TempConcept)e)
-                           .collect(toList());
-    }
-
     default List<TempConcept> getImportedConcepts()
     {
         return getImportedModules()
                     .stream()
                     .flatMap(m -> m.getConcepts().stream())
+                    .map(c -> (TempConcept)c)
                     .collect(toList());
     }
 
@@ -44,6 +37,7 @@ public interface TempModule extends NamedElement, Scope, Module
         return concat(
             getConcepts().stream(),
             getImportedConcepts().stream())
+            .map(c -> (TempConcept)c)
             .collect(toList());
     }
 
@@ -141,5 +135,11 @@ class TempModuleImpl implements TempModule
     public List<Task> getTasks()
     {
         return module.getTasks();
+    }
+
+    @Override
+    public List<Concept> getConcepts()
+    {
+        return module.getConcepts();
     }
 }

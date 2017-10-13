@@ -56,6 +56,7 @@ public interface TempModel extends NamedElement, Scope, Model
         return getModules().stream()
                            .map(m -> (TempModule)m)
                            .flatMap(m -> m.getConcepts().stream())
+                           .map(c -> (TempConcept)c)
                            .collect(toList());
     }
 

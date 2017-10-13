@@ -7,10 +7,7 @@ import cml.language.expressions.Literal;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
-import cml.language.generated.Association;
-import cml.language.generated.AssociationEnd;
-import cml.language.generated.Import;
-import cml.language.generated.Property;
+import cml.language.generated.*;
 import cml.language.loader.ModelLoader;
 import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +48,7 @@ public class ModelLoaderTest
     {
         final String moduleName = "module_name";
         final TempModule module = loadModule(moduleName);
-        final TempConcept concept = module.getConcepts().get(0);
+        final Concept concept = module.getConcepts().get(0);
 
         assertThat(module.getName(), is(moduleName));
         assertThat(concept.getName(), is("SomeConcept"));
@@ -59,7 +56,7 @@ public class ModelLoaderTest
         final String anotherModuleName = "another_module";
         final Import _import = module.getImports().get(0);
         final TempModule anotherModule = (TempModule) _import.getImportedModule();
-        final TempConcept anotherConcept = anotherModule.getConcepts().get(0);
+        final Concept anotherConcept = anotherModule.getConcepts().get(0);
 
         assertThat(_import.getName(), is(anotherModuleName));
         assertThat(anotherModule.getName(), is(anotherModuleName));

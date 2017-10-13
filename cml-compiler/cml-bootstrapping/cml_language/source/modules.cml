@@ -5,10 +5,10 @@
 
     /imports = members as? IMPORT*;
     /tasks = members as? TASK*;
+    /concepts = members as? CONCEPT*;
 
 /*
 
-    /concepts = members as? CONCEPT*;
     /associations = members as? ASSOCIATION*;
 
     /templates = for m in members | select: m is TEMPLATE;
