@@ -9,7 +9,7 @@
     /modules = members as? MODULE*;
     /tasks = modules.tasks;
     /concepts = modules.concepts;
-//    /associations = modules.associations;
+    /associations = modules.associations;
 
 /*
 

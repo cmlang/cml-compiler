@@ -52,14 +52,6 @@ public interface TempModel extends NamedElement, Scope, Model
         };
     }
 
-    default List<Association> getAssociations()
-    {
-        return getModules().stream()
-                           .map(m -> (TempModule)m)
-                           .flatMap(m -> m.getAssociations().stream())
-                           .collect(toList());
-    }
-
     default List<Template> getTemplates()
     {
         return getModules().stream()
@@ -133,6 +125,12 @@ class ModelImpl implements TempModel
     public List<Concept> getConcepts()
     {
         return model.getConcepts();
+    }
+
+    @Override
+    public List<Association> getAssociations()
+    {
+        return model.getAssociations();
     }
 
     @Override
