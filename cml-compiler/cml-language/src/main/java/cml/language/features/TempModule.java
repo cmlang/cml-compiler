@@ -41,14 +41,6 @@ public interface TempModule extends NamedElement, Scope, Module
             .collect(toList());
     }
 
-    default List<Association> getAssociations()
-    {
-        return getMembers().stream()
-                           .filter(e -> e instanceof Association)
-                           .map(e -> (Association)e)
-                           .collect(toList());
-    }
-
     default List<Template> getTemplates()
     {
         return getMembers().stream()
@@ -141,5 +133,11 @@ class TempModuleImpl implements TempModule
     public List<Concept> getConcepts()
     {
         return module.getConcepts();
+    }
+
+    @Override
+    public List<Association> getAssociations()
+    {
+        return module.getAssociations();
     }
 }
