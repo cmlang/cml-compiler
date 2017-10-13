@@ -102,13 +102,6 @@ public interface TempConcept extends Concept, PropertyList
                               .collect(toList());
     }
 
-    default List<Property> getPrintableProperties()
-    {
-        return getAllProperties().stream()
-                                 .filter(property -> (property.isSlot() && !property.getType().isSequence()) || property.getType().isPrimitive())
-                                 .collect(toList());
-    }
-
     default List<TempConcept> getAllGeneralizations()
     {
         final List<TempConcept> generalizations = new ArrayList<>();
@@ -236,6 +229,12 @@ class ConceptImpl implements TempConcept
     public List<Property> getNonInitProperties()
     {
         return concept.getNonInitProperties();
+    }
+
+    @Override
+    public List<Property> getPrintableProperties()
+    {
+        return concept.getPrintableProperties();
     }
 
     @Override

@@ -32,6 +32,7 @@
 
     /init_properties = all_properties | select: init;
     /non_init_properties = all_properties | select: non_init;
+    /printable_properties = all_properties | select: printable;
 
     /property_types = all_properties | collect: type;
 
@@ -39,10 +40,6 @@
     /associations = model.associations | select: (association_ends | exists: concept == self);
 
     /association_properties = properties | select: present(association);
-
-    /printable_properties = all_properties | select: printable;
-
-    /all_properties = concat(properties, non_redefined_properties);
 
     /dependencies = distinct(concat(inherited_dependencies, property_dependencies));
     /property_dependencies = distinct(concat(
