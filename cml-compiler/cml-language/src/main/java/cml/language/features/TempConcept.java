@@ -122,15 +122,6 @@ public interface TempConcept extends Concept, PropertyList
         return redefinedInheritedConcreteProperties(this);
     }
 
-    @SuppressWarnings("unused")
-    default List<Property> getSuperProperties()
-    {
-        return getDelegatedProperties()
-            .stream()
-            .filter(p -> !p.isDerived())
-            .collect(toList());
-    }
-
     default List<Property> getDelegatedProperties()
     {
         return getInheritedProperties()
@@ -380,6 +371,12 @@ class ConceptImpl implements TempConcept
     public List<Property> getInheritedNonRedefinedProperties()
     {
         return concept.getInheritedNonRedefinedProperties();
+    }
+
+    @Override
+    public List<Property> getSuperProperties()
+    {
+        return concept.getSuperProperties();
     }
 
     @Override

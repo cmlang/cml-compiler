@@ -31,9 +31,9 @@
     /inherited_non_redefined_properties = for inherited in inherited_properties
                                              | select: (for p in self.properties | none: p.name == inherited.name);
 
+    /super_properties = inherited_non_redefined_properties | select: not derived;
 
 /*
-    /super_properties = non_redefined_properties | select: not derived;
     /associations = model.associations | select: (association_ends | exists: concept == self);
 
     /association_properties = properties | select: present(association);
