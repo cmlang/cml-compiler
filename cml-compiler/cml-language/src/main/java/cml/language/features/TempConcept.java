@@ -55,7 +55,7 @@ public interface TempConcept extends Concept, PropertyList
     {
         final List<TempConcept> concepts = new ArrayList<>();
 
-        getPropertyConcepts().forEach(c -> c.appendToPropertyConcepts(concepts));
+        seq(getPropertyConcepts()).map(c -> (TempConcept)c).forEach(c -> c.appendToPropertyConcepts(concepts));
 
         return concepts;
     }
@@ -66,20 +66,8 @@ public interface TempConcept extends Concept, PropertyList
         {
             concepts.add(this);
 
-            getPropertyConcepts().forEach(c -> c.appendToPropertyConcepts(concepts));
+            seq(getPropertyConcepts()).map(c -> (TempConcept)c).forEach(c -> c.appendToPropertyConcepts(concepts));
         }
-    }
-
-    default List<TempConcept> getPropertyConcepts()
-    {
-        return getPropertyTypes().stream()
-                                 .filter(type -> !type.isPrimitive())
-                                 .map(Type::getConcept)
-                                 .filter(Optional::isPresent)
-                                 .map(Optional::get)
-                                 .map(c -> (TempConcept)c)
-                                 .distinct()
-                                 .collect(toList());
     }
 
     @SuppressWarnings("unused")
@@ -209,6 +197,12 @@ class ConceptImpl implements TempConcept
     }
 
     @Override
+    public List<Type> getConceptTypes()
+    {
+        return concept.getConceptTypes();
+    }
+
+    @Override
     public List<Association> getAssociations()
     {
         return concept.getAssociations();
@@ -230,6 +224,12 @@ class ConceptImpl implements TempConcept
     public List<Property> getPrintableProperties()
     {
         return concept.getPrintableProperties();
+    }
+
+    @Override
+    public List<Concept> getPropertyConcepts()
+    {
+        return concept.getPropertyConcepts();
     }
 
     @Override

@@ -35,7 +35,9 @@
     /non_init_properties = all_properties | select: non_init;
     /printable_properties = all_properties | select: printable;
 
-    /property_types = all_properties | collect: type;
+    /property_types = all_properties.type;
+    /property_concepts = distinct(concept_types.concept);
+    /concept_types = property_types | select: not primitive and present(concept);
 
     /associations = model.associations | select: (association_ends | exists: associated_concept === self);
 
