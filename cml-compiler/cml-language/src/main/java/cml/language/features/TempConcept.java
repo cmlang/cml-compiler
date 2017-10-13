@@ -95,13 +95,6 @@ public interface TempConcept extends Concept, PropertyList
         return redefinedInheritedConcreteProperties(this);
     }
 
-    default List<Property> getAssociationProperties()
-    {
-        return getProperties().stream()
-                              .filter(p -> p.getAssociation().isPresent())
-                              .collect(toList());
-    }
-
     default List<TempConcept> getAllGeneralizations()
     {
         final List<TempConcept> generalizations = new ArrayList<>();
@@ -211,6 +204,12 @@ class ConceptImpl implements TempConcept
     public List<Property> getDerivedProperties()
     {
         return concept.getDerivedProperties();
+    }
+
+    @Override
+    public List<Property> getAssociationProperties()
+    {
+        return concept.getAssociationProperties();
     }
 
     @Override

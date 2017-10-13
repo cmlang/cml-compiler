@@ -29,6 +29,7 @@
 
     /slot_properties = properties | select: slot;
     /derived_properties = properties | select: derived;
+    /association_properties = properties | select: present(association);
 
     /init_properties = all_properties | select: init;
     /non_init_properties = all_properties | select: non_init;
@@ -38,8 +39,6 @@
 
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
-
-    /association_properties = properties | select: present(association);
 
     /dependencies = distinct(concat(inherited_dependencies, property_dependencies));
     /property_dependencies = distinct(concat(
