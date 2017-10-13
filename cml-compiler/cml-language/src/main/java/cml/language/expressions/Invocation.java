@@ -45,7 +45,7 @@ public interface Invocation extends Expression, NamedElement
         {
             final TempConcept concept = getConcept().get();
 
-            return concat(concept.getSuperProperties(), concept.getNonDerivedProperties())
+            return seq(concept.getInvocationProperties())
                 .map(p -> new FunctionParameter(p.getName(), p.getType()))
                 .toList();
         }

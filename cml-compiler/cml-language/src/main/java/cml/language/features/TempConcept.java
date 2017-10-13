@@ -4,7 +4,6 @@ import cml.language.foundation.TempModel;
 import cml.language.generated.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -21,23 +20,6 @@ import static org.jooq.lambda.Seq.seq;
 
 public interface TempConcept extends Concept, PropertyList
 {
-    default List<Property> getNonDerivedProperties()
-    {
-        return getProperties().stream()
-                              .filter(p -> !p.isDerived())
-                              .sorted(byInitOrder())
-                              .collect(toList());
-    }
-
-    static Comparator<Property> byInitOrder()
-    {
-        return (Property p1, Property p2) -> {
-            if (p1.getValue().isPresent() && !p2.getValue().isPresent()) return +1;
-            else if (!p1.getValue().isPresent() && p2.getValue().isPresent()) return -1;
-            else return 0;
-        };
-    }
-
     default List<String> getDependencies()
     {
         return concat(
@@ -259,6 +241,18 @@ class ConceptImpl implements TempConcept
     public List<Property> getDerivedProperties()
     {
         return concept.getDerivedProperties();
+    }
+
+    @Override
+    public List<Property> getNonDerivedProperties()
+    {
+        return concept.getNonDerivedProperties();
+    }
+
+    @Override
+    public List<Property> getInvocationProperties()
+    {
+        return concept.getInvocationProperties();
     }
 
     @Override

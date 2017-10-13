@@ -3,19 +3,6 @@
 {
     abstraction: BOOLEAN;
 
-    /derived_properties = properties | select: derived;
-    /slot_properties = properties | select: slot;
-
-/*
-
-    /nonDerivedProperties = properties
-        | select: not derived
-        | sort: p1, p2 ->
-            if present(p1) and empty(p2) then +1
-            else if empty(p1) and present(p2) then -1
-            else 0;
-*/
-
     generalizations: INHERITANCE*;
     specializations: INHERITANCE*;
 
@@ -32,6 +19,15 @@
                                              | select: (for p in self.properties | none: p.name == inherited.name);
 
     /super_properties = inherited_non_redefined_properties | select: not derived;
+    /non_derived_properties = properties
+        | select: not derived
+        | sort: p1, p2 ->
+            if present(p1) and empty(p2) then +1
+            else if empty(p1) and present(p2) then -1
+            else 0;
+    /invocation_properties = concat(super_properties, non_derived_properties);
+    /slot_properties = properties | select: slot;
+    /derived_properties = properties | select: derived;
 
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
