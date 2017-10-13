@@ -197,9 +197,9 @@ class ConceptImpl implements TempConcept
     }
 
     @Override
-    public List<Type> getConceptTypes()
+    public List<Type> getPropertyConceptTypes()
     {
-        return concept.getConceptTypes();
+        return concept.getPropertyConceptTypes();
     }
 
     @Override
