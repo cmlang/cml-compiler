@@ -83,13 +83,6 @@ public interface TempConcept extends Concept, PropertyList
                                  .collect(toList());
     }
 
-    default List<Type> getPropertyTypes()
-    {
-        return getAllProperties().stream()
-                                 .map(Property::getType)
-                                 .collect(toList());
-    }
-
     @SuppressWarnings("unused")
     default List<ConceptRedef> getRedefinedAncestors()
     {
@@ -241,6 +234,12 @@ class ConceptImpl implements TempConcept
     public List<Property> getDerivedProperties()
     {
         return concept.getDerivedProperties();
+    }
+
+    @Override
+    public List<Type> getPropertyTypes()
+    {
+        return concept.getPropertyTypes();
     }
 
     @Override

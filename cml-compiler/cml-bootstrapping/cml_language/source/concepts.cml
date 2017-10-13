@@ -26,8 +26,11 @@
             else if empty(p1) and present(p2) then -1
             else 0;
     /invocation_properties = concat(super_properties, non_derived_properties);
+
     /slot_properties = properties | select: slot;
     /derived_properties = properties | select: derived;
+
+    /property_types = all_properties | collect: type;
 
 /*
     /associations = model.associations | select: (association_ends | exists: concept == self);
@@ -48,7 +51,6 @@
 
     /transitive_property_concepts = self | recurse_depth: property_concepts;
     /property_concepts = property_types | reject: primitive | yield: concept | distinct;
-    /property_types = all_properties | yield: type;
 
     /redefined_ancestors: CONCEPT_REDEF*;
     /redefined_inherited_concrete_properties: PROPERTY*;
