@@ -31,6 +31,7 @@ public class ModelFunctions
         return model.getConcepts()
                     .stream()
                     .filter(concept -> concept.getName().equals(name))
+                    .map(c -> (TempConcept)c)
                     .findFirst();
     }
 

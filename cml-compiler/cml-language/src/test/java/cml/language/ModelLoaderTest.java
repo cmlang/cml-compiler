@@ -139,7 +139,7 @@ public class ModelLoaderTest
 
     private TempConcept loadConcept(String sourceFileName)
     {
-        return loadModel(sourceFileName).getConcepts().get(0);
+        return (TempConcept) loadModel(sourceFileName).getConcepts().get(0);
     }
 
     private Association loadAssociation(String name)

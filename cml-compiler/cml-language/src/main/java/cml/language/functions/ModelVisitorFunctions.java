@@ -16,7 +16,7 @@ public class ModelVisitorFunctions
     {
         visitor.visit(model);
 
-        model.getConcepts().forEach(c -> visitConcept(c, visitor));
+        model.getConcepts().forEach(c -> visitConcept((TempConcept) c, visitor));
 
         model.getAssociations().forEach(a -> visitAssociation(a, visitor));
     }

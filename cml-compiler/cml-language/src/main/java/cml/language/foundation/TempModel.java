@@ -20,6 +20,7 @@ public interface TempModel extends NamedElement, Scope, Model
     default List<TempConcept> getOrderedConcepts()
     {
         return getConcepts().stream()
+                            .map(c -> (TempConcept)c)
                             .sorted(byDependencyOrder())
                             .collect(toList());
     }
@@ -49,15 +50,6 @@ public interface TempModel extends NamedElement, Scope, Model
                 return 0;
             }
         };
-    }
-
-    default List<TempConcept> getConcepts()
-    {
-        return getModules().stream()
-                           .map(m -> (TempModule)m)
-                           .flatMap(m -> m.getConcepts().stream())
-                           .map(c -> (TempConcept)c)
-                           .collect(toList());
     }
 
     default List<Association> getAssociations()
@@ -135,6 +127,12 @@ class ModelImpl implements TempModel
     public List<Task> getTasks()
     {
         return model.getTasks();
+    }
+
+    @Override
+    public List<Concept> getConcepts()
+    {
+        return model.getConcepts();
     }
 
     @Override
