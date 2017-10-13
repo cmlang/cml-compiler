@@ -26,7 +26,7 @@ class2(concept, class_name_suffix) ::= <<
     ancestors=[],
     interfaces=[concept],
     field_ancestors=concept.allAncestors,
-    delegated_properties=concept.delegatedProperties,
+    delegated_properties=concept.nonRedefinedProperties,
     super_properties=[],
     inherited_properties=[]
 )>
