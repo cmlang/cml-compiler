@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static cml.language.functions.ConceptFunctions.redefinedAncestors;
@@ -120,21 +119,6 @@ public interface TempConcept extends Concept, PropertyList
     default List<Property> getRedefinedInheritedConcreteProperties()
     {
         return redefinedInheritedConcreteProperties(this);
-    }
-
-    default List<Property> getDelegatedProperties()
-    {
-        return getInheritedProperties()
-            .stream()
-            .filter(nonRedefinedProperties())
-            .collect(toList());
-    }
-
-    default Predicate<Property> nonRedefinedProperties()
-    {
-        return p1 -> getProperties().stream()
-                                    .filter(p2 -> p1.getName().equals(p2.getName()))
-                                    .count() == 0;
     }
 
     @SuppressWarnings("unused")
