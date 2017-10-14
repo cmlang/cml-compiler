@@ -1,7 +1,10 @@
 package cml.language.types;
 
 import cml.language.features.TempConcept;
-import cml.language.generated.*;
+import cml.language.generated.Concept;
+import cml.language.generated.Element;
+import cml.language.generated.NamedType;
+import cml.language.generated.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,8 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static cml.language.functions.TypeFunctions.withCardinality;
-import static cml.language.generated.ModelElement.extendModelElement;
-import static cml.language.generated.NamedElement.extendNamedElement;
+import static cml.language.generated.Element.extendElement;
 import static cml.language.generated.Type.extendType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
@@ -98,61 +100,32 @@ public interface TempNamedType extends NamedType
 
     static TempNamedType create(String name)
     {
-        return new NamedTypeImpl(name, null, null);
+        return new NamedTypeImpl(name, null);
     }
 
     static TempNamedType create(String name, @Nullable String cardinality)
     {
-        return new NamedTypeImpl(name, cardinality, null);
+        return new NamedTypeImpl(name, cardinality);
     }
 }
 
 class NamedTypeImpl implements TempNamedType
 {
-    private final NamedElement namedElement;
     private final Type type;
 
+    private final String name;
     private final @Nullable String cardinality;
 
     private @Nullable Concept concept;
 
-    NamedTypeImpl(String name, @Nullable String cardinality, @Nullable String errorMessage)
+    NamedTypeImpl(String name, @Nullable String cardinality)
     {
-        final ModelElement modelElement = extendModelElement(this, null, null);
+        final Element element = extendElement(this);
 
-        this.namedElement = extendNamedElement(this, modelElement, name);
-        this.type = extendType(this, modelElement, errorMessage);
+        this.type = extendType(this, element);
 
+        this.name = name;
         this.cardinality = cardinality;
-    }
-
-    @Override
-    public Optional<Location> getLocation()
-    {
-        return type.getLocation();
-    }
-
-    @Override
-    public Optional<Scope> getParent()
-    {
-        return type.getParent();
-    }
-
-    @Override
-    public Optional<Model> getModel()
-    {
-        return type.getModel();
-    }
-
-    @Override
-    public Optional<Module> getModule()
-    {
-        return type.getModule();
-    }
-
-    public Optional<String> getErrorMessage()
-    {
-        return type.getErrorMessage();
     }
 
     @Override
@@ -236,7 +209,7 @@ class NamedTypeImpl implements TempNamedType
     @Override
     public String getName()
     {
-        return namedElement.getName();
+        return name;
     }
 
     @Override
@@ -259,7 +232,7 @@ class NamedTypeImpl implements TempNamedType
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
         return isUndefined() ? getName() : getName() + (getCardinality().isPresent() ? getCardinality().get() : "");
     }

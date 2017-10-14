@@ -58,7 +58,16 @@ public class TypeCheck extends ExpressionBase
             return createUndefinedType(
                 format(
                     "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s'",
-                    getOperator(), expr, exprType, checkedType));
+                    getOperator(),
+                    expr.getDiagnosticId(),
+                    exprType.getDiagnosticId(),
+                    checkedType.getDiagnosticId()));
         }
+    }
+
+    @Override
+    public String getDiagnosticId()
+    {
+        return format("%s is %s", expr.getDiagnosticId(), checkedType.getDiagnosticId());
     }
 }

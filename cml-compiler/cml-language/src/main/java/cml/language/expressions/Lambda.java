@@ -145,7 +145,7 @@ public class Lambda extends ExpressionBase
     @Override
     public Type getType()
     {
-        return functionType == null ? createUndefinedType("Function type not specified for: " + this) : functionType;
+        return functionType == null ? createUndefinedType("Function type not specified for: " + getDiagnosticId()) : functionType;
     }
 
     @Override
@@ -160,11 +160,12 @@ public class Lambda extends ExpressionBase
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
         return parameters.isEmpty() ?
             format("{ %s }", innerExpression) :
-            format("{ %s -> %s }", seq(parameters).map(this::stringOf).toString(", "), innerExpression);
+            format("{ %s -> %s }", seq(parameters).map(this::stringOf).toString(", "), innerExpression)
+            + " - inferred result type: " + getMatchingResultType().getDiagnosticId();
     }
 
     private String stringOf(final String parameter)
@@ -173,7 +174,7 @@ public class Lambda extends ExpressionBase
         final Type formalType = getTypedParameters().get(parameter);
 
         return actualType.map(t -> parameter + ": " + t)
-                   .orElseGet(() -> formalType == null ? parameter : formalType.toString());
+                         .orElseGet(() -> formalType == null ? parameter : formalType.toString());
     }
 }
 

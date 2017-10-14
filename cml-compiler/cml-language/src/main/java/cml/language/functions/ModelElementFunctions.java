@@ -1,19 +1,15 @@
 package cml.language.functions;
 
-import cml.language.expressions.Invocation;
-import cml.language.expressions.Lambda;
-import cml.language.expressions.Path;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
-import cml.language.generated.*;
+import cml.language.generated.Import;
+import cml.language.generated.ModelElement;
 import cml.language.types.TempNamedType;
 
 import java.util.Optional;
 
 import static cml.language.functions.ScopeFunctions.memberNamed;
-import static java.lang.String.format;
 import static java.util.Optional.empty;
-import static java.util.stream.Collectors.joining;
 
 @SuppressWarnings("WeakerAccess")
 public class ModelElementFunctions
@@ -70,80 +66,4 @@ public class ModelElementFunctions
             return empty();
         }
     }
-
-    public static String diagnosticIdentificationOf(ModelElement element)
-    {
-        if (element instanceof Property)
-        {
-            final Property property = (Property) element;
-
-            if (property.getParent().isPresent() && property.getParent().get() instanceof NamedElement)
-            {
-                final NamedElement namedElement = (NamedElement)property.getParent().get();
-
-                return format("property %s.%s: %s",  namedElement.getName(), property.getName(), diagnosticIdentificationOf(property.getType()));
-            }
-            else
-            {
-                return format("property %s: %s",  property.getName(), diagnosticIdentificationOf(property.getType()));
-            }
-        }
-        else if (element instanceof Invocation)
-        {
-            final Invocation invocation = (Invocation) element;
-
-            return format("%s -> %s", invocation, diagnosticIdentificationOf(invocation.getType()));
-        }
-        else if (element instanceof Lambda)
-        {
-            final Lambda lambda = (Lambda) element;
-
-            return lambda + " - inferred result type: " + diagnosticIdentificationOf(lambda.getMatchingResultType());
-        }
-        else if (element instanceof TempNamedType)
-        {
-            final TempNamedType namedType = (TempNamedType) element;
-
-            if (namedType.getErrorMessage().isPresent())
-            {
-                return diagnosticIdentificationOf(namedType) + " - " + namedType.getErrorMessage().get();
-            }
-        }
-        else if (element instanceof AssociationEnd)
-        {
-            final AssociationEnd associationEnd = (AssociationEnd) element;
-
-            if (associationEnd.getPropertyType().isPresent())
-            {
-                return format(
-                    "association end %s.%s: %s",
-                    associationEnd.getConceptName(),
-                    associationEnd.getPropertyName(),
-                    diagnosticIdentificationOf(associationEnd.getPropertyType().get()));
-            }
-            else
-            {
-                return format("association end %s.%s", associationEnd.getConceptName(), associationEnd.getPropertyName());
-            }
-        }
-        else if (element instanceof Association)
-        {
-            final Association association = (Association) element;
-
-            return "association " + association.getName();
-        }
-        else if (element instanceof Path)
-        {
-            final Path path = (Path) element;
-
-            return path.getNames().stream().collect(joining(".")) + ": " + diagnosticIdentificationOf(path.getType());
-        }
-        else if (element instanceof UndefinedType)
-        {
-            return "UNDEFINED";
-        }
-
-        return element.toString();
-    }
-
 }

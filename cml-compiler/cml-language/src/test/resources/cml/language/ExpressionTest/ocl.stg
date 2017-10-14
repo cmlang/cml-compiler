@@ -33,7 +33,7 @@ recurse(args) ::= <<
 >>
 
 reduce(args) ::= <<
-<ocl(args.seq)>->iterate(<args.expr.parameters; separator="; "> = <args.from.innerExpression> | <ocl(args.expr.innerExpression)>)
+<ocl(args.seq)>->iterate(<args.expr.parameters; separator="; "> = <ocl(args.from.innerExpression)> | <ocl(args.expr.innerExpression)>)
 >>
 
 distinct(args) ::= <<
@@ -45,7 +45,7 @@ flatten(expr) ::= <<
 >>
 
 cross_join(args) ::= <<
-cross_join(<args.seq1>, <args.seq2>)
+cross_join(<ocl(args.seq1)>, <ocl(args.seq2)>)
 >>
 
 collection_invocation(args, operation, appendix) ::= <<

@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 
@@ -39,8 +38,8 @@ public class TupleTypeElement extends ModelElementBase
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
-        return name == null ? type.toString() : format("%s: %s", name, diagnosticIdentificationOf(type));
+        return name == null ? type.toString() : format("%s: %s", name, type.getDiagnosticId());
     }
 }

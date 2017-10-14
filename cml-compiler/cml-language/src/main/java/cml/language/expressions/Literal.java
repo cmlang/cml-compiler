@@ -30,7 +30,7 @@ public class Literal extends ExpressionBase
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
         return text;
     }

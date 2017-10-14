@@ -9,6 +9,7 @@ import cml.language.foundation.TempModel;
 import cml.language.generated.Expression;
 import cml.language.generated.Property;
 import cml.language.generated.Type;
+import cml.language.generated.UndefinedType;
 import cml.language.loader.ModelLoader;
 import cml.templates.ModelAdaptor;
 import org.junit.Test;
@@ -179,15 +180,24 @@ public class ExpressionTest
             final Type type = value.getType();
             assertNotNull("Should have computed type for property: " + property.getName(), type);
 
-            if (type.getErrorMessage().isPresent())
+            if (type instanceof UndefinedType)
             {
-                fail("NamedType Error of property '" + property.getName() + "': " + type.getErrorMessage().get());
+                final UndefinedType undefinedType = (UndefinedType) type;
+
+                if (undefinedType.getErrorMessage().isPresent())
+                {
+                    fail("Type Error of property '" + property.getName() + "': " + undefinedType.getErrorMessage().get());
+                }
+                else
+                {
+                    fail("Undefined type for property: " + property.getName());
+                }
             }
 
             assertEquals(
                 "Property should match expected type: " + property.getName(),
                 expectedType,
-                type.toString());
+                type.getDiagnosticId());
         }
     }
 }

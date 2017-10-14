@@ -6,7 +6,9 @@ import cml.language.generated.*;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.generated.Element.extendElement;
 import static cml.language.generated.ModelElement.extendModelElement;
+import static cml.language.generated.Module.extendModule;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
 import static java.util.Collections.emptyList;
@@ -74,11 +76,12 @@ class TempModuleImpl implements TempModule
 
     TempModuleImpl(TempModel model, String name)
     {
-        final ModelElement modelElement = extendModelElement(this, model, null);
-        final NamedElement namedElement = extendNamedElement(this, modelElement, name);
-        final Scope scope = extendScope(this, modelElement, emptyList());
+        final Element element = extendElement(this);
+        final ModelElement modelElement = extendModelElement(this, element, model, null);
+        final NamedElement namedElement = extendNamedElement(this, element, modelElement, name);
+        final Scope scope = extendScope(this, element, modelElement, emptyList());
 
-        this.module = Module.extendModule(this, modelElement, namedElement, scope);
+        this.module = extendModule(this, element, modelElement, namedElement, scope);
     }
 
     @Override
@@ -139,5 +142,11 @@ class TempModuleImpl implements TempModule
     public List<Association> getAssociations()
     {
         return module.getAssociations();
+    }
+
+    @Override
+    public String getDiagnosticId()
+    {
+        return module.getDiagnosticId();
     }
 }

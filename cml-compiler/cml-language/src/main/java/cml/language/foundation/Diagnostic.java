@@ -1,6 +1,6 @@
 package cml.language.foundation;
 
-import cml.language.generated.ModelElement;
+import cml.language.generated.Element;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -12,27 +12,27 @@ import static java.util.Collections.emptyList;
 public class Diagnostic
 {
     private final String code;
-    private final ModelElement element;
+    private final Element element;
     private final @Nullable String message;
-    private final List<? extends ModelElement> participants;
+    private final List<? extends Element> participants;
 
-    public Diagnostic(String code, ModelElement element)
+    public Diagnostic(String code, Element element)
     {
         this(code, element, emptyList());
     }
 
-    public Diagnostic(String code, ModelElement element, @Nullable String message)
+    public Diagnostic(String code, Element element, @Nullable String message)
     {
         this(code, element, message, emptyList());
     }
 
-    public Diagnostic(String code, ModelElement element, List<? extends ModelElement> participants)
+    public Diagnostic(String code, Element element, List<? extends Element> participants)
     {
         this(code, element, null, participants);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public Diagnostic(String code, ModelElement element, @Nullable String message, List<? extends ModelElement> participants)
+    public Diagnostic(String code, Element element, @Nullable String message, List<? extends Element> participants)
     {
         this.code = code;
         this.element = element;
@@ -45,7 +45,7 @@ public class Diagnostic
         return code;
     }
 
-    public ModelElement getElement()
+    public Element getElement()
     {
         return element;
     }
@@ -55,7 +55,7 @@ public class Diagnostic
         return Optional.ofNullable(message);
     }
 
-    public List<? extends ModelElement> getParticipants()
+    public List<? extends Element> getParticipants()
     {
         return participants;
     }

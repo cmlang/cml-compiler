@@ -19,6 +19,9 @@ CONCEPT_REDEF files:
 PROPERTY_REDEF files:
 - src/main/java/cml/language/generated/PropertyRedef.java
 
+ELEMENT files:
+- src/main/java/cml/language/generated/Element.java
+
 MODEL_ELEMENT files:
 - src/main/java/cml/language/generated/ModelElement.java
 

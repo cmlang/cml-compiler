@@ -70,7 +70,7 @@ public class Unary extends ExpressionBase
     @Override
     public Type getType()
     {
-        final Type subExprType = (Type) subExpr.getType();
+        final Type subExprType = subExpr.getType();
 
         if (subExprType.isUndefined())
         {
@@ -89,7 +89,15 @@ public class Unary extends ExpressionBase
             return createUndefinedType(
                 format(
                     "Incompatible operand '%s' of type '%s' for operator '%s'.",
-                    getSubExpr(), subExprType, getOperator()));
+                    getSubExpr().getDiagnosticId(),
+                    subExprType.getDiagnosticId(),
+                    getOperator()));
         }
+    }
+
+    @Override
+    public String getDiagnosticId()
+    {
+        return format("%s %s ", getOperator(), getSubExpr());
     }
 }

@@ -32,12 +32,6 @@ public class TupleType extends BaseType
     }
 
     @Override
-    public Optional<String> getErrorMessage()
-    {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<String> getCardinality()
     {
         return Optional.ofNullable(cardinality);
@@ -50,7 +44,7 @@ public class TupleType extends BaseType
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
         return format("(%s)", seq(elements).toString(",")) + (getCardinality().isPresent() ? getCardinality().get() : "");
     }

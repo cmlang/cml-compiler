@@ -4,7 +4,6 @@ import cml.language.foundation.Diagnostic;
 import cml.language.foundation.Invariant;
 import cml.language.generated.Property;
 
-import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static java.lang.String.format;
 
@@ -28,8 +27,8 @@ public class PropertyTypeAssignableFromExpressionType implements Invariant<Prope
             self,
             format(
                 "Declared type is %s but type inferred from expression is %s.",
-                diagnosticIdentificationOf(self.getDeclaredType().get()),
-                diagnosticIdentificationOf(self.getValue().get().getType())));
+                self.getDeclaredType().get().getDiagnosticId(),
+                self.getValue().get().getType().getDiagnosticId()));
     }
 
 }

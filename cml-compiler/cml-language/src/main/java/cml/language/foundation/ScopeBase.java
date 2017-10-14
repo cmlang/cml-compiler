@@ -14,7 +14,7 @@ public abstract class ScopeBase extends ModelElementBase implements Scope
     {
         super(parent);
 
-        this.scope = Scope.extendScope(this, modelElement, members);
+        this.scope = Scope.extendScope(this, element, modelElement, members);
     }
 
     @Override

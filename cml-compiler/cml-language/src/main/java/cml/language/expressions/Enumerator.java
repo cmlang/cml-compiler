@@ -1,8 +1,6 @@
 package cml.language.expressions;
 
-import cml.language.foundation.ModelElementBase;
-
-public class Enumerator extends ModelElementBase
+public class Enumerator
 {
     private final String variable;
     private final Path path;

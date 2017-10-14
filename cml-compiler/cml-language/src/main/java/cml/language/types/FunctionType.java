@@ -61,12 +61,6 @@ public class FunctionType extends BaseType
     }
 
     @Override
-    public Optional<String> getErrorMessage()
-    {
-        return Optional.empty();
-    }
-
-    @Override
     public Type getElementType()
     {
         assert !getCardinality().isPresent();
@@ -81,7 +75,7 @@ public class FunctionType extends BaseType
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
         return format("%s -> %s", params, result);
     }

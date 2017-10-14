@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static cml.language.generated.Element.extendElement;
 import static cml.language.generated.ModelElement.extendModelElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 import static cml.language.generated.Scope.extendScope;
@@ -72,11 +73,12 @@ class ModelImpl implements TempModel
 
     ModelImpl()
     {
-        final ModelElement modelElement = extendModelElement(this, null, null);
-        final NamedElement namedElement = extendNamedElement(this, modelElement, "");
-        final Scope scope = extendScope(this, modelElement, emptyList());
+        final Element element = extendElement(this);
+        final ModelElement modelElement = extendModelElement(this, element, null, null);
+        final NamedElement namedElement = extendNamedElement(this, element, modelElement, "");
+        final Scope scope = extendScope(this, element, modelElement, emptyList());
 
-        this.model = Model.extendModel(this, modelElement, namedElement, scope);
+        this.model = Model.extendModel(this, element, modelElement, namedElement, scope);
     }
 
     @Override
@@ -137,6 +139,12 @@ class ModelImpl implements TempModel
     public String getName()
     {
         return model.getName();
+    }
+
+    @Override
+    public String getDiagnosticId()
+    {
+        return model.getDiagnosticId();
     }
 }
 

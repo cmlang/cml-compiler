@@ -1,6 +1,5 @@
 package cml.language.expressions;
 
-import cml.language.foundation.NamedElementBase;
 import cml.language.generated.Expression;
 import org.jooq.lambda.Seq;
 
@@ -9,17 +8,22 @@ import java.util.List;
 import static java.lang.String.format;
 import static org.jooq.lambda.Seq.seq;
 
-public class Keyword extends NamedElementBase
+public class Keyword
 {
+    private final String name;
     private final List<String> parameters;
     private final Expression expression;
 
     public Keyword(final String name, final Seq<String> parameters, final Expression expression)
     {
-        super(name);
-
+        this.name = name;
         this.parameters = parameters.toList();
         this.expression = expression;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     public Seq<String> getParameters()

@@ -1,6 +1,5 @@
 package cml.language.expressions;
 
-import cml.language.foundation.ModelElementBase;
 import cml.language.generated.Expression;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.empty;
 import static org.jooq.lambda.Seq.seq;
 
-public class Query extends ModelElementBase
+public class Query
 {
     private final @Nullable String name;
     private final List<Keyword> keywords;

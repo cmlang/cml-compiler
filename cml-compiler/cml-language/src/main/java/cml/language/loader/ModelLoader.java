@@ -7,6 +7,7 @@ import cml.io.SourceFile;
 import cml.language.features.TempModule;
 import cml.language.foundation.Diagnostic;
 import cml.language.foundation.TempModel;
+import cml.language.generated.Element;
 import cml.language.generated.Import;
 import cml.language.generated.Location;
 import cml.language.generated.ModelElement;
@@ -17,7 +18,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jetbrains.annotations.Nullable;
-import org.jooq.lambda.Seq;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,11 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static cml.language.functions.ModelElementFunctions.diagnosticIdentificationOf;
 import static cml.language.functions.ModelVisitorFunctions.visitModel;
 import static cml.language.functions.ModuleFunctions.createImportOfModule;
 import static cml.language.functions.ModuleFunctions.importedModuleOf;
-import static org.jooq.lambda.Seq.seq;
 
 public interface ModelLoader
 {
@@ -210,7 +208,7 @@ class ModelLoaderImpl implements ModelLoader
                 console.print(
                     "\nFailed validation: required %s: in %s",
                     diagnostic.getCode(),
-                    diagnosticIdentificationOf(diagnostic.getElement()));
+                    diagnostic.getElement().getDiagnosticId());
 
                 printLocation(diagnostic.getElement());
 
@@ -219,9 +217,9 @@ class ModelLoaderImpl implements ModelLoader
                     console.println(diagnostic.getMessage().get());
                 }
 
-                for(ModelElement element: diagnostic.getParticipants())
+                for(Element element: diagnostic.getParticipants())
                 {
-                    console.print("- %s", diagnosticIdentificationOf(element));
+                    console.print("- %s", element.getDiagnosticId());
 
                     printLocation(element);
                 }
@@ -231,18 +229,21 @@ class ModelLoaderImpl implements ModelLoader
         }
     }
 
-    private void printLocation(ModelElement element)
+    private void printLocation(Element element)
     {
-        if (element.getLocation().isPresent())
+        if (element instanceof ModelElement)
         {
-            final Location location = element.getLocation().get();
+            final ModelElement modelElement = (ModelElement) element;
 
-            console.println(" (%d:%d)", location.getLine(), location.getColumn());
+            if (modelElement.getLocation().isPresent())
+            {
+                final Location location = modelElement.getLocation().get();
+
+                console.print(" (%d:%d)", location.getLine(), location.getColumn());
+            }
         }
-        else
-        {
-            console.println("");
-        }
+
+        console.println("");
     }
 
     private CompilationUnitContext parse(SourceFile sourceFile) throws IOException

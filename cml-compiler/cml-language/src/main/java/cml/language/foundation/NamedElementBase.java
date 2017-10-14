@@ -4,9 +4,10 @@ import cml.language.generated.NamedElement;
 import cml.language.generated.Scope;
 import org.jetbrains.annotations.Nullable;
 
+import static cml.language.generated.Element.extendElement;
 import static cml.language.generated.NamedElement.extendNamedElement;
 
-public class NamedElementBase extends ModelElementBase implements NamedElement
+public abstract class NamedElementBase extends ModelElementBase implements NamedElement
 {
     private final NamedElement namedElement;
 
@@ -18,7 +19,8 @@ public class NamedElementBase extends ModelElementBase implements NamedElement
     public NamedElementBase(@Nullable Scope parent, String name)
     {
         super(parent);
-        namedElement = extendNamedElement(this, modelElement, name);
+
+        namedElement = extendNamedElement(this, extendElement(this), modelElement, name);
     }
 
     @Override

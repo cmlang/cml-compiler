@@ -1,5 +1,10 @@
 
-@abstraction MODEL_ELEMENT
+@abstraction ELEMENT
+{
+    /diagnostic_id: string;
+}
+
+@abstraction MODEL_ELEMENT: ELEMENT
 {
     parent: SCOPE?;
     location: LOCATION?;
@@ -18,7 +23,7 @@
     /type: TYPE;
 }
 
-@concept SCOPE: MODEL_ELEMENT
+@abstraction SCOPE: MODEL_ELEMENT
 {
     members: MODEL_ELEMENT*;
 }

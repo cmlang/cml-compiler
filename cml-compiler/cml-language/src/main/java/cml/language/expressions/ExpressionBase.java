@@ -29,10 +29,11 @@ public abstract class ExpressionBase implements Expression
 
     ExpressionBase(Scope parent, List<Expression> subExpressions)
     {
-        final ModelElement modelElement = ModelElement.extendModelElement(this, parent, null);
-        final Scope scope = Scope.extendScope(this, modelElement, seq(subExpressions).map(s -> (ModelElement)s).toList());
+        final Element element = Element.extendElement(this);
+        final ModelElement modelElement = ModelElement.extendModelElement(this, element, parent, null);
+        final Scope scope = Scope.extendScope(this, element, modelElement, seq(subExpressions).map(s -> (ModelElement)s).toList());
 
-        expression = Expression.extendExpression(this, modelElement, scope);
+        expression = Expression.extendExpression(this, element, modelElement, scope);
     }
 
     @Override

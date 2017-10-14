@@ -103,6 +103,12 @@ public abstract class LangTest extends TemplateTest
         testTemplate(templateName, "named_element", namedElement, expectedOutputPath);
     }
 
+    void testTemplateWithNamedElement(String templateName, TempNamedType type, String expectedOutputPath)
+        throws IOException
+    {
+        testTemplate(templateName, "named_element", type, expectedOutputPath);
+    }
+
     void assertThatOutputMatches(String expectedOutputPath, String actualOutput) throws IOException
     {
         expectedOutputPath = format(

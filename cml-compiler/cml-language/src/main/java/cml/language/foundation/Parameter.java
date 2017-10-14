@@ -2,6 +2,7 @@ package cml.language.foundation;
 
 import cml.language.generated.*;
 import cml.language.types.TempNamedType;
+import cml.language.types.TypedElementBase;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -27,26 +28,20 @@ public interface Parameter extends TypedElement
         }
     }
 
-    static Parameter create(String name, TempNamedType type, String scopeName)
+    static Parameter create(String name, TempNamedType type, @Nullable String scopeName)
     {
         return new ParameterImpl(name, type, scopeName);
     }
 }
 
-class ParameterImpl implements Parameter
+class ParameterImpl extends TypedElementBase implements Parameter
 {
-    private final ModelElement modelElement;
-    private final NamedElement namedElement;
-
-    private final TempNamedType type;
     private final @Nullable String scopeName;
 
-    ParameterImpl(String name, TempNamedType type, String scopeName)
+    ParameterImpl(String name, TempNamedType type, @Nullable String scopeName)
     {
-        modelElement = extendModelElement(this, null, null);
-        namedElement = extendNamedElement(this, modelElement, name);
+        super(name, type);
 
-        this.type = type;
         this.scopeName = scopeName;
     }
 
@@ -57,38 +52,8 @@ class ParameterImpl implements Parameter
     }
 
     @Override
-    public TempNamedType getType()
+    public String getDiagnosticId()
     {
-        return type;
-    }
-
-    @Override
-    public String getName()
-    {
-        return namedElement.getName();
-    }
-
-    @Override
-    public Optional<Location> getLocation()
-    {
-        return modelElement.getLocation();
-    }
-
-    @Override
-    public Optional<Scope> getParent()
-    {
-        return modelElement.getParent();
-    }
-
-    @Override
-    public Optional<Model> getModel()
-    {
-        return modelElement.getModel();
-    }
-
-    @Override
-    public Optional<Module> getModule()
-    {
-        return modelElement.getModule();
+        return getType().getDiagnosticId();
     }
 }

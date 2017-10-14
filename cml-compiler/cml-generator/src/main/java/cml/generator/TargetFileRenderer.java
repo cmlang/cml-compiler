@@ -2,6 +2,7 @@ package cml.generator;
 
 import cml.io.Console;
 import cml.io.FileSystem;
+import cml.language.expressions.Literal;
 import cml.language.generated.NamedElement;
 import cml.language.generated.Task;
 import cml.templates.TemplateRenderer;
@@ -102,8 +103,8 @@ class TargetFileRendererImpl implements TargetFileRenderer
         //noinspection ConstantConditions
         task.getProperties()
             .stream()
-            .filter(property -> property.getValue().isPresent())
-            .forEach(property -> properties.put(property.getName(), property.getValue().get()));
+            .filter(property -> property.getValue().isPresent() && property.getValue().get() instanceof Literal)
+            .forEach(property -> properties.put(property.getName(), ((Literal) property.getValue().get()).getText()));
 
         return properties;
     }

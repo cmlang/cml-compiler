@@ -2,7 +2,6 @@ package cml.language.expressions;
 
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.generated.UndefinedType;
 import cml.language.types.TempNamedType;
 
 import java.util.Collection;
@@ -158,12 +157,14 @@ public class Infix extends ExpressionBase
         {
             return createUndefinedType(format(
                 "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s: %s'",
-                getOperator(), getLeft(), leftType, getRight(), rightType));
+                getOperator(),
+                getLeft().getDiagnosticId(), leftType.getDiagnosticId(),
+                getRight().getDiagnosticId(), rightType.getDiagnosticId()));
         }
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
         return format("%s %s %s", getLeft(), getOperator(), getRight());
     }

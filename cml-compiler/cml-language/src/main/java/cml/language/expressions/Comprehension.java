@@ -74,6 +74,12 @@ public class Comprehension extends ExpressionBase
     @Override
     public TempNamedType getType()
     {
-        return null;
+        throw new UnsupportedOperationException("Unexpected type inference of a comprehension. Should have been transformed into an invocation.");
+    }
+
+    @Override
+    public String getDiagnosticId()
+    {
+        throw new UnsupportedOperationException("Unexpected diagnostic of a comprehension. Should have been transformed into an invocation.");
     }
 }

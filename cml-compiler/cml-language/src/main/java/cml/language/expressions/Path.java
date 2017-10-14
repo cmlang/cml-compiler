@@ -134,7 +134,7 @@ public class Path extends ExpressionBase
                 }
                 else
                 {
-                    return createUndefinedType("Unable to find type: " + type);
+                    return createUndefinedType("Unable to find type: " + type.getDiagnosticId());
                 }
             }
 
@@ -187,7 +187,7 @@ public class Path extends ExpressionBase
                 }
                 else
                 {
-                    return createUndefinedType("Unable to find type: " + type);
+                    return createUndefinedType("Unable to find type: " + type.getDiagnosticId());
                 }
             }
 
@@ -226,7 +226,7 @@ public class Path extends ExpressionBase
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
         return getNames().stream().collect(joining("."));
     }

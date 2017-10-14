@@ -1,24 +1,19 @@
 package cml.language.types;
 
-import cml.language.generated.NamedElement;
 import cml.language.generated.Type;
-
-import java.util.Optional;
 
 import static java.lang.String.format;
 
-public class MemberType extends BaseType implements NamedElement
+public class MemberType extends BaseType
 {
-    private final NamedElement namedElement;
-
     private final Type baseType;
+    private final String name;
     private final long paramIndex;
 
     public MemberType(final Type baseType, final String name, final long paramIndex)
     {
-        namedElement = NamedElement.extendNamedElement(this, modelElement, name);
-
         this.baseType = baseType;
+        this.name = name;
         this.paramIndex = paramIndex;
     }
 
@@ -27,10 +22,9 @@ public class MemberType extends BaseType implements NamedElement
         return baseType;
     }
 
-    @Override
-    public boolean isString()
+    public String getName()
     {
-        return false;
+        return name;
     }
 
     public long getParamIndex()
@@ -47,19 +41,7 @@ public class MemberType extends BaseType implements NamedElement
     }
 
     @Override
-    public String getKind()
-    {
-        return "member";
-    }
-
-    @Override
-    public String getName()
-    {
-        return namedElement.getName();
-    }
-
-    @Override
-    public String toString()
+    public String getDiagnosticId()
     {
         return format("%s.%s", baseType, getName());
     }

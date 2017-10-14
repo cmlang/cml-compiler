@@ -23,7 +23,6 @@ import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toMap;
-import static org.jooq.lambda.Seq.concat;
 import static org.jooq.lambda.Seq.seq;
 
 public interface Invocation extends Expression, NamedElement
@@ -220,7 +219,7 @@ class InvocationImpl extends ExpressionBase implements Invocation
     {
         super(seq(arguments).toList());
 
-        namedElement = extendNamedElement(this, expression, name);
+        namedElement = extendNamedElement(this, expression, expression, name);
 
         this.arguments = new ArrayList<>(arguments);
     }
@@ -292,9 +291,9 @@ class InvocationImpl extends ExpressionBase implements Invocation
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
-        return format("%s(%s)", getName(), seq(arguments).toString(", "));
+        return format("%s(%s) -> %s", getName(), seq(arguments).map(a -> a.getDiagnosticId()).toString(", "), getType().getDiagnosticId());
     }
 }
 
@@ -311,7 +310,7 @@ class ParameterizedInvocation extends ExpressionBase implements Invocation
     {
         super(seq(namedArguments.values()).toList());
 
-        namedElement = extendNamedElement(this, expression, name);
+        namedElement = extendNamedElement(this, expression, expression, name);
 
         this.namedArguments = new LinkedHashMap<>(namedArguments);
     }
@@ -379,10 +378,10 @@ class ParameterizedInvocation extends ExpressionBase implements Invocation
     }
 
     @Override
-    public String toString()
+    public String getDiagnosticId()
     {
-        final Seq<String> namedArguments = seq(getNamedArguments()).map(t -> format("%s: %s", t.v1, t.v2));
+        final Seq<String> namedArguments = seq(getNamedArguments()).map(t -> format("%s: %s", t.v1, t.v2.getDiagnosticId()));
 
-        return format("%s(%s)", getName(), namedArguments.toString(", "));
+        return format("%s(%s) -> %s", getName(), namedArguments.toString(", "), getType().getDiagnosticId());
     }
 }

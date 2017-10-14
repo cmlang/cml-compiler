@@ -5,6 +5,7 @@ import cml.language.generated.Type;
 import cml.language.types.TempNamedType;
 
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 public class Conditional extends ExpressionBase
@@ -59,7 +60,13 @@ public class Conditional extends ExpressionBase
         }
         else
         {
-            return TempNamedType.create(thenType + "|" + elseType);
+            return TempNamedType.create(thenType.getDiagnosticId() + "|" + elseType.getDiagnosticId());
         }
+    }
+
+    @Override
+    public String getDiagnosticId()
+    {
+        return format("if %s then %s else %s", cond.getDiagnosticId(), then.getDiagnosticId(), else_.getDiagnosticId());
     }
 }

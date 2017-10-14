@@ -1,18 +1,19 @@
 package cml.language.types;
 
-import cml.language.foundation.ModelElementBase;
 import cml.language.generated.Concept;
 import cml.language.generated.Type;
 
 import java.util.Optional;
 
-public class BaseType extends ModelElementBase implements Type
+import static cml.language.generated.Element.extendElement;
+
+public abstract class BaseType implements Type
 {
     private final Type type;
 
     public BaseType()
     {
-        this.type = Type.extendType(this, modelElement, null);
+        this.type = Type.extendType(this, extendElement(this));
     }
 
     @Override
@@ -109,12 +110,6 @@ public class BaseType extends ModelElementBase implements Type
     public boolean isBoolean()
     {
         return type.isBoolean();
-    }
-
-    @Override
-    public Optional<String> getErrorMessage()
-    {
-        return type.getErrorMessage();
     }
 
     @Override

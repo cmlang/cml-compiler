@@ -17,6 +17,8 @@
 
     /one_property = if first_one_to_last_many then first_end.associated_property else last_end.associated_property;
     /many_property = if first_many_to_last_one then first_end.associated_property else last_end.associated_property;
+
+    /diagnostic_id = "association " + name;
 }
 
 @concept ASSOCIATION_END: MODEL_ELEMENT
@@ -34,6 +36,9 @@
 
     /one = associated_property_type.single;
     /many = associated_property_type.sequence;
+
+    /diagnostic_id = "association end " + concept_name + "." + property_name +
+                        if present(property_type) then property_type.diagnostic_id as! string else "";
 }
 
 @association ASSOCIATION_END_PROPERTY

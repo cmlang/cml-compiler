@@ -60,7 +60,10 @@ public class TypeCast extends ExpressionBase
             return createUndefinedType(
                 format(
                     "%s:\n- left operand is '%s: %s'\n- right operand is '%s'",
-                    diagnosticMessage(operator, exprType, castType), expr, exprType, castType));
+                    diagnosticMessage(operator, exprType, castType),
+                    expr.getDiagnosticId(),
+                    exprType.getDiagnosticId(),
+                    castType.getDiagnosticId()));
         }
     }
 
@@ -85,4 +88,9 @@ public class TypeCast extends ExpressionBase
         }
     }
 
+    @Override
+    public String getDiagnosticId()
+    {
+        return expr.getDiagnosticId() + (operator.equals(ASB) ? "as!" : "as?") + castType.getDiagnosticId();
+    }
 }

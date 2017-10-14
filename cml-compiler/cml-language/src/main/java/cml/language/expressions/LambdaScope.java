@@ -28,4 +28,10 @@ public class LambdaScope extends ScopeBase
     {
         return unmodifiableMap(parameters);
     }
+
+    @Override
+    public String getDiagnosticId()
+    {
+        return parameters.toString();
+    }
 }

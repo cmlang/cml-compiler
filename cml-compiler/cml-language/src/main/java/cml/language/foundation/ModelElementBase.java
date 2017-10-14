@@ -5,8 +5,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+import static cml.language.generated.Element.extendElement;
+import static cml.language.generated.ModelElement.extendModelElement;
+
 public abstract class ModelElementBase implements ModelElement
 {
+    protected final Element element;
     protected final ModelElement modelElement;
 
     protected ModelElementBase()
@@ -16,7 +20,8 @@ public abstract class ModelElementBase implements ModelElement
 
     protected ModelElementBase(@Nullable Scope parent)
     {
-        modelElement = ModelElement.extendModelElement(this, parent, null);
+        element = extendElement(this);
+        modelElement = extendModelElement(this, element, parent, null);
     }
 
     @Override

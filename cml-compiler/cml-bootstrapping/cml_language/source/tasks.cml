@@ -2,4 +2,6 @@
 @concept TASK: NAMED_ELEMENT, PROPERTY_LIST
 {
     constructor: String?;
+
+    /diagnostic_id = "task " + name;
 }

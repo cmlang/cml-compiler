@@ -17,4 +17,10 @@ public class Template extends NamedElementBase
     {
         return function;
     }
+
+    @Override
+    public String getDiagnosticId()
+    {
+        return function.getDiagnosticId();
+    }
 }

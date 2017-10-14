@@ -1,8 +1,6 @@
 
-@abstraction TYPE: MODEL_ELEMENT
+@abstraction TYPE: ELEMENT
 {
-    error_message: STRING?;
-
     /cardinality: STRING? = none;
     /concept: CONCEPT? = none;
     /element_type: TYPE = self;
@@ -40,12 +38,19 @@
     /inferred_type: TYPE = self;
 }
 
-@abstraction NAMED_TYPE: TYPE, NAMED_ELEMENT;
+@abstraction NAMED_TYPE: TYPE
+{
+    name: string;
+}
 
 @concept UNDEFINED_TYPE: NAMED_TYPE
 {
+    error_message: string?;
+
     /name = "UNDEFINED";
     /undefined = true;
     /parent: SCOPE? = none;
     /location: LOCATION? = none;
+
+    /diagnostic_id = name;
 }

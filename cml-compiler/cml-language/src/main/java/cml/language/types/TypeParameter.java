@@ -1,11 +1,16 @@
 package cml.language.types;
 
-import cml.language.foundation.NamedElementBase;
-
-public class TypeParameter extends NamedElementBase
+public class TypeParameter
 {
+    private final String name;
+
     public TypeParameter(final String name)
     {
-        super(name);
+        this.name = name;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }
