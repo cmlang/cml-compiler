@@ -224,9 +224,19 @@ public class TypeFunctions
         }
         else
         {
-            return isElementTypeAssignableFrom(exprType.getElementType(), castType.getElementType()) &&
-                   isCardinalityAssignableFrom(castType, exprType);
+            return (isElementGeneralizationAssignableFrom(exprType.getElementType(), castType.getElementType()) &&
+                    isCardinalityAssignableFrom(castType, exprType));
         }
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    public static boolean isElementGeneralizationAssignableFrom(final Type thisElementType, final Type thatElementType)
+    {
+        if (isElementTypeAssignableFrom(thisElementType, thatElementType)) return true;
+
+        return seq(thisElementType.getConcept()).map(c -> (TempConcept)c)
+                                                .flatMap(c -> c.getAllGeneralizations().stream())
+                                                .anyMatch(c -> isElementTypeAssignableFrom(selfTypeOf(c), thatElementType));
     }
 
     public static int getParamIndexOfMatchingType(List<FunctionParameter> parameters, Type type)
