@@ -38,7 +38,7 @@
     /many = associated_property_type.sequence;
 
     /diagnostic_id = "association end " + concept_name + "." + property_name +
-                        if present(property_type) then property_type.diagnostic_id as! string else "";
+                        if present(property_type) then ": " + property_type.diagnostic_id as! string else "";
 }
 
 @association ASSOCIATION_END_PROPERTY
