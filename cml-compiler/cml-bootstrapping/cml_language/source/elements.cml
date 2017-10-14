@@ -15,7 +15,7 @@
 
 @abstraction TYPED_ELEMENT: NAMED_ELEMENT
 {
-    type: TYPE;
+    /type: TYPE;
 }
 
 @concept SCOPE: MODEL_ELEMENT
