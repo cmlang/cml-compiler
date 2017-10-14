@@ -45,7 +45,7 @@
 
 @concept UNDEFINED_TYPE: NAMED_TYPE
 {
-    error_message: string?;
+    error_message: string;
 
     /name = "UNDEFINED";
     /undefined = true;

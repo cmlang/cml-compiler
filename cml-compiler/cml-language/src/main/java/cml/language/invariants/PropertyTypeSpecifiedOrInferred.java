@@ -20,12 +20,10 @@ public class PropertyTypeSpecifiedOrInferred implements Invariant<Property>
 
         final UndefinedType undefinedType = (UndefinedType) self.getType();
 
-        assert undefinedType.getErrorMessage().isPresent();
-
         return new Diagnostic(
             "property_type_specified_or_inferred",
             self,
-            undefinedType.getErrorMessage().get());
+            undefinedType.getErrorMessage());
     }
 
 }

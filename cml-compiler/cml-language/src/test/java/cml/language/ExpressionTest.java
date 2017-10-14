@@ -184,14 +184,7 @@ public class ExpressionTest
             {
                 final UndefinedType undefinedType = (UndefinedType) type;
 
-                if (undefinedType.getErrorMessage().isPresent())
-                {
-                    fail("Type Error of property '" + property.getName() + "': " + undefinedType.getErrorMessage().get());
-                }
-                else
-                {
-                    fail("Undefined type for property: " + property.getName());
-                }
+                fail("Type Error of property '" + property.getName() + "': " + undefinedType.getErrorMessage());
             }
 
             assertEquals(
