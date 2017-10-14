@@ -1,8 +1,4 @@
 
-invocation_concept_arg(arg) ::= <<
-<expression(arg)>
->>
-
 invocation_sequence_empty(args) ::= <<
 (len(<expression(args.seq)>) == 0)
 >>

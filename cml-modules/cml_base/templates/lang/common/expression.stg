@@ -22,7 +22,7 @@ expression_infix(expr) ::= <<
 <if(expr.operation)><\\>
 (<({operation_<expr.operation>})(expr.left, expr.right)>)<\\>
 <else><\\>
-(<expression(expr.left)> <expr.operator> <expression(expr.right)>)<\\>
+(<nullable_expr(expr.left)> <expr.operator> <nullable_expr(expr.right)>)<\\>
 <endif>
 >>
 

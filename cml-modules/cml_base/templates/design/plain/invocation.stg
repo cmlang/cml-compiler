@@ -1,5 +1,5 @@
 
 invocation_concept(concept, args) ::= <<
-<new_call(type_name(concept), args:invocation_concept_arg())>
+<new_call(type_name(concept), args:nullable_expr())>
 >>
 

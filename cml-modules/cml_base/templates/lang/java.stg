@@ -1,4 +1,5 @@
 
+import "/lang/java/expression.stg"
 import "/lang/java/invocation.stg"
 import "/lang/java/lambda.stg"
 import "/lang/java/type.stg"
@@ -293,14 +294,16 @@ integral_zero() ::= "0"
 
 float_zero() ::= "0.0f"
 
+boolean_false() ::= "false"
+
 // Operations
 
-operation_add(left, right) ::= "<expression(left)> + <expression(right)>"
-operation_sub(left, right) ::= "<expression(left)> - <expression(right)>"
-operation_mul(left, right) ::= "<expression(left)> * <expression(right)>"
-operation_div(left, right) ::= "<expression(left)> / <expression(right)>"
-operation_mod(left, right) ::= "<expression(left)> % <expression(right)>"
-operation_exp(left, right) ::= "Math.pow(<expression(left)>, <expression(right)>)"
+operation_add(left, right) ::= "<nullable_expr(left)> + <nullable_expr(right)>"
+operation_sub(left, right) ::= "<nullable_expr(left)> - <nullable_expr(right)>"
+operation_mul(left, right) ::= "<nullable_expr(left)> * <nullable_expr(right)>"
+operation_div(left, right) ::= "<nullable_expr(left)> / <nullable_expr(right)>"
+operation_mod(left, right) ::= "<nullable_expr(left)> % <nullable_expr(right)>"
+operation_exp(left, right) ::= "Math.pow(<nullable_expr(left)>, <nullable_expr(right)>)"
 
 operation_eq(left, right) ::= <<
 <if(left.type.string || right.type.string)><\\>
@@ -314,11 +317,11 @@ operation_eq_operand(operand) ::= <<
 <expression(operand)><if(operand.type.optional)>.orElse(<field_default_value(operand.type)>)<endif>
 >>
 
-operation_ineq(left, right) ::= "<expression(left)> != <expression(right)>"
-operation_gt(left, right) ::= "<expression(left)> > <expression(right)>"
-operation_gte(left, right) ::= "<expression(left)> >= <expression(right)>"
-operation_lt(left, right) ::= "<expression(left)> \< <expression(right)>"
-operation_lte(left, right) ::= "<expression(left)> \<= <expression(right)>"
+operation_ineq(left, right) ::= "<nullable_expr(left)> != <nullable_expr(right)>"
+operation_gt(left, right) ::= "<nullable_expr(left)> > <nullable_expr(right)>"
+operation_gte(left, right) ::= "<nullable_expr(left)> >= <nullable_expr(right)>"
+operation_lt(left, right) ::= "<expression(left)> \< <nullable_expr(right)>"
+operation_lte(left, right) ::= "<nullable_expr(left)> \<= <nullable_expr(right)>"
 
 operation_and(left, right) ::= "<expression(left)> && <expression(right)>"
 operation_or(left, right) ::= "<expression(left)> || <expression(right)>"
