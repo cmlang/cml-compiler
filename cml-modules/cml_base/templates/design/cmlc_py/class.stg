@@ -1,7 +1,6 @@
 // constructors/cmlc_py
 
 class_primary_constructor(inherited_properties, super_properties, ancestors) ::= <<
-<if(ancestors || concept.nonDerivedProperties)><\\>
 <if(concept.abstraction || !concept.superProperties)><\\>
 <class_constructor(
     [actual_self_decl(concept), ancestors:optional_param_decl(), concept.nonDerivedProperties],
@@ -12,7 +11,6 @@ class_primary_constructor(inherited_properties, super_properties, ancestors) ::=
     [actual_self_decl(concept), ancestors:optional_param_decl(), concept.nonDerivedProperties, class_primary_constructor_keyword_args(concept)],
     class_primary_constructor_statements()
 )><\\>
-<endif><\\>
 <endif>
 >>
 

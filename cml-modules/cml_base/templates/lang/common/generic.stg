@@ -31,6 +31,10 @@ commaIf2(cond1, cond2) ::= <<
 <if(cond1 && cond2)>, <endif>
 >>
 
+commaIfEither(cond1, cond2) ::= <<
+<if(cond1 || cond2)>, <endif>
+>>
+
 line_list(list) ::= <<
 <if(list)><\\>
 <trim_template(all_lines(list))><\\>

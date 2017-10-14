@@ -7,10 +7,11 @@ class_self_field(concept) ::= <<
 extend_invocation(conceptRedef) ::= <<
 <field_access(conceptRedef.concept)> = <\\>
 <type_name(conceptRedef.concept)>.<interface_extend_name(type_name(conceptRedef.concept))><\\>
-(<actual_self_field()>, <extend_invocation_extra_args(conceptRedef)>)<statement_terminator()>
+(<actual_self_field()><extend_invocation_extra_args(conceptRedef)>)<statement_terminator()>
 >>
 
 extend_invocation_extra_args(conceptRedef) ::= <<
+<commaIfEither(conceptRedef.concept.allAncestors, conceptRedef.propertyRedefs)><\\>
 <conceptRedef.concept.allAncestors:field_access(); separator=", "><\\>
 <commaIf2(conceptRedef.concept.allAncestors, conceptRedef.propertyRedefs)><\\>
 <conceptRedef.propertyRedefs:extend_invocation_arg(); separator=", ">

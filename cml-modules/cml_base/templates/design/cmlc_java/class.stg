@@ -1,12 +1,10 @@
 // constructors/cmlc_java
 
 class_primary_constructor(inherited_properties, super_properties, ancestors) ::= <<
-<if(ancestors || concept.nonDerivedProperties)><\\>
 <class_constructor(
     [actual_self_decl(concept), concept.superProperties, concept.nonDerivedProperties],
     class_primary_constructor_statements()
-)><\\>
-<endif>
+)>
 >>
 
 class_primary_constructor_statements() ::= <<
