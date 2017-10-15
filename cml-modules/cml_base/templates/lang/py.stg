@@ -280,6 +280,10 @@ operation_div(left, right) ::= "<expression(left)> / <expression(right)>"
 operation_mod(left, right) ::= "<expression(left)> % <expression(right)>"
 operation_exp(left, right) ::= "<expression(left)> ** <expression(right)>"
 
+operation_str_concat(left, right) ::= <<
+<nullable_expr(left)> + <nullable_expr(right)>
+>>
+
 operation_eq(left, right) ::= "<expression(left)> == <expression(right)>"
 operation_ineq(left, right) ::= "<expression(left)> != <expression(right)>"
 operation_gt(left, right) ::= "<expression(left)> > <expression(right)>"

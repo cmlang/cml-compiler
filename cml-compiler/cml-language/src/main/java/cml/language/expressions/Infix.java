@@ -37,9 +37,7 @@ public class Infix extends ExpressionBase
         REFERENTIAL_EQUALITY, REFERENTIAL_INEQUALITY
     ));
 
-    private static final Collection<String> STRING_OPERATORS = unmodifiableCollection(asList(
-        "+", "%"
-    ));
+    private static final Collection<String> STRING_OPERATORS = unmodifiableCollection(asList("&", "+"));
 
     private static Map<String, String> OPERATIONS =
         new HashMap<String, String>()
@@ -51,6 +49,9 @@ public class Infix extends ExpressionBase
             put("/", "div");
             put("%", "mod");
             put("^", "exp");
+
+            // String Concatenation:
+            put("&", "str_concat");
 
             // Relational Operators:
             put("==", "eq");

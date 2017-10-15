@@ -13,6 +13,7 @@ expression returns [Expression expr]
     | <assoc=right> expression operator='^' expression
     | expression operator=('*' | '/' | '%') expression
     | expression operator=('+' | '-') expression
+    | expression operator='&' expression
     | expression operator=('<' | '<=' | '>' | '>=') expression
     | expression operator=('===' | '!==' | '==' | '!=') expression
     | expression operator=(IS | ISNT) type=typeDeclaration

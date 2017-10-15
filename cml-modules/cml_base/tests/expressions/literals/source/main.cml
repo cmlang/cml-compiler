@@ -9,6 +9,8 @@
     LiteralDecimalInit2 = .456;
 
     /compared_strings = LiteralStringInit == "another string";
+    /str_concat = LiteralStringInit & "another string";
+    /str_concat2 = LiteralStringInit + "another string";
 }
 
 @task literals_poj: poj

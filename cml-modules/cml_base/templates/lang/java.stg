@@ -305,6 +305,10 @@ operation_div(left, right) ::= "<nullable_expr(left)> / <nullable_expr(right)>"
 operation_mod(left, right) ::= "<nullable_expr(left)> % <nullable_expr(right)>"
 operation_exp(left, right) ::= "Math.pow(<nullable_expr(left)>, <nullable_expr(right)>)"
 
+operation_str_concat(left, right) ::= <<
+<nullable_expr(left)> + <nullable_expr(right)>
+>>
+
 operation_eq(left, right) ::= <<
 <if(left.type.string || right.type.string)><\\>
 Objects.equals(<operation_eq_operand(left)>, <operation_eq_operand(right)>)<\\>
