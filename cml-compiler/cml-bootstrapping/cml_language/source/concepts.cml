@@ -55,7 +55,7 @@
     /redefined_inherited_concrete_properties: PROPERTY*;
 */
 
-    /diagnostic_id = "concept " + name;
+    /diagnostic_id = "concept " & name;
 }
 
 @concept INHERITANCE

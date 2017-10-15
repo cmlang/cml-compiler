@@ -20,7 +20,7 @@
     /imported_modules = imports | yield: imported_module;
 */
 
-    /diagnostic_id = "module " + name;
+    /diagnostic_id = "module " & name;
 }
 
 @concept IMPORT: NAMED_ELEMENT
@@ -28,6 +28,6 @@
     imported_module: MODULE;
     first_import: boolean;
 
-    /diagnostic_id = "import " + name;
+    /diagnostic_id = "import " & name;
 }
 

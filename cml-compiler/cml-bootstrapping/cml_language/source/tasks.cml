@@ -3,5 +3,5 @@
 {
     constructor: String?;
 
-    /diagnostic_id = "task " + name;
+    /diagnostic_id = "task " & name;
 }
