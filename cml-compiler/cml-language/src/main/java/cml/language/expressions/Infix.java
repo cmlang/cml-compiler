@@ -150,7 +150,7 @@ public class Infix extends ExpressionBase
         {
             return isBinaryFloatingPointWiderThan(leftType, rightType) ? leftType : rightType;
         }
-        else if (STRING_OPERATORS.contains(operator) && leftType.isString() && rightType.isString())
+        else if (STRING_OPERATORS.contains(operator) && leftType.isPrimitive() && rightType.isPrimitive())
         {
             return TempNamedType.STRING;
         }

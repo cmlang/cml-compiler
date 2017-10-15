@@ -48,10 +48,18 @@ class LiteralExpressions:
 
     @property
     def str_concat_2(self) -> 'str':
+        return ((self.literal_string_init + str(321)) + str(self.literal_decimal_init))
+
+    @property
+    def str_concat_3(self) -> 'str':
+        return (str(321) + str(self.literal_decimal_init))
+
+    @property
+    def str_concat_4(self) -> 'str':
         return (self.literal_string_init + "another string")
 
     def __str__(self) -> 'str':
-        return "%s(literal_true_boolean=%s, literal_false_boolean=%s, literal_string_init=%s, literal_integer_init=%s, literal_decimal_init=%s, literal_decimal_init_2=%s, compared_strings=%s, str_concat=%s, str_concat_2=%s)" % (
+        return "%s(literal_true_boolean=%s, literal_false_boolean=%s, literal_string_init=%s, literal_integer_init=%s, literal_decimal_init=%s, literal_decimal_init_2=%s, compared_strings=%s, str_concat=%s, str_concat_2=%s, str_concat_3=%s, str_concat_4=%s)" % (
             type(self).__name__,
             self.literal_true_boolean,
             self.literal_false_boolean,
@@ -61,5 +69,7 @@ class LiteralExpressions:
             self.literal_decimal_init_2,
             self.compared_strings,
             self.str_concat,
-            self.str_concat_2
+            self.str_concat_2,
+            self.str_concat_3,
+            self.str_concat_4
         )

@@ -76,6 +76,16 @@ public class LiteralExpressions
 
     public String getStrConcat2()
     {
+        return ((this.getLiteralStringInit() + Objects.toString(321)) + Objects.toString(this.getLiteralDecimalInit()));
+    }
+
+    public String getStrConcat3()
+    {
+        return (Objects.toString(321) + Objects.toString(this.getLiteralDecimalInit()));
+    }
+
+    public String getStrConcat4()
+    {
         return (this.getLiteralStringInit() + "another string");
     }
 
@@ -91,7 +101,9 @@ public class LiteralExpressions
                    .append("literalDecimalInit2=").append(String.format("\"%s\"", this.getLiteralDecimalInit2())).append(", ")
                    .append("comparedStrings=").append(String.format("\"%s\"", this.isComparedStrings())).append(", ")
                    .append("strConcat=").append(String.format("\"%s\"", this.getStrConcat())).append(", ")
-                   .append("strConcat2=").append(String.format("\"%s\"", this.getStrConcat2()))
+                   .append("strConcat2=").append(String.format("\"%s\"", this.getStrConcat2())).append(", ")
+                   .append("strConcat3=").append(String.format("\"%s\"", this.getStrConcat3())).append(", ")
+                   .append("strConcat4=").append(String.format("\"%s\"", this.getStrConcat4()))
                    .append(')')
                    .toString();
     }
