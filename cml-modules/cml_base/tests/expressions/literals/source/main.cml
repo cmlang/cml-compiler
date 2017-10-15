@@ -12,7 +12,7 @@
     /str_concat = LiteralStringInit & "another string";
     /str_concat2 = LiteralStringInit & 321 & LiteralDecimalInit;
     /str_concat3 = 321 & LiteralDecimalInit;
-    /str_concat4 = LiteralStringInit + "another string";
+    /str_concat4 = LiteralStringInit & "another string";
 }
 
 @task literals_poj: poj

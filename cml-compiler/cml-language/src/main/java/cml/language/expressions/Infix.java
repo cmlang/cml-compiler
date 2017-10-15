@@ -14,6 +14,7 @@ import static cml.language.functions.TypeFunctions.isNumericWiderThan;
 import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableCollection;
 
 public class Infix extends ExpressionBase
@@ -37,7 +38,7 @@ public class Infix extends ExpressionBase
         REFERENTIAL_EQUALITY, REFERENTIAL_INEQUALITY
     ));
 
-    private static final Collection<String> STRING_OPERATORS = unmodifiableCollection(asList("&", "+"));
+    private static final Collection<String> STRING_OPERATORS = unmodifiableCollection(singletonList("&"));
 
     private static Map<String, String> OPERATIONS =
         new HashMap<String, String>()
@@ -167,6 +168,6 @@ public class Infix extends ExpressionBase
     @Override
     public String getDiagnosticId()
     {
-        return format("%s %s %s", getLeft(), getOperator(), getRight());
+        return format("%s %s %s", getLeft().getDiagnosticId(), getOperator(), getRight().getDiagnosticId());
     }
 }
