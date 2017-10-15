@@ -18,13 +18,13 @@
 
     /type = if present(declared_type) then declared_type as! TYPE
             else if present(value) then value.type.inferred_type as! TYPE
-            else UNDEFINED_TYPE("No type or expression defined for property: " + name);
+            else UNDEFINED_TYPE("No type or expression defined for property: " & name);
 
     /named_parent = parent as? NAMED_ELEMENT?;
 
     /diagnostic_id = if present(named_parent)
-                        then "property " & named_parent.name + "." & name + ": " & type.diagnostic_id
-                        else "property " & name + ": " & type.diagnostic_id;
+                        then "property " & named_parent.name & "." & name & ": " & type.diagnostic_id
+                        else "property " & name & ": " & type.diagnostic_id;
 }
 
 @abstraction PROPERTY_LIST: SCOPE
