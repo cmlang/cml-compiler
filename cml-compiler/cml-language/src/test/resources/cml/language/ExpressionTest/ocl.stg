@@ -82,6 +82,8 @@ operator_div() ::= "/"
 operator_mod() ::= "%"
 operator_exp() ::= "^"
 
+operator_str_concat() ::= "+"
+
 operator_eq() ::= "="
 operator_not_eq() ::= "\<>"
 operator_ref_eq() ::= "="

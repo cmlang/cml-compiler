@@ -76,4 +76,9 @@
 
     // Binary Floating-Point:
     floating_point = 2.0f * 3.0d;
+
+    // String concatenation:
+    str1: string;
+    str2: string;
+    str_concat = str1 & "some" & str2 & "else";
 }
