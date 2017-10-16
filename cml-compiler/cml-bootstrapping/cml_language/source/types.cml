@@ -34,7 +34,7 @@
     /optional = kind == "optional";
     /sequence = kind == "sequence";
 
-    /inferred_cardinality = if required or (optional and boolean) then "" else cardinality;
+    /inferred_cardinality = cardinality;
     /inferred_type: TYPE = self;
 }
 

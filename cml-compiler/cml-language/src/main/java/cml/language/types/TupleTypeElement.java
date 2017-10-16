@@ -40,6 +40,6 @@ public class TupleTypeElement extends ModelElementBase
     @Override
     public String getDiagnosticId()
     {
-        return name == null ? type.toString() : format("%s: %s", name, type.getDiagnosticId());
+        return name == null ? type.getDiagnosticId() : format("%s: %s", name, type.getDiagnosticId());
     }
 }

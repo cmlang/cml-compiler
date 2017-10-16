@@ -77,6 +77,6 @@ public class FunctionType extends BaseType
     @Override
     public String getDiagnosticId()
     {
-        return format("%s -> %s", params, result);
+        return format("%s -> %s", params.getDiagnosticId(), result.getDiagnosticId());
     }
 }

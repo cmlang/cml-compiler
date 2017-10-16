@@ -34,8 +34,8 @@
 
     /associated_property_type = associated_property.type;
 
-    /one = associated_property_type.single;
-    /many = associated_property_type.sequence;
+    /one = associated_property_type | exists: single;
+    /many = associated_property_type | exists: sequence;
 
     /diagnostic_id = "association end " & concept_name & "." & property_name &
                         if present(property_type) then ": " & property_type.diagnostic_id as! string else "";

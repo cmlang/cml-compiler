@@ -36,6 +36,6 @@ public class TupleType extends BaseType
     @Override
     public String getDiagnosticId()
     {
-        return format("(%s)", seq(elements).toString(","));
+        return format("(%s)", seq(elements).map(e -> e.getDiagnosticId()).toString(","));
     }
 }
