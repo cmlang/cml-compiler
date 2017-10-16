@@ -107,12 +107,12 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final String constructorName = ctx.constructorDeclaration() == null ? null : ctx.constructorDeclaration().NAME().getText();
+        final Constructor constructor = ctx.constructorDeclaration() == null ? null : createConstructor(ctx.constructorDeclaration().NAME().getText());
         final List<ModelElement> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
             .map(node -> (ModelElement) node.property)
             .toList();
 
-        ctx.task = Task.createTask(name, module, locationOf(ctx), propertyList, createConstructor(constructorName));
+        ctx.task = Task.createTask(name, module, locationOf(ctx), propertyList, constructor);
     }
 
     @Override
