@@ -19,7 +19,7 @@
     /sorted_list = somePathList | sort: item1, item2 -> compare(item1.value, item2.value);
 
     opt_prop: AnotherConcept?;
-    /opt_flag = opt_prop.flag;
+    /opt_flag = opt_prop | exists: flag;
 
     /none_prop: SomeConcept? = none;
 }

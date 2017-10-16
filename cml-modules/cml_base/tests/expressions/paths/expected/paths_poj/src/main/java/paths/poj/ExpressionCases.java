@@ -92,7 +92,7 @@ public class ExpressionCases
 
     public boolean isOptFlag()
     {
-        return seq(this.getOptProp()).flatMap(anotherConcept -> seq(asList(anotherConcept.isFlag()))).findFirst().orElse(false);
+        return seq(this.getOptProp()).anyMatch(item1 -> item1.isFlag());
     }
 
     public Optional<SomeConcept> getNoneProp()

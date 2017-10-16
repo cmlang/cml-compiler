@@ -153,7 +153,7 @@ class ExpressionCases:
 
     @property
     def opt_flag(self) -> 'bool':
-        return False if self.opt_prop is None else self.opt_prop.flag
+        return any(map(lambda item: item.flag, [] if self.opt_prop is None else [self.opt_prop]))
 
     @property
     def none_prop(self) -> 'Optional[SomeConcept]':

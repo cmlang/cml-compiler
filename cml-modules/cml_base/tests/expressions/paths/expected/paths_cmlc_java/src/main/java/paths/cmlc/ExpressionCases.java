@@ -139,7 +139,7 @@ class ExpressionCasesImpl implements ExpressionCases
 
     public boolean isOptFlag()
     {
-        return seq(this.actual_self.getOptProp()).flatMap(anotherConcept -> seq(asList(anotherConcept.isFlag()))).findFirst().orElse(false);
+        return seq(this.actual_self.getOptProp()).anyMatch(item1 -> item1.isFlag());
     }
 
     public Optional<SomeConcept> getNoneProp()
