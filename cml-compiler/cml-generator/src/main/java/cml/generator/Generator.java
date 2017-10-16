@@ -82,7 +82,7 @@ class GeneratorImpl implements Generator
 
         if (!targetFileRepository.templatesFoundFor(target.get()))
         {
-            console.error(NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR, constructor.get());
+            console.error(NO_TEMPLATES_FOUND_FOR_CONSTRUCTOR, constructor.get().getName());
             return FAILURE__CONSTRUCTOR_UNKNOWN;
         }
 
