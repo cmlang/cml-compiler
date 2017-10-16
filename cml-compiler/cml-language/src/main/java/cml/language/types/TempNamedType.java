@@ -22,7 +22,7 @@ import static java.util.Collections.unmodifiableList;
 public interface TempNamedType extends NamedType
 {
     TempNamedType UNDEFINED = TempNamedType.create("UNDEFINED");
-    TempNamedType NOTHING = TempNamedType.create("NOTHING");
+    TempNamedType NOTHING = TempNamedType.create("NOTHING", "?");
     TempNamedType BOOLEAN = TempNamedType.create("BOOLEAN");
     TempNamedType STRING = TempNamedType.create("STRING");
 
@@ -60,7 +60,7 @@ public interface TempNamedType extends NamedType
     @Override
     default Type getInferredType()
     {
-        return withCardinality(this, getInferredCardinality().orElse(null));
+        return withCardinality(this, getInferredCardinality());
     }
 
     @Override
@@ -100,10 +100,10 @@ public interface TempNamedType extends NamedType
 
     static TempNamedType create(String name)
     {
-        return new NamedTypeImpl(name, null);
+        return new NamedTypeImpl(name, "");
     }
 
-    static TempNamedType create(String name, @Nullable String cardinality)
+    static TempNamedType create(String name, String cardinality)
     {
         return new NamedTypeImpl(name, cardinality);
     }
@@ -116,9 +116,9 @@ class NamedTypeImpl implements TempNamedType
     private final String name;
     private final @Nullable String cardinality;
 
-    private @Nullable Concept concept;
+    private Concept concept;
 
-    NamedTypeImpl(String name, @Nullable String cardinality)
+    NamedTypeImpl(String name, String cardinality)
     {
         final Element element = extendElement(this);
 
@@ -201,7 +201,7 @@ class NamedTypeImpl implements TempNamedType
     }
 
     @Override
-    public Optional<String> getInferredCardinality()
+    public String getInferredCardinality()
     {
         return type.getInferredCardinality();
     }
@@ -213,9 +213,9 @@ class NamedTypeImpl implements TempNamedType
     }
 
     @Override
-    public Optional<String> getCardinality()
+    public String getCardinality()
     {
-        return Optional.ofNullable(cardinality);
+        return cardinality;
     }
 
     @Override
@@ -234,7 +234,7 @@ class NamedTypeImpl implements TempNamedType
     @Override
     public String getDiagnosticId()
     {
-        return isUndefined() ? getName() : getName() + (getCardinality().isPresent() ? getCardinality().get() : "");
+        return isUndefined() ? getName() : getName() + getCardinality();
     }
 }
 

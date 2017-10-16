@@ -32,7 +32,7 @@ public class FieldTest extends LangTest
     @Test
     public void field_type__required() throws IOException
     {
-        final String cardinality = null; // required
+        final String cardinality = ""; // required
 
         field_type(cardinality, "required.txt");
     }

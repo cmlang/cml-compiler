@@ -163,8 +163,8 @@ public class Lambda extends ExpressionBase
     public String getDiagnosticId()
     {
         return parameters.isEmpty() ?
-            format("{ %s }", innerExpression) :
-            format("{ %s -> %s }", seq(parameters).map(this::stringOf).toString(", "), innerExpression)
+            format("{ %s }", innerExpression.getDiagnosticId()) :
+            format("{ %s -> %s }", seq(parameters).map(this::stringOf).toString(", "), innerExpression.getDiagnosticId())
             + " - inferred result type: " + getMatchingResultType().getDiagnosticId();
     }
 
@@ -173,8 +173,8 @@ public class Lambda extends ExpressionBase
         final Optional<Type> actualType = typeOfVariableNamed(parameter, innerExpression);
         final Type formalType = getTypedParameters().get(parameter);
 
-        return actualType.map(t -> parameter + ": " + t)
-                         .orElseGet(() -> formalType == null ? parameter : formalType.toString());
+        return actualType.map(t -> parameter + ": " + t.getDiagnosticId())
+                         .orElseGet(() -> formalType == null ? parameter : formalType.getDiagnosticId());
     }
 }
 

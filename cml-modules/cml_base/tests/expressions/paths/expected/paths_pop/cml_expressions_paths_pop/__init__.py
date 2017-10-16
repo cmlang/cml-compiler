@@ -6,12 +6,12 @@ import functools, itertools
 
 class AnotherConcept:
 
-    def __init__(self, etc: 'Decimal', flag: 'bool' = True) -> 'None':
+    def __init__(self, etc: 'Etc', flag: 'bool' = True) -> 'None':
         self.__etc = etc
         self.__flag = flag
 
     @property
-    def etc(self) -> 'Decimal':
+    def etc(self) -> 'Etc':
         return self.__etc
 
     @property
@@ -26,15 +26,32 @@ class AnotherConcept:
         )
 
 
+class Bar:
+
+    def __str__(self) -> 'str':
+        return "%s()" % type(self).__name__
+
+
+class Etc:
+
+    def __str__(self) -> 'str':
+        return "%s()" % type(self).__name__
+
+
 class SomeConcept:
 
-    def __init__(self, bar: 'int', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'None':
+    def __init__(self, value: 'int', bar: 'Bar', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'None':
+        self.__value = value
         self.__bar = bar
         self.__foos = foos
         self.__one_more_path = one_more_path
 
     @property
-    def bar(self) -> 'int':
+    def value(self) -> 'int':
+        return self.__value
+
+    @property
+    def bar(self) -> 'Bar':
         return self.__bar
 
     @property
@@ -46,8 +63,9 @@ class SomeConcept:
         return self.__one_more_path
 
     def __str__(self) -> 'str':
-        return "%s(bar=%s, one_more_path=%s)" % (
+        return "%s(value=%s, bar=%s, one_more_path=%s)" % (
             type(self).__name__,
+            self.value,
             self.bar,
             self.one_more_path
         )
@@ -90,15 +108,15 @@ class ExpressionCases:
         return self.some_path
 
     @property
-    def path_var(self) -> 'int':
+    def path_var(self) -> 'Bar':
         return self.some_path.bar
 
     @property
-    def path_var_2(self) -> 'Decimal':
+    def path_var_2(self) -> 'Etc':
         return self.some_path.one_more_path.etc
 
     @property
-    def path_var_3(self) -> 'List[Decimal]':
+    def path_var_3(self) -> 'List[Etc]':
         return list(
             map(
                 lambda another_concept: another_concept.etc,
@@ -110,7 +128,7 @@ class ExpressionCases:
         )
 
     @property
-    def path_bars(self) -> 'List[int]':
+    def path_bars(self) -> 'List[Bar]':
         return list(
             map(
                 lambda some_concept: some_concept.bar,
@@ -130,7 +148,7 @@ class ExpressionCases:
     @property
     def sorted_list(self) -> 'List[SomeConcept]':
         return list(
-            sorted(self.some_path_list, key=functools.cmp_to_key(lambda item_1, item_2: -1 if (item_1.bar < item_2.bar) else +1 if (item_2.bar < item_1.bar) else 0))
+            sorted(self.some_path_list, key=functools.cmp_to_key(lambda item_1, item_2: -1 if (item_1.value < item_2.value) else +1 if (item_2.value < item_1.value) else 0))
         )
 
     @property
@@ -142,15 +160,11 @@ class ExpressionCases:
         return None
 
     def __str__(self) -> 'str':
-        return "%s(foo=%s, some_path=%s, single_var=%s, path_var=%s, path_var_2=%s, path_var_3=%s, path_bars=%s, opt_prop=%s, opt_flag=%s)" % (
+        return "%s(foo=%s, some_path=%s, single_var=%s, opt_prop=%s, opt_flag=%s)" % (
             type(self).__name__,
             self.foo,
             self.some_path,
             self.single_var,
-            self.path_var,
-            self.path_var_2,
-            self.path_var_3,
-            self.path_bars,
             self.opt_prop,
             self.opt_flag
         )

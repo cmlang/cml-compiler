@@ -180,19 +180,19 @@ public class Functions
         return seq(asList(this.getRequiredItem())).removeAll(seq(asList(this.getRequiredItem())).filter(item15 -> (item15.getSize() > 100))).toList();
     }
 
-    public List<Integer> getItemsCollect()
+    public List<Item> getItemsCollect()
     {
-        return seq(this.getItems()).map(item16 -> item16.getSize()).toList();
+        return seq(this.getItems()).map(item16 -> seq(item16.getSubItem()).cast(Item.class).findFirst().get()).toList();
     }
 
-    public List<Integer> getSingleItemCollect()
+    public List<Item> getSingleItemCollect()
     {
-        return seq(this.getSingleItem()).map(item17 -> item17.getSize()).toList();
+        return seq(this.getSingleItem()).map(item17 -> seq(item17.getSubItem()).cast(Item.class).findFirst().get()).toList();
     }
 
-    public List<Integer> getRequiredItemCollect()
+    public List<Item> getRequiredItemCollect()
     {
-        return seq(asList(this.getRequiredItem())).map(item18 -> item18.getSize()).toList();
+        return seq(asList(this.getRequiredItem())).map(item18 -> seq(item18.getSubItem()).cast(Item.class).findFirst().get()).toList();
     }
 
     public List<Item> getSortedItems()
@@ -207,7 +207,7 @@ public class Functions
 
     public Item getNewItem()
     {
-        return new Item(12);
+        return new Item(12, null);
     }
 
     public List<Item> getConcatItems()
@@ -246,9 +246,6 @@ public class Functions
                    .append("requiredItemExists=").append(String.format("\"%s\"", this.isRequiredItemExists())).append(", ")
                    .append("requiredItemAll=").append(String.format("\"%s\"", this.isRequiredItemAll())).append(", ")
                    .append("requiredItemNone=").append(String.format("\"%s\"", this.isRequiredItemNone())).append(", ")
-                   .append("itemsCollect=").append(this.getItemsCollect()).append(", ")
-                   .append("singleItemCollect=").append(this.getSingleItemCollect()).append(", ")
-                   .append("requiredItemCollect=").append(this.getRequiredItemCollect()).append(", ")
                    .append("countItems=").append(String.format("\"%s\"", this.getCountItems()))
                    .append(')')
                    .toString();

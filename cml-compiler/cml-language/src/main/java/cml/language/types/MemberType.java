@@ -35,8 +35,6 @@ public class MemberType extends BaseType
     @Override
     public Type getElementType()
     {
-        assert !getCardinality().isPresent();
-
         return this;
     }
 

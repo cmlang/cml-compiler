@@ -13,10 +13,12 @@ import static org.jooq.lambda.Seq.*;
 public class Item
 {
     private final int size;
+    private final @Nullable Item subItem;
 
-    public Item(int size)
+    public Item(int size, @Nullable Item subItem)
     {
         this.size = size;
+        this.subItem = subItem;
     }
 
     public int getSize()
@@ -24,11 +26,17 @@ public class Item
         return this.size;
     }
 
+    public Optional<Item> getSubItem()
+    {
+        return Optional.ofNullable(this.subItem);
+    }
+
     public String toString()
     {
         return new StringBuilder(Item.class.getSimpleName())
                    .append('(')
-                   .append("size=").append(String.format("\"%s\"", this.getSize()))
+                   .append("size=").append(String.format("\"%s\"", this.getSize())).append(", ")
+                   .append("subItem=").append(this.getSubItem().isPresent() ? String.format("\"%s\"", this.getSubItem()) : "not present")
                    .append(')')
                    .toString();
     }

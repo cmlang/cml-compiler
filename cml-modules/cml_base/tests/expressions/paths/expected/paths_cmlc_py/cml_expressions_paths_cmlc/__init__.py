@@ -7,7 +7,7 @@ import functools, itertools
 class AnotherConcept(ABC):
 
     @abstractproperty
-    def etc(self) -> 'Decimal':
+    def etc(self) -> 'Etc':
         pass
 
     @abstractproperty
@@ -15,17 +15,17 @@ class AnotherConcept(ABC):
         pass
 
     @staticmethod
-    def create_another_concept(etc: 'Decimal', flag: 'bool' = True) -> 'AnotherConcept':
+    def create_another_concept(etc: 'Etc', flag: 'bool' = True) -> 'AnotherConcept':
         return AnotherConceptImpl(None, etc, flag)
 
     @staticmethod
-    def extend_another_concept(actual_self: 'Optional[AnotherConcept]', etc: 'Decimal', flag: 'bool' = True) -> 'AnotherConcept':
+    def extend_another_concept(actual_self: 'Optional[AnotherConcept]', etc: 'Etc', flag: 'bool' = True) -> 'AnotherConcept':
         return AnotherConceptImpl(actual_self, etc, flag)
 
 
 class AnotherConceptImpl(AnotherConcept):
 
-    def __init__(self, actual_self: 'Optional[AnotherConcept]', etc: 'Decimal', flag: 'bool' = True) -> 'None':
+    def __init__(self, actual_self: 'Optional[AnotherConcept]', etc: 'Etc', flag: 'bool' = True) -> 'None':
         if actual_self is None:
             self.__actual_self = self  # type: Optional[AnotherConcept]
         else:
@@ -35,7 +35,7 @@ class AnotherConceptImpl(AnotherConcept):
         self.__flag = flag
 
     @property
-    def etc(self) -> 'Decimal':
+    def etc(self) -> 'Etc':
         return self.__etc
 
     @property
@@ -50,10 +50,50 @@ class AnotherConceptImpl(AnotherConcept):
         )
 
 
+class Bar(ABC):
+    pass
+
+
+class BarImpl(Bar):
+
+    def __init__(self, actual_self: 'Optional[Bar]') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Bar]
+        else:
+            self.__actual_self = actual_self
+
+
+
+    def __str__(self) -> 'str':
+        return "%s()" % type(self).__name__
+
+
+class Etc(ABC):
+    pass
+
+
+class EtcImpl(Etc):
+
+    def __init__(self, actual_self: 'Optional[Etc]') -> 'None':
+        if actual_self is None:
+            self.__actual_self = self  # type: Optional[Etc]
+        else:
+            self.__actual_self = actual_self
+
+
+
+    def __str__(self) -> 'str':
+        return "%s()" % type(self).__name__
+
+
 class SomeConcept(ABC):
 
     @abstractproperty
-    def bar(self) -> 'int':
+    def value(self) -> 'int':
+        pass
+
+    @abstractproperty
+    def bar(self) -> 'Bar':
         pass
 
     @abstractproperty
@@ -65,28 +105,33 @@ class SomeConcept(ABC):
         pass
 
     @staticmethod
-    def create_some_concept(bar: 'int', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'SomeConcept':
-        return SomeConceptImpl(None, bar, foos, one_more_path)
+    def create_some_concept(value: 'int', bar: 'Bar', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'SomeConcept':
+        return SomeConceptImpl(None, value, bar, foos, one_more_path)
 
     @staticmethod
-    def extend_some_concept(actual_self: 'Optional[SomeConcept]', bar: 'int', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'SomeConcept':
-        return SomeConceptImpl(actual_self, bar, foos, one_more_path)
+    def extend_some_concept(actual_self: 'Optional[SomeConcept]', value: 'int', bar: 'Bar', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'SomeConcept':
+        return SomeConceptImpl(actual_self, value, bar, foos, one_more_path)
 
 
 class SomeConceptImpl(SomeConcept):
 
-    def __init__(self, actual_self: 'Optional[SomeConcept]', bar: 'int', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'None':
+    def __init__(self, actual_self: 'Optional[SomeConcept]', value: 'int', bar: 'Bar', foos: 'List[AnotherConcept]', one_more_path: 'AnotherConcept') -> 'None':
         if actual_self is None:
             self.__actual_self = self  # type: Optional[SomeConcept]
         else:
             self.__actual_self = actual_self
 
+        self.__value = value
         self.__bar = bar
         self.__foos = foos
         self.__one_more_path = one_more_path
 
     @property
-    def bar(self) -> 'int':
+    def value(self) -> 'int':
+        return self.__value
+
+    @property
+    def bar(self) -> 'Bar':
         return self.__bar
 
     @property
@@ -98,8 +143,9 @@ class SomeConceptImpl(SomeConcept):
         return self.__one_more_path
 
     def __str__(self) -> 'str':
-        return "%s(bar=%s, one_more_path=%s)" % (
+        return "%s(value=%s, bar=%s, one_more_path=%s)" % (
             type(self).__name__,
+            self.__actual_self.value,
             self.__actual_self.bar,
             self.__actual_self.one_more_path
         )
@@ -132,19 +178,19 @@ class ExpressionCases(ABC):
         pass
 
     @abstractproperty
-    def path_var(self) -> 'int':
+    def path_var(self) -> 'Bar':
         pass
 
     @abstractproperty
-    def path_var_2(self) -> 'Decimal':
+    def path_var_2(self) -> 'Etc':
         pass
 
     @abstractproperty
-    def path_var_3(self) -> 'List[Decimal]':
+    def path_var_3(self) -> 'List[Etc]':
         pass
 
     @abstractproperty
-    def path_bars(self) -> 'List[int]':
+    def path_bars(self) -> 'List[Bar]':
         pass
 
     @abstractproperty
@@ -218,15 +264,15 @@ class ExpressionCasesImpl(ExpressionCases):
         return self.__actual_self.some_path
 
     @property
-    def path_var(self) -> 'int':
+    def path_var(self) -> 'Bar':
         return self.__actual_self.some_path.bar
 
     @property
-    def path_var_2(self) -> 'Decimal':
+    def path_var_2(self) -> 'Etc':
         return self.__actual_self.some_path.one_more_path.etc
 
     @property
-    def path_var_3(self) -> 'List[Decimal]':
+    def path_var_3(self) -> 'List[Etc]':
         return list(
             map(
                 lambda another_concept: another_concept.etc,
@@ -238,7 +284,7 @@ class ExpressionCasesImpl(ExpressionCases):
         )
 
     @property
-    def path_bars(self) -> 'List[int]':
+    def path_bars(self) -> 'List[Bar]':
         return list(
             map(
                 lambda some_concept: some_concept.bar,
@@ -258,7 +304,7 @@ class ExpressionCasesImpl(ExpressionCases):
     @property
     def sorted_list(self) -> 'List[SomeConcept]':
         return list(
-            sorted(self.__actual_self.some_path_list, key=functools.cmp_to_key(lambda item_1, item_2: -1 if (item_1.bar < item_2.bar) else +1 if (item_2.bar < item_1.bar) else 0))
+            sorted(self.__actual_self.some_path_list, key=functools.cmp_to_key(lambda item_1, item_2: -1 if (item_1.value < item_2.value) else +1 if (item_2.value < item_1.value) else 0))
         )
 
     @property
@@ -270,15 +316,11 @@ class ExpressionCasesImpl(ExpressionCases):
         return None
 
     def __str__(self) -> 'str':
-        return "%s(foo=%s, some_path=%s, single_var=%s, path_var=%s, path_var_2=%s, path_var_3=%s, path_bars=%s, opt_prop=%s, opt_flag=%s)" % (
+        return "%s(foo=%s, some_path=%s, single_var=%s, opt_prop=%s, opt_flag=%s)" % (
             type(self).__name__,
             self.__actual_self.foo,
             self.__actual_self.some_path,
             self.__actual_self.single_var,
-            self.__actual_self.path_var,
-            self.__actual_self.path_var_2,
-            self.__actual_self.path_var_3,
-            self.__actual_self.path_bars,
             self.__actual_self.opt_prop,
             self.__actual_self.opt_flag
         )

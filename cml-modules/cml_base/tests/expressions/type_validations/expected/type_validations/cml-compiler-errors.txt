@@ -28,3 +28,7 @@ Failed validation: required property_type_specified_or_inferred: in property Typ
 Cannot cast from sequence type to optional-cardinality type:
 - left operand is 'seq: Ancestor*'
 - right operand is 'Descendant?'
+
+Failed validation: required optional_attribute_disallowed: in property Types.flag: Boolean? (38:5)
+
+Failed validation: required sequential_attribute_disallowed: in property Types.ints: Integer* (39:5)

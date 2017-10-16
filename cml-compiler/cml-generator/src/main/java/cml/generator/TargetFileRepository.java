@@ -71,7 +71,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
 
                 if (files.trim().length() > 0)
                 {
-                    final String constructorName = task.getConstructor().get();
+                    final String constructorName = task.getConstructor().get().getName();
 
                     return stream(files.split("\n"))
                         .map(line -> line.split(FILE_LINE_SEPARATOR))
@@ -89,7 +89,7 @@ class TargetFileRepositoryImpl implements TargetFileRepository
         if (moduleOf(task).isPresent() & task.getConstructor().isPresent())
         {
             final TempModule module = moduleOf(task).get();
-            final String constructorName = task.getConstructor().get();
+            final String constructorName = task.getConstructor().get().getName();
 
             return findTemplateFile(module, constructorName, GROUP_FILES);
         }

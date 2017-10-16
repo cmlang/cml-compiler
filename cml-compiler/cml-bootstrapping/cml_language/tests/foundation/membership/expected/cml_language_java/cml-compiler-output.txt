@@ -58,6 +58,9 @@ PROPERTY_LIST files:
 TASK files:
 - src/main/java/cml/language/generated/Task.java
 
+CONSTRUCTOR files:
+- src/main/java/cml/language/generated/Constructor.java
+
 TYPE files:
 - src/main/java/cml/language/generated/Type.java
 

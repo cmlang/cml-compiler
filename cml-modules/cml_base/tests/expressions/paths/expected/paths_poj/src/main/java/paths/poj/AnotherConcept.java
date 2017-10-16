@@ -12,21 +12,21 @@ import static org.jooq.lambda.Seq.*;
 
 public class AnotherConcept
 {
-    private final BigDecimal etc;
+    private final Etc etc;
     private final boolean flag;
 
-    public AnotherConcept(BigDecimal etc)
+    public AnotherConcept(Etc etc)
     {
         this(etc, true);
     }
 
-    public AnotherConcept(BigDecimal etc, boolean flag)
+    public AnotherConcept(Etc etc, boolean flag)
     {
         this.etc = etc;
         this.flag = flag;
     }
 
-    public BigDecimal getEtc()
+    public Etc getEtc()
     {
         return this.etc;
     }

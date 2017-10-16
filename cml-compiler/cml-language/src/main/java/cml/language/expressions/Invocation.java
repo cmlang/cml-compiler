@@ -108,7 +108,7 @@ public interface Invocation extends Expression, NamedElement
                 final Seq<TupleTypeElement> matchingElements = tupleType.getElements()
                                                                         .map(e -> new TupleTypeElement(getMatchingTypeOf(e.getType()), e.getName().orElse(null)));
 
-                return new TupleType(matchingElements, tupleType.getCardinality().orElse(null));
+                return new TupleType(matchingElements);
             }
             else if (type.isParameter())
             {
@@ -138,7 +138,7 @@ public interface Invocation extends Expression, NamedElement
                                              .orElse(createUndefinedType(MESSAGE__SHOULD_MATCH_PARAMETER_TYPE_IN_FUNCTION + getName()));
                     }
 
-                    return withCardinality(paramType, type.getCardinality().orElse(null));
+                    return withCardinality(paramType, type.getCardinality());
                 }
                 else
                 {

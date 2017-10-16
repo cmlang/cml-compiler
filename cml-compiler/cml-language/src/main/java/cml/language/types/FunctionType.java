@@ -63,7 +63,7 @@ public class FunctionType extends BaseType
     @Override
     public Type getElementType()
     {
-        assert !getCardinality().isPresent();
+        assert isRequired();
 
         return this;
     }

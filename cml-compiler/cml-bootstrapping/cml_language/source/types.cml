@@ -1,11 +1,11 @@
 
 @abstraction TYPE: ELEMENT
 {
-    /cardinality: STRING? = none;
+    /cardinality: STRING = "";
     /concept: CONCEPT? = none;
     /element_type: TYPE = self;
 
-    /kind = if empty(cardinality) then "required"
+    /kind = if cardinality == "" then "required"
             else if cardinality == "?" then "optional"
             else if cardinality == "*" then "sequence"
             else "unknown";
@@ -34,7 +34,7 @@
     /optional = kind == "optional";
     /sequence = kind == "sequence";
 
-    /inferred_cardinality = if empty(cardinality) or (optional and boolean) then none else cardinality;
+    /inferred_cardinality = if required or (optional and boolean) then "" else cardinality;
     /inferred_type: TYPE = self;
 }
 

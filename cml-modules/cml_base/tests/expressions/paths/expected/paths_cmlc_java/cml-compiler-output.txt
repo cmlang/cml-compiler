@@ -9,3 +9,9 @@ SomeConcept files:
 
 AnotherConcept files:
 - src/main/java/paths/cmlc/AnotherConcept.java
+
+Bar files:
+- src/main/java/paths/cmlc/Bar.java
+
+Etc files:
+- src/main/java/paths/cmlc/Etc.java

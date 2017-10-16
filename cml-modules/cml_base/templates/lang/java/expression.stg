@@ -1,6 +1,8 @@
 
 nullable_expr(expr) ::= <<
-<if(expr.type.optional)><\\>
+<if(expr.type.nothing)><\\>
+<null_value()><\\>
+<elseif(expr.type.optional)><\\>
 <expression(expr)>.orElse(<field_default_value(expr.type)>)<\\>
 <else><\\>
 <expression(expr)><\\>

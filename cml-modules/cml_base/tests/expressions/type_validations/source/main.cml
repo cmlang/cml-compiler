@@ -34,6 +34,9 @@
     /seq_to_seq_type_cast_asq = seq as? Descendant*;
 
     /descendants = for a in seq | select: a is Descendant;
+
+    flag: Boolean?;
+    ints: Integer*;
 }
 
 @concept Ancestor;

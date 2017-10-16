@@ -44,14 +44,14 @@
     /required_item_select = required_item | select: size > 100;
     /required_item_reject = required_item | reject: size > 100;
 
-    /items_collect = items | collect: size;
-    /single_item_collect = single_item | collect: size;
-    /required_item_collect = required_item | collect: size;
+    /items_collect = items | collect: subItem as! Item;
+    /single_item_collect = single_item | collect: subItem as! Item;
+    /required_item_collect = required_item | collect: subItem as! Item;
 
     /sorted_items = items | sort: i1, i2 -> compare(i1.size, i2.size);
     /reversed_items = reverse(items);
 
-    /new_item = Item(12);
+    /new_item = Item(12, none);
 
     /concat_items = concat(items, items2);
 
@@ -62,6 +62,7 @@
 @concept Item
 {
     size: integer;
+    subItem: Item?;
 }
 
 @task poj: poj

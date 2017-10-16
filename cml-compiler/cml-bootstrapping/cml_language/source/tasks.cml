@@ -1,7 +1,14 @@
 
 @concept TASK: NAMED_ELEMENT, PROPERTY_LIST
 {
-    constructor: String?;
+    constructor: CONSTRUCTOR?;
 
-    /diagnostic_id = "task " & name;
+    /diagnostic_id = "task " & name & if present(constructor) then ": " & constructor.diagnostic_id else "";
+}
+
+@concept CONSTRUCTOR: ELEMENT
+{
+    name: string;
+
+    /diagnostic_id = name;
 }

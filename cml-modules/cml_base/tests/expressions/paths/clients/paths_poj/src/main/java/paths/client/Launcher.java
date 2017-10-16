@@ -2,8 +2,6 @@ package paths.client;
 
 import paths.poj.*;
 
-import java.math.BigDecimal;
-
 import static java.util.Arrays.asList;
 
 public class Launcher
@@ -13,10 +11,10 @@ public class Launcher
         System.out.println("Paths Client (poj)");
         System.out.println();
 
-        final AnotherConcept anotherConcept = new AnotherConcept(BigDecimal.TEN);
-        final AnotherConcept anotherConcept2 = new AnotherConcept(BigDecimal.TEN.add(BigDecimal.TEN));
-        final SomeConcept someConcept = new SomeConcept(-1, asList(anotherConcept, anotherConcept2), anotherConcept);
-        final SomeConcept someConcept2 = new SomeConcept(2, asList(anotherConcept2, anotherConcept), anotherConcept2);
+        final AnotherConcept anotherConcept = new AnotherConcept(new Etc());
+        final AnotherConcept anotherConcept2 = new AnotherConcept(new Etc());
+        final SomeConcept someConcept = new SomeConcept(-1, new Bar(), asList(anotherConcept, anotherConcept2), anotherConcept);
+        final SomeConcept someConcept2 = new SomeConcept(2, new Bar(), asList(anotherConcept2, anotherConcept), anotherConcept2);
         final ExpressionCases cases = new ExpressionCases("foo", someConcept, asList(someConcept2, someConcept), null);
         
         System.out.println("self_var = " + cases.getSelfVar());

@@ -24,13 +24,13 @@ public interface ExpressionCases
 
     SomeConcept getDerivedSomePath();
 
-    int getPathVar();
+    Bar getPathVar();
 
-    BigDecimal getPathVar2();
+    Etc getPathVar2();
 
-    List<BigDecimal> getPathVar3();
+    List<Etc> getPathVar3();
 
-    List<Integer> getPathBars();
+    List<Bar> getPathBars();
 
     List<AnotherConcept> getPathFoos();
 
@@ -107,22 +107,22 @@ class ExpressionCasesImpl implements ExpressionCases
         return this.actual_self.getSomePath();
     }
 
-    public int getPathVar()
+    public Bar getPathVar()
     {
         return this.actual_self.getSomePath().getBar();
     }
 
-    public BigDecimal getPathVar2()
+    public Etc getPathVar2()
     {
         return this.actual_self.getSomePath().getOneMorePath().getEtc();
     }
 
-    public List<BigDecimal> getPathVar3()
+    public List<Etc> getPathVar3()
     {
         return seq(this.actual_self.getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getOneMorePath()))).flatMap(anotherConcept -> seq(asList(anotherConcept.getEtc()))).toList();
     }
 
-    public List<Integer> getPathBars()
+    public List<Bar> getPathBars()
     {
         return seq(this.actual_self.getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getBar()))).toList();
     }
@@ -134,7 +134,7 @@ class ExpressionCasesImpl implements ExpressionCases
 
     public List<SomeConcept> getSortedList()
     {
-        return seq(this.actual_self.getSomePathList()).sorted((item1, item2) -> (item1.getBar() < item2.getBar()) ? -1 : ((item2.getBar() < item1.getBar()) ? +1 : 0)).toList();
+        return seq(this.actual_self.getSomePathList()).sorted((item1, item2) -> (item1.getValue() < item2.getValue()) ? -1 : ((item2.getValue() < item1.getValue()) ? +1 : 0)).toList();
     }
 
     public boolean isOptFlag()
@@ -154,10 +154,6 @@ class ExpressionCasesImpl implements ExpressionCases
                    .append("foo=").append(String.format("\"%s\"", this.actual_self.getFoo())).append(", ")
                    .append("somePath=").append(String.format("\"%s\"", this.actual_self.getSomePath())).append(", ")
                    .append("singleVar=").append(String.format("\"%s\"", this.actual_self.getSingleVar())).append(", ")
-                   .append("pathVar=").append(String.format("\"%s\"", this.actual_self.getPathVar())).append(", ")
-                   .append("pathVar2=").append(String.format("\"%s\"", this.actual_self.getPathVar2())).append(", ")
-                   .append("pathVar3=").append(this.actual_self.getPathVar3()).append(", ")
-                   .append("pathBars=").append(this.actual_self.getPathBars()).append(", ")
                    .append("optProp=").append(this.actual_self.getOptProp().isPresent() ? String.format("\"%s\"", this.actual_self.getOptProp()) : "not present").append(", ")
                    .append("optFlag=").append(String.format("\"%s\"", this.actual_self.isOptFlag()))
                    .append(')')

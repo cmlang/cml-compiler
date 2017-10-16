@@ -120,7 +120,7 @@ public class Path extends ExpressionBase
                         }
                         else
                         {
-                            final String cardinality = memberType.get().getCardinality().orElse(null);
+                            final String cardinality = memberType.get().getCardinality();
 
                             type = withCardinality(
                                 memberType.get(),

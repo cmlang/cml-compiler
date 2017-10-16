@@ -16,7 +16,7 @@
     /path_bars = somePathList.bar;
     /path_foos = somePathList.foos;
 
-    /sorted_list = somePathList | sort: item1, item2 -> compare(item1.bar, item2.bar);
+    /sorted_list = somePathList | sort: item1, item2 -> compare(item1.value, item2.value);
 
     opt_prop: AnotherConcept?;
     /opt_flag = opt_prop.flag;
@@ -26,16 +26,20 @@
 
 @concept SomeConcept
 {
-    bar: Integer;
+    value: integer;
+    bar: Bar;
     foos: AnotherConcept*;
     oneMorePath: AnotherConcept;
 }
 
 @concept AnotherConcept
 {
-    etc: Decimal;
+    etc: Etc;
     flag: boolean = true;
 }
+
+@concept Bar;
+@concept Etc;
 
 @task paths_poj: poj
 {

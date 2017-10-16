@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import static cml.language.functions.ModuleFunctions.createImportOfModule;
 import static cml.language.generated.Association.createAssociation;
+import static cml.language.generated.Constructor.createConstructor;
 import static cml.language.generated.Property.createProperty;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
@@ -106,12 +107,12 @@ class ModelSynthesizer extends CMLBaseListener
         }
 
         final String name = ctx.NAME().getText();
-        final String constructor = ctx.constructorDeclaration() == null ? null : ctx.constructorDeclaration().NAME().getText();
+        final String constructorName = ctx.constructorDeclaration() == null ? null : ctx.constructorDeclaration().NAME().getText();
         final List<ModelElement> propertyList = seq(ctx.propertyList() == null ? empty() : ctx.propertyList().propertyDeclaration())
             .map(node -> (ModelElement) node.property)
             .toList();
 
-        ctx.task = Task.createTask(name, module, locationOf(ctx), propertyList, constructor);
+        ctx.task = Task.createTask(name, module, locationOf(ctx), propertyList, createConstructor(constructorName));
     }
 
     @Override
@@ -147,7 +148,7 @@ class ModelSynthesizer extends CMLBaseListener
         else
         {
             final String name = ctx.NAME().getText();
-            final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
+            final String cardinality = (ctx.cardinality() == null) ? "" : ctx.cardinality().getText();
 
             ctx.type = TempNamedType.create(name, cardinality);
         }
@@ -157,9 +158,8 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitTupleTypeDeclaration(final TupleTypeDeclarationContext ctx)
     {
         final Seq<TupleTypeElement> elements = seq(ctx.tupleTypeElementDeclaration()).map(c -> c.element);
-        final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
 
-        ctx.type = new TupleType(elements, cardinality);
+        ctx.type = new TupleType(elements);
     }
 
     @Override
@@ -290,7 +290,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         if (text != null)
         {
-            final TempNamedType type = TempNamedType.create(getPrimitiveTypeName(ctx), null);
+            final TempNamedType type = TempNamedType.create(getPrimitiveTypeName(ctx));
             ctx.literal = new Literal(text, type);
         }
     }

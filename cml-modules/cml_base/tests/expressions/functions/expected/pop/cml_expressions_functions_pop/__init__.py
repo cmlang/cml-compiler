@@ -6,17 +6,23 @@ import functools, itertools
 
 class Item:
 
-    def __init__(self, size: 'int') -> 'None':
+    def __init__(self, size: 'int', sub_item: 'Optional[Item]') -> 'None':
         self.__size = size
+        self.__sub_item = sub_item
 
     @property
     def size(self) -> 'int':
         return self.__size
 
+    @property
+    def sub_item(self) -> 'Optional[Item]':
+        return self.__sub_item
+
     def __str__(self) -> 'str':
-        return "%s(size=%s)" % (
+        return "%s(size=%s, sub_item=%s)" % (
             type(self).__name__,
-            self.size
+            self.size,
+            self.sub_item
         )
 
 
@@ -165,21 +171,21 @@ class Functions:
         )
 
     @property
-    def items_collect(self) -> 'List[int]':
+    def items_collect(self) -> 'List[Item]':
         return list(
-            map(lambda item: item.size, self.items)
+            map(lambda item: cast('Item', item.sub_item), self.items)
         )
 
     @property
-    def single_item_collect(self) -> 'List[int]':
+    def single_item_collect(self) -> 'List[Item]':
         return list(
-            map(lambda item: item.size, [] if self.single_item is None else [self.single_item])
+            map(lambda item: cast('Item', item.sub_item), [] if self.single_item is None else [self.single_item])
         )
 
     @property
-    def required_item_collect(self) -> 'List[int]':
+    def required_item_collect(self) -> 'List[Item]':
         return list(
-            map(lambda item: item.size, [self.required_item])
+            map(lambda item: cast('Item', item.sub_item), [self.required_item])
         )
 
     @property
@@ -196,7 +202,7 @@ class Functions:
 
     @property
     def new_item(self) -> 'Item':
-        return Item(12)
+        return Item(12, None)
 
     @property
     def concat_items(self) -> 'List[Item]':
@@ -215,7 +221,7 @@ class Functions:
         )
 
     def __str__(self) -> 'str':
-        return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, none_large_items=%s, large_item_exists=%s, large_item_all=%s, large_item_none=%s, required_item_exists=%s, required_item_all=%s, required_item_none=%s, items_collect=%s, single_item_collect=%s, required_item_collect=%s, count_items=%s)" % (
+        return "%s(required_item=%s, single_item=%s, empty_items=%s, present_items=%s, empty_single_item=%s, present_single_item=%s, required_empty_single_item=%s, required_present_single_item=%s, at_least_one_large_item=%s, all_large_items=%s, none_large_items=%s, large_item_exists=%s, large_item_all=%s, large_item_none=%s, required_item_exists=%s, required_item_all=%s, required_item_none=%s, count_items=%s)" % (
             type(self).__name__,
             self.required_item,
             self.single_item,
@@ -234,8 +240,5 @@ class Functions:
             self.required_item_exists,
             self.required_item_all,
             self.required_item_none,
-            self.items_collect,
-            self.single_item_collect,
-            self.required_item_collect,
             self.count_items
         )

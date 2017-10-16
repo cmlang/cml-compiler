@@ -12,21 +12,21 @@ import static org.jooq.lambda.Seq.*;
 
 public interface AnotherConcept
 {
-    BigDecimal getEtc();
+    Etc getEtc();
 
     boolean isFlag();
 
-    static AnotherConcept createAnotherConcept(BigDecimal etc)
+    static AnotherConcept createAnotherConcept(Etc etc)
     {
         return createAnotherConcept(etc, true);
     }
 
-    static AnotherConcept createAnotherConcept(BigDecimal etc, boolean flag)
+    static AnotherConcept createAnotherConcept(Etc etc, boolean flag)
     {
         return new AnotherConceptImpl(null, etc, flag);
     }
 
-    static AnotherConcept extendAnotherConcept(@Nullable AnotherConcept actual_self, BigDecimal etc, boolean flag)
+    static AnotherConcept extendAnotherConcept(@Nullable AnotherConcept actual_self, Etc etc, boolean flag)
     {
         return new AnotherConceptImpl(actual_self, etc, flag);
     }
@@ -36,10 +36,10 @@ class AnotherConceptImpl implements AnotherConcept
 {
     private final @Nullable AnotherConcept actual_self;
 
-    private final BigDecimal etc;
+    private final Etc etc;
     private final boolean flag;
 
-    AnotherConceptImpl(@Nullable AnotherConcept actual_self, BigDecimal etc, boolean flag)
+    AnotherConceptImpl(@Nullable AnotherConcept actual_self, Etc etc, boolean flag)
     {
         this.actual_self = actual_self == null ? this : actual_self;
 
@@ -47,7 +47,7 @@ class AnotherConceptImpl implements AnotherConcept
         this.flag = flag;
     }
 
-    public BigDecimal getEtc()
+    public Etc getEtc()
     {
         return this.etc;
     }

@@ -17,9 +17,9 @@ public abstract class BaseType implements Type
     }
 
     @Override
-    public Optional<String> getCardinality()
+    public String getCardinality()
     {
-        return Optional.empty();
+        return type.getCardinality();
     }
 
     @Override
@@ -149,7 +149,7 @@ public abstract class BaseType implements Type
     }
 
     @Override
-    public Optional<String> getInferredCardinality()
+    public String getInferredCardinality()
     {
         return type.getInferredCardinality();
     }

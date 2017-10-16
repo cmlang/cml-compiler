@@ -32,11 +32,6 @@ public class TypeFunctions
 
             return newType;
         }
-        else if (type instanceof TupleType)
-        {
-            final TupleType tupleType = (TupleType) type;
-            return new TupleType(seq(tupleType.getElements()), cardinality);
-        }
         else if (type.isUndefined())
         {
             return type;
@@ -49,8 +44,8 @@ public class TypeFunctions
 
     public static boolean isElementTypeAssignableFrom(Type thisElementType, Type thatElementType)
     {
-        assert !thisElementType.getCardinality().isPresent();
-        assert !thatElementType.getCardinality().isPresent();
+        assert thisElementType.isRequired();
+        assert thatElementType.isRequired();
 
         if (thisElementType instanceof TempNamedType)
         {

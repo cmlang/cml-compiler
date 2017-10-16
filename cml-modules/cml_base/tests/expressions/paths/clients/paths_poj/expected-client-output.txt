@@ -1,14 +1,14 @@
 Paths Client (poj)
 
-self_var = ExpressionCases(foo="foo", somePath="SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10", flag="true")")", singleVar="foo", pathVar="-1", pathVar2="10", pathVar3=[20, 10], pathBars=[2, -1], optProp=not present, optFlag="false")
+self_var = ExpressionCases(foo="foo", somePath="SomeConcept(value="-1", bar="Bar()", oneMorePath="AnotherConcept(etc="Etc()", flag="true")")", singleVar="foo", optProp=not present, optFlag="false")
 single_var = foo
 
-path_var = -1
-path_var2 = 10
+path_var = Bar()
+path_var2 = Etc()
 
-path_var3 = [20, 10]
-path_bars = [2, -1]
-path_foos = [AnotherConcept(etc="20", flag="true"), AnotherConcept(etc="10", flag="true"), AnotherConcept(etc="10", flag="true"), AnotherConcept(etc="20", flag="true")]
+path_var3 = [Etc(), Etc()]
+path_bars = [Bar(), Bar()]
+path_foos = [AnotherConcept(etc="Etc()", flag="true"), AnotherConcept(etc="Etc()", flag="true"), AnotherConcept(etc="Etc()", flag="true"), AnotherConcept(etc="Etc()", flag="true")]
 
-somePathList = [SomeConcept(bar="2", oneMorePath="AnotherConcept(etc="20", flag="true")"), SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10", flag="true")")]
-sorted_list = [SomeConcept(bar="-1", oneMorePath="AnotherConcept(etc="10", flag="true")"), SomeConcept(bar="2", oneMorePath="AnotherConcept(etc="20", flag="true")")]
+somePathList = [SomeConcept(value="2", bar="Bar()", oneMorePath="AnotherConcept(etc="Etc()", flag="true")"), SomeConcept(value="-1", bar="Bar()", oneMorePath="AnotherConcept(etc="Etc()", flag="true")")]
+sorted_list = [SomeConcept(value="-1", bar="Bar()", oneMorePath="AnotherConcept(etc="Etc()", flag="true")"), SomeConcept(value="2", bar="Bar()", oneMorePath="AnotherConcept(etc="Etc()", flag="true")")]

@@ -23,5 +23,3 @@
 @template @function concat<T>(seq1: T*, seq2: T*) -> T*;
 
 @template @function count<T>(seq: T*) -> long;
-
-@template @function cross_join<T,S>(seq1: T*, seq2: S*) -> (T, S)*;

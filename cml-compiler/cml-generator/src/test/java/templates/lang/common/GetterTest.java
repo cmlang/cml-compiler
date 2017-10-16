@@ -48,7 +48,7 @@ public class GetterTest extends LangTest
     @Test
     public void getter_type__required() throws IOException
     {
-        final String cardinality = null; // required
+        final String cardinality = ""; // required
 
         getter_type(cardinality, "required.txt");
     }
@@ -78,7 +78,7 @@ public class GetterTest extends LangTest
     @Test
     public void interface_getter__required() throws IOException
     {
-        final String cardinality = null; // required
+        final String cardinality = ""; // required
 
         interface_getter(cardinality, "required.txt");
     }
@@ -102,7 +102,7 @@ public class GetterTest extends LangTest
     @Test
     public void class_getter__required() throws IOException
     {
-        final String cardinality = null; // required
+        final String cardinality = ""; // required
 
         class_getter(cardinality, "required.txt");
     }

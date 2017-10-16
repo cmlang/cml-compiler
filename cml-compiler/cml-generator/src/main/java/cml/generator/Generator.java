@@ -5,6 +5,7 @@ import cml.io.Directory;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
 import cml.language.foundation.TempModel;
+import cml.language.generated.Constructor;
 import cml.language.generated.Task;
 import cml.templates.TemplateGroupFile;
 import cml.templates.TemplateRenderer;
@@ -72,7 +73,7 @@ class GeneratorImpl implements Generator
             return FAILURE__TASK_UNDECLARED;
         }
 
-        final Optional<String> constructor = target.get().getConstructor();
+        final Optional<Constructor> constructor = target.get().getConstructor();
         if (!constructor.isPresent())
         {
             console.error(NO_CONSTRUCTOR_DEFINED_FOR_TASK, target.get().getName());
