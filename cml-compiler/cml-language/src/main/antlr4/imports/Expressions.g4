@@ -9,6 +9,9 @@ expression returns [Expression expr]
   | invocationExpression
   | comprehensionExpression
 
+  // Grouping
+  | '(' inner=expression ')'
+
   // Arithmetic Expressions:
   | operator=('+' | '-' | NOT) expression
   | <assoc=right> expression operator='^' expression
@@ -40,10 +43,8 @@ expression returns [Expression expr]
   // Conditional Expressions:
   | IF cond=expression THEN then=expression ELSE else_=expression
   | then=expression conj=(GIVEN | UNLESS) cond=expression
-  | then=expression (ORQ | XORQ) else_=expression
+  | then=expression (ORQ | XORQ) else_=expression;
 
-  // Grouping
-  | '(' inner=expression ')';
 
 pathExpression returns [Path path]:
   NAME ('.' NAME)*;
