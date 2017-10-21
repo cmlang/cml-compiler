@@ -5,12 +5,12 @@ lexer grammar Ignored;
 // Ignoring Whitespace:
 
 WS:
-    ( ' ' | '\t' | '\f' | '\n' | '\r' )+ -> skip;
+  ( ' ' | '\t' | '\f' | '\n' | '\r' )+ -> skip;
 
 
 // Ignoring Comments:
 
 COMMENT:
-    (('//' | '--') .*? '\n' | '/*' .*? '*/' ) -> skip;
+  (('//' | '--') .*? '\n' | '/*' .*? '*/' ) -> skip;
 
     

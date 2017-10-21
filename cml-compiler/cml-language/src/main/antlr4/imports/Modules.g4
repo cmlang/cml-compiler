@@ -3,7 +3,7 @@ grammar Modules;
 import Names;
 
 moduleDeclaration returns [TempModule module]:
-    MODULE NAME '{' importDeclaration* '}';
+  MODULE NAME '{' importDeclaration* '}';
 
 importDeclaration returns [Import _import]:
-    IMPORT NAME ';';
+  IMPORT NAME ';';
