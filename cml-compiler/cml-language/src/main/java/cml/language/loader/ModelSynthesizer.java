@@ -214,13 +214,13 @@ class ModelSynthesizer extends CMLBaseListener
     {
         if (ctx.literalExpression() != null) ctx.expr = ctx.literalExpression().literal;
         else if (ctx.pathExpression() != null) ctx.expr = ctx.pathExpression().path;
-        else if (ctx.conditionalExpression() != null) ctx.expr = ctx.conditionalExpression().conditional;
         else if (ctx.lambdaExpression() != null) ctx.expr = ctx.lambdaExpression().lambda;
         else if (ctx.invocationExpression() != null) ctx.expr = ctx.invocationExpression().invocation;
         else if (ctx.comprehensionExpression() != null) ctx.expr = invocationOf(ctx.comprehensionExpression().comprehension);
         else if (ctx.operator != null && ctx.type != null) ctx.expr = createTypeExpression(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
+        else if (ctx.cond != null) ctx.expr = conditionalExpressionOf(ctx);
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
 
         createLocation(ctx, ctx.expr);
@@ -262,14 +262,13 @@ class ModelSynthesizer extends CMLBaseListener
         return new Infix(operator, left, right);
     }
 
-    @Override
-    public void exitConditionalExpression(final ConditionalExpressionContext ctx)
+    public Conditional conditionalExpressionOf(final ExpressionContext ctx)
     {
         final Expression cond = ctx.cond.expr;
         final Expression then = ctx.then.expr;
         final Expression else_ = ctx.else_.expr;
 
-        ctx.conditional = new Conditional(cond, then, else_);
+        return new Conditional(cond, then, else_);
     }
 
     @Override

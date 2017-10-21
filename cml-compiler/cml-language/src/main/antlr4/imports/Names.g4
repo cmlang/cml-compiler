@@ -7,6 +7,7 @@ lexer grammar Names;
 
 FOR: 'for';
 IN: 'in';
+AS: 'as';
 ASB: 'as!';
 ASQ: 'as?';
 IS: 'is';
@@ -14,6 +15,10 @@ ISNT: 'isnt';
 IF: 'if';
 THEN: 'then';
 ELSE: 'else';
+GIVEN: 'given';
+UNLESS: 'unless';
+ORQ: 'or?';
+XORQ: 'xor?';
 BOOLEAN: 'true' | 'false';
 AND: 'and';
 OR: 'or';

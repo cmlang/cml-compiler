@@ -5,24 +5,48 @@ import Literals, Types;
 expression returns [Expression expr]
   : literalExpression
   | pathExpression
-  | conditionalExpression
   | lambdaExpression
   | invocationExpression
   | comprehensionExpression
+
+  // Arithmetic Expressions:
   | operator=('+' | '-' | NOT) expression
   | <assoc=right> expression operator='^' expression
   | expression operator=('*' | '/' | '%') expression
   | expression operator=('+' | '-') expression
+
+  // String Concatenation:
   | expression operator='&' expression
+
+  // Relational Expressions:
   | expression operator=('<' | '<=' | '>' | '>=') expression
-  | expression operator=('===' | '!==' | '==' | '!=') expression
+  | expression operator=('==' | '!=') expression
+
+  // Referential Expressions:
+  | expression operator=('===' | '!==') expression
+
+  // Type-Checking:
   | expression operator=(IS | ISNT) type=typeDeclaration
-  | expression operator=(ASB | ASQ) type=typeDeclaration
+
+  // Type-Casting:
+  | expression operator=(AS | ASB | ASQ) type=typeDeclaration
+
+  // Logical Expressions:
   | expression operator=AND expression
   | expression operator=OR expression
   | expression operator=XOR expression
   | expression operator=IMPLIES expression
+
+  // Conditional Expressions:
+  | IF cond=expression THEN then=expression ELSE else_=expression
+  | then=expression conj=(GIVEN | UNLESS) cond=expression
+  | then=expression (ORQ | XORQ) else_=expression
+
+  // Grouping
   | '(' inner=expression ')';
+
+pathExpression returns [Path path]:
+  NAME ('.' NAME)*;
 
 lambdaExpression returns[Lambda lambda]:
   '{' lambdaParameterList? expression '}';
@@ -47,10 +71,4 @@ queryStatement returns [Query query]:
 keywordExpression returns [Keyword keyword]:
   NAME ':' lambdaParameterList? expression;
 
-conditionalExpression returns [Conditional conditional]:
-  IF cond=expression
-  THEN then=expression
-  ELSE else_=expression;
 
-pathExpression returns [Path path]:
-  NAME ('.' NAME)*;
