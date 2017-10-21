@@ -114,7 +114,6 @@ class NamedTypeImpl implements TempNamedType
     private final Type type;
 
     private final String name;
-    private final String cardinality;
 
     private Concept concept;
 
@@ -122,10 +121,9 @@ class NamedTypeImpl implements TempNamedType
     {
         final Element element = extendElement(this);
 
-        this.type = extendType(this, element);
+        this.type = extendType(this, element, cardinality);
 
         this.name = name;
-        this.cardinality = cardinality;
     }
 
     @Override
@@ -215,7 +213,19 @@ class NamedTypeImpl implements TempNamedType
     @Override
     public String getCardinality()
     {
-        return cardinality;
+        return type.getCardinality();
+    }
+
+    @Override
+    public int getMinCardinality()
+    {
+        return type.getMinCardinality();
+    }
+
+    @Override
+    public int getMaxCardinality()
+    {
+        return type.getMaxCardinality();
     }
 
     @Override

@@ -1,7 +1,11 @@
 
 @abstraction TYPE: ELEMENT
 {
-    /cardinality: STRING = "";
+    cardinality: STRING;
+
+    /min_cardinality = if cardinality == "?" or cardinality == "*" then 0 else 1;
+    /max_cardinality = if cardinality == "*" or cardinality == "+" then 2140000000 else 1;
+
     /concept: CONCEPT? = none;
     /element_type: TYPE = self;
 
@@ -42,6 +46,7 @@
 {
     error_message: string;
 
+    /cardinality = "";
     /undefined = true;
     /parent: SCOPE? = none;
     /location: LOCATION? = none;

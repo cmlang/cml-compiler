@@ -13,13 +13,25 @@ public abstract class BaseType implements Type
 
     public BaseType()
     {
-        this.type = Type.extendType(this, extendElement(this));
+        this.type = Type.extendType(this, extendElement(this), "");
     }
 
     @Override
     public String getCardinality()
     {
         return type.getCardinality();
+    }
+
+    @Override
+    public int getMinCardinality()
+    {
+        return type.getMinCardinality();
+    }
+
+    @Override
+    public int getMaxCardinality()
+    {
+        return type.getMaxCardinality();
     }
 
     @Override
