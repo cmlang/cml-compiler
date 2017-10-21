@@ -166,7 +166,7 @@ public interface Invocation extends Expression, NamedElement
         {
             final Type matchingType = getMatchingTypeOf(scopeType.get());
 
-            assert matchingType.getConcept().isPresent(): "Expected concept but found '" + matchingType + "' for lambda: " + lambda + " - " + scopeType.get();
+            assert matchingType.getConcept().isPresent(): "Expected concept but found '" + matchingType.getDiagnosticId() + "' for lambda: " + lambda.getDiagnosticId() + " - " + scopeType.get().getDiagnosticId();
 
             final Optional<Concept> concept = matchingType.getConcept();
 
