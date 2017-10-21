@@ -3,10 +3,8 @@ package cml.language.types;
 import cml.language.features.TempConcept;
 import cml.language.generated.Concept;
 import cml.language.generated.Element;
-import cml.language.generated.NamedType;
 import cml.language.generated.Type;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +17,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
 
-public interface TempNamedType extends NamedType
+public interface TempNamedType extends Type
 {
     TempNamedType UNDEFINED = TempNamedType.create("UNDEFINED");
     TempNamedType NOTHING = TempNamedType.create("NOTHING", "?");
@@ -38,6 +36,8 @@ public interface TempNamedType extends NamedType
     List<String> BINARY_FLOATING_POINT_TYPE_NAMES = unmodifiableList(asList(
         "FLOAT", "DOUBLE" // from narrower to wider
     ));
+
+    String getName();
 
     @Override
     default boolean isPrimitive()
@@ -114,7 +114,7 @@ class NamedTypeImpl implements TempNamedType
     private final Type type;
 
     private final String name;
-    private final @Nullable String cardinality;
+    private final String cardinality;
 
     private Concept concept;
 
