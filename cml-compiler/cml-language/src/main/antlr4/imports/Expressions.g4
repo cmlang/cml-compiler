@@ -45,7 +45,6 @@ expression returns [Expression expr]
   | then=expression conj=(GIVEN | UNLESS) cond=expression
   | then=expression (ORQ | XORQ) else_=expression;
 
-
 pathExpression returns [Path path]:
   NAME ('.' NAME)*;
 
