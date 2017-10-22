@@ -2,7 +2,7 @@ package cml.generator;
 
 import cml.io.Console;
 import cml.io.FileSystem;
-import cml.language.expressions.Literal;
+import cml.language.generated.Literal;
 import cml.language.generated.NamedElement;
 import cml.language.generated.Task;
 import cml.templates.TemplateRenderer;

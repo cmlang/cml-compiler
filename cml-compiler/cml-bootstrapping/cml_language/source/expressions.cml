@@ -7,3 +7,12 @@
 
     /operands = members as? EXPRESSION*;
 }
+
+@concept LITERAL: EXPRESSION
+{
+  text: string;
+  type: TYPE;
+
+  /kind = "literal";
+  /diagnostic_id = text;
+}

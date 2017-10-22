@@ -40,6 +40,9 @@ LOCATION files:
 EXPRESSION files:
 - src/main/java/cml/language/generated/Expression.java
 
+LITERAL files:
+- src/main/java/cml/language/generated/Literal.java
+
 MODEL files:
 - src/main/java/cml/language/generated/Model.java
 

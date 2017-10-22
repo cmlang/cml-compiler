@@ -3,7 +3,6 @@ package cml.language;
 import cml.io.Console;
 import cml.io.FileSystem;
 import cml.io.ModuleManager;
-import cml.language.expressions.Literal;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;

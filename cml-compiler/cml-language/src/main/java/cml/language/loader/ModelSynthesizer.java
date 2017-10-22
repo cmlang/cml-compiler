@@ -22,8 +22,8 @@ import static cml.language.generated.Constructor.createConstructor;
 import static cml.language.generated.Property.createProperty;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static org.jooq.lambda.Seq.empty;
@@ -133,7 +133,7 @@ class ModelSynthesizer extends CMLBaseListener
         final Type type = (ctx.typeDeclaration() == null) ? null : ctx.typeDeclaration().type;
         final Expression value = (ctx.expression() == null) ? null : ctx.expression().expr;
 
-        ctx.property = createProperty(name, null, locationOf(ctx), asList(value), ctx.DERIVED() != null, type, value, null);
+        ctx.property = createProperty(name, null, locationOf(ctx), singletonList(value), ctx.DERIVED() != null, type, value, null);
     }
 
     @Override
@@ -290,7 +290,7 @@ class ModelSynthesizer extends CMLBaseListener
         if (text != null)
         {
             final TempNamedType type = TempNamedType.create(getPrimitiveTypeName(ctx));
-            ctx.literal = new Literal(text, type);
+            ctx.literal = Literal.createLiteral(emptyList(), null, locationOf(ctx), text, type);
         }
     }
 
