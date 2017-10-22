@@ -11,10 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static cml.language.functions.TypeFunctions.isBinaryFloatingPointWiderThan;
-import static cml.language.functions.TypeFunctions.isNumericWiderThan;
-import static cml.language.generated.UndefinedType.createUndefinedType;
-import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableCollection;
@@ -23,10 +19,6 @@ public class TempInfix extends ExpressionBase implements Infix
 {
     private static final String REFERENTIAL_EQUALITY = "===";
     private static final String REFERENTIAL_INEQUALITY = "!==";
-
-    private static final Collection<String> ARITHMETIC_OPERATORS = unmodifiableCollection(asList(
-        "+", "-", "*", "/", "%", "^"
-    ));
 
     private static final Collection<String> RELATIONAL_OPERATORS = unmodifiableCollection(asList(
         "==", "!=", ">", ">=", "<", "<="
@@ -45,14 +37,6 @@ public class TempInfix extends ExpressionBase implements Infix
     private static Map<String, String> OPERATIONS =
         new HashMap<String, String>()
         {{
-            // Arithmetic Operators:
-            put("+", "add");
-            put("-", "sub");
-            put("*", "mul");
-            put("/", "div");
-            put("%", "mod");
-            put("^", "exp");
-
             // String Concatenation:
             put("&", "str_concat");
 
@@ -144,14 +128,6 @@ public class TempInfix extends ExpressionBase implements Infix
         else if (REFERENTIAL_OPERATORS.contains(getOperator()) && leftType.isReferential() && rightType.isReferential())
         {
             return TempNamedType.BOOLEAN;
-        }
-        else if (ARITHMETIC_OPERATORS.contains(getOperator()) && leftType.isNumeric() && rightType.isNumeric())
-        {
-            return isNumericWiderThan(leftType, rightType) ? leftType : rightType;
-        }
-        else if (ARITHMETIC_OPERATORS.contains(getOperator()) && leftType.isBinaryFloatingPoint() && rightType.isBinaryFloatingPoint())
-        {
-            return isBinaryFloatingPointWiderThan(leftType, rightType) ? leftType : rightType;
         }
         else if (STRING_OPERATORS.contains(getOperator()) && leftType.isPrimitive() && rightType.isPrimitive())
         {
