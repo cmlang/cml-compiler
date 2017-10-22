@@ -8,11 +8,11 @@
     <parent>
         <groupId>cml</groupId>
         <artifactId>cml-compiler</artifactId>
-        <version>master-SNAPSHOT</version>
+        <version>2017.10.22-alpha</version>
     </parent>
 
     <artifactId>cml-templates</artifactId>
-    <version>master-SNAPSHOT</version>
+    <version>2017.10.22-alpha</version>
     <packaging>jar</packaging>
 
     <dependencies>
