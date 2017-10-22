@@ -3,8 +3,10 @@ grammar Expressions;
 import Literals, Types;
 
 expression returns [Expression expr]
-  : literalExpression | pathExpression
-  | lambdaExpression  | invocationExpression
+  : literalExpression
+  | pathExpression
+  | lambdaExpression
+  | invocationExpression
   | comprehensionExpression
 
   // Grouping
@@ -40,7 +42,8 @@ expression returns [Expression expr]
   | expression operator=IMPLIES expression
 
   // Conditional Expressions:
-  | IF cond=expression THEN then=expression ELSE else_=expression
+  | IF cond=expression
+    THEN then=expression ELSE else_=expression
   | then=expression conj=(GIVEN | UNLESS) cond=expression
   | then=expression (ORQ | XORQ) else_=expression;
 
@@ -57,7 +60,8 @@ invocationExpression returns [Invocation invocation]:
   NAME '(' expression (',' expression)* ')' lambdaExpression?;
 
 comprehensionExpression returns [Comprehension comprehension]:
-  (pathExpression | FOR enumeratorDeclaration (',' enumeratorDeclaration)*)
+  (pathExpression |
+   FOR enumeratorDeclaration (',' enumeratorDeclaration)*)
   queryStatement+;
 
 enumeratorDeclaration returns [Enumerator enumerator]:
