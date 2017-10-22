@@ -17,7 +17,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableCollection;
 
-public class Infix extends ExpressionBase
+public class TempInfix extends ExpressionBase
 {
     private static final String REFERENTIAL_EQUALITY = "===";
     private static final String REFERENTIAL_INEQUALITY = "!==";
@@ -77,7 +77,7 @@ public class Infix extends ExpressionBase
     private final Expression left;
     private final Expression right;
 
-    public Infix(String operator, Expression left, Expression right)
+    public TempInfix(String operator, Expression left, Expression right)
     {
         super(asList(left, right));
 

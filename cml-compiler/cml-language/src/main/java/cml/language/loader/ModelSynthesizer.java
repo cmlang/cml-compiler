@@ -253,13 +253,13 @@ class ModelSynthesizer extends CMLBaseListener
         return new Unary(operator, expr);
     }
 
-    private Infix createInfix(ExpressionContext ctx)
+    private TempInfix createInfix(ExpressionContext ctx)
     {
         final String operator = ctx.operator.getText();
         final Expression left = ctx.expression().get(0).expr;
         final Expression right = ctx.expression().get(1).expr;
 
-        return new Infix(operator, left, right);
+        return new TempInfix(operator, left, right);
     }
 
     public Conditional conditionalExpressionOf(final ExpressionContext ctx)
