@@ -1,0 +1,6 @@
+
+// Template functions on this file are implemented by the cml-primitives Maven module.
+
+// Under cml.primitives.Type:
+@template @function subtype(s: string, t: string) -> boolean;
+

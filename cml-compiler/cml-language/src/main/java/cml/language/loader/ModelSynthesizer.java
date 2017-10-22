@@ -21,7 +21,9 @@ import static cml.language.generated.Association.createAssociation;
 import static cml.language.generated.Constructor.createConstructor;
 import static cml.language.generated.Property.createProperty;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
+import static cml.primitives.Type.arithmeticOperator;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
@@ -254,13 +256,20 @@ class ModelSynthesizer extends CMLBaseListener
         return new Unary(operator, expr);
     }
 
-    private TempInfix createInfix(ExpressionContext ctx)
+    private Infix createInfix(ExpressionContext ctx)
     {
         final String operator = ctx.operator.getText();
         final Expression left = ctx.expression().get(0).expr;
         final Expression right = ctx.expression().get(1).expr;
 
-        return new TempInfix(operator, left, right);
+        if (arithmeticOperator(operator))
+        {
+            return Arithmetic.createArithmetic(operator, asList(left, right), null, locationOf(ctx));
+        }
+        else
+        {
+            return new TempInfix(operator, left, right);
+        }
     }
 
     public Conditional conditionalExpressionOf(final ExpressionContext ctx)

@@ -46,6 +46,9 @@ LITERAL files:
 INFIX files:
 - src/main/java/cml/language/generated/Infix.java
 
+ARITHMETIC files:
+- src/main/java/cml/language/generated/Arithmetic.java
+
 MODEL files:
 - src/main/java/cml/language/generated/Model.java
 

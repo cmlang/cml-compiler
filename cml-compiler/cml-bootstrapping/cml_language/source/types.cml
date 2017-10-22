@@ -1,55 +1,57 @@
 
 @abstraction TYPE: ELEMENT
 {
-    cardinality: STRING;
+  cardinality: STRING;
 
-    /min_cardinality = if cardinality == "?" or cardinality == "*" then 0 else 1;
-    /max_cardinality = if cardinality == "*" or cardinality == "+" then 2140000000 else 1;
+  /name = "";
 
-    /concept: CONCEPT? = none;
-    /element_type: TYPE = self;
+  /min_cardinality = if cardinality == "?" or cardinality == "*" then 0 else 1;
+  /max_cardinality = if cardinality == "*" or cardinality == "+" then 2140000000 else 1;
 
-    /kind = if cardinality == "" then "required"
-            else if cardinality == "?" then "optional"
-            else if cardinality == "*" then "sequence"
-            else "unknown";
+  /concept: CONCEPT? = none;
+  /element_type: TYPE = self;
 
-    /matching_result_type = self;
-    /base_type = self;
+  /kind = if cardinality == "" then "required"
+          else if cardinality == "?" then "optional"
+          else if cardinality == "*" then "sequence"
+          else "unknown";
 
-    /parameter = defined and not primitive and empty(concept);
-    /defined = not undefined;
-    /undefined = false;
-    /something = defined and not nothing;
-    /nothing = false;
+  /matching_result_type = self;
+  /base_type = self;
 
-    /relational = string or numeric or binary_floating_point;
-    /referential = present(concept) and not sequence;
+  /parameter = defined and not primitive and empty(concept);
+  /defined = not undefined;
+  /undefined = false;
+  /something = defined and not nothing;
+  /nothing = false;
 
-    /primitive = false;
-    /numeric = false;
-    /binary_floating_point = false;
+  /relational = string or numeric or binary_floating_point;
+  /referential = present(concept) and not sequence;
 
-    /boolean = false;
-    /string = false;
+  /primitive = false;
+  /numeric = false;
+  /binary_floating_point = false;
 
-    /single = (required or optional) and not sequence;
-    /required = kind == "required";
-    /optional = kind == "optional";
-    /sequence = kind == "sequence";
+  /boolean = false;
+  /string = false;
 
-    /inferred_cardinality = cardinality;
-    /inferred_type: TYPE = self;
+  /single = (required or optional) and not sequence;
+  /required = kind == "required";
+  /optional = kind == "optional";
+  /sequence = kind == "sequence";
+
+  /inferred_cardinality = cardinality;
+  /inferred_type: TYPE = self;
 }
 
 @concept UNDEFINED_TYPE: TYPE
 {
-    error_message: string;
+  error_message: string;
 
-    /cardinality = "";
-    /undefined = true;
-    /parent: SCOPE? = none;
-    /location: LOCATION? = none;
+  /cardinality = "";
+  /undefined = true;
+  /parent: SCOPE? = none;
+  /location: LOCATION? = none;
 
-    /diagnostic_id = "UNDEFINED";
+  /diagnostic_id = "UNDEFINED";
 }

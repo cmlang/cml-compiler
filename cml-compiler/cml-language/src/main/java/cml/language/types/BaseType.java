@@ -28,6 +28,12 @@ public abstract class BaseType implements Type
     }
 
     @Override
+    public String getName()
+    {
+        return type.getName();
+    }
+
+    @Override
     public int getMinCardinality()
     {
         return type.getMinCardinality();

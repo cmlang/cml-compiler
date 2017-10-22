@@ -89,6 +89,7 @@ public class TempInfix extends ExpressionBase implements Infix
         return infix.getOperator();
     }
 
+    @Override
     public Optional<String> getOperation()
     {
         final String operation = OPERATIONS.get(getOperator());
@@ -111,7 +112,7 @@ public class TempInfix extends ExpressionBase implements Infix
     @Override
     public String getKind()
     {
-        return infix.getKind();
+        return "infix";
     }
 
     @Override

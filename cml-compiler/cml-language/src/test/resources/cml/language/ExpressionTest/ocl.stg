@@ -60,6 +60,10 @@ unary_ocl(unary) ::= <<
 (<expr_operator(unary)> <ocl(unary.subExpr)>)
 >>
 
+arithmetic_ocl(expr) ::= <<
+<infix_ocl(expr)>
+>>
+
 infix_ocl(infix) ::= <<
 (<ocl(infix.left)> <expr_operator(infix)> <ocl(infix.right)>)
 >>

@@ -1,0 +1,19 @@
+
+dependencies() ::= <<
+\<dependency>
+    \<groupId>org.jetbrains\</groupId>
+    \<artifactId>annotations\</artifactId>
+    \<version>15.0\</version>
+\</dependency>
+\<dependency>
+    \<groupId>org.jooq\</groupId>
+    \<artifactId>jool\</artifactId>
+    \<version>0.9.12\</version>
+    \<scope>compile\</scope>
+\</dependency>
+\<dependency>
+    \<groupId>cml\</groupId>
+    \<artifactId>cml-primitives\</artifactId>
+    \<version><task.artifactVersion>\</version>
+\</dependency>
+>>

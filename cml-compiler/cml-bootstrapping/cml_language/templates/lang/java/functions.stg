@@ -1,0 +1,4 @@
+
+invocation_subtype(args) ::= <<
+cml.primitives.Type.subtype(<expression(args.s)>, <expression(args.t)>)
+>>

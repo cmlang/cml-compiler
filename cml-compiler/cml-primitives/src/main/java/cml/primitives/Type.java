@@ -16,12 +16,16 @@ public class Type
         "FLOAT", "DOUBLE" // from narrower to wider
     ));
 
-    public static boolean isNumeric(String typeName)
+    public static final List<String> ARITHMETIC_OPERATORS = unmodifiableList(asList(
+        "+", "-", "*", "/", "%", "^"
+    ));
+
+    public static boolean numeric(String typeName)
     {
         return NUMERIC_TYPE_NAMES.contains(typeName.toUpperCase());
     }
 
-    public static boolean isBinaryFloatingPoint(String typeName)
+    public static boolean binaryFloatingPoint(String typeName)
     {
         return BINARY_FLOATING_POINT_TYPE_NAMES.contains(typeName.toUpperCase());
     }
@@ -30,13 +34,13 @@ public class Type
     @SuppressWarnings("SimplifiableIfStatement")
     public static boolean subtype(String s, String t)
     {
-        if (isNumeric(s) && isNumeric(t))
+        if (numeric(s) && numeric(t))
         {
-            return isNumericWiderThan(s, t);
+            return numericSubType(s, t);
         }
-        else if (isBinaryFloatingPoint(s) && isBinaryFloatingPoint(t))
+        else if (binaryFloatingPoint(s) && binaryFloatingPoint(t))
         {
-            return isBinaryFloatingPointWiderThan(s, t);
+            return binaryFloatingPointSubtype(s, t);
         }
         else
         {
@@ -44,29 +48,34 @@ public class Type
         }
     }
 
-    public static boolean isNumericWiderThan(String s, String t)
+    public static boolean numericSubType(String s, String t)
     {
-        if (isNumeric(s) && isNumeric(t))
+        if (numeric(s) && numeric(t))
         {
             final int i = NUMERIC_TYPE_NAMES.indexOf(s.toUpperCase());
             final int j = NUMERIC_TYPE_NAMES.indexOf(t.toUpperCase());
 
-            return i > j;
+            return i <= j;
         }
 
         return false;
     }
 
-    public static boolean isBinaryFloatingPointWiderThan(String s, String t)
+    public static boolean binaryFloatingPointSubtype(String s, String t)
     {
-        if (isBinaryFloatingPoint(s) && isBinaryFloatingPoint(t))
+        if (binaryFloatingPoint(s) && binaryFloatingPoint(t))
         {
             final int i = BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(s.toUpperCase());
             final int j = BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(t.toUpperCase());
 
-            return i > j;
+            return i <= j;
         }
 
         return false;
+    }
+
+    public static boolean arithmeticOperator(String operator)
+    {
+        return ARITHMETIC_OPERATORS.contains(operator);
     }
 }

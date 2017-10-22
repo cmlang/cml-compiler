@@ -18,6 +18,10 @@ expression_unary(expr) ::= <<
 operation_unary_add(expr) ::= "+<expression(expr)>"
 operation_unary_sub(expr) ::= "-<expression(expr)>"
 
+expression_arithmetic(expr) ::= <<
+<expression_infix(expr)>
+>>
+
 expression_infix(expr) ::= <<
 <if(expr.operation)><\\>
 (<({operation_<expr.operation>})(expr.left, expr.right)>)<\\>

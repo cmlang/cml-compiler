@@ -85,6 +85,18 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
+    public boolean isNumeric()
+    {
+        return expression.isNumeric();
+    }
+
+    @Override
+    public boolean isBinaryFloatingPoint()
+    {
+        return expression.isBinaryFloatingPoint();
+    }
+
+    @Override
     public List<Expression> getOperands()
     {
         return expression.getOperands();
