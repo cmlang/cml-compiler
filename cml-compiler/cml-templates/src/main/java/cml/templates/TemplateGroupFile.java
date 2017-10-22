@@ -53,13 +53,25 @@ public class TemplateGroupFile extends STGroupFile
     @Override
     public void importTemplates(Token fileNameToken)
     {
-        final String moduleName = moduleManager.getModuleName(getFileName());
-        final String importFileName = Misc.strip(fileNameToken.getText(), 1);
-        final String path = moduleManager.getModulePath(moduleName, importFileName);
-        final STGroup g = new TemplateGroupFile(path);
+        final STGroup g = new TemplateGroupFile(importFilePathOf(fileNameToken));
 
         g.setListener(getListener());
 
         importTemplates(g, true);
+    }
+
+    private String importFilePathOf(final Token fileNameToken)
+    {
+        final String filePath = Misc.strip(fileNameToken.getText(), 1);
+
+        if (filePath.contains(":/"))
+        {
+            return filePath;
+        }
+        else
+        {
+            final String moduleName = moduleManager.getModuleName(getFileName());
+            return moduleManager.getModulePath(moduleName, filePath);
+        }
     }
 }
