@@ -1,6 +1,7 @@
 package cml.language.expressions;
 
 import cml.language.generated.Expression;
+import cml.language.generated.Infix;
 import cml.language.generated.Type;
 import cml.language.types.TempNamedType;
 
@@ -17,7 +18,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableCollection;
 
-public class TempInfix extends ExpressionBase
+public class TempInfix extends ExpressionBase implements Infix
 {
     private static final String REFERENTIAL_EQUALITY = "===";
     private static final String REFERENTIAL_INEQUALITY = "!==";
@@ -73,22 +74,19 @@ public class TempInfix extends ExpressionBase
             put(REFERENTIAL_INEQUALITY, "not_ref_eq");
         }};
 
-    private final String operator;
-    private final Expression left;
-    private final Expression right;
+    private final Infix infix;
 
     public TempInfix(String operator, Expression left, Expression right)
     {
         super(asList(left, right));
 
-        this.operator = operator;
-        this.left = left;
-        this.right = right;
+        infix = Infix.extendInfix(this, expression, expression, expression, expression, operator);
     }
 
+    @Override
     public String getOperator()
     {
-        return operator;
+        return infix.getOperator();
     }
 
     public Optional<String> getOperation()
@@ -98,30 +96,32 @@ public class TempInfix extends ExpressionBase
         return Optional.ofNullable(operation);
     }
 
+    @Override
     public Expression getLeft()
     {
-        return left;
+        return infix.getLeft();
     }
 
+    @Override
     public Expression getRight()
     {
-        return right;
+        return infix.getRight();
     }
 
     @Override
     public String getKind()
     {
-        return "infix";
+        return infix.getKind();
     }
 
     @Override
     public Type getType()
     {
-        final Type leftType = left.getType();
-        final Type rightType = right.getType();
+        final Type leftType = getLeft().getType();
+        final Type rightType = getRight().getType();
 
-        assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + left.getKind();
-        assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + right.getKind();
+        assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + getLeft().getKind();
+        assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + getRight().getKind();
 
         if (leftType.isUndefined())
         {
@@ -131,27 +131,27 @@ public class TempInfix extends ExpressionBase
         {
             return rightType;
         }
-        else if (BOOLEAN_OPERATORS.contains(operator) && leftType.isBoolean() && rightType.isBoolean())
+        else if (BOOLEAN_OPERATORS.contains(getOperator()) && leftType.isBoolean() && rightType.isBoolean())
         {
             return TempNamedType.BOOLEAN;
         }
-        else if (RELATIONAL_OPERATORS.contains(operator) && leftType.isRelational() && rightType.isRelational())
+        else if (RELATIONAL_OPERATORS.contains(getOperator()) && leftType.isRelational() && rightType.isRelational())
         {
             return TempNamedType.BOOLEAN;
         }
-        else if (REFERENTIAL_OPERATORS.contains(operator) && leftType.isReferential() && rightType.isReferential())
+        else if (REFERENTIAL_OPERATORS.contains(getOperator()) && leftType.isReferential() && rightType.isReferential())
         {
             return TempNamedType.BOOLEAN;
         }
-        else if (ARITHMETIC_OPERATORS.contains(operator) && leftType.isNumeric() && rightType.isNumeric())
+        else if (ARITHMETIC_OPERATORS.contains(getOperator()) && leftType.isNumeric() && rightType.isNumeric())
         {
             return isNumericWiderThan(leftType, rightType) ? leftType : rightType;
         }
-        else if (ARITHMETIC_OPERATORS.contains(operator) && leftType.isBinaryFloatingPoint() && rightType.isBinaryFloatingPoint())
+        else if (ARITHMETIC_OPERATORS.contains(getOperator()) && leftType.isBinaryFloatingPoint() && rightType.isBinaryFloatingPoint())
         {
             return isBinaryFloatingPointWiderThan(leftType, rightType) ? leftType : rightType;
         }
-        else if (STRING_OPERATORS.contains(operator) && leftType.isPrimitive() && rightType.isPrimitive())
+        else if (STRING_OPERATORS.contains(getOperator()) && leftType.isPrimitive() && rightType.isPrimitive())
         {
             return TempNamedType.STRING;
         }
@@ -168,6 +168,6 @@ public class TempInfix extends ExpressionBase
     @Override
     public String getDiagnosticId()
     {
-        return format("%s %s %s", getLeft().getDiagnosticId(), getOperator(), getRight().getDiagnosticId());
+        return infix.getDiagnosticId();
     }
 }

@@ -43,6 +43,9 @@ EXPRESSION files:
 LITERAL files:
 - src/main/java/cml/language/generated/Literal.java
 
+INFIX files:
+- src/main/java/cml/language/generated/Infix.java
+
 MODEL files:
 - src/main/java/cml/language/generated/Model.java
 
