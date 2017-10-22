@@ -46,6 +46,6 @@ public class ModelVisitorFunctions
     {
         visitor.visit(expression);
 
-        ((Expression)expression).getSubExpressions().forEach(e -> visitExpression(e, visitor));
+        expression.getOperands().forEach(e -> visitExpression(e, visitor));
     }
 }

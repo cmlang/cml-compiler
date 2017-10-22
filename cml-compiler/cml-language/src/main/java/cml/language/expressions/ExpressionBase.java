@@ -22,16 +22,16 @@ public abstract class ExpressionBase implements Expression
         this(scope, emptyList());
     }
 
-    ExpressionBase(List<Expression> subExpressions)
+    ExpressionBase(List<Expression> operands)
     {
-        this(null, subExpressions);
+        this(null, operands);
     }
 
-    ExpressionBase(Scope parent, List<Expression> subExpressions)
+    ExpressionBase(Scope parent, List<Expression> operands)
     {
         final Element element = Element.extendElement(this);
         final ModelElement modelElement = ModelElement.extendModelElement(this, element, parent, null);
-        final Scope scope = Scope.extendScope(this, element, modelElement, seq(subExpressions).map(s -> (ModelElement)s).toList());
+        final Scope scope = Scope.extendScope(this, element, modelElement, seq(operands).map(s -> (ModelElement)s).toList());
 
         expression = Expression.extendExpression(this, element, modelElement, scope);
     }
@@ -85,8 +85,8 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
-    public List<Expression> getSubExpressions()
+    public List<Expression> getOperands()
     {
-        return expression.getSubExpressions();
+        return expression.getOperands();
     }
 }

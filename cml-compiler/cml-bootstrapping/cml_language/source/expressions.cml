@@ -5,5 +5,5 @@
     /type: TYPE;
     /matching_result_type = self.type;
 
-    /sub_expressions = members as? EXPRESSION*;
+    /operands = members as? EXPRESSION*;
 }
