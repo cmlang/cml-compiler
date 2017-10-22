@@ -5,8 +5,10 @@
   /type: TYPE;
 
   /matching_result_type = type;
+
   /numeric = type.numeric;
   /binary_floating_point = type.binary_floating_point;
+  /arithmetic = numeric or binary_floating_point;
 
   /operands = members as? EXPRESSION*;
 }
@@ -47,7 +49,6 @@
 
   /numeric = left.numeric and right.numeric;
   /binary_floating_point = left.binary_floating_point and right.binary_floating_point;
-  /arithmetic = numeric or binary_floating_point;
 
   /type = if arithmetic and subtype(left.type.name, right.type.name) then right.type
           else if arithmetic and subtype(right.type.name, left.type.name) then left.type

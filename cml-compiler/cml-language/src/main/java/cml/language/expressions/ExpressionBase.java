@@ -97,6 +97,12 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
+    public boolean isArithmetic()
+    {
+        return expression.isArithmetic();
+    }
+
+    @Override
     public List<Expression> getOperands()
     {
         return expression.getOperands();
