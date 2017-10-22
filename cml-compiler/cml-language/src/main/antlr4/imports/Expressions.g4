@@ -3,17 +3,15 @@ grammar Expressions;
 import Literals, Types;
 
 expression returns [Expression expr]
-  : literalExpression
-  | pathExpression
-  | lambdaExpression
-  | invocationExpression
+  : literalExpression | pathExpression
+  | lambdaExpression  | invocationExpression
   | comprehensionExpression
 
   // Grouping
   | '(' inner=expression ')'
 
   // Arithmetic Expressions:
-  | operator=('+' | '-' | NOT) expression
+  | operator=('+' | '-') expression
   | <assoc=right> expression operator='^' expression
   | expression operator=('*' | '/' | '%') expression
   | expression operator=('+' | '-') expression
@@ -35,6 +33,7 @@ expression returns [Expression expr]
   | expression operator=(AS | ASB | ASQ) type=typeDeclaration
 
   // Logical Expressions:
+  | operator=NOT expression
   | expression operator=AND expression
   | expression operator=OR expression
   | expression operator=XOR expression
@@ -58,9 +57,8 @@ invocationExpression returns [Invocation invocation]:
   NAME '(' expression (',' expression)* ')' lambdaExpression?;
 
 comprehensionExpression returns [Comprehension comprehension]:
-  (pathExpression |
-   FOR enumeratorDeclaration
-   (',' enumeratorDeclaration)*) queryStatement+;
+  (pathExpression | FOR enumeratorDeclaration (',' enumeratorDeclaration)*)
+  queryStatement+;
 
 enumeratorDeclaration returns [Enumerator enumerator]:
   var=NAME IN pathExpression;
