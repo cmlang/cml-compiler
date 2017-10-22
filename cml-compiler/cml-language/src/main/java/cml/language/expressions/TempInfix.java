@@ -3,6 +3,7 @@ package cml.language.expressions;
 import cml.language.generated.Expression;
 import cml.language.generated.Infix;
 import cml.language.generated.Type;
+import cml.language.generated.UndefinedType;
 import cml.language.types.TempNamedType;
 
 import java.util.Collection;
@@ -170,5 +171,11 @@ public class TempInfix extends ExpressionBase implements Infix
     public String getDiagnosticId()
     {
         return infix.getDiagnosticId();
+    }
+
+    @Override
+    public UndefinedType getUndefinedType()
+    {
+        return infix.getUndefinedType();
     }
 }
