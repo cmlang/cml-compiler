@@ -158,8 +158,9 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitTupleTypeDeclaration(final TupleTypeDeclarationContext ctx)
     {
         final Seq<TupleTypeElement> elements = seq(ctx.tupleTypeElementDeclaration()).map(c -> c.element);
+        final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
 
-        ctx.type = new TupleType(elements);
+        ctx.type = new TupleType(elements, cardinality);
     }
 
     @Override

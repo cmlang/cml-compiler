@@ -13,7 +13,7 @@
 
 @template @function reduce<T,S>(seq: T*, expr: (T, S) -> S, from: () -> S) -> S;
 
-//@template @function cross_join<T,S>(seq1: T*, seq2: S*) -> (T, S)*;
+@template @function cross_join<T,S>(seq1: T*, seq2: S*) -> (T, S)*;
 
 @concept Expressions
 {
@@ -56,12 +56,12 @@
     enumeration_embedded_select = yield(for order in top_orders | select: order.total > 100, { items });
 
 
-//    cross_join_enumeration = for order in top_orders, gold_customer in gold_customers
-//                                | select: order.customer === gold_customer
-//                                | yield: order;
-//    cross_join_nested = yield(for order in top_orders, gold_customer in gold_customers
-//                                  | select: order.customer === gold_customer and order.total > 1000,
-//                              { order, gold_customer -> order.customer.name });
+    cross_join_enumeration = for order in top_orders, gold_customer in gold_customers
+                                | select: order.customer === gold_customer
+                                | yield: order;
+    cross_join_nested = yield(for order in top_orders, gold_customer in gold_customers
+                                  | select: order.customer === gold_customer and order.total > 1000,
+                              { order, gold_customer -> order.customer.name });
 }
 
 @concept Order

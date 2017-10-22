@@ -20,12 +20,6 @@ Declared type is BYTE but type inferred from expression is DECIMAL.
 Failed validation: required property_type_assignable_from_expression_type: in property Attributes.a_to_b: B (28:5)
 Declared type is B but type inferred from expression is A.
 
-Failed validation: required optional_attribute_disallowed: in property Attributes.d1: DECIMAL? (46:5)
-
-Failed validation: required sequential_attribute_disallowed: in property Attributes.d2: DECIMAL* (47:5)
-
-Failed validation: required sequential_attribute_disallowed: in property Attributes.d3: DECIMAL* (48:5)
-
 Failed validation: required property_type_assignable_from_expression_type: in property Attributes.a6: A (51:5)
 Declared type is A but type inferred from expression is A*.
 
@@ -46,8 +40,6 @@ Declared type is A but type inferred from expression is A?.
 
 Failed validation: required property_type_assignable_from_expression_type: in property Attributes.d4: DECIMAL (57:5)
 Declared type is DECIMAL but type inferred from expression is DECIMAL*.
-
-Failed validation: required optional_attribute_disallowed: in property Attributes.d5: DECIMAL? (58:5)
 
 Failed validation: required property_type_assignable_from_expression_type: in property Attributes.d5: DECIMAL? (58:5)
 Declared type is DECIMAL? but type inferred from expression is DECIMAL*.

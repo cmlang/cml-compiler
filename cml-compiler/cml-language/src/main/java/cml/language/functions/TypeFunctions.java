@@ -32,6 +32,11 @@ public class TypeFunctions
 
             return newType;
         }
+        else if (type instanceof TupleType)
+        {
+            final TupleType tupleType = (TupleType) type;
+            return new TupleType(seq(tupleType.getElements()), cardinality);
+        }
         else if (type.isUndefined())
         {
             return type;

@@ -27,8 +27,6 @@ public class ModelValidator implements ModelVisitor
     private final InvariantValidator<Property> propertyInvariantValidator = () -> asList(
         new UniquePropertyName(),
         new PropertyTypeSpecifiedOrInferred(),
-        new OptionalAttributeDisallowed(),
-        new SequentialAttributeDisallowed(),
         new PropertyTypeAssignableFromExpressionType(),
         new GeneralizationCompatibleRedefinition(),
         new AbstractPropertyInAbstractConcept()

@@ -5,6 +5,7 @@ import org.jooq.lambda.Seq;
 
 import java.util.List;
 
+import static cml.language.functions.TypeFunctions.withCardinality;
 import static java.lang.String.format;
 import static org.jooq.lambda.Seq.seq;
 
@@ -14,6 +15,13 @@ public class TupleType extends BaseType
 
     public TupleType(final Seq<TupleTypeElement> elements)
     {
+        this(elements, "");
+    }
+
+    public TupleType(final Seq<TupleTypeElement> elements, String cardinality)
+    {
+        super(cardinality);
+
         this.elements = elements.toList();
     }
 
@@ -30,12 +38,12 @@ public class TupleType extends BaseType
     @Override
     public Type getElementType()
     {
-        return this;
+        return withCardinality(this, "");
     }
 
     @Override
     public String getDiagnosticId()
     {
-        return format("(%s)", seq(elements).map(e -> e.getDiagnosticId()).toString(","));
+        return format("(%s)", seq(elements).map(e -> e.getDiagnosticId()).toString(",")) + getCardinality();
     }
 }

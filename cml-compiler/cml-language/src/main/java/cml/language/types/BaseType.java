@@ -13,7 +13,12 @@ public abstract class BaseType implements Type
 
     public BaseType()
     {
-        this.type = Type.extendType(this, extendElement(this), "");
+        this("");
+    }
+
+    public BaseType(String cardinality)
+    {
+        this.type = Type.extendType(this, extendElement(this), cardinality);
     }
 
     @Override

@@ -57,6 +57,10 @@
 
     /count_items = count(items);
     /distinct_items = distinct(items);
+
+    /items_size_collect = items | collect: size;
+    /single_item_size_collect = single_item | collect: size;
+    /required_item_size_collect = required_item | collect: size;
 }
 
 @concept Item

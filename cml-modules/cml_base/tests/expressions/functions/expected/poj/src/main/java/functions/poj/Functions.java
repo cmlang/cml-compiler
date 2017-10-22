@@ -225,6 +225,21 @@ public class Functions
         return seq(this.getItems()).distinct().toList();
     }
 
+    public List<Integer> getItemsSizeCollect()
+    {
+        return seq(this.getItems()).map(item19 -> item19.getSize()).toList();
+    }
+
+    public List<Integer> getSingleItemSizeCollect()
+    {
+        return seq(this.getSingleItem()).map(item20 -> item20.getSize()).toList();
+    }
+
+    public List<Integer> getRequiredItemSizeCollect()
+    {
+        return seq(asList(this.getRequiredItem())).map(item21 -> item21.getSize()).toList();
+    }
+
     public String toString()
     {
         return new StringBuilder(Functions.class.getSimpleName())
@@ -246,7 +261,10 @@ public class Functions
                    .append("requiredItemExists=").append(String.format("\"%s\"", this.isRequiredItemExists())).append(", ")
                    .append("requiredItemAll=").append(String.format("\"%s\"", this.isRequiredItemAll())).append(", ")
                    .append("requiredItemNone=").append(String.format("\"%s\"", this.isRequiredItemNone())).append(", ")
-                   .append("countItems=").append(String.format("\"%s\"", this.getCountItems()))
+                   .append("countItems=").append(String.format("\"%s\"", this.getCountItems())).append(", ")
+                   .append("itemsSizeCollect=").append(this.getItemsSizeCollect()).append(", ")
+                   .append("singleItemSizeCollect=").append(this.getSingleItemSizeCollect()).append(", ")
+                   .append("requiredItemSizeCollect=").append(this.getRequiredItemSizeCollect())
                    .append(')')
                    .toString();
     }
