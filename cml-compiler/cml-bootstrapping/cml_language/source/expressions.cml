@@ -4,13 +4,13 @@
   /kind: string;
   /type: TYPE;
 
+  /operands = members as? EXPRESSION*;
+
   /matching_result_type = type;
 
   /numeric = type.numeric;
   /binary_floating_point = type.binary_floating_point;
   /arithmetic = numeric or binary_floating_point;
-
-  /operands = members as? EXPRESSION*;
 }
 
 @concept LITERAL: EXPRESSION
