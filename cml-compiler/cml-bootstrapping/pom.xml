@@ -20,6 +20,14 @@
         <cml_language.path>${project.basedir}/cml_language</cml_language.path>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>cml</groupId>
+            <artifactId>cml-primitives</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

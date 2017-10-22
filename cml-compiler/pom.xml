@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>cml-primitives</module>
         <module>cml-bootstrapping</module>
         <module>cml-io</module>
         <module>cml-templates</module>
