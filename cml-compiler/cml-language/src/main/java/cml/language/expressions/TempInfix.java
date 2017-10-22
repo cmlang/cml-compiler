@@ -159,11 +159,7 @@ public class TempInfix extends ExpressionBase implements Infix
         }
         else
         {
-            return createUndefinedType(format(
-                "Incompatible operand(s) for operator '%s':\n- left operand is '%s: %s'\n- right operand is '%s: %s'",
-                getOperator(),
-                getLeft().getDiagnosticId(), leftType.getDiagnosticId(),
-                getRight().getDiagnosticId(), rightType.getDiagnosticId()));
+            return getUndefinedType();
         }
     }
 
