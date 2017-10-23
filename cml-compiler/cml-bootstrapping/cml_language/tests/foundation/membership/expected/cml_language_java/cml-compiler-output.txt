@@ -73,6 +73,9 @@ CONSTRUCTOR files:
 TYPE files:
 - src/main/java/cml/language/generated/Type.java
 
+VALUE_TYPE files:
+- src/main/java/cml/language/generated/ValueType.java
+
 UNDEFINED_TYPE files:
 - src/main/java/cml/language/generated/UndefinedType.java
 

@@ -45,6 +45,26 @@
   /diagnostic_id = name & cardinality;
 }
 
+@concept VALUE_TYPE: TYPE
+{
+  name: string;
+
+  /element_type: TYPE = VALUE_TYPE("", primitive_type_name(name));
+
+  /boolean = boolean(name);
+  /string = string(name);
+  /numeric = numeric(name);
+  /float = float(name);
+
+  /primitive = boolean or numeric or float or string;
+  /relational = numeric or float or string;
+}
+
+//@concept REFERENCE_TYPE: TYPE
+//{
+//
+//}
+
 @concept UNDEFINED_TYPE: TYPE
 {
   error_message: string;
