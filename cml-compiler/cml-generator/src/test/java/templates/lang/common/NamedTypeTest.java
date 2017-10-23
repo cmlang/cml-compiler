@@ -2,10 +2,12 @@ package templates.lang.common;
 
 import cml.language.generated.ValueType;
 import cml.language.types.TempNamedType;
+import cml.templates.NameRenderer;
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import static cml.primitives.Types.PRIMITIVE_TYPE_NAMES;
 import static org.hamcrest.CoreMatchers.is;
@@ -30,8 +32,8 @@ public class NamedTypeTest extends LangTest
         for (String typeName : PRIMITIVE_TYPE_NAMES)
         {
             final ValueType type = ValueType.createValueType("", typeName);
-
-            testTemplateWithNamedElement("type_name", type, typeName + ".txt");
+            final String expectedOutputPath = NameRenderer.pascalCase(Locale.getDefault(), typeName) + ".txt";
+            testTemplateWithNamedElement("type_name", type, expectedOutputPath);
         }
     }
 
