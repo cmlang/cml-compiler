@@ -117,7 +117,7 @@ public class TypeFunctions
         }
         else
         {
-            throw new UnsupportedOperationException("isElementTypeAssignableFrom(" + thisElementType + ", " + thatElementType + ")");
+            return false;
         }
     }
 
