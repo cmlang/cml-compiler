@@ -4,7 +4,6 @@ import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
-import cml.language.types.TempNamedType;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
@@ -99,7 +98,8 @@ public class Lambda extends ExpressionBase
 
     public Seq<Tuple2<String, Type>> getUntypedParams()
     {
-        return getTypeUndefinedParams().zip(getTypeUndefinedParams().map(p -> TempNamedType.UNDEFINED));
+        return getTypeUndefinedParams().zip(getTypeUndefinedParams()
+                                       .map(p -> createUndefinedType("Unable to infer type of parameter: " + p)));
     }
 
     public Seq<String> getTypeDefinedParams()
