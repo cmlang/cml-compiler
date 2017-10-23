@@ -4,7 +4,7 @@ import cml.language.features.TempConcept;
 import cml.language.generated.Association;
 import cml.language.generated.NamedElement;
 import cml.language.generated.Property;
-import cml.language.types.TempNamedType;
+import cml.language.generated.Type;
 import com.google.common.io.Resources;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -92,7 +92,7 @@ public abstract class LangTest extends TemplateTest
         testTemplate(templateName, "property", property, expectedOutputPath);
     }
 
-    void testTemplateWithType(String templateName, TempNamedType type, String expectedOutputPath) throws IOException
+    void testTemplateWithType(String templateName, Type type, String expectedOutputPath) throws IOException
     {
         testTemplate(templateName, "type", type, expectedOutputPath);
     }
@@ -103,7 +103,7 @@ public abstract class LangTest extends TemplateTest
         testTemplate(templateName, "named_element", namedElement, expectedOutputPath);
     }
 
-    void testTemplateWithNamedElement(String templateName, TempNamedType type, String expectedOutputPath)
+    void testTemplateWithNamedElement(String templateName, Type type, String expectedOutputPath)
         throws IOException
     {
         testTemplate(templateName, "named_element", type, expectedOutputPath);

@@ -111,27 +111,27 @@ literal_ocl(literal) ::= <<
 <({literal_<literal.type.name>})(literal.text)>
 >>
 
-literal_BOOLEAN(text) ::= <<
+literal_boolean(text) ::= <<
 <text>
 >>
 
-literal_STRING(text) ::= <<
+literal_string(text) ::= <<
 "<text>"
 >>
 
-literal_INTEGER(text) ::= <<
+literal_integer(text) ::= <<
 <text>
 >>
 
-literal_DECIMAL(text) ::= <<
+literal_decimal(text) ::= <<
 <text>
 >>
 
-literal_FLOAT(text) ::= <<
+literal_float(text) ::= <<
 <text>f
 >>
 
-literal_DOUBLE(text) ::= <<
+literal_double(text) ::= <<
 <text>d
 >>
 

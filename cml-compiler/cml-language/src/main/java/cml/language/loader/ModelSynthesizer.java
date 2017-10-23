@@ -20,8 +20,18 @@ import static cml.language.functions.ModuleFunctions.createImportOfModule;
 import static cml.language.generated.Association.createAssociation;
 import static cml.language.generated.Constructor.createConstructor;
 import static cml.language.generated.Property.createProperty;
+import static cml.language.generated.ValueType.createValueType;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
-import static cml.primitives.Types.arithmeticOperator;
+import static cml.primitives.Types.BOOLEAN;
+import static cml.primitives.Types.BYTE;
+import static cml.primitives.Types.DECIMAL;
+import static cml.primitives.Types.DOUBLE;
+import static cml.primitives.Types.FLOAT;
+import static cml.primitives.Types.INTEGER;
+import static cml.primitives.Types.LONG;
+import static cml.primitives.Types.SHORT;
+import static cml.primitives.Types.STRING;
+import static cml.primitives.Types.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -152,7 +162,14 @@ class ModelSynthesizer extends CMLBaseListener
             final String name = ctx.NAME().getText();
             final String cardinality = (ctx.cardinality() == null) ? "" : ctx.cardinality().getText();
 
-            ctx.type = TempNamedType.create(name, cardinality);
+            if (primitive(name))
+            {
+                ctx.type = createValueType(cardinality, primitiveTypeName(name));
+            }
+            else
+            {
+                ctx.type = TempNamedType.create(name, cardinality);
+            }
         }
     }
 
@@ -160,7 +177,7 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitTupleTypeDeclaration(final TupleTypeDeclarationContext ctx)
     {
         final Seq<TupleTypeElement> elements = seq(ctx.tupleTypeElementDeclaration()).map(c -> c.element);
-        final String cardinality = (ctx.cardinality() == null) ? null : ctx.cardinality().getText();
+        final String cardinality = (ctx.cardinality() == null) ? "" : ctx.cardinality().getText();
 
         ctx.type = new TupleType(elements, cardinality);
     }
@@ -299,7 +316,7 @@ class ModelSynthesizer extends CMLBaseListener
 
         if (text != null)
         {
-            final TempNamedType type = TempNamedType.create(getPrimitiveTypeName(ctx));
+            final ValueType type = createValueType("", primitiveTypeNameOf(ctx));
             ctx.literal = Literal.createLiteral(emptyList(), null, locationOf(ctx), text, type);
         }
     }
@@ -415,17 +432,17 @@ class ModelSynthesizer extends CMLBaseListener
         return text.substring(0, text.length() - 1);
     }
 
-    private static String getPrimitiveTypeName(LiteralExpressionContext ctx)
+    private static String primitiveTypeNameOf(LiteralExpressionContext ctx)
     {
-        if (ctx.BOOLEAN() != null) return "BOOLEAN";
-        else if (ctx.STRING() != null) return "STRING";
-        else if (ctx.INTEGER() != null) return "INTEGER";
-        else if (ctx.LONG() != null) return "LONG";
-        else if (ctx.SHORT() != null) return "SHORT";
-        else if (ctx.BYTE() != null) return "BYTE";
-        else if (ctx.DECIMAL() != null) return "DECIMAL";
-        else if (ctx.FLOAT() != null) return "FLOAT";
-        else if (ctx.DOUBLE() != null) return "DOUBLE";
+        if (ctx.BOOLEAN() != null) return BOOLEAN;
+        else if (ctx.STRING() != null) return STRING;
+        else if (ctx.INTEGER() != null) return INTEGER;
+        else if (ctx.LONG() != null) return LONG;
+        else if (ctx.SHORT() != null) return SHORT;
+        else if (ctx.BYTE() != null) return BYTE;
+        else if (ctx.DECIMAL() != null) return DECIMAL;
+        else if (ctx.FLOAT() != null) return FLOAT;
+        else if (ctx.DOUBLE() != null) return DOUBLE;
         else return null;
     }
 

@@ -1,11 +1,13 @@
 package templates.lang.common;
 
 import cml.language.generated.Property;
+import cml.language.generated.ValueType;
 import cml.language.types.TempNamedType;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static cml.primitives.Types.INTEGER;
 import static java.util.Collections.emptyList;
 
 public class GetterTest extends LangTest
@@ -72,7 +74,7 @@ public class GetterTest extends LangTest
     @Test
     public void getter_type__sequence_integer() throws IOException
     {
-        testTemplateWithType("getter_type", TempNamedType.create("Integer", "*"), "sequence_integer.txt");
+        testTemplateWithType("getter_type", ValueType.createValueType("*", INTEGER), "sequence_integer.txt");
     }
 
     @Test

@@ -4,6 +4,7 @@ import cml.language.expressions.TypeCast;
 import cml.language.features.FunctionParameter;
 import cml.language.features.TempConcept;
 import cml.language.generated.Type;
+import cml.language.generated.ValueType;
 import cml.language.types.FunctionType;
 import cml.language.types.MemberType;
 import cml.language.types.TempNamedType;
@@ -13,8 +14,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
-import static cml.language.types.TempNamedType.BINARY_FLOATING_POINT_TYPE_NAMES;
-import static cml.language.types.TempNamedType.NUMERIC_TYPE_NAMES;
+import static cml.language.generated.ValueType.createValueType;
+import static cml.primitives.Types.subtype;
 import static org.jooq.lambda.Seq.seq;
 import static org.jooq.lambda.Seq.zip;
 
@@ -23,7 +24,11 @@ public class TypeFunctions
 {
     public static Type withCardinality(Type type, String cardinality)
     {
-        if (type instanceof TempNamedType)
+        if (type instanceof ValueType)
+        {
+            return createValueType(cardinality, type.getName());
+        }
+        else if (type instanceof TempNamedType)
         {
             final TempNamedType namedType = (TempNamedType) type;
             final TempNamedType newType = TempNamedType.create(namedType.getName(), cardinality);
@@ -47,73 +52,69 @@ public class TypeFunctions
         }
     }
 
-    public static boolean isElementTypeAssignableFrom(Type thisElementType, Type thatElementType)
+    public static boolean isElementTypeAssignableFrom(Type leftType, Type rightType)
     {
-        assert thisElementType.isRequired();
-        assert thatElementType.isRequired();
+        assert leftType.isRequired();
+        assert rightType.isRequired();
 
-        if (thisElementType instanceof TempNamedType)
+        if (leftType instanceof ValueType && rightType instanceof ValueType)
         {
-            final TempNamedType thisNamedType = (TempNamedType) thisElementType;
+            return subtype(rightType.getName(), leftType.getName());
+        }
+        else if (leftType instanceof TempNamedType)
+        {
+            final TempNamedType leftNamedType = (TempNamedType) leftType;
 
-            if (thatElementType instanceof TempNamedType)
+            if (rightType instanceof TempNamedType)
             {
-                final TempNamedType thatNamedType = (TempNamedType) thatElementType;
+                final TempNamedType rightNamedType = (TempNamedType) rightType;
 
-                if (isNameEquals(thisNamedType, thatNamedType))
+                if (isNameEquals(leftNamedType, rightNamedType))
                 {
                     return true;
                 }
-                else if (thisNamedType.isNumeric() && thatNamedType.isNumeric())
+                else if (leftNamedType.getConcept().isPresent() && rightNamedType.getConcept().isPresent())
                 {
-                    return isNumericWiderThan(thisNamedType, thatNamedType);
-                }
-                else if (thisNamedType.isFloat() && thatNamedType.isFloat())
-                {
-                    return isBinaryFloatingPointWiderThan(thisNamedType, thatNamedType);
-                }
-                else if (thisNamedType.getConcept().isPresent() && thatNamedType.getConcept().isPresent())
-                {
-                    return seq(thatNamedType.getConcept()).map(c -> (TempConcept)c)
+                    return seq(rightNamedType.getConcept()).map(c -> (TempConcept)c)
                                                           .flatMap(c -> c.getAllGeneralizations().stream())
-                                                          .anyMatch(c -> isElementTypeAssignableFrom(thisNamedType, selfTypeOf(c)));
+                                                          .anyMatch(c -> isElementTypeAssignableFrom(leftNamedType, selfTypeOf(c)));
                 }
             }
 
             return false;
         }
-        else if (thisElementType instanceof TupleType)
+        else if (leftType instanceof TupleType)
         {
-            final TupleType thisTupleType = (TupleType) thisElementType;
+            final TupleType leftTupleType = (TupleType) leftType;
 
-            if (thatElementType instanceof TupleType)
+            if (rightType instanceof TupleType)
             {
-                final TupleType thatTupleType = (TupleType)thatElementType;
+                final TupleType rightTupleType = (TupleType)rightType;
 
-                return zip(thisTupleType.getElements(), thatTupleType.getElements()).allMatch(t -> t.v1.isAssignableFrom(t.v2));
+                return zip(leftTupleType.getElements(), rightTupleType.getElements()).allMatch(t -> t.v1.isAssignableFrom(t.v2));
             }
 
             return false;
         }
-        else if (thisElementType instanceof FunctionType)
+        else if (leftType instanceof FunctionType)
         {
-            final FunctionType thisFunctionType = (FunctionType) thisElementType;
+            final FunctionType leftFunctionType = (FunctionType) leftType;
 
-            if (thatElementType instanceof FunctionType)
+            if (rightType instanceof FunctionType)
             {
-                final FunctionType thatFunctionType = (FunctionType)thatElementType;
+                final FunctionType rightFunctionType = (FunctionType)rightType;
 
-                return isAssignableFrom(thisFunctionType.getParams(), thatFunctionType.getParams()) &&
-                       isAssignableFrom(thisFunctionType.getResult(), thatFunctionType.getResult());
+                return isAssignableFrom(leftFunctionType.getParams(), rightFunctionType.getParams()) &&
+                       isAssignableFrom(leftFunctionType.getResult(), rightFunctionType.getResult());
             }
 
             return false;
         }
-        else if (thisElementType instanceof MemberType)
+        else if (leftType instanceof MemberType)
         {
-            final MemberType thisMemberType = (MemberType) thisElementType;
+            final MemberType leftMemberType = (MemberType) leftType;
 
-            return isElementTypeAssignableFrom(thisMemberType.getBaseType(), thatElementType);
+            return isElementTypeAssignableFrom(leftMemberType.getBaseType(), rightType);
         }
         else
         {
@@ -142,18 +143,19 @@ public class TypeFunctions
 
     public static boolean isEqualTo(Type thisType, Type thatType)
     {
-        if (thisType instanceof TempNamedType && thatType instanceof TempNamedType)
+        if (thisType instanceof ValueType && thatType instanceof ValueType)
         {
-            final TempNamedType thisNamedType = (TempNamedType) thisType;
-            final TempNamedType thatNamedType = (TempNamedType) thatType;
-
-            return isNameEquals(thisNamedType, thatNamedType) && isCardinalityEquals(thisNamedType, thatNamedType);
+            return isNameEquals(thisType, thatType) && isCardinalityEquals(thisType, thatType);
+        }
+        else if (thisType instanceof TempNamedType && thatType instanceof TempNamedType)
+        {
+            return isNameEquals(thisType, thatType) && isCardinalityEquals(thisType, thatType);
         }
 
         return false;
     }
 
-    public static boolean isNameEquals(final TempNamedType thisType, final TempNamedType thatType)
+    public static boolean isNameEquals(final Type thisType, final Type thatType)
     {
         assert thisType.getName() != null;
         assert thatType.getName() != null;
@@ -168,47 +170,9 @@ public class TypeFunctions
         }
     }
 
-    public static boolean isCardinalityEquals(final TempNamedType thisType, final TempNamedType thatType)
+    public static boolean isCardinalityEquals(final Type thisType, final Type thatType)
     {
         return Objects.equals(thisType.getCardinality(), thatType.getCardinality());
-    }
-
-    public static boolean isNumericWiderThan(Type thisType, Type thatType)
-    {
-        if (thisType instanceof TempNamedType && thatType instanceof TempNamedType)
-        {
-            final TempNamedType thisNamedType = (TempNamedType) thisType;
-            final TempNamedType thatNamedType = (TempNamedType) thatType;
-
-            assert thisNamedType.isNumeric() && thatNamedType.isNumeric()
-                : "Both types must be numeric in order to be compared: " + thisNamedType.getName() + " & " + thatNamedType.getName();
-
-            final int i = NUMERIC_TYPE_NAMES.indexOf(thisNamedType.getName().toUpperCase());
-            final int j = NUMERIC_TYPE_NAMES.indexOf(thatNamedType.getName().toUpperCase());
-
-            return i > j;
-        }
-
-        return false;
-    }
-
-    public static boolean isBinaryFloatingPointWiderThan(Type thisType, Type thatType)
-    {
-        if (thisType instanceof TempNamedType && thatType instanceof TempNamedType)
-        {
-            final TempNamedType thisNamedType = (TempNamedType) thisType;
-            final TempNamedType thatNamedType = (TempNamedType) thatType;
-
-            assert thisNamedType.isFloat() && thatNamedType.isFloat()
-                : "Both types must be binary floating-point in order to be compared: " + thisNamedType.getName() + " & " + thatNamedType.getName();
-
-            final int i = BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(thisNamedType.getName().toUpperCase());
-            final int j = BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(thatNamedType.getName().toUpperCase());
-
-            return i > j;
-        }
-
-        return false;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

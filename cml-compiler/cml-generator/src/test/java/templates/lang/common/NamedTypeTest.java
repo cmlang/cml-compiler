@@ -1,24 +1,18 @@
 package templates.lang.common;
 
+import cml.language.generated.ValueType;
 import cml.language.types.TempNamedType;
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
 
 import java.io.IOException;
-import java.util.Collection;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableCollection;
+import static cml.primitives.Types.PRIMITIVE_TYPE_NAMES;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class NamedTypeTest extends LangTest
 {
-    private static final Collection<String> primitiveTypeNames = unmodifiableCollection(asList(
-        "Boolean", "Integer", "Decimal", "String", "Regex", // main primitive types
-        "Byte", "Short", "Long", "Float", "Double", "Char" // remaining primitive types
-    ));
-
     public NamedTypeTest(String targetLanguageExtension)
     {
         super(targetLanguageExtension);
@@ -33,9 +27,9 @@ public class NamedTypeTest extends LangTest
     @Test
     public void primitive_types() throws IOException
     {
-        for (String typeName : primitiveTypeNames)
+        for (String typeName : PRIMITIVE_TYPE_NAMES)
         {
-            final TempNamedType type = TempNamedType.create(typeName, null);
+            final ValueType type = ValueType.createValueType("", typeName);
 
             testTemplateWithNamedElement("type_name", type, typeName + ".txt");
         }

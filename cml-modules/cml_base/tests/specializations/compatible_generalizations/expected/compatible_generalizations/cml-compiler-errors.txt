@@ -1,8 +1,8 @@
 
 Failed validation: required compatible_generalizations: in concept C (13:1)
-- property A.number: INTEGER (4:5)
-- property B.number: DECIMAL (9:5)
+- property A.number: integer (4:5)
+- property B.number: decimal (9:5)
 
 Failed validation: required compatible_generalizations: in concept F (18:1)
-- property A.number: INTEGER (4:5)
-- property B.number: DECIMAL (9:5)
+- property A.number: integer (4:5)
+- property B.number: decimal (9:5)

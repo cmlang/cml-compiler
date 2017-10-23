@@ -4,81 +4,28 @@ import cml.language.features.TempConcept;
 import cml.language.generated.Concept;
 import cml.language.generated.Element;
 import cml.language.generated.Type;
+import cml.language.generated.ValueType;
+import cml.primitives.Types;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import static cml.language.functions.TypeFunctions.withCardinality;
 import static cml.language.generated.Element.extendElement;
 import static cml.language.generated.Type.extendType;
-import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableCollection;
-import static java.util.Collections.unmodifiableList;
 
 public interface TempNamedType extends Type
 {
-    TempNamedType UNDEFINED = TempNamedType.create("UNDEFINED");
     TempNamedType NOTHING = TempNamedType.create("NOTHING", "?");
-    TempNamedType BOOLEAN = TempNamedType.create("BOOLEAN");
-    TempNamedType STRING = TempNamedType.create("STRING");
-
-    Collection<String> PRIMITIVE_TYPE_NAMES = unmodifiableCollection(asList(
-        "BOOLEAN", "INTEGER", "DECIMAL", "STRING", "REGEX", // main primitive types
-        "BYTE", "SHORT", "LONG", "FLOAT", "DOUBLE", "CHAR" // remaining primitive types
-    ));
-
-    List<String> NUMERIC_TYPE_NAMES = unmodifiableList(asList(
-        "BYTE", "SHORT", "INTEGER", "LONG", "DECIMAL" // from narrower to wider
-    ));
-
-    List<String> BINARY_FLOATING_POINT_TYPE_NAMES = unmodifiableList(asList(
-        "FLOAT", "DOUBLE" // from narrower to wider
-    ));
+    ValueType BOOLEAN = ValueType.createValueType("", Types.BOOLEAN);
+    ValueType STRING = ValueType.createValueType("", Types.STRING);
 
     String getName();
-
-    @Override
-    default boolean isPrimitive()
-    {
-        return PRIMITIVE_TYPE_NAMES.contains(getName().toUpperCase());
-    }
-
-    @Override
-    default boolean isBoolean()
-    {
-        return BOOLEAN.getName().equalsIgnoreCase(getName());
-    }
-
-    @Override
-    default boolean isString()
-    {
-        return STRING.getName().equalsIgnoreCase(getName());
-    }
 
     @Override
     default Type getInferredType()
     {
         return withCardinality(this, getInferredCardinality());
-    }
-
-    @Override
-    default boolean isNumeric()
-    {
-        return NUMERIC_TYPE_NAMES.contains(getName().toUpperCase());
-    }
-
-    @Override
-    default boolean isFloat()
-    {
-        return BINARY_FLOATING_POINT_TYPE_NAMES.contains(getName().toUpperCase());
-    }
-
-    @Override
-    default boolean isUndefined()
-    {
-        return getName().toUpperCase().equals(UNDEFINED.getName());
     }
 
     default boolean isNothing()
@@ -157,9 +104,45 @@ class NamedTypeImpl implements TempNamedType
     }
 
     @Override
+    public boolean isUndefined()
+    {
+        return type.isUndefined();
+    }
+
+    @Override
     public boolean isSomething()
     {
         return type.isSomething();
+    }
+
+    @Override
+    public boolean isBoolean()
+    {
+        return type.isBoolean();
+    }
+
+    @Override
+    public boolean isNumeric()
+    {
+        return type.isNumeric();
+    }
+
+    @Override
+    public boolean isFloat()
+    {
+        return type.isFloat();
+    }
+
+    @Override
+    public boolean isString()
+    {
+        return type.isString();
+    }
+
+    @Override
+    public boolean isPrimitive()
+    {
+        return type.isPrimitive();
     }
 
     @Override

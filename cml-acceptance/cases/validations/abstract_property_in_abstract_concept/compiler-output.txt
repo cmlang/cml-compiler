@@ -1,5 +1,5 @@
 
-Failed validation: required abstract_property_in_abstract_concept: in property Shape.area: Double (5:5)
+Failed validation: required abstract_property_in_abstract_concept: in property Shape.area: double (5:5)
 
 Failed validation: required abstract_property_redefinition: in concept CircleA (9:1)
-- property Shape.area: Double (5:5)
+- property Shape.area: double (5:5)
