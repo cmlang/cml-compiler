@@ -1,7 +1,7 @@
 
 @abstraction TYPE: ELEMENT
 {
-  cardinality: STRING;
+  cardinality: string;
 
   /name = "";
 
@@ -25,15 +25,14 @@
   /something = defined and not nothing;
   /nothing = false;
 
-  /relational = string or numeric or binary_floating_point;
-  /referential = present(concept) and not sequence;
-
-  /primitive = false;
+  /boolean = false;
   /numeric = false;
   /binary_floating_point = false;
-
-  /boolean = false;
   /string = false;
+
+  /primitive = false;
+  /relational = string or numeric or binary_floating_point;
+  /referential = present(concept) and not sequence;
 
   /single = (required or optional) and not sequence;
   /required = kind == "required";
