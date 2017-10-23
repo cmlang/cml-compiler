@@ -70,7 +70,7 @@ public interface TempNamedType extends Type
     }
 
     @Override
-    default boolean isBinaryFloatingPoint()
+    default boolean isFloat()
     {
         return BINARY_FLOATING_POINT_TYPE_NAMES.contains(getName().toUpperCase());
     }

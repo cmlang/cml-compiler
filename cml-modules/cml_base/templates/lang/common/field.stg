@@ -33,7 +33,7 @@ field_or_init_value(property) ::= <<
 
 field_default_value(type) ::= <<
 <if(type.numeric)><integral_zero()><\\>
-<elseif(type.binaryFloatingPoint)><float_zero()><\\>
+<elseif(type.float)><float_zero()><\\>
 <elseif(type.boolean)><boolean_false()><\\>
 <else><null_value()><endif>
 >>

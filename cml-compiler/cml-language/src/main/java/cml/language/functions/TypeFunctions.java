@@ -68,7 +68,7 @@ public class TypeFunctions
                 {
                     return isNumericWiderThan(thisNamedType, thatNamedType);
                 }
-                else if (thisNamedType.isBinaryFloatingPoint() && thatNamedType.isBinaryFloatingPoint())
+                else if (thisNamedType.isFloat() && thatNamedType.isFloat())
                 {
                     return isBinaryFloatingPointWiderThan(thisNamedType, thatNamedType);
                 }
@@ -199,7 +199,7 @@ public class TypeFunctions
             final TempNamedType thisNamedType = (TempNamedType) thisType;
             final TempNamedType thatNamedType = (TempNamedType) thatType;
 
-            assert thisNamedType.isBinaryFloatingPoint() && thatNamedType.isBinaryFloatingPoint()
+            assert thisNamedType.isFloat() && thatNamedType.isFloat()
                 : "Both types must be binary floating-point in order to be compared: " + thisNamedType.getName() + " & " + thatNamedType.getName();
 
             final int i = BINARY_FLOATING_POINT_TYPE_NAMES.indexOf(thisNamedType.getName().toUpperCase());

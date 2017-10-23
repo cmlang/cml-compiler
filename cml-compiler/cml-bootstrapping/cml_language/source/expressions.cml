@@ -9,8 +9,8 @@
   /matching_result_type = type;
 
   /numeric = type.numeric;
-  /binary_floating_point = type.binary_floating_point;
-  /arithmetic = numeric or binary_floating_point;
+  /float = type.float;
+  /arithmetic = numeric or float;
 }
 
 @concept LITERAL: EXPRESSION
@@ -32,7 +32,7 @@
   /right = last(operands) as! EXPRESSION;
 
   /numeric = left.numeric and right.numeric;
-  /binary_floating_point = left.binary_floating_point and right.binary_floating_point;
+  /float = left.float and right.float;
 
   /diagnostic_id = left.diagnostic_id & " " & operator & " " & right.diagnostic_id;
 

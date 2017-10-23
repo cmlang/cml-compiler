@@ -124,9 +124,9 @@ public abstract class BaseType implements Type
     }
 
     @Override
-    public boolean isBinaryFloatingPoint()
+    public boolean isFloat()
     {
-        return type.isBinaryFloatingPoint();
+        return type.isFloat();
     }
 
     @Override

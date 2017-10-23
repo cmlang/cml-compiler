@@ -80,7 +80,7 @@ public class Unary extends ExpressionBase
         {
             return TempNamedType.BOOLEAN;
         }
-        else if (NUMERIC_OPERATORS.contains(operator) && (subExprType.isNumeric() || subExprType.isBinaryFloatingPoint()))
+        else if (NUMERIC_OPERATORS.contains(operator) && (subExprType.isNumeric() || subExprType.isFloat()))
         {
             return subExprType;
         }

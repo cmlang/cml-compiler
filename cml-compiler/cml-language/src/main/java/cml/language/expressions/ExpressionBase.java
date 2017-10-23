@@ -91,9 +91,9 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
-    public boolean isBinaryFloatingPoint()
+    public boolean isFloat()
     {
-        return expression.isBinaryFloatingPoint();
+        return expression.isFloat();
     }
 
     @Override

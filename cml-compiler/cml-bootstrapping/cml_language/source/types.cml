@@ -27,11 +27,11 @@
 
   /boolean = false;
   /numeric = false;
-  /binary_floating_point = false;
+  /float = false;
   /string = false;
 
   /primitive = false;
-  /relational = string or numeric or binary_floating_point;
+  /relational = string or numeric or float;
   /referential = present(concept) and not sequence;
 
   /single = (required or optional) and not sequence;
