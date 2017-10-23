@@ -1,5 +1,5 @@
 
-invocation_primitive_type_name(args) ::= "True"
+invocation_primitive_type_name(args) ::= "\"\""
 invocation_boolean(args) ::= "True"
 invocation_string(args) ::= "True"
 invocation_numeric(args) ::= "True"
