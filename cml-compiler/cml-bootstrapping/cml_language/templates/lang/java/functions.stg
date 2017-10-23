@@ -1,6 +1,6 @@
 
 invocation_primitive_type_name(args) ::= <<
-cml.primitives.Types.primitive_type_name(<expression(args.name)>)
+cml.primitives.Types.primitiveTypeName(<expression(args.name)>)
 >>
 
 invocation_boolean(args) ::= <<
