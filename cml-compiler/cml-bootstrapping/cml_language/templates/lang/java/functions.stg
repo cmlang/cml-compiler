@@ -1,22 +1,22 @@
 
 invocation_primitive_type_name(args) ::= <<
-cml.primitives.Types.primitive_type_name(<expression(args.s)>, <expression(args.t)>)
+cml.primitives.Types.primitive_type_name(<expression(args.name)>)
 >>
 
 invocation_boolean(args) ::= <<
-cml.primitives.Types.boolean_(<expression(args.s)>, <expression(args.t)>)
+cml.primitives.Types.boolean_(<expression(args.name)>)
 >>
 
 invocation_string(args) ::= <<
-cml.primitives.Types.string(<expression(args.s)>, <expression(args.t)>)
+cml.primitives.Types.string(<expression(args.name)>)
 >>
 
 invocation_numeric(args) ::= <<
-cml.primitives.Types.numeric(<expression(args.s)>, <expression(args.t)>)
+cml.primitives.Types.numeric(<expression(args.name)>)
 >>
 
 invocation_float(args) ::= <<
-cml.primitives.Types.float_(<expression(args.s)>, <expression(args.t)>)
+cml.primitives.Types.float_(<expression(args.name)>)
 >>
 
 invocation_subtype(args) ::= <<
