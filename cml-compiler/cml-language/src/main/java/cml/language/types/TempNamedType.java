@@ -165,7 +165,7 @@ class NamedTypeImpl implements TempNamedType
     @Override
     public boolean isRelational()
     {
-        return type.isRelational();
+        return isNumeric() || isFloat() || isString();
     }
 
     @Override
