@@ -21,7 +21,7 @@ import static cml.language.generated.Association.createAssociation;
 import static cml.language.generated.Constructor.createConstructor;
 import static cml.language.generated.Property.createProperty;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
-import static cml.primitives.Type.arithmeticOperator;
+import static cml.primitives.Types.arithmeticOperator;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
