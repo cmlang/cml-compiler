@@ -85,6 +85,12 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
+    public boolean isBoolean()
+    {
+        return expression.isBoolean();
+    }
+
+    @Override
     public boolean isNumeric()
     {
         return expression.isNumeric();
