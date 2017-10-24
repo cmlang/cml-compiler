@@ -64,6 +64,10 @@ arithmetic_ocl(expr) ::= <<
 <infix_ocl(expr)>
 >>
 
+logic_ocl(expr) ::= <<
+<infix_ocl(expr)>
+>>
+
 infix_ocl(infix) ::= <<
 (<ocl(infix.left)> <expr_operator(infix)> <ocl(infix.right)>)
 >>

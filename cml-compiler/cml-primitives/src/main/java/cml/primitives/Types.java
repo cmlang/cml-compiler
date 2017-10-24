@@ -37,6 +37,10 @@ public class Types
         "+", "-", "*", "/", "%", "^"
     ));
 
+    private static final Collection<String> LOGICAL_OPERATORS = unmodifiableCollection(asList(
+        "and", "or", "xor", "implies"
+    ));
+
     public static String primitiveTypeName(final String name)
     {
         return name.toLowerCase();
@@ -118,5 +122,10 @@ public class Types
     public static boolean arithmeticOperator(String operator)
     {
         return ARITHMETIC_OPERATORS.contains(operator);
+    }
+
+    public static boolean logicalOperator(String operator)
+    {
+        return LOGICAL_OPERATORS.contains(operator);
     }
 }

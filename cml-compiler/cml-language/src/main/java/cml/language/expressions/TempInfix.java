@@ -24,10 +24,6 @@ public class TempInfix extends ExpressionBase implements Infix
         "==", "!=", ">", ">=", "<", "<="
     ));
 
-    private static final Collection<String> BOOLEAN_OPERATORS = unmodifiableCollection(asList(
-        "and", "or", "xor", "implies"
-    ));
-
     private static final Collection<String> REFERENTIAL_OPERATORS = unmodifiableCollection(asList(
         REFERENTIAL_EQUALITY, REFERENTIAL_INEQUALITY
     ));
@@ -47,12 +43,6 @@ public class TempInfix extends ExpressionBase implements Infix
             put(">=", "gte");
             put("<", "lt");
             put("<=", "lte");
-
-            // Boolean Operators:
-            put("and", "and");
-            put("or", "or");
-            put("xor", "xor");
-            put("implies", "implies");
 
             // Referential Operators:
             put(REFERENTIAL_EQUALITY, "ref_eq");
@@ -103,25 +93,19 @@ public class TempInfix extends ExpressionBase implements Infix
     @Override
     public Type getType()
     {
+        return infix.getType();
+    }
+
+    @Override
+    public Type getInferredType()
+    {
         final Type leftType = getLeft().getType();
         final Type rightType = getRight().getType();
 
         assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + getLeft().getKind();
         assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + getRight().getKind();
 
-        if (leftType.isUndefined())
-        {
-            return leftType;
-        }
-        else if (rightType.isUndefined())
-        {
-            return rightType;
-        }
-        else if (BOOLEAN_OPERATORS.contains(getOperator()) && leftType.isBoolean() && rightType.isBoolean())
-        {
-            return TempNamedType.BOOLEAN;
-        }
-        else if (RELATIONAL_OPERATORS.contains(getOperator()) && leftType.isRelational() && rightType.isRelational())
+        if (RELATIONAL_OPERATORS.contains(getOperator()) && leftType.isRelational() && rightType.isRelational())
         {
             return TempNamedType.BOOLEAN;
         }

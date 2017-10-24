@@ -41,6 +41,13 @@
   /undefined_type = UNDEFINED_TYPE("Incompatible operand(s) for operator '" & operator & "':\n" &
                                    "- left operand is '" & left.diagnostic_id & ": " & left.type.diagnostic_id & "'\n" &
                                    "- right operand is '" & right.diagnostic_id & ": " & right.type.diagnostic_id & "'");
+
+  /type =
+    if left.type.undefined then left.type
+    else if right.type.undefined then right.type
+    else inferred_type;
+
+  /inferred_type: TYPE;
 }
 
 @concept ARITHMETIC: INFIX
@@ -53,12 +60,13 @@
     else if operator == "*" then "mul" as! string?
     else if operator == "/" then "div" as! string?
     else if operator == "%" then "mod" as! string?
-    else if operator == "^" then "exp" as! string? // necessary until conditionals are fixed to support "none"
+    else if operator == "^" then "exp" as! string? // type-casting necessary until conditionals are fixed to support "none"
     else none;
 
-  /type = if arithmetic and subtype(left.type.name, right.type.name) then right.type
-          else if arithmetic and subtype(right.type.name, left.type.name) then left.type
-          else undefined_type;
+  /inferred_type =
+    if arithmetic and subtype(left.type.name, right.type.name) then right.type
+    else if arithmetic and subtype(right.type.name, left.type.name) then left.type
+    else undefined_type;
 }
 
 @concept LOGIC: INFIX
@@ -66,5 +74,6 @@
   /kind = "logic";
   /operation = operator as? string?;
 
-  /type = if boolean then VALUE_TYPE("", primitive_type_name("boolean")) else undefined_type;
+  /inferred_type =
+    if boolean then VALUE_TYPE("", primitive_type_name("boolean")) else undefined_type;
 }

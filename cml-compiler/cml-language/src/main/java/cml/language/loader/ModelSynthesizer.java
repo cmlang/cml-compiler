@@ -17,8 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static cml.language.functions.ModuleFunctions.createImportOfModule;
+import static cml.language.generated.Arithmetic.createArithmetic;
 import static cml.language.generated.Association.createAssociation;
 import static cml.language.generated.Constructor.createConstructor;
+import static cml.language.generated.Logic.createLogic;
 import static cml.language.generated.Property.createProperty;
 import static cml.language.generated.ValueType.createValueType;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
@@ -281,7 +283,11 @@ class ModelSynthesizer extends CMLBaseListener
 
         if (arithmeticOperator(operator))
         {
-            return Arithmetic.createArithmetic(operator, asList(left, right), null, locationOf(ctx));
+            return createArithmetic(operator, asList(left, right), null, locationOf(ctx));
+        }
+        else if (logicalOperator(operator))
+        {
+            return createLogic(operator, asList(left, right), null, locationOf(ctx));
         }
         else
         {
