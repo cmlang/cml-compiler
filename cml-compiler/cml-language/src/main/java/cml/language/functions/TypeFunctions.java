@@ -12,6 +12,7 @@ import cml.language.types.TupleType;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static cml.language.functions.ModelElementFunctions.selfTypeOf;
 import static cml.language.generated.ValueType.createValueType;
@@ -184,13 +185,20 @@ public class TypeFunctions
         }
         else if (operator.equals(TypeCast.ASB) && castType.isRequired())
         {
-            return isElementTypeAssignableFrom(exprType.getElementType(), castType.getElementType()) && exprType.isSingle();
+            return (isElementTypeAssignableFrom(exprType.getElementType(), castType.getElementType()) ||
+                    isElementTypeAssignableFrom(castType.getElementType(), exprType.getElementType()))
+                   && exprType.isSingle();
         }
         else
         {
-            return (isElementGeneralizationAssignableFrom(exprType.getElementType(), castType.getElementType()) &&
-                    isCardinalityAssignableFrom(castType, exprType));
+            return isGeneralizationAssignableFrom(exprType, castType);
         }
+    }
+
+    public static boolean isGeneralizationAssignableFrom(final Type exprType, final Type castType)
+    {
+        return isElementGeneralizationAssignableFrom(exprType.getElementType(), castType.getElementType()) &&
+               isCardinalityAssignableFrom(castType, exprType);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -201,6 +209,18 @@ public class TypeFunctions
         return seq(thisElementType.getConcept()).map(c -> (TempConcept)c)
                                                 .flatMap(c -> c.getAllGeneralizations().stream())
                                                 .anyMatch(c -> isElementTypeAssignableFrom(selfTypeOf(c), thatElementType));
+    }
+
+    public static Optional<Type> firstGeneralizationAssignableFrom(final Type leftType, final Type rightType)
+    {
+        final Type leftElementType = leftType.getElementType();
+        final Type rightElementType = rightType.getElementType();
+
+        final Optional<TempConcept> match = seq(leftElementType.getConcept()).map(c -> (TempConcept)c)
+                                                                             .flatMap(c -> c.getAllGeneralizations().stream())
+                                                                             .findFirst(c -> isElementTypeAssignableFrom(selfTypeOf(c), rightElementType));
+
+        return match.map(c -> withCardinality(selfTypeOf(c), leftType.getCardinality()));
     }
 
     public static int getParamIndexOfMatchingType(List<FunctionParameter> parameters, Type type)

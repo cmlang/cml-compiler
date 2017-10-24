@@ -4,7 +4,9 @@ import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.TempNamedType;
 
-import static cml.language.functions.TypeFunctions.isAssignableFrom;
+import java.util.Optional;
+
+import static cml.language.functions.TypeFunctions.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
@@ -58,10 +60,26 @@ public class Conditional extends ExpressionBase
         {
             return elseType;
         }
-        else
+        else if (thenType.getConcept().isPresent() && elseType.getConcept().isPresent())
         {
-            return TempNamedType.create(thenType.getDiagnosticId() + "|" + elseType.getDiagnosticId());
+            final Optional<Type> thenTypeGeneralization = firstGeneralizationAssignableFrom(thenType, elseType);
+
+            if (thenTypeGeneralization.isPresent())
+            {
+                return thenTypeGeneralization.get();
+            }
+            else
+            {
+                final Optional<Type> elseTypeGeneralization = firstGeneralizationAssignableFrom(thenType, elseType);
+
+                if (elseTypeGeneralization.isPresent())
+                {
+                    return elseTypeGeneralization.get();
+                }
+            }
         }
+
+        return TempNamedType.create(thenType.getDiagnosticId() + "|" + elseType.getDiagnosticId());
     }
 
     @Override
