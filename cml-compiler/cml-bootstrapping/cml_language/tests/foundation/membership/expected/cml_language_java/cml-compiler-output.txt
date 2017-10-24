@@ -49,8 +49,8 @@ INFIX files:
 ARITHMETIC files:
 - src/main/java/cml/language/generated/Arithmetic.java
 
-LOGIC files:
-- src/main/java/cml/language/generated/Logic.java
+LOGICAL files:
+- src/main/java/cml/language/generated/Logical.java
 
 MODEL files:
 - src/main/java/cml/language/generated/Model.java

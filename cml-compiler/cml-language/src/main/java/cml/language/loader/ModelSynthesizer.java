@@ -20,7 +20,7 @@ import static cml.language.functions.ModuleFunctions.createImportOfModule;
 import static cml.language.generated.Arithmetic.createArithmetic;
 import static cml.language.generated.Association.createAssociation;
 import static cml.language.generated.Constructor.createConstructor;
-import static cml.language.generated.Logic.createLogic;
+import static cml.language.generated.Logical.createLogical;
 import static cml.language.generated.Property.createProperty;
 import static cml.language.generated.ValueType.createValueType;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
@@ -287,7 +287,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
         else if (logicalOperator(operator))
         {
-            return createLogic(operator, asList(left, right), null, locationOf(ctx));
+            return createLogical(operator, asList(left, right), null, locationOf(ctx));
         }
         else
         {

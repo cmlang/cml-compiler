@@ -22,7 +22,7 @@ expression_arithmetic(expr) ::= <<
 <expression_infix(expr)>
 >>
 
-expression_logic(expr) ::= <<
+expression_logical(expr) ::= <<
 <expression_infix(expr)>
 >>
 

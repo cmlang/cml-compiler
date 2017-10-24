@@ -69,9 +69,9 @@
     else undefined_type;
 }
 
-@concept LOGIC: INFIX
+@concept LOGICAL: INFIX
 {
-  /kind = "logic";
+  /kind = "logical";
   /operation = operator as? string?;
 
   /inferred_type =

@@ -64,7 +64,7 @@ arithmetic_ocl(expr) ::= <<
 <infix_ocl(expr)>
 >>
 
-logic_ocl(expr) ::= <<
+logical_ocl(expr) ::= <<
 <infix_ocl(expr)>
 >>
 
