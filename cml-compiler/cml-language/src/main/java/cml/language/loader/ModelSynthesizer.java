@@ -22,6 +22,7 @@ import static cml.language.generated.Association.createAssociation;
 import static cml.language.generated.Constructor.createConstructor;
 import static cml.language.generated.Logical.createLogical;
 import static cml.language.generated.Property.createProperty;
+import static cml.language.generated.Relational.createRelational;
 import static cml.language.generated.ValueType.createValueType;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static cml.primitives.Types.BOOLEAN;
@@ -288,6 +289,10 @@ class ModelSynthesizer extends CMLBaseListener
         else if (logicalOperator(operator))
         {
             return createLogical(operator, asList(left, right), null, locationOf(ctx));
+        }
+        else if (relationalOperator(operator))
+        {
+            return createRelational(operator, asList(left, right), null, locationOf(ctx));
         }
         else
         {

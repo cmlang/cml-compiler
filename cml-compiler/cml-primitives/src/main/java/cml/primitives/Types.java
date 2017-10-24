@@ -41,6 +41,10 @@ public class Types
         "and", "or", "xor", "implies"
     ));
 
+    private static final Collection<String> RELATIONAL_OPERATORS = unmodifiableCollection(asList(
+        "==", "!=", ">", ">=", "<", "<="
+    ));
+
     public static String primitiveTypeName(final String name)
     {
         return name.toLowerCase();
@@ -127,5 +131,10 @@ public class Types
     public static boolean logicalOperator(String operator)
     {
         return LOGICAL_OPERATORS.contains(operator);
+    }
+
+    public static boolean relationalOperator(String operator)
+    {
+        return RELATIONAL_OPERATORS.contains(operator);
     }
 }

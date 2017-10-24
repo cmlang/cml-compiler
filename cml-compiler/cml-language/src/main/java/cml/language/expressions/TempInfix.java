@@ -1,9 +1,6 @@
 package cml.language.expressions;
 
-import cml.language.generated.Expression;
-import cml.language.generated.Infix;
-import cml.language.generated.Type;
-import cml.language.generated.UndefinedType;
+import cml.language.generated.*;
 import cml.language.types.TempNamedType;
 
 import java.util.Collection;
@@ -20,10 +17,6 @@ public class TempInfix extends ExpressionBase implements Infix
     private static final String REFERENTIAL_EQUALITY = "===";
     private static final String REFERENTIAL_INEQUALITY = "!==";
 
-    private static final Collection<String> RELATIONAL_OPERATORS = unmodifiableCollection(asList(
-        "==", "!=", ">", ">=", "<", "<="
-    ));
-
     private static final Collection<String> REFERENTIAL_OPERATORS = unmodifiableCollection(asList(
         REFERENTIAL_EQUALITY, REFERENTIAL_INEQUALITY
     ));
@@ -35,14 +28,6 @@ public class TempInfix extends ExpressionBase implements Infix
         {{
             // String Concatenation:
             put("&", "str_concat");
-
-            // Relational Operators:
-            put("==", "eq");
-            put("!=", "not_eq");
-            put(">", "gt");
-            put(">=", "gte");
-            put("<", "lt");
-            put("<=", "lte");
 
             // Referential Operators:
             put(REFERENTIAL_EQUALITY, "ref_eq");
@@ -105,11 +90,7 @@ public class TempInfix extends ExpressionBase implements Infix
         assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + getLeft().getKind();
         assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + getRight().getKind();
 
-        if (RELATIONAL_OPERATORS.contains(getOperator()) && leftType.isRelational() && rightType.isRelational())
-        {
-            return TempNamedType.BOOLEAN;
-        }
-        else if (REFERENTIAL_OPERATORS.contains(getOperator()) && leftType.isReferential() && rightType.isReferential())
+        if (REFERENTIAL_OPERATORS.contains(getOperator()) && leftType.isReferential() && rightType.isReferential())
         {
             return TempNamedType.BOOLEAN;
         }
@@ -127,6 +108,12 @@ public class TempInfix extends ExpressionBase implements Infix
     public String getDiagnosticId()
     {
         return infix.getDiagnosticId();
+    }
+
+    @Override
+    public ValueType getBooleanType()
+    {
+        return infix.getBooleanType();
     }
 
     @Override

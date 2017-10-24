@@ -109,6 +109,12 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
+    public boolean isRelational()
+    {
+        return expression.isRelational();
+    }
+
+    @Override
     public List<Expression> getOperands()
     {
         return expression.getOperands();

@@ -26,6 +26,10 @@ expression_logical(expr) ::= <<
 <expression_infix(expr)>
 >>
 
+expression_relational(expr) ::= <<
+<expression_infix(expr)>
+>>
+
 expression_infix(expr) ::= <<
 <if(expr.operation)><\\>
 (<({operation_<expr.operation>})(expr.left, expr.right)>)<\\>
