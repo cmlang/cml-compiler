@@ -8,6 +8,7 @@
 
   /matching_result_type = type;
 
+  /boolean = type.boolean;
   /numeric = type.numeric;
   /float = type.float;
   /arithmetic = numeric or float;
@@ -31,6 +32,7 @@
   /left = first(operands) as! EXPRESSION;
   /right = last(operands) as! EXPRESSION;
 
+  /boolean = left.boolean and right.boolean;
   /numeric = left.numeric and right.numeric;
   /float = left.float and right.float;
 
@@ -57,4 +59,12 @@
   /type = if arithmetic and subtype(left.type.name, right.type.name) then right.type
           else if arithmetic and subtype(right.type.name, left.type.name) then left.type
           else undefined_type;
+}
+
+@concept LOGIC: INFIX
+{
+  /kind = "logic";
+  /operation = operator as? string?;
+
+  /type = if boolean then VALUE_TYPE("", primitive_type_name("boolean")) else undefined_type;
 }
