@@ -24,6 +24,7 @@ import static cml.language.generated.Logical.createLogical;
 import static cml.language.generated.Property.createProperty;
 import static cml.language.generated.Referential.createReferential;
 import static cml.language.generated.Relational.createRelational;
+import static cml.language.generated.StringConcat.createStringConcat;
 import static cml.language.generated.ValueType.createValueType;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
 import static cml.primitives.Types.BOOLEAN;
@@ -299,9 +300,13 @@ class ModelSynthesizer extends CMLBaseListener
         {
             return createReferential(operator, asList(left, right), null, locationOf(ctx));
         }
+        else if (stringOperator(operator))
+        {
+            return createStringConcat(operator, asList(left, right), null, locationOf(ctx));
+        }
         else
         {
-            return new TempInfix(operator, left, right);
+            throw new IllegalStateException("Unexpected operator accepted by parser: " + operator + locationOf(ctx).toString());
         }
     }
 

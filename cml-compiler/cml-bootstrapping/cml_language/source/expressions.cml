@@ -15,6 +15,7 @@
   /arithmetic = numeric or float;
   /relational = type.relational;
   /referential = type.referential;
+  /primitive = type.primitive;
 }
 
 @concept LITERAL: EXPRESSION
@@ -108,4 +109,17 @@
     else none;
 
   /inferred_type = if left.referential and right.referential then boolean_type else undefined_type;
+}
+
+@concept STRING_CONCAT: INFIX
+{
+  /kind = "string_concat";
+
+  /operation =
+    if operator == "&" then kind as! string? // type-casting necessary until conditionals are fixed to support "none"
+    else none;
+
+  /string_type = VALUE_TYPE("", primitive_type_name("string"));
+
+  /inferred_type = if left.primitive and right.primitive then string_type else undefined_type;
 }

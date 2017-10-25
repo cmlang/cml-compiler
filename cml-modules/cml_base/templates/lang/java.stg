@@ -305,11 +305,11 @@ operation_div(left, right) ::= "<nullable_expr(left)> / <nullable_expr(right)>"
 operation_mod(left, right) ::= "<nullable_expr(left)> % <nullable_expr(right)>"
 operation_exp(left, right) ::= "Math.pow(<nullable_expr(left)>, <nullable_expr(right)>)"
 
-operation_str_concat(left, right) ::= <<
-<str_concat_operand(left)> + <str_concat_operand(right)>
+operation_string_concat(left, right) ::= <<
+<string_concat_operand(left)> + <string_concat_operand(right)>
 >>
 
-str_concat_operand(expr) ::= <<
+string_concat_operand(expr) ::= <<
 <if(!expr.type.string)>Objects.toString(<endif><nullable_expr(expr)><if(!expr.type.string)>)<endif>
 >>
 

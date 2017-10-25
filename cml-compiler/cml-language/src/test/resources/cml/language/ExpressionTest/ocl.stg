@@ -76,6 +76,10 @@ referential_ocl(expr) ::= <<
 <infix_ocl(expr)>
 >>
 
+string_concat_ocl(expr) ::= <<
+<infix_ocl(expr)>
+>>
+
 infix_ocl(infix) ::= <<
 (<ocl(infix.left)> <expr_operator(infix)> <ocl(infix.right)>)
 >>
@@ -98,7 +102,7 @@ operator_div() ::= "/"
 operator_mod() ::= "%"
 operator_exp() ::= "^"
 
-operator_str_concat() ::= "+"
+operator_string_concat() ::= "+"
 
 operator_eq() ::= "="
 operator_not_eq() ::= "\<>"

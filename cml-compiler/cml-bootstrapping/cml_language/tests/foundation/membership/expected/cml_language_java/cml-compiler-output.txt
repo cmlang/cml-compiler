@@ -58,6 +58,9 @@ RELATIONAL files:
 REFERENTIAL files:
 - src/main/java/cml/language/generated/Referential.java
 
+STRING_CONCAT files:
+- src/main/java/cml/language/generated/StringConcat.java
+
 MODEL files:
 - src/main/java/cml/language/generated/Model.java
 

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableList;
 
@@ -48,6 +49,8 @@ public class Types
     private static final Collection<String> REFERENTIAL_OPERATORS = unmodifiableCollection(asList(
         "===", "!=="
     ));
+
+    private static final Collection<String> STRING_OPERATORS = unmodifiableCollection(singletonList("&"));
 
     public static String primitiveTypeName(final String name)
     {
@@ -145,5 +148,10 @@ public class Types
     public static boolean referentialOperator(String operator)
     {
         return REFERENTIAL_OPERATORS.contains(operator);
+    }
+
+    public static boolean stringOperator(String operator)
+    {
+        return STRING_OPERATORS.contains(operator);
     }
 }

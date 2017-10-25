@@ -280,11 +280,11 @@ operation_div(left, right) ::= "<expression(left)> / <expression(right)>"
 operation_mod(left, right) ::= "<expression(left)> % <expression(right)>"
 operation_exp(left, right) ::= "<expression(left)> ** <expression(right)>"
 
-operation_str_concat(left, right) ::= <<
-<str_concat_operand(left)> + <str_concat_operand(right)>
+operation_string_concat(left, right) ::= <<
+<string_concat_operand(left)> + <string_concat_operand(right)>
 >>
 
-str_concat_operand(expr) ::= <<
+string_concat_operand(expr) ::= <<
 <if(!expr.type.string)>str(<endif><nullable_expr(expr)><if(!expr.type.string)>)<endif>
 >>
 

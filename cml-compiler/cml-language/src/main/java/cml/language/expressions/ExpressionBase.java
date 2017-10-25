@@ -121,6 +121,12 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
+    public boolean isPrimitive()
+    {
+        return expression.isPrimitive();
+    }
+
+    @Override
     public List<Expression> getOperands()
     {
         return expression.getOperands();
