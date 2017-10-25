@@ -14,6 +14,7 @@
 
   /arithmetic = numeric or float;
   /relational = type.relational;
+  /referential = type.referential;
 }
 
 @concept LITERAL: EXPRESSION
@@ -95,4 +96,16 @@
     else none;
 
   /inferred_type = if left.relational and right.relational then boolean_type else undefined_type;
+}
+
+@concept REFERENTIAL: INFIX
+{
+  /kind = "referential";
+
+  /operation =
+    if operator == "===" then "ref_eq" as! string?
+    else if operator == "!==" then "not_ref_eq" as! string? // type-casting necessary until conditionals are fixed to support "none"
+    else none;
+
+  /inferred_type = if left.referential and right.referential then boolean_type else undefined_type;
 }

@@ -45,6 +45,10 @@ public class Types
         "==", "!=", ">", ">=", "<", "<="
     ));
 
+    private static final Collection<String> REFERENTIAL_OPERATORS = unmodifiableCollection(asList(
+        "===", "!=="
+    ));
+
     public static String primitiveTypeName(final String name)
     {
         return name.toLowerCase();
@@ -136,5 +140,10 @@ public class Types
     public static boolean relationalOperator(String operator)
     {
         return RELATIONAL_OPERATORS.contains(operator);
+    }
+
+    public static boolean referentialOperator(String operator)
+    {
+        return REFERENTIAL_OPERATORS.contains(operator);
     }
 }

@@ -55,6 +55,9 @@ LOGICAL files:
 RELATIONAL files:
 - src/main/java/cml/language/generated/Relational.java
 
+REFERENTIAL files:
+- src/main/java/cml/language/generated/Referential.java
+
 MODEL files:
 - src/main/java/cml/language/generated/Model.java
 

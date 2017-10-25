@@ -22,6 +22,7 @@ import static cml.language.generated.Association.createAssociation;
 import static cml.language.generated.Constructor.createConstructor;
 import static cml.language.generated.Logical.createLogical;
 import static cml.language.generated.Property.createProperty;
+import static cml.language.generated.Referential.createReferential;
 import static cml.language.generated.Relational.createRelational;
 import static cml.language.generated.ValueType.createValueType;
 import static cml.language.transforms.InvocationTransforms.invocationOf;
@@ -293,6 +294,10 @@ class ModelSynthesizer extends CMLBaseListener
         else if (relationalOperator(operator))
         {
             return createRelational(operator, asList(left, right), null, locationOf(ctx));
+        }
+        else if (referentialOperator(operator))
+        {
+            return createReferential(operator, asList(left, right), null, locationOf(ctx));
         }
         else
         {

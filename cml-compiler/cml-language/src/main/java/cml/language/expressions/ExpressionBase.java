@@ -115,6 +115,12 @@ public abstract class ExpressionBase implements Expression
     }
 
     @Override
+    public boolean isReferential()
+    {
+        return expression.isReferential();
+    }
+
+    @Override
     public List<Expression> getOperands()
     {
         return expression.getOperands();

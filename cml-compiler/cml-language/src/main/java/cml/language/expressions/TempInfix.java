@@ -14,13 +14,6 @@ import static java.util.Collections.unmodifiableCollection;
 
 public class TempInfix extends ExpressionBase implements Infix
 {
-    private static final String REFERENTIAL_EQUALITY = "===";
-    private static final String REFERENTIAL_INEQUALITY = "!==";
-
-    private static final Collection<String> REFERENTIAL_OPERATORS = unmodifiableCollection(asList(
-        REFERENTIAL_EQUALITY, REFERENTIAL_INEQUALITY
-    ));
-
     private static final Collection<String> STRING_OPERATORS = unmodifiableCollection(singletonList("&"));
 
     private static Map<String, String> OPERATIONS =
@@ -28,10 +21,6 @@ public class TempInfix extends ExpressionBase implements Infix
         {{
             // String Concatenation:
             put("&", "str_concat");
-
-            // Referential Operators:
-            put(REFERENTIAL_EQUALITY, "ref_eq");
-            put(REFERENTIAL_INEQUALITY, "not_ref_eq");
         }};
 
     private final Infix infix;
@@ -90,11 +79,7 @@ public class TempInfix extends ExpressionBase implements Infix
         assert leftType != null: "Left expression must have a type in order to be able to compute type of infix expression: " + getLeft().getKind();
         assert rightType != null: "Right expression must have a type in order to be able to compute type of infix expression: " + getRight().getKind();
 
-        if (REFERENTIAL_OPERATORS.contains(getOperator()) && leftType.isReferential() && rightType.isReferential())
-        {
-            return TempNamedType.BOOLEAN;
-        }
-        else if (STRING_OPERATORS.contains(getOperator()) && leftType.isPrimitive() && rightType.isPrimitive())
+        if (STRING_OPERATORS.contains(getOperator()) && leftType.isPrimitive() && rightType.isPrimitive())
         {
             return TempNamedType.STRING;
         }
