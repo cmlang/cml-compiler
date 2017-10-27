@@ -1,27 +1,27 @@
 
-@template @function empty<T>(seq: T*) -> boolean;
-@template @function present<T>(seq: T*) -> boolean;
+@function empty<T>(seq: T*) -> boolean;
+@function present<T>(seq: T*) -> boolean;
 
-@template @function first<T>(seq: T*) -> T?;
-@template @function last<T>(seq: T*) -> T?;
+@function first<T>(seq: T*) -> T?;
+@function last<T>(seq: T*) -> T?;
 
-@template @function exists<T>(seq: T*, expr: (T) -> boolean) -> boolean;
-@template @function all<T>(seq: T*, expr: (T) -> boolean) -> boolean;
-@template @function none<T>(seq: T*, expr: (T) -> boolean) -> boolean;
+@function exists<T>(seq: T*, expr: (T) -> boolean) -> boolean;
+@function all<T>(seq: T*, expr: (T) -> boolean) -> boolean;
+@function none<T>(seq: T*, expr: (T) -> boolean) -> boolean;
 
-@template @function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
-@template @function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
+@function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
+@function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 
-@template @function collect<T>(seq: T*, expr: (T) -> R*) -> R*;
+@function collect<T>(seq: T*, expr: (T) -> R*) -> R*;
 
-@template @function distinct<T>(seq: T*) -> T*;
-@template @function reverse<T>(seq: T*) -> T*;
+@function distinct<T>(seq: T*) -> T*;
+@function reverse<T>(seq: T*) -> T*;
 
-@template @function sort<T>(seq: T*, expr: (T, T) -> integer) -> T*;
-@template @function compare<T>(expr1: T, expr2: T) -> integer;
+@function sort<T>(seq: T*, expr: (T, T) -> integer) -> T*;
+@function compare<T>(expr1: T, expr2: T) -> integer;
 
-@template @function concat<T>(seq1: T*, seq2: T*) -> T*;
+@function concat<T>(seq1: T*, seq2: T*) -> T*;
 
-@template @function count<T>(seq: T*) -> long;
+@function count<T>(seq: T*) -> long;
 
-@template @function cross_join<T,S>(seq1: T*, seq2: S*) -> (T, S)*;
+@function cross_join<T,S>(seq1: T*, seq2: S*) -> (T, S)*;

@@ -135,7 +135,10 @@ class ModelSynthesizer extends CMLBaseListener
     @Override
     public void exitTemplateDeclaration(final TemplateDeclarationContext ctx)
     {
-        ctx.template = new Template(module, ctx.functionDeclaration().function);
+        if (!ctx.functionDeclaration().function.getParent().isPresent())
+        {
+            ctx.template = new Template(module, ctx.functionDeclaration().function);
+        }
     }
 
     @Override
@@ -209,7 +212,14 @@ class ModelSynthesizer extends CMLBaseListener
         final Type type = ctx.resultType.type;
         final Stream<FunctionParameter> params = ctx.functionParameterList().params;
 
-        ctx.function = new Function(name, type, params);
+        if (ctx.parent instanceof TemplateDeclarationContext)
+        {
+            ctx.function = new Function(name, type, params);
+        }
+        else
+        {
+            ctx.function = new Function(module, name, type, params);
+        }
     }
 
     @Override

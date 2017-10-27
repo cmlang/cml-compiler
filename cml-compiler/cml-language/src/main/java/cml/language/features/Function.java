@@ -2,6 +2,7 @@ package cml.language.features;
 
 import cml.language.generated.Type;
 import cml.language.types.TypedElementBase;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,12 @@ public class Function extends TypedElementBase
 
     public Function(final String name, final Type type, final Stream<FunctionParameter> parameters)
     {
-        super(name, type);
+        this(null, name, type, parameters);
+    }
+
+    public Function(@Nullable final TempModule module, final String name, final Type type, final Stream<FunctionParameter> parameters)
+    {
+        super(module, name, type);
 
         this.parameters = seq(parameters).toList();
     }
