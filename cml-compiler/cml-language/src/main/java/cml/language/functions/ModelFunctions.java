@@ -1,5 +1,6 @@
 package cml.language.functions;
 
+import cml.language.features.Function;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.features.Template;
@@ -54,6 +55,14 @@ public class ModelFunctions
     public static Optional<Template> templateOf(TempModel model, String name)
     {
         return model.getTemplates()
+                    .stream()
+                    .filter(t -> t.getName().equals(name))
+                    .findFirst();
+    }
+
+    public static Optional<Function> functionOf(TempModel model, String name)
+    {
+        return model.getFunctions()
                     .stream()
                     .filter(t -> t.getName().equals(name))
                     .findFirst();

@@ -1,8 +1,9 @@
 grammar Functions;
 
-import Names, Types;
+import Names, Types, Annotations;
 
 functionDeclaration returns [Function function]:
+  annotationList?
   FUNCTION name=NAME
   typeParams=typeParameterList?
   params=functionParameterList

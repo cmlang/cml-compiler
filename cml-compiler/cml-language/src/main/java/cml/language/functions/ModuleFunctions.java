@@ -2,7 +2,6 @@ package cml.language.functions;
 
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
-import cml.language.features.Template;
 import cml.language.foundation.TempModel;
 import cml.language.generated.Import;
 import cml.language.generated.Location;
@@ -43,14 +42,6 @@ public class ModuleFunctions
         return module.getAllConcepts()
                      .stream()
                      .filter(concept -> concept.getName().equals(name))
-                     .findFirst();
-    }
-
-    public static Optional<Template> templateOf(TempModule module, String name)
-    {
-        return module.getAllTemplates()
-                     .stream()
-                     .filter(t -> t.getName().equals(name))
                      .findFirst();
     }
 

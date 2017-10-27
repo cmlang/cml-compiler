@@ -5,6 +5,7 @@ import cml.language.foundation.TempModel;
 import cml.language.generated.Expression;
 
 import static cml.language.functions.ModelFunctions.conceptOf;
+import static cml.language.functions.ModelFunctions.functionOf;
 import static cml.language.functions.ModelFunctions.templateOf;
 import static org.jooq.lambda.Seq.seq;
 
@@ -27,7 +28,12 @@ public class FunctionLinker implements ModelVisitor
 
             if (!invocation.getFunction().isPresent() && !invocation.getConcept().isPresent())
             {
-                templateOf(model, invocation.getName()).ifPresent(t -> invocation.setFunction(t.getFunction()));
+                functionOf(model, invocation.getName()).ifPresent(f -> invocation.setFunction(f));
+
+                if (!invocation.getFunction().isPresent())
+                {
+                    templateOf(model, invocation.getName()).ifPresent(t -> invocation.setFunction(t.getFunction()));
+                }
 
                 if (invocation.getFunction().isPresent())
                 {

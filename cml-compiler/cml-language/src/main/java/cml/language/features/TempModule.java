@@ -51,17 +51,12 @@ public interface TempModule extends NamedElement, Scope, Module
                            .collect(toList());
     }
 
-    default List<Template> getImportedTemplates()
+    default List<Function> getFunctions()
     {
-        return getImportedModules()
-                    .stream()
-                    .flatMap(m -> m.getTemplates().stream())
-                    .collect(toList());
-    }
-
-    default List<Template> getAllTemplates()
-    {
-        return concat(getTemplates().stream(), getImportedTemplates().stream()).collect(toList());
+        return getMembers().stream()
+                           .filter(e -> e instanceof Function)
+                           .map(e -> (Function)e)
+                           .collect(toList());
     }
 
     static TempModule create(TempModel model, String name)

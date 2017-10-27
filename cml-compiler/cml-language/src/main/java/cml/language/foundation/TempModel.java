@@ -1,5 +1,6 @@
 package cml.language.foundation;
 
+import cml.language.features.Function;
 import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.features.Template;
@@ -58,6 +59,14 @@ public interface TempModel extends NamedElement, Scope, Model
         return getModules().stream()
                            .map(m -> (TempModule)m)
                            .flatMap(m -> m.getTemplates().stream())
+                           .collect(toList());
+    }
+
+    default List<Function> getFunctions()
+    {
+        return getModules().stream()
+                           .map(m -> (TempModule)m)
+                           .flatMap(m -> m.getFunctions().stream())
                            .collect(toList());
     }
 
