@@ -48,7 +48,9 @@ public class Function extends ScopeBase
 
     public Type getType()
     {
-        return type == null && getExpression().isPresent() ? getExpression().get().getType() : (type == null ? createUndefinedType("Unable to find type of function: " + getDiagnosticId()) : type);
+        return type == null && getExpression().isPresent() ?
+            getExpression().get().getType() :
+            (type == null ? createUndefinedType("Unable to find type of function: " + getDiagnosticId()) : type);
     }
 
     public List<FunctionParameter> getParameters()
