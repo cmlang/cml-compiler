@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static cml.language.generated.UndefinedType.createUndefinedType;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static org.jooq.lambda.Seq.*;
@@ -47,7 +48,7 @@ public class Function extends ScopeBase
 
     public Type getType()
     {
-        return type;
+        return type == null && getExpression().isPresent() ? getExpression().get().getType() : (type == null ? createUndefinedType("Unable to find type of function: " + getDiagnosticId()) : type);
     }
 
     public List<FunctionParameter> getParameters()
