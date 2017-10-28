@@ -353,7 +353,7 @@ Optional.empty()<\\>
 <actual_self_field()><\\>
 <elseif(path.base)><\\>
 <path_base_call(path)><\\>
-<elseif(lambda.parameters)><\\>
+<elseif(lambda.parameters && path.variable)><\\>
 <field_name(path)><\\>
 <elseif(!lambda.parameters && lambda.innerExpression)><\\>
 <path_root_call(path_root_call_lambda_var_name(path))><\\>
@@ -407,6 +407,6 @@ to_list(expr) ::= <<
 >>
 
 expression_conditional(expr) ::= <<
-(<expression(expr.cond)> ? <expression(expr.then)> : <expression(expr.else_)>)
+(<expression(expr.condExpr)> ? <expression(expr.thenExpr)> : <expression(expr.elseExpr)>)
 >>
 
