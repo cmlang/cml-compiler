@@ -96,7 +96,7 @@ Seq.of(<expression(args.seq)>).filter(<expression(args.expr)>)
 >>
 
 invocation_sequence_reject(args) ::= <<
-seq(<expression(args.seq)>).removeAll(<expression(args.seq)>.filter(<expression(args.expr)>))
+seq(<expression(args.seq)>).removeAll(seq(<expression(args.seq)>).filter(<expression(args.expr)>))
 >>
 
 invocation_optional_reject(args) ::= <<
@@ -104,7 +104,7 @@ seq(<expression(args.seq)>).removeAll(seq(<expression(args.seq)>).filter(<expres
 >>
 
 invocation_required_reject(args) ::= <<
-Seq.of(<expression(args.seq)>).removeAll(seq(asList(<expression(args.seq)>)).filter(<expression(args.expr)>))
+Seq.of(<expression(args.seq)>).removeAll(Seq.of(<expression(args.seq)>).filter(<expression(args.expr)>))
 >>
 
 invocation_sequence_collect(args) ::= <<

@@ -157,7 +157,7 @@ public class Functions
 
     public List<Item> getItemsReject()
     {
-        return this.getItems().removeAll(this.getItems().filter(item11 -> (item11.getSize() > 100))).toList();
+        return seq(this.getItems()).removeAll(seq(this.getItems()).filter(item11 -> (item11.getSize() > 100))).toList();
     }
 
     public List<Item> getSingleItemSelect()
@@ -177,7 +177,7 @@ public class Functions
 
     public List<Item> getRequiredItemReject()
     {
-        return Seq.of(this.getRequiredItem()).removeAll(seq(asList(this.getRequiredItem())).filter(item15 -> (item15.getSize() > 100))).toList();
+        return Seq.of(this.getRequiredItem()).removeAll(Seq.of(this.getRequiredItem()).filter(item15 -> (item15.getSize() > 100))).toList();
     }
 
     public List<Item> getItemsCollect()

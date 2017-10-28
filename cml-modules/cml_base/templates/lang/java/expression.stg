@@ -30,7 +30,7 @@ seq(<expression(arg)>).toList()
 >>
 
 expression_sequence_to_sequence(arg) ::= <<
-<expression(arg)>.toList()
+seq(<expression(arg)>).toList()
 >>
 
 
