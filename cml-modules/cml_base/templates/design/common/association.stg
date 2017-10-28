@@ -19,10 +19,11 @@ association_class(association, class_name_suffix) ::= <<
 
 association_init(association) ::= <<
 <static_operation(
-    name="init",
-    params=[association_init_param()],
-    result_type=void(),
-    statements=association_init_statements(association)
+   name="init",
+   params=[association_init_param()],
+   result_type=void(),
+   type_params=[],
+   statements=association_init_statements(association)
 )>
 >>
 

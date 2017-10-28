@@ -3,6 +3,7 @@ import "/lang/java/expression.stg"
 import "/lang/java/invocation.stg"
 import "/lang/java/lambda.stg"
 import "/lang/java/type.stg"
+import "/lang/java/imports.stg"
 import "/lang/common.stg"
 
 // Language
@@ -355,17 +356,9 @@ Optional.empty()<\\>
 <elseif(lambda.parameters)><\\>
 <field_name(path)><\\>
 <elseif(!lambda.parameters && lambda.innerExpression)><\\>
-<path_getter_call({<lambda_var_name()>.}, path)><\\>
+<path_root_call(path_root_call_lambda_var_name(path))><\\>
 <else><\\>
-<path_getter_call({<actual_self_field()>.}, path)><\\>
-<endif>
->>
-
-path_getter_call(prefix, path) ::= <<
-<if(path.type.sequence)><\\>
-seq(<prefix><getter_name(path)>())<\\>
-<else><\\>
-<prefix><getter_name(path)>()<\\>
+<path_root_call(path_root_call_self_field(path))><\\>
 <endif>
 >>
 
@@ -378,9 +371,21 @@ seq(<path_expr(path.base)>)<\\>
 <endif><\\>
 .<path_map_call(path)><\\>
 <else><\\>
-<path_getter_call({<path_expr(path.base)>.}, path)><\\>
+<path_root_call(path_root_call_base(path))><\\>
 <endif>
 >>
+
+path_root_call(actual_call) ::= <<
+<if(path.type.sequence)><\\>
+seq(<actual_call>)<\\>
+<else><\\>
+<actual_call><\\>
+<endif>
+>>
+
+path_root_call_base(path) ::= "<path_expr(path.base)>.<getter_name(path)>()"
+path_root_call_lambda_var_name(path) ::= "<lambda_var_name()>.<getter_name(path)>()"
+path_root_call_self_field(path) ::= "<actual_self_field()>.<getter_name(path)>()"
 
 path_map_call(path) ::= <<
 <if(path.base.type.required && path.type.required)><\\>

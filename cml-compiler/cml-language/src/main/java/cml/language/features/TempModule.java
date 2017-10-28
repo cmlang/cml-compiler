@@ -59,6 +59,15 @@ public interface TempModule extends NamedElement, Scope, Module
                            .collect(toList());
     }
 
+    default List<Function> getDefinedFunctions()
+    {
+        return getMembers().stream()
+                           .filter(e -> e instanceof Function)
+                           .map(e -> (Function)e)
+                           .filter(f -> f.getExpression().isPresent())
+                           .collect(toList());
+    }
+
     static TempModule create(TempModel model, String name)
     {
         return new TempModuleImpl(model, name);

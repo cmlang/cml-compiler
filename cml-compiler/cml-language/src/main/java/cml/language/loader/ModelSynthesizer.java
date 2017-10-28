@@ -200,12 +200,6 @@ class ModelSynthesizer extends CMLBaseListener
     }
 
     @Override
-    public void exitTypeParameterList(final TypeParameterListContext ctx)
-    {
-        ctx.params = seq(ctx.typeParameter()).map(c -> c.param);
-    }
-
-    @Override
     public void exitFunctionDeclaration(final FunctionDeclarationContext ctx)
     {
         final String name = ctx.name.getText();
@@ -218,7 +212,10 @@ class ModelSynthesizer extends CMLBaseListener
         }
         else
         {
-            ctx.function = new Function(module, name, type, params);
+            final Seq<TypeParameter> typeParams = ctx.typeParameterList().params;
+            final Expression expr = ctx.expression() == null ? null : ctx.expression().expr;
+
+            ctx.function = new Function(module, name, type, params, typeParams, expr);
         }
     }
 
@@ -234,6 +231,12 @@ class ModelSynthesizer extends CMLBaseListener
         final String name = ctx.name.getText();
 
         ctx.param = new FunctionParameter(name, ctx.type.type);
+    }
+
+    @Override
+    public void exitTypeParameterList(final TypeParameterListContext ctx)
+    {
+        ctx.params = seq(ctx.typeParameter()).map(c -> c.param);
     }
 
     @Override

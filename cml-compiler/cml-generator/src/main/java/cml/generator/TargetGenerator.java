@@ -1,6 +1,7 @@
 package cml.generator;
 
 import cml.language.features.TempConcept;
+import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
 import cml.language.generated.Association;
 import cml.language.generated.NamedElement;
@@ -10,6 +11,7 @@ import cml.language.loader.ModelVisitor;
 class TargetGenerator implements ModelVisitor
 {
     private static final String MODEL = "model";
+    private static final String MODULE = "module";
     private static final String CONCEPT = "concept";
     private static final String ASSOCIATION = "association";
 
@@ -31,6 +33,12 @@ class TargetGenerator implements ModelVisitor
     public void visit(TempModel model)
     {
         generateTargetFiles(MODEL, model);
+    }
+
+    @Override
+    public void visit(final TempModule module)
+    {
+        generateTargetFiles(MODULE, module);
     }
 
     @Override

@@ -205,6 +205,7 @@ class_association_setter(association) ::= <<
     name=association_setter_name(association),
     params=[association_setter_param(association)],
     result_type=void(),
+    type_params=[],
     statements=association_setter_statements(association)
 )>
 >>

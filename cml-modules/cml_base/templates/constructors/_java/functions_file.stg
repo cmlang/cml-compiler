@@ -1,0 +1,41 @@
+
+import "/lang/java.stg"
+
+functions_file(task, module) ::= <<
+package <task.packageName>;
+
+<common_imports()>
+
+public<\ ><\\>
+<structure(
+    keyword="class",
+    header={<type_name(module)>Functions},
+    base_list=true,
+    sections = [functions(module)]
+)>
+>>
+
+functions(module) ::= <<
+<module.definedFunctions:static_function_declaration();separator="\n\n">
+>>
+
+static_function_declaration(function) ::= <<
+public<\ ><\\>
+<static_operation(
+    name=function_name(function),
+    params=function.parameters,
+    result_type=type_name(function.type),
+    type_params=function.typeParams,
+    statements=function_expression(function)
+)>
+>>
+
+function_name(function) ::=<<
+<function.name; format="camel-case">
+>>
+
+function_expression(function) ::=<<
+<return(expression(function.expression))>
+>>
+
+path_root_call_self_field(path) ::= "<field_name(path)>"

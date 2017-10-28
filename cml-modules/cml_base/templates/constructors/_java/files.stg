@@ -3,6 +3,12 @@ model_files(task, model) ::= <<
 _java:pom_file|pom.xml
 >>
 
+module_files(task, module) ::= <<
+<if(module.definedFunctions)>
+_java:functions_file|src/main/java/<task.packagePath>/<module.name; format="pascal-case">Functions.java
+<endif>
+>>
+
 concept_files(task, concept) ::= <<
 concept_file|src/main/java/<task.packagePath>/<concept.name; format="pascal-case">.java
 >>

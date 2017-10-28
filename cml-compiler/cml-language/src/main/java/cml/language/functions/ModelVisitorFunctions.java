@@ -1,6 +1,8 @@
 package cml.language.functions;
 
+import cml.language.features.Function;
 import cml.language.features.TempConcept;
+import cml.language.features.TempModule;
 import cml.language.foundation.TempModel;
 import cml.language.generated.Association;
 import cml.language.generated.Expression;
@@ -16,9 +18,25 @@ public class ModelVisitorFunctions
     {
         visitor.visit(model);
 
+        model.getModules().forEach(m -> visitModule((TempModule) m, visitor));
+
         model.getConcepts().forEach(c -> visitConcept((TempConcept) c, visitor));
 
         model.getAssociations().forEach(a -> visitAssociation(a, visitor));
+    }
+
+    public static void visitModule(TempModule module, ModelVisitor visitor)
+    {
+        visitor.visit(module);
+
+        module.getDefinedFunctions().forEach(f -> visitFunction(f, visitor));
+    }
+
+    public static void visitFunction(Function function, ModelVisitor visitor)
+    {
+        visitor.visit(function);
+
+        function.getExpression().ifPresent(expression -> visitExpression(expression, visitor));
     }
 
     public static void visitConcept(TempConcept concept, ModelVisitor visitor)

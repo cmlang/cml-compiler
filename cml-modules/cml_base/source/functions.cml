@@ -1,6 +1,7 @@
 
 @function empty<T>(seq: T*) -> boolean;
 @function present<T>(seq: T*) -> boolean;
+//@function present<T>(seq: T*) -> boolean = not empty(seq);
 
 @function first<T>(seq: T*) -> T?;
 @function last<T>(seq: T*) -> T?;

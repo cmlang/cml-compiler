@@ -1,8 +1,11 @@
 package cml.language.features;
 
+import cml.language.foundation.ScopeBase;
+import cml.language.generated.Expression;
 import cml.language.generated.Type;
-import cml.language.types.TypedElementBase;
+import cml.language.types.TypeParameter;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.lambda.Seq;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +13,13 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
-import static org.jooq.lambda.Seq.seq;
+import static org.jooq.lambda.Seq.*;
 
-public class Function extends TypedElementBase
+public class Function extends ScopeBase
 {
-    private List<FunctionParameter> parameters;
+    private String name;
+    private Type type;
+    private List<TypeParameter> typeParams;
 
     public Function(final String name, final Type type, final Stream<FunctionParameter> parameters)
     {
@@ -23,25 +28,53 @@ public class Function extends TypedElementBase
 
     public Function(@Nullable final TempModule module, final String name, final Type type, final Stream<FunctionParameter> parameters)
     {
-        super(module, name, type);
+        this(module, name, type, parameters, empty(), null);
+    }
 
-        this.parameters = seq(parameters).toList();
+    public Function(@Nullable final TempModule module, final String name, final Type type, final Stream<FunctionParameter> parameters, final Seq<TypeParameter> typeParams, final @Nullable Expression expression)
+    {
+        super(module, seq(concat(seq(parameters), seq(Optional.ofNullable(expression)))).toList());
+
+        this.name = name;
+        this.type = type;
+        this.typeParams = typeParams.toList();
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public Type getType()
+    {
+        return type;
     }
 
     public List<FunctionParameter> getParameters()
     {
-        return unmodifiableList(parameters);
+        return seq(getMembers()).filter(m -> m instanceof FunctionParameter)
+                                .cast(FunctionParameter.class)
+                                .toList();
     }
 
-    public Optional<FunctionParameter> getParameter(String name)
+    public List<TypeParameter> getTypeParams()
     {
-        return seq(parameters).filter(p -> p.getName().equals(name))
-                              .findFirst();
+        return unmodifiableList(typeParams);
+    }
+
+    public Optional<Expression> getExpression()
+    {
+        return seq(getMembers()).filter(m -> m instanceof Expression)
+                                .cast(Expression.class)
+                                .findFirst();
     }
 
     @Override
     public String getDiagnosticId()
     {
-        return format("function %s(%s) -> %s", getName(), seq(parameters).toString(", "), getType().getDiagnosticId());
+        return format(
+            "function %s(%s) -> %s", getName(),
+            seq(getParameters()).toString(", "),
+            getType().getDiagnosticId());
     }
 }

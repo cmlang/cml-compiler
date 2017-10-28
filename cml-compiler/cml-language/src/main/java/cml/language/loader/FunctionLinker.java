@@ -4,9 +4,7 @@ import cml.language.expressions.Invocation;
 import cml.language.foundation.TempModel;
 import cml.language.generated.Expression;
 
-import static cml.language.functions.ModelFunctions.conceptOf;
-import static cml.language.functions.ModelFunctions.functionOf;
-import static cml.language.functions.ModelFunctions.templateOf;
+import static cml.language.functions.ModelFunctions.*;
 import static org.jooq.lambda.Seq.seq;
 
 public class FunctionLinker implements ModelVisitor

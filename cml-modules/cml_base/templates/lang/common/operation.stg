@@ -8,13 +8,14 @@ instance_operation_header(name, params, result_type) ::= <<
 <block_header("operation", operation_header_content(true, operation_name(name), params, result_type))>
 >>
 
-static_operation(name, params, result_type, statements) ::= <<
-<static_operation_header(name, params, result_type)><\\>
+static_operation(name, params, result_type, type_params, statements) ::= <<
+<static_operation_header(name, params, result_type, type_params)><\\>
 <block(statements)>
 >>
 
-static_operation_header(name, params, result_type) ::= <<
+static_operation_header(name, params, result_type, type_params) ::= <<
 <static_operation_modifier()><\\>
+<if(type_params)>\<<type_params:type_name();separator=", ">\><\ ><endif><\\>
 <block_header("operation", operation_header_content(false, operation_name(name), params, result_type))>
 >>
 

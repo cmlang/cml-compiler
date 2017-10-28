@@ -15,6 +15,7 @@ interface_secondary_create_method(concept) ::= <<
     name=interface_create_name(interface_name()),
     params=[concept.nonInitProperties],
     result_type=interface_name(),
+    type_params=[],
     statements=return(init_call(interface_create_name(interface_name()), [concept.superProperties, concept.nonDerivedProperties]))
 )><\\>
 <endif>
