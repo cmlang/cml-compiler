@@ -120,7 +120,7 @@ operator_implies() ::= "implies"
 operator_not() ::= "not"
 
 conditional_ocl(conditional) ::= <<
-(if <ocl(conditional.cond)> then <ocl(conditional.then)> else <ocl(conditional.else_)> endif)
+(if <ocl(conditional.condExpr)> then <ocl(conditional.thenExpr)> else <ocl(conditional.elseExpr)> endif)
 >>
 
 literal_ocl(literal) ::= <<
