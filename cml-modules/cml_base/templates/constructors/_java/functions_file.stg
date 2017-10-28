@@ -4,12 +4,11 @@ import "/lang/java.stg"
 functions_file(task, module) ::= <<
 package <task.packageName>;
 
-<common_imports()>
-
+<common_imports(task, module.model)>
 public<\ ><\\>
 <structure(
     keyword="class",
-    header={<type_name(module)>Functions},
+    header=functions_class_name(module),
     base_list=true,
     sections = [functions(module)]
 )>
@@ -30,11 +29,11 @@ public<\ ><\\>
 )>
 >>
 
-function_name(function) ::=<<
+function_name(function) ::= <<
 <function.name; format="camel-case">
 >>
 
-function_expression(function) ::=<<
+function_expression(function) ::= <<
 <return(expression(function.expression))>
 >>
 

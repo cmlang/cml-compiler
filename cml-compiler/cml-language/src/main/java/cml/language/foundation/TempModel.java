@@ -70,6 +70,14 @@ public interface TempModel extends NamedElement, Scope, Model
                            .collect(toList());
     }
 
+    default List<Function> getDefinedFunctions()
+    {
+        return getModules().stream()
+                           .map(m -> (TempModule)m)
+                           .flatMap(m -> m.getDefinedFunctions().stream())
+                           .collect(toList());
+    }
+
     static TempModel create()
     {
         return new ModelImpl();

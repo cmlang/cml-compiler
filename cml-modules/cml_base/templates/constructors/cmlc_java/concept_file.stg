@@ -4,8 +4,7 @@ import "/design/cmlc_java.stg"
 concept_file(task, concept) ::= <<
 package <task.packageName>;
 
-<common_imports()>
-
+<common_imports(task, concept.model)>
 public <interface(concept, "Impl")>
 
 <class2(concept, "Impl")>

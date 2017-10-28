@@ -1,5 +1,5 @@
 
-common_imports() ::= <<
+common_imports(task, model) ::= <<
 import java.util.*;
 import java.math.*;
 import org.jetbrains.annotations.*;
@@ -9,4 +9,16 @@ import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.jooq.lambda.Seq.*;
+<if(model.definedFunctions)><\\>
+
+<model.modules:functions_import(task); separator="\n"><\\>
+<endif>
+>>
+
+functions_import(module, task) ::= <<
+<if(module.definedFunctions)>import static <task.packageName>.<functions_class_name(module)>.*;<endif>
+>>
+
+functions_class_name(module) ::= <<
+<type_name(module)>Functions
 >>

@@ -9,3 +9,31 @@ nullable_expr(expr) ::= <<
 <endif>
 >>
 
+expression_required_to_required(arg) ::= <<
+<expression(arg)>
+>>
+
+expression_required_to_optional(arg) ::= <<
+Optional.of(<expression(arg)>)
+>>
+
+expression_required_to_sequence(arg) ::= <<
+Seq.of(<expression(arg)>).toList()
+>>
+
+expression_optional_to_optional(arg) ::= <<
+<expression(arg)>
+>>
+
+expression_optional_to_sequence(arg) ::= <<
+seq(<expression(arg)>).toList()
+>>
+
+expression_sequence_to_sequence(arg) ::= <<
+<expression(arg)>.toList()
+>>
+
+
+
+
+

@@ -68,7 +68,9 @@ expression_literal(literal) ::= <<
 
 expression_invocation(invocation) ::= <<
 <if(invocation.function)><\\>
-<if(invocation.namedArguments.seq)><\\>
+<if(invocation.function.expression)><\\>
+<call(invocation.name, invocation.function.parameters:expression_arg(invocation.namedArguments))><\\>
+<elseif(invocation.namedArguments.seq)><\\>
 <({invocation_<invocation.namedArguments.seq.type.kind>_<invocation.name>})(invocation.namedArguments)><\\>
 <else><\\>
 <({invocation_<invocation.name>})(invocation.namedArguments)><\\>
@@ -77,6 +79,10 @@ expression_invocation(invocation) ::= <<
 <invocation_concept(invocation.concept, invocation.arguments)><\\>
 <else><\\>
 <endif>
+>>
+
+expression_arg(param, args) ::= <<
+<({expression_<args.(param.name).type.kind>_to_<param.type.kind>})(args.(param.name))>
 >>
 
 expression_type_check(type_check) ::= <<
