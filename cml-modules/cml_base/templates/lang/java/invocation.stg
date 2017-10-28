@@ -24,7 +24,7 @@ invocation_required_present(args) ::= <<
 >>
 
 invocation_sequence_first(args) ::= <<
-<expression(args.seq)>.findFirst()
+seq(<expression(args.seq)>).findFirst()
 >>
 
 invocation_optional_first(args) ::= <<
@@ -36,7 +36,7 @@ seq(asList(<expression(args.seq)>)).findFirst()
 >>
 
 invocation_sequence_last(args) ::= <<
-<expression(args.seq)>.findLast()
+seq(<expression(args.seq)>).findLast()
 >>
 
 invocation_optional_last(args) ::= <<
@@ -48,7 +48,7 @@ seq(asList(<expression(args.seq)>)).findLast()
 >>
 
 invocation_sequence_exists(args) ::= <<
-<expression(args.seq)>.anyMatch(<expression(args.expr)>)
+seq(<expression(args.seq)>).anyMatch(<expression(args.expr)>)
 >>
 
 invocation_optional_exists(args) ::= <<
@@ -60,7 +60,7 @@ seq(asList(<expression(args.seq)>)).anyMatch(<expression(args.expr)>)
 >>
 
 invocation_sequence_all(args) ::= <<
-<expression(args.seq)>.allMatch(<expression(args.expr)>)
+seq(<expression(args.seq)>).allMatch(<expression(args.expr)>)
 >>
 
 invocation_optional_all(args) ::= <<
@@ -72,7 +72,7 @@ seq(asList(<expression(args.seq)>)).allMatch(<expression(args.expr)>)
 >>
 
 invocation_sequence_none(args) ::= <<
-<expression(args.seq)>.noneMatch(<expression(args.expr)>)
+seq(<expression(args.seq)>).noneMatch(<expression(args.expr)>)
 >>
 
 invocation_optional_none(args) ::= <<
@@ -84,7 +84,7 @@ seq(asList(<expression(args.seq)>)).noneMatch(<expression(args.expr)>)
 >>
 
 invocation_sequence_select(args) ::= <<
-<expression(args.seq)>.filter(<expression(args.expr)>)
+seq(<expression(args.seq)>).filter(<expression(args.expr)>)
 >>
 
 invocation_optional_select(args) ::= <<
@@ -108,7 +108,7 @@ seq(asList(<expression(args.seq)>)).removeAll(seq(asList(<expression(args.seq)>)
 >>
 
 invocation_sequence_collect(args) ::= <<
-<expression(args.seq)>.map(<expression(args.expr)>)
+seq(<expression(args.seq)>).map(<expression(args.expr)>)
 >>
 
 invocation_optional_collect(args) ::= <<
@@ -120,7 +120,7 @@ seq(asList(<expression(args.seq)>)).map(<expression(args.expr)>)
 >>
 
 invocation_sequence_sort(args) ::= <<
-<expression(args.seq)>.sorted(<expression(args.expr)>)
+seq(<expression(args.seq)>).sorted(<expression(args.expr)>)
 >>
 
 invocation_compare(args) ::= <<
@@ -128,7 +128,7 @@ invocation_compare(args) ::= <<
 >>
 
 invocation_sequence_reverse(args) ::= <<
-<expression(args.seq)>.reverse()
+seq(<expression(args.seq)>).reverse()
 >>
 
 invocation_concat(args) ::= <<
@@ -136,11 +136,11 @@ concat(<expression(args.seq1)>, <expression(args.seq2)>)
 >>
 
 invocation_sequence_count(args) ::= <<
-<expression(args.seq)>.count()
+seq(<expression(args.seq)>).count()
 >>
 
 invocation_sequence_distinct(args) ::= <<
-<expression(args.seq)>.distinct()
+seq(<expression(args.seq)>).distinct()
 >>
 
 invocation_cross_join(args) ::= <<
