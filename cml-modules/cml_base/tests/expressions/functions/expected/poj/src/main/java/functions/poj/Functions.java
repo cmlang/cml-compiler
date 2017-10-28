@@ -47,12 +47,12 @@ public class Functions
 
     public boolean isEmptyItems()
     {
-        return seq(this.getItems()).isEmpty();
+        return this.getItems().isEmpty();
     }
 
     public boolean isPresentItems()
     {
-        return !seq(this.getItems()).isEmpty();
+        return !this.getItems().isEmpty();
     }
 
     public boolean isEmptySingleItem()
@@ -97,12 +97,12 @@ public class Functions
 
     public Optional<Item> getRequiredItemFirst()
     {
-        return seq(asList(this.getRequiredItem())).findFirst();
+        return Seq.of(this.getRequiredItem()).findFirst();
     }
 
     public Optional<Item> getRequiredItemLast()
     {
-        return seq(asList(this.getRequiredItem())).findLast();
+        return Seq.of(this.getRequiredItem()).findLast();
     }
 
     public boolean isAtLeastOneLargeItem()
@@ -137,17 +137,17 @@ public class Functions
 
     public boolean isRequiredItemExists()
     {
-        return seq(asList(this.getRequiredItem())).anyMatch(item7 -> (item7.getSize() > 100));
+        return Seq.of(this.getRequiredItem()).anyMatch(item7 -> (item7.getSize() > 100));
     }
 
     public boolean isRequiredItemAll()
     {
-        return seq(asList(this.getRequiredItem())).allMatch(item8 -> (item8.getSize() > 100));
+        return Seq.of(this.getRequiredItem()).allMatch(item8 -> (item8.getSize() > 100));
     }
 
     public boolean isRequiredItemNone()
     {
-        return seq(asList(this.getRequiredItem())).noneMatch(item9 -> (item9.getSize() > 100));
+        return Seq.of(this.getRequiredItem()).noneMatch(item9 -> (item9.getSize() > 100));
     }
 
     public List<Item> getItemsSelect()
@@ -157,7 +157,7 @@ public class Functions
 
     public List<Item> getItemsReject()
     {
-        return seq(this.getItems()).removeAll(seq(this.getItems()).filter(item11 -> (item11.getSize() > 100))).toList();
+        return this.getItems().removeAll(this.getItems().filter(item11 -> (item11.getSize() > 100))).toList();
     }
 
     public List<Item> getSingleItemSelect()
@@ -172,12 +172,12 @@ public class Functions
 
     public List<Item> getRequiredItemSelect()
     {
-        return seq(asList(this.getRequiredItem())).filter(item14 -> (item14.getSize() > 100)).toList();
+        return Seq.of(this.getRequiredItem()).filter(item14 -> (item14.getSize() > 100)).toList();
     }
 
     public List<Item> getRequiredItemReject()
     {
-        return seq(asList(this.getRequiredItem())).removeAll(seq(asList(this.getRequiredItem())).filter(item15 -> (item15.getSize() > 100))).toList();
+        return Seq.of(this.getRequiredItem()).removeAll(seq(asList(this.getRequiredItem())).filter(item15 -> (item15.getSize() > 100))).toList();
     }
 
     public List<Item> getItemsCollect()
@@ -192,7 +192,7 @@ public class Functions
 
     public List<Item> getRequiredItemCollect()
     {
-        return seq(asList(this.getRequiredItem())).map(item18 -> seq(item18.getSubItem()).cast(Item.class).findFirst().get()).toList();
+        return Seq.of(this.getRequiredItem()).map(item18 -> seq(item18.getSubItem()).cast(Item.class).findFirst().get()).toList();
     }
 
     public List<Item> getSortedItems()
@@ -212,7 +212,7 @@ public class Functions
 
     public List<Item> getConcatItems()
     {
-        return concat(seq(this.getItems()), seq(this.getItems2())).toList();
+        return concat(this.getItems(), this.getItems2()).toList();
     }
 
     public long getCountItems()
@@ -237,7 +237,7 @@ public class Functions
 
     public List<Integer> getRequiredItemSizeCollect()
     {
-        return seq(asList(this.getRequiredItem())).map(item21 -> item21.getSize()).toList();
+        return Seq.of(this.getRequiredItem()).map(item21 -> item21.getSize()).toList();
     }
 
     public String toString()

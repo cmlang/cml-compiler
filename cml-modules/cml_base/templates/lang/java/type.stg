@@ -32,7 +32,7 @@ type_cast_asb_from_optional_to_sequence(expr, type) ::= <<
 >>
 
 type_cast_asb_from_sequence_to_sequence(expr, type) ::= <<
-<expression(expr)>.<cast(type)>
+<from_sequence(expr)>.<cast(type)>
 >>
 
 type_cast_asq_from_required_to_optional(expr, type) ::= <<
@@ -52,14 +52,18 @@ type_cast_asq_from_optional_to_sequence(expr, type) ::= <<
 >>
 
 type_cast_asq_from_sequence_to_sequence(expr, type) ::= <<
-<expression(expr)>.<of_type(type)>
+<from_sequence(expr)>.<of_type(type)>
 >>
 
 from_required(expr) ::= <<
-seq(asList(<expression(expr)>))
+Seq.of(<expression(expr)>)
 >>
 
 from_optional(expr) ::= <<
+seq(<expression(expr)>)
+>>
+
+from_sequence(expr) ::= <<
 seq(<expression(expr)>)
 >>
 

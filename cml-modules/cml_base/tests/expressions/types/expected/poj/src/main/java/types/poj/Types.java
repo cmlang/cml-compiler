@@ -60,12 +60,12 @@ public class Types
 
     public Optional<Descendant> getReqToOptTypeCastAsb()
     {
-        return seq(asList(this.getReq())).cast(Descendant.class).findFirst();
+        return Seq.of(this.getReq()).cast(Descendant.class).findFirst();
     }
 
     public Optional<Descendant> getReqToOptTypeCastAsq()
     {
-        return seq(asList(this.getReq())).ofType(Descendant.class).findFirst();
+        return Seq.of(this.getReq()).ofType(Descendant.class).findFirst();
     }
 
     public Optional<Descendant> getOptToOptTypeCastAsb()
@@ -80,7 +80,7 @@ public class Types
 
     public List<Descendant> getReqToSeqTypeCastAsb()
     {
-        return seq(asList(this.getReq())).cast(Descendant.class).toList();
+        return Seq.of(this.getReq()).cast(Descendant.class).toList();
     }
 
     public List<Descendant> getOptToSeqTypeCastAsb()
@@ -95,7 +95,7 @@ public class Types
 
     public List<Descendant> getReqToSeqTypeCastAsq()
     {
-        return seq(asList(this.getReq())).ofType(Descendant.class).toList();
+        return Seq.of(this.getReq()).ofType(Descendant.class).toList();
     }
 
     public List<Descendant> getOptToSeqTypeCastAsq()

@@ -356,9 +356,9 @@ Optional.empty()<\\>
 <elseif(lambda.parameters && path.variable)><\\>
 <field_name(path)><\\>
 <elseif(!lambda.parameters && lambda.innerExpression)><\\>
-<path_root_call(path_root_call_lambda_var_name(path))><\\>
+<path_root_call_lambda_var_name(path)><\\>
 <else><\\>
-<path_root_call(path_root_call_self_field(path))><\\>
+<path_root_call_self_field(path)><\\>
 <endif>
 >>
 
@@ -367,19 +367,11 @@ path_base_call(path) ::= <<
 <if(path.base.type.optional)><\\>
 seq(<path_expr(path.base)>)<\\>
 <else><\\>
-<path_expr(path.base)><\\>
+seq(<path_expr(path.base)>)<\\>
 <endif><\\>
 .<path_map_call(path)><\\>
 <else><\\>
-<path_root_call(path_root_call_base(path))><\\>
-<endif>
->>
-
-path_root_call(actual_call) ::= <<
-<if(path.type.sequence)><\\>
-seq(<actual_call>)<\\>
-<else><\\>
-<actual_call><\\>
+<path_root_call_base(path)><\\>
 <endif>
 >>
 

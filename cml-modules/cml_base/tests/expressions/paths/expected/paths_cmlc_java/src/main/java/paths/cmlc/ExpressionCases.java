@@ -119,7 +119,7 @@ class ExpressionCasesImpl implements ExpressionCases
 
     public List<Etc> getPathVar3()
     {
-        return seq(this.actual_self.getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getOneMorePath()))).flatMap(anotherConcept -> seq(asList(anotherConcept.getEtc()))).toList();
+        return seq(seq(this.actual_self.getSomePathList()).flatMap(someConcept -> seq(asList(someConcept.getOneMorePath())))).flatMap(anotherConcept -> seq(asList(anotherConcept.getEtc()))).toList();
     }
 
     public List<Bar> getPathBars()

@@ -32,7 +32,7 @@ seq(<expression(args.seq)>).findFirst()
 >>
 
 invocation_required_first(args) ::= <<
-seq(asList(<expression(args.seq)>)).findFirst()
+Seq.of(<expression(args.seq)>).findFirst()
 >>
 
 invocation_sequence_last(args) ::= <<
@@ -44,7 +44,7 @@ seq(<expression(args.seq)>).findLast()
 >>
 
 invocation_required_last(args) ::= <<
-seq(asList(<expression(args.seq)>)).findLast()
+Seq.of(<expression(args.seq)>).findLast()
 >>
 
 invocation_sequence_exists(args) ::= <<
@@ -56,7 +56,7 @@ seq(<expression(args.seq)>).anyMatch(<expression(args.expr)>)
 >>
 
 invocation_required_exists(args) ::= <<
-seq(asList(<expression(args.seq)>)).anyMatch(<expression(args.expr)>)
+Seq.of(<expression(args.seq)>).anyMatch(<expression(args.expr)>)
 >>
 
 invocation_sequence_all(args) ::= <<
@@ -68,7 +68,7 @@ seq(<expression(args.seq)>).allMatch(<expression(args.expr)>)
 >>
 
 invocation_required_all(args) ::= <<
-seq(asList(<expression(args.seq)>)).allMatch(<expression(args.expr)>)
+Seq.of(<expression(args.seq)>).allMatch(<expression(args.expr)>)
 >>
 
 invocation_sequence_none(args) ::= <<
@@ -80,7 +80,7 @@ seq(<expression(args.seq)>).noneMatch(<expression(args.expr)>)
 >>
 
 invocation_required_none(args) ::= <<
-seq(asList(<expression(args.seq)>)).noneMatch(<expression(args.expr)>)
+Seq.of(<expression(args.seq)>).noneMatch(<expression(args.expr)>)
 >>
 
 invocation_sequence_select(args) ::= <<
@@ -92,11 +92,11 @@ seq(<expression(args.seq)>).filter(<expression(args.expr)>)
 >>
 
 invocation_required_select(args) ::= <<
-seq(asList(<expression(args.seq)>)).filter(<expression(args.expr)>)
+Seq.of(<expression(args.seq)>).filter(<expression(args.expr)>)
 >>
 
 invocation_sequence_reject(args) ::= <<
-<expression(args.seq)>.removeAll(<expression(args.seq)>.filter(<expression(args.expr)>))
+seq(<expression(args.seq)>).removeAll(<expression(args.seq)>.filter(<expression(args.expr)>))
 >>
 
 invocation_optional_reject(args) ::= <<
@@ -104,7 +104,7 @@ seq(<expression(args.seq)>).removeAll(seq(<expression(args.seq)>).filter(<expres
 >>
 
 invocation_required_reject(args) ::= <<
-seq(asList(<expression(args.seq)>)).removeAll(seq(asList(<expression(args.seq)>)).filter(<expression(args.expr)>))
+Seq.of(<expression(args.seq)>).removeAll(seq(asList(<expression(args.seq)>)).filter(<expression(args.expr)>))
 >>
 
 invocation_sequence_collect(args) ::= <<
@@ -116,7 +116,7 @@ seq(<expression(args.seq)>).map(<expression(args.expr)>)
 >>
 
 invocation_required_collect(args) ::= <<
-seq(asList(<expression(args.seq)>)).map(<expression(args.expr)>)
+Seq.of(<expression(args.seq)>).map(<expression(args.expr)>)
 >>
 
 invocation_sequence_sort(args) ::= <<
