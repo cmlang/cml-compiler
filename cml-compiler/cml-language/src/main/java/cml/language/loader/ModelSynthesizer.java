@@ -203,7 +203,7 @@ class ModelSynthesizer extends CMLBaseListener
     public void exitFunctionDeclaration(final FunctionDeclarationContext ctx)
     {
         final String name = ctx.name.getText();
-        final Type type = ctx.resultType.type;
+        final Type type = ctx.resultType == null ? null : ctx.resultType.type;
         final Stream<FunctionParameter> params = ctx.functionParameterList().params;
 
         if (ctx.parent instanceof TemplateDeclarationContext)
