@@ -123,3 +123,14 @@
 
   /inferred_type = if left.primitive and right.primitive then string_type else undefined_type;
 }
+
+@abstraction CONDITIONAL: EXPRESSION
+{
+  /kind = "conditional";
+
+  /condExpr = first(operands) as! EXPRESSION;
+  /thenExpr = first(operands | select: o -> o !== condExpr and o !== elseExpr) as! EXPRESSION;
+  /elseExpr = last(operands) as! EXPRESSION;
+
+  /diagnostic_id = "if " & condExpr.diagnostic_id & " then " & thenExpr.diagnostic_id & " else " & elseExpr.diagnostic_id;
+}

@@ -407,6 +407,6 @@ to_list(expr) ::= <<
 >>
 
 expression_conditional(expr) ::= <<
-(<expression(expr.cond)> ? <expression(expr.then)> : <expression(expr.else_)>)
+(<expression(expr.condExpr)> ? <expression(expr.thenExpr)> : <expression(expr.elseExpr)>)
 >>
 
