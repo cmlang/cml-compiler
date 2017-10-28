@@ -212,7 +212,7 @@ class ModelSynthesizer extends CMLBaseListener
         }
         else
         {
-            final Seq<TypeParameter> typeParams = ctx.typeParameterList().params;
+            final Seq<TypeParameter> typeParams = ctx.typeParameterList() == null ? empty() : ctx.typeParameterList().params;
             final Expression expr = ctx.expression() == null ? null : ctx.expression().expr;
 
             ctx.function = new Function(module, name, type, params, typeParams, expr);
