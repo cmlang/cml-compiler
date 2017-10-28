@@ -61,9 +61,6 @@ REFERENTIAL files:
 STRING_CONCAT files:
 - src/main/java/cml/language/generated/StringConcat.java
 
-CONDITIONAL files:
-- src/main/java/cml/language/generated/Conditional.java
-
 MODEL files:
 - src/main/java/cml/language/generated/Model.java
 

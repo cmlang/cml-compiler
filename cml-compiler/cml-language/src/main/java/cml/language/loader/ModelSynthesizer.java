@@ -323,13 +323,13 @@ class ModelSynthesizer extends CMLBaseListener
         }
     }
 
-    public TempConditional conditionalExpressionOf(final ExpressionContext ctx)
+    public Conditional conditionalExpressionOf(final ExpressionContext ctx)
     {
         final Expression cond = ctx.cond.expr;
         final Expression then = ctx.then.expr;
         final Expression else_ = ctx.else_.expr;
 
-        return new TempConditional(cond, then, else_);
+        return new Conditional(cond, then, else_);
     }
 
     @Override

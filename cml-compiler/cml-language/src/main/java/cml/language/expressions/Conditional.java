@@ -1,57 +1,56 @@
 package cml.language.expressions;
 
-import cml.language.generated.Conditional;
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
 import cml.language.types.TempNamedType;
 
 import java.util.Optional;
 
-import static cml.language.functions.TypeFunctions.firstGeneralizationAssignableFrom;
-import static cml.language.functions.TypeFunctions.isAssignableFrom;
-import static cml.language.generated.Conditional.extendConditional;
+import static cml.language.functions.TypeFunctions.*;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
-public class TempConditional extends ExpressionBase implements Conditional
+public class Conditional extends ExpressionBase
 {
-    private final Conditional conditional;
+    private final Expression cond;
+    private final Expression then;
+    private final Expression else_;
 
-    public TempConditional(Expression cond, Expression then, Expression else_)
+    public Conditional(Expression cond, Expression then, Expression else_)
     {
         super(asList(cond, then, else_));
 
-        this.conditional = extendConditional(this, expression, expression, expression, expression);
+        this.cond = cond;
+        this.then = then;
+        this.else_ = else_;
+    }
+
+    public Expression getCond()
+    {
+        return cond;
+    }
+
+    public Expression getThen()
+    {
+        return then;
+    }
+
+    public Expression getElse_()
+    {
+        return else_;
     }
 
     @Override
     public String getKind()
     {
-        return conditional.getKind();
-    }
-
-    @Override
-    public Expression getCondExpr()
-    {
-        return conditional.getCondExpr();
-    }
-
-    @Override
-    public Expression getThenExpr()
-    {
-        return conditional.getThenExpr();
-    }
-
-    @Override
-    public Expression getElseExpr()
-    {
-        return conditional.getElseExpr();
+        return "conditional";
     }
 
     @Override
     public Type getType()
     {
-        final Type thenType = getThenExpr().getType();
-        final Type elseType = getElseExpr().getType();
+        final Type thenType = then.getType();
+        final Type elseType = else_.getType();
 
         if (isAssignableFrom(thenType, elseType))
         {
@@ -86,6 +85,6 @@ public class TempConditional extends ExpressionBase implements Conditional
     @Override
     public String getDiagnosticId()
     {
-        return conditional.getDiagnosticId();
+        return format("if %s then %s else %s", cond.getDiagnosticId(), then.getDiagnosticId(), else_.getDiagnosticId());
     }
 }

@@ -18,7 +18,6 @@ import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static org.jooq.lambda.Seq.seq;
 
 public class Path extends ExpressionBase
 {
@@ -68,37 +67,6 @@ public class Path extends ExpressionBase
         assert getNames().size() >= 1: "Path must have at least one name in order to determine its member names.";
 
         return getNames().stream().skip(1).collect(toList());
-    }
-
-    public boolean isVariable()
-    {
-        if (isFirst())
-        {
-            Optional<LambdaScope> lambdaScope = getLambdaScope(getParent());
-
-            while (lambdaScope.isPresent())
-            {
-                if (lambdaScope.get().getParameters().containsKey(getName()))
-                {
-                    return true;
-                }
-
-                lambdaScope = getLambdaScope(lambdaScope.get().getParent());
-            }
-        }
-
-        return false;
-    }
-
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Optional<LambdaScope> getLambdaScope(Optional<Scope> parent)
-    {
-        while (parent.isPresent() && !(parent.get() instanceof LambdaScope))
-        {
-            parent = parent.get().getParent();
-        }
-
-        return seq(parent).cast(LambdaScope.class).findFirst();
     }
 
     public boolean isFirst()
