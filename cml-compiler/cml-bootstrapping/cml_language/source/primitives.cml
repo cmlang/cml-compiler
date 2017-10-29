@@ -2,10 +2,10 @@
 // Template functions on this file are implemented by the cml-primitives Maven module.
 
 // Under cml.primitives.Types:
-@template @function primitive_type_name(name: string) -> string;
-@template @function boolean(name: string) -> boolean;
-@template @function string(name: string) -> boolean;
-@template @function numeric(name: string) -> boolean;
-@template @function float(name: string) -> boolean;
-@template @function subtype(s: string, t: string) -> boolean;
+@function primitive_type_name(name: string) -> string;
+@function boolean(name: string) -> boolean;
+@function string(name: string) -> boolean;
+@function numeric(name: string) -> boolean;
+@function float(name: string) -> boolean;
+@function subtype(s: string, t: string) -> boolean;
 
