@@ -132,7 +132,7 @@ seq(<expression(args.seq)>).reverse()
 >>
 
 invocation_concat(args) ::= <<
-concat(<expression(args.seq1)>, <expression(args.seq2)>)
+concat(<arg_to_seq(args.seq1)>, <arg_to_seq(args.seq2)>)
 >>
 
 invocation_sequence_count(args) ::= <<
@@ -146,3 +146,8 @@ seq(<expression(args.seq)>).distinct()
 invocation_cross_join(args) ::= <<
 crossJoin(<expression(args.seq1)>, <expression(args.seq2)>)
 >>
+
+arg_to_seq(arg) ::= <<
+<({expression_<arg.type.kind>_to_sequence})(arg)>
+>>
+
