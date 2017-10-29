@@ -69,7 +69,7 @@ expression_literal(literal) ::= <<
 expression_invocation(invocation) ::= <<
 <if(invocation.function)><\\>
 <if(invocation.function.expression)><\\>
-<call(invocation.name, invocation.function.parameters:expression_arg(invocation.namedArguments))><\\>
+<call(operation_name(invocation.name), invocation.function.parameters:expression_arg(invocation.namedArguments))><\\>
 <elseif(invocation.namedArguments.seq)><\\>
 <({invocation_<invocation.namedArguments.seq.type.kind>_<invocation.name>})(invocation.namedArguments)><\\>
 <else><\\>
