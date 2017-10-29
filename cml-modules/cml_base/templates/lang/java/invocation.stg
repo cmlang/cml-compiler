@@ -83,6 +83,30 @@ invocation_required_none(args) ::= <<
 Seq.of(<expression(args.seq)>).noneMatch(<expression(args.expr)>)
 >>
 
+invocation_sequence_includes(args) ::= <<
+seq(<expression(args.seq)>).contains(<expression(args.expr.innerExpression)>)
+>>
+
+invocation_optional_includes(args) ::= <<
+seq(<expression(args.seq)>).contains(<expression(args.expr.innerExpression)>)
+>>
+
+invocation_required_includes(args) ::= <<
+Seq.of(<expression(args.seq)>).contains(<expression(args.expr.innerExpression)>)
+>>
+
+invocation_sequence_excludes(args) ::= <<
+!seq(<expression(args.seq)>).contains(<expression(args.expr.innerExpression)>)
+>>
+
+invocation_optional_excludes(args) ::= <<
+!seq(<expression(args.seq)>).contains(<expression(args.expr.innerExpression)>)
+>>
+
+invocation_required_excludes(args) ::= <<
+!Seq.of(<expression(args.seq)>).contains(<expression(args.expr.innerExpression)>)
+>>
+
 invocation_sequence_select(args) ::= <<
 seq(<expression(args.seq)>).filter(<expression(args.expr)>)
 >>

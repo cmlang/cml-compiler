@@ -10,6 +10,9 @@
 @function all<T>(seq: T*, expr: (T) -> boolean) -> boolean;
 @function none<T>(seq: T*, expr: (T) -> boolean) -> boolean;
 
+@function includes<T>(seq: T*, expr: T) -> boolean;
+@function excludes<T>(seq: T*, expr: T) -> boolean;
+
 @function select<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 @function reject<T>(seq: T*, expr: (T) -> Boolean) -> T*;
 
