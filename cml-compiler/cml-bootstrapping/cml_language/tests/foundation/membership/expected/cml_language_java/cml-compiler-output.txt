@@ -1,6 +1,9 @@
 model files:
 - pom.xml
 
+cml_language files:
+- src/main/java/cml/language/generated/CmlLanguageFunctions.java
+
 ASSOCIATION files:
 - src/main/java/cml/language/generated/Association.java
 

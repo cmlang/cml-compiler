@@ -1,0 +1,10 @@
+
+@function intersection(sa: CONCEPT*, sb: CONCEPT*) = sa | select: a -> (sb | exists: b -> b === a);
+
+@function super_list(c: CONCEPT) = concat(c, c.all_ancestors);
+
+@function sub(a: CONCEPT, b: CONCEPT) = (a === b) or (a.all_ancestors | includes: b);
+
+@function least(s: CONCEPT*) = for a in s | select: (for b in s | all: sub(a, b));
+
+@function least_upper_bound(a: CONCEPT, b: CONCEPT) = least(intersection(super_list(a), super_list(b)));
