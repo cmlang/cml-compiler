@@ -69,6 +69,15 @@ public interface Invocation extends Expression, NamedElement
                                                .collect(toMap(Tuple2::v1, Tuple2::v2));
     }
 
+    default Map<Type, Lambda> getUntypedParameterlessLambdaArguments()
+    {
+        return seq(getParameterizedArguments()).filter(t -> !(t.v1.getType() instanceof FunctionType))
+                                               .filter(t -> t.v2 instanceof Lambda)
+                                               .map(t -> new Tuple2<>(t.v1.getType(), (Lambda) t.v2))
+                                               .filter(t -> t.v2.getParameters().count() == 0)
+                                               .collect(toMap(Tuple2::v1, Tuple2::v2));
+    }
+
     Optional<Function> getFunction();
     void setFunction(@NotNull Function function);
 
@@ -158,7 +167,8 @@ public interface Invocation extends Expression, NamedElement
 
     default void createScopeFor(Lambda lambda)
     {
-        assert lambda.getFunctionType().isPresent() && !lambda.isInnerExpressionInSomeScope();
+        assert lambda.getFunctionType().isPresent() || lambda.getParameters().count() == 0;
+        assert !lambda.isInnerExpressionInSomeScope();
 
         final Optional<Type> scopeType = lambda.getExpectedScopeType();
 
@@ -182,8 +192,11 @@ public interface Invocation extends Expression, NamedElement
 
             final LambdaScope lambdaScope = new LambdaScope(this, lambda);
 
-            lambda.getTypedParameters()
-                  .forEach((name, type) -> lambdaScope.addParameter(name, getMatchingTypeOf(type)));
+            if (lambda.getFunctionType().isPresent())
+            {
+                lambda.getTypedParameters()
+                      .forEach((name, type) -> lambdaScope.addParameter(name, getMatchingTypeOf(type)));
+            }
         }
     }
 

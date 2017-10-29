@@ -27,6 +27,15 @@ public class LambdaScopeLinker implements ModelVisitor
                             invocation.createScopeFor(lambda);
                         }
                     });
+
+                invocation.getUntypedParameterlessLambdaArguments().forEach(
+                    (functionType, lambda) ->
+                    {
+                        if (!lambda.isInnerExpressionInSomeScope())
+                        {
+                            invocation.createScopeFor(lambda);
+                        }
+                    });
             }
         }
     }
