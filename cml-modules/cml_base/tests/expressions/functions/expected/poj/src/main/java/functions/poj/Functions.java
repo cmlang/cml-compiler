@@ -212,7 +212,7 @@ public class Functions
 
     public List<Item> getConcatItems()
     {
-        return concat(this.getItems(), this.getItems2()).toList();
+        return concat(seq(this.getItems()).toList(), seq(this.getItems2()).toList()).toList();
     }
 
     public long getCountItems()
