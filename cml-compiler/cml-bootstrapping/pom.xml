@@ -8,12 +8,12 @@
     <parent>
         <groupId>cml</groupId>
         <artifactId>cml-compiler</artifactId>
-        <version>2017.10.29-alpha</version>
+        <version>master-SNAPSHOT</version>
     </parent>
 
     <groupId>cml</groupId>
     <artifactId>cml-bootstrapping</artifactId>
-    <version>2017.10.29-alpha</version>
+    <version>master-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
