@@ -60,10 +60,15 @@
   /relational = numeric or float or string;
 }
 
-//@concept REFERENCE_TYPE: TYPE
-//{
-//
-//}
+@concept REFERENCE_TYPE: TYPE
+{
+  name: string;
+  concept: CONCEPT?;
+
+  /element_type: TYPE = REFERENCE_TYPE("", name, concept);
+
+  /inferred_type: TYPE = REFERENCE_TYPE(inferred_cardinality, name, concept);
+}
 
 @concept UNDEFINED_TYPE: TYPE
 {

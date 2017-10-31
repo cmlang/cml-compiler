@@ -94,6 +94,9 @@ TYPE files:
 VALUE_TYPE files:
 - src/main/java/cml/language/generated/ValueType.java
 
+REFERENCE_TYPE files:
+- src/main/java/cml/language/generated/ReferenceType.java
+
 UNDEFINED_TYPE files:
 - src/main/java/cml/language/generated/UndefinedType.java
 
