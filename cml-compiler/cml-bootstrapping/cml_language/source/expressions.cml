@@ -132,5 +132,25 @@
   /thenExpr = first(operands | select: o -> o !== condExpr and o !== elseExpr) as! EXPRESSION;
   /elseExpr = last(operands) as! EXPRESSION;
 
+/*
+  /thenType = thenEpr.type;
+  /elseType = elseExpr.type;
+
+  /type =
+    if thenType.primitive and elseType.primitive then
+    (
+      if subtype(thenType.name, elseType.name) then thenType
+      else if subtype(elseType.name, thenType.name) then elseType
+      else undefined_type
+    )
+    else if present(thenType.concept) and present(elseType.concept) then
+    (
+      if count(concept_lub) == 1 then first(concept_lub) as! TYPE;
+    )
+
+  /concept_lub = lower_upper_bound(thenType.concept, elseType.concept);
+
+  /undefined_type = UNDEFINED_TYPE(thenType.diagnostic_id & "|" & elseType.diagnostic_id);
+*/
   /diagnostic_id = "if " & condExpr.diagnostic_id & " then " & thenExpr.diagnostic_id & " else " & elseExpr.diagnostic_id;
 }
