@@ -17,6 +17,7 @@ THEN: 'then';
 ELSE: 'else';
 GIVEN: 'given';
 UNLESS: 'unless';
+LET: 'let';
 ORQ: 'or?';
 XORQ: 'xor?';
 BOOLEAN: 'true' | 'false';

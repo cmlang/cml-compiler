@@ -1,0 +1,14 @@
+
+@concept LetExpressions
+{
+  /square = let a = 2 in a * a;
+}
+
+@task poj: poj
+{
+    groupId = "cml-expressions";
+    artifactId = "cml-expressions-let";
+    artifactVersion = "1.0-SNAPSHOT";
+    packageName = "let.poj";
+    packagePath = "let/poj";
+}

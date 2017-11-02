@@ -33,7 +33,15 @@ expression_sequence_to_sequence(arg) ::= <<
 seq(<expression(arg)>).toList()
 >>
 
-
+expression_let(let) ::= <<
+new Supplier\<<boxed_type_name(let.type)>\>() {
+<indent()>public <boxed_type_name(let.type)> get()
+<indent()>{
+<indent()><indent()>final <field_type(let.variableExpr)> <let.variable; format="camel-case"> = <expression(let.variableExpr)>;
+<indent()><indent()><return(expression(let.resultExpr))>
+<indent()>}
+}.get()
+>>
 
 
 

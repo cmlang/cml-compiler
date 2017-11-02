@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Let;
 import cml.language.generated.Scope;
 import cml.language.generated.Type;
 import cml.language.types.TempNamedType;
@@ -85,6 +86,18 @@ public class Path extends ExpressionBase
 
                 lambdaScope = getLambdaScope(lambdaScope.get().getParent());
             }
+
+            Optional<Let> letScope = getLetScope(getParent());
+
+            while (letScope.isPresent())
+            {
+                if (letScope.get().getVariable().equals(getName()))
+                {
+                    return true;
+                }
+
+                letScope = getLetScope(letScope.get().getParent());
+            }
         }
 
         return false;
@@ -99,6 +112,16 @@ public class Path extends ExpressionBase
         }
 
         return seq(parent).cast(LambdaScope.class).findFirst();
+    }
+
+    private Optional<Let> getLetScope(Optional<Scope> parent)
+    {
+        while (parent.isPresent() && !(parent.get() instanceof Let))
+        {
+            parent = parent.get().getParent();
+        }
+
+        return seq(parent).cast(Let.class).findFirst();
     }
 
     public boolean isFirst()

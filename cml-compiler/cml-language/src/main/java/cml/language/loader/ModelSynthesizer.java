@@ -4,6 +4,7 @@ import cml.language.expressions.*;
 import cml.language.features.*;
 import cml.language.generated.*;
 import cml.language.grammar.CMLBaseListener;
+import cml.language.grammar.CMLParser;
 import cml.language.grammar.CMLParser.*;
 import cml.language.types.*;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -259,6 +260,7 @@ class ModelSynthesizer extends CMLBaseListener
         else if (ctx.operator != null && ctx.expression().size() == 1) ctx.expr = createUnary(ctx);
         else if (ctx.operator != null && ctx.expression().size() == 2) ctx.expr = createInfix(ctx);
         else if (ctx.cond != null) ctx.expr = conditionalExpressionOf(ctx);
+        else if (ctx.varExpr != null) ctx.expr = letExpressionOf(ctx);
         else if (ctx.inner != null) ctx.expr = ctx.inner.expr;
 
         createLocation(ctx, ctx.expr);
@@ -323,13 +325,22 @@ class ModelSynthesizer extends CMLBaseListener
         }
     }
 
-    public TempConditional conditionalExpressionOf(final ExpressionContext ctx)
+    private TempConditional conditionalExpressionOf(final ExpressionContext ctx)
     {
         final Expression cond = ctx.cond.expr;
         final Expression then = ctx.then.expr;
         final Expression else_ = ctx.else_.expr;
 
         return new TempConditional(cond, then, else_);
+    }
+
+    private Expression letExpressionOf(final ExpressionContext ctx)
+    {
+        final Expression variableExpr = ctx.varExpr.expr;
+        final Expression resultExpr = ctx.resultExpr.expr;
+        final String variable = ctx.var.getText();
+
+        return Let.createLet(asList(variableExpr, resultExpr), null, locationOf(ctx), variable);
     }
 
     @Override

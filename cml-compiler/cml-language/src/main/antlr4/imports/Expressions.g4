@@ -45,7 +45,10 @@ expression returns [Expression expr]
   | IF cond=expression
     THEN then=expression ELSE else_=expression
   | then=expression conj=(GIVEN | UNLESS) cond=expression
-  | then=expression (ORQ | XORQ) else_=expression;
+  | then=expression (ORQ | XORQ) else_=expression
+
+  // Let Expressions:
+  | LET var=NAME '=' varExpr=expression IN resultExpr=expression;
 
 pathExpression returns [Path path]:
   NAME ('.' NAME)*;

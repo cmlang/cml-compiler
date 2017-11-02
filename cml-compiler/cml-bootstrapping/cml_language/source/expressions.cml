@@ -27,6 +27,22 @@
   /diagnostic_id = text;
 }
 
+@concept LET: EXPRESSION
+{
+  variable: string;
+
+  /kind = "let";
+
+  /variableExpr = first(operands) as! EXPRESSION;
+  /resultExpr = last(operands) as! EXPRESSION;
+
+  /type = resultExpr.type;
+
+  /diagnostic_id =  
+    "let " & variable & " = " & variableExpr.diagnostic_id &
+    " in " & resultExpr.diagnostic_id;
+}
+
 @abstraction INFIX: EXPRESSION
 {
   operator: string;

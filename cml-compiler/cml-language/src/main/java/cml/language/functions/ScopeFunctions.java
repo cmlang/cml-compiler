@@ -78,6 +78,15 @@ public class ScopeFunctions
         {
             return ofNullable(selfTypeOf(scope));
         }
+        else if (scope instanceof Let)
+        {
+            final Let let = (Let) scope;
+
+            if (let.getVariable().equals(name))
+            {
+                return Optional.of(let.getVariableExpr().getType());
+            }
+        }
         else if (scope instanceof LambdaScope)
         {
             final LambdaScope lambdaScope = (LambdaScope) scope;
