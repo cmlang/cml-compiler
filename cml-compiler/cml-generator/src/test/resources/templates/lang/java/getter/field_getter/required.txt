@@ -1,4 +1,4 @@
 public SomeType getSomeProperty()
 {
-    return this.someProperty;
+    return someProperty;
 }

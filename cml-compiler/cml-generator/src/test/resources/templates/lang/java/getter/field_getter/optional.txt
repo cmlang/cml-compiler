@@ -1,4 +1,4 @@
 public Optional<SomeType> getSomeProperty()
 {
-    return Optional.ofNullable(this.someProperty);
+    return Optional.ofNullable(someProperty);
 }

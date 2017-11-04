@@ -1,4 +1,4 @@
 public List<SomeType> getSomeProperty()
 {
-    return Collections.unmodifiableList(this.someProperty);
+    return Collections.unmodifiableList(someProperty);
 }
