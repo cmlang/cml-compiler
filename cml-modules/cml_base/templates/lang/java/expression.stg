@@ -34,6 +34,10 @@ seq(<expression(arg)>).toList()
 >>
 
 expression_let(let) ::= <<
+<expression_let_("", let)>
+>>
+
+expression_let_(field_access_prefix, let) ::= <<
 new Supplier\<<boxed_type_name(let.type)>\>() {
 <indent()>public <boxed_type_name(let.type)> get()
 <indent()>{
