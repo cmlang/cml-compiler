@@ -10,6 +10,9 @@ ASSOCIATION files:
 ASSOCIATION_END files:
 - src/main/java/cml/language/generated/AssociationEnd.java
 
+BINDING files:
+- src/main/java/cml/language/generated/Binding.java
+
 CONCEPT files:
 - src/main/java/cml/language/generated/Concept.java
 
@@ -105,6 +108,12 @@ UNDEFINED_TYPE files:
 
 ASSOCIATION_END_PROPERTY files:
 - src/main/java/cml/language/generated/AssociationEndProperty.java
+
+CONCEPT_BINDING files:
+- src/main/java/cml/language/generated/ConceptBinding.java
+
+REFERENCE_TYPE_BINDING files:
+- src/main/java/cml/language/generated/ReferenceTypeBinding.java
 
 GENERALIZATION files:
 - src/main/java/cml/language/generated/Generalization.java
