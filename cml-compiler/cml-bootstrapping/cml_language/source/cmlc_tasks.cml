@@ -9,9 +9,11 @@
     classTypeNamePrefix = "";
 }
 
+/*
 @task cml_language_py: cmlc_py
 {
     moduleName = "cml_language";
     moduleVersion = "master-SNAPSHOT";
     classTypeNamePrefix = "CML";
 }
+*/
