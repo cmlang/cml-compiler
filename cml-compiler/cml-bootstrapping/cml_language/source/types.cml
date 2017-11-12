@@ -63,19 +63,9 @@
 @concept REFERENCE_TYPE: TYPE
 {
   name: string;
-  binding: BINDING?;
 
-  /concept = binding.concept;
-
-  /element_type =
-    let ref_type = REFERENCE_TYPE("", name, none) in
-    let binding = BINDING(concept as! CONCEPT, ref_type) in
-    ref_type;
-    
-  /inferred_type =
-    let ref_type = REFERENCE_TYPE(inferred_cardinality, name, none) in
-    let binding = BINDING(concept as! CONCEPT, ref_type) in
-    ref_type;
+  /element_type = REFERENCE_TYPE("", name);
+  /inferred_type = REFERENCE_TYPE(inferred_cardinality, name);
 }
 
 @concept UNDEFINED_TYPE: TYPE

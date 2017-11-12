@@ -6,10 +6,6 @@
     generalizations: INHERITANCE*;
     specializations: INHERITANCE*;
 
-    binding: BINDING?;
-
-    /type = binding.type;
-
     /ancestors = generalizations.ancestor;
     /descendants = specializations.descendant;
 
