@@ -131,7 +131,7 @@ class ConceptImpl implements TempConcept
         final NamedElement namedElement = extendNamedElement(this, element, modelElement, name);
         final Scope scope = extendScope(this, element, modelElement, seq(properties).map(p -> (ModelElement)p).toList());
         final PropertyList propertyList = extendPropertyList(this, element, modelElement, scope);
-        this.concept = extendConcept(this, element, modelElement, scope, namedElement, propertyList, abstraction, emptyList(), emptyList(), null);
+        this.concept = extendConcept(this, element, modelElement, scope, namedElement, propertyList, abstraction, emptyList(), emptyList());
     }
 
     @Override
@@ -264,18 +264,6 @@ class ConceptImpl implements TempConcept
     public List<Inheritance> getSpecializations()
     {
         return concept.getSpecializations();
-    }
-
-    @Override
-    public Optional<Binding> getBinding()
-    {
-        return concept.getBinding();
-    }
-
-    @Override
-    public Optional<ReferenceType> getType()
-    {
-        return concept.getType();
     }
 
     @Override

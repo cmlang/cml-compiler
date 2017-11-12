@@ -2,7 +2,6 @@ package cml.language.expressions;
 
 import cml.language.features.Function;
 import cml.language.features.FunctionParameter;
-import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.generated.Concept;
 import cml.language.generated.Expression;
@@ -42,7 +41,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else if (getConcept().isPresent())
         {
-            final TempConcept concept = getConcept().get();
+            final Concept concept = getConcept().get();
 
             return seq(concept.getInvocationProperties())
                 .map(p -> new FunctionParameter(p.getName(), p.getType()))
@@ -81,8 +80,8 @@ public interface Invocation extends Expression, NamedElement
     Optional<Function> getFunction();
     void setFunction(@NotNull Function function);
 
-    Optional<TempConcept> getConcept();
-    void setConcept(@NotNull TempConcept concept);
+    Optional<Concept> getConcept();
+    void setConcept(@NotNull Concept concept);
 
     default Type getInferredType()
     {
@@ -94,7 +93,7 @@ public interface Invocation extends Expression, NamedElement
         }
         else if (getConcept().isPresent())
         {
-            final TempConcept concept = getConcept().get();
+            final Concept concept = getConcept().get();
             final TempNamedType namedType = TempNamedType.create(concept.getName());
 
             namedType.setConcept(concept);
@@ -125,7 +124,7 @@ public interface Invocation extends Expression, NamedElement
 
                 if (paramIndex < getArguments().size())
                 {
-                    Type paramType = (Type) getArguments().get(paramIndex).getMatchingResultType();
+                    Type paramType = getArguments().get(paramIndex).getMatchingResultType();
 
                     if (paramType.isUndefined())
                     {
@@ -133,7 +132,7 @@ public interface Invocation extends Expression, NamedElement
 
                         if (paramIndex < getArguments().size())
                         {
-                            paramType = (Type) getArguments().get(paramIndex).getMatchingResultType();
+                            paramType = getArguments().get(paramIndex).getMatchingResultType();
                         }
                     }
 
@@ -202,8 +201,8 @@ public interface Invocation extends Expression, NamedElement
 
     default boolean typeMatches(final FunctionParameter param, final Expression argument)
     {
-        final Type paramType = (Type) param.getMatchingResultType();
-        final Type argumentType = (Type) argument.getMatchingResultType();
+        final Type paramType = param.getMatchingResultType();
+        final Type argumentType = argument.getMatchingResultType();
 
         return !argumentType.isUndefined() && isAssignableFrom(getMatchingTypeOf(paramType), argumentType);
     }
@@ -226,7 +225,7 @@ class InvocationImpl extends ExpressionBase implements Invocation
     private final List<Expression> arguments;
 
     private @Nullable Function function;
-    private @Nullable TempConcept concept;
+    private @Nullable Concept concept;
 
     InvocationImpl(String name, List<Expression> arguments)
     {
@@ -266,13 +265,13 @@ class InvocationImpl extends ExpressionBase implements Invocation
     }
 
     @Override
-    public Optional<TempConcept> getConcept()
+    public Optional<Concept> getConcept()
     {
         return Optional.ofNullable(concept);
     }
 
     @Override
-    public void setConcept(@NotNull final TempConcept concept)
+    public void setConcept(@NotNull final Concept concept)
     {
         assert this.concept == null;
 
@@ -317,7 +316,7 @@ class ParameterizedInvocation extends ExpressionBase implements Invocation
     private final LinkedHashMap<String, Expression> namedArguments;
 
     private @Nullable Function function;
-    private @Nullable TempConcept concept;
+    private @Nullable Concept concept;
 
     ParameterizedInvocation(String name, LinkedHashMap<String, Expression> namedArguments)
     {
@@ -355,13 +354,13 @@ class ParameterizedInvocation extends ExpressionBase implements Invocation
     }
 
     @Override
-    public Optional<TempConcept> getConcept()
+    public Optional<Concept> getConcept()
     {
         return Optional.ofNullable(concept);
     }
 
     @Override
-    public void setConcept(@NotNull final TempConcept concept)
+    public void setConcept(@NotNull final Concept concept)
     {
         this.concept = concept;
     }

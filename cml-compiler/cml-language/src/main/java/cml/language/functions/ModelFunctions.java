@@ -1,13 +1,10 @@
 package cml.language.functions;
 
 import cml.language.features.Function;
-import cml.language.features.TempConcept;
 import cml.language.features.TempModule;
 import cml.language.features.Template;
 import cml.language.foundation.TempModel;
-import cml.language.generated.Association;
-import cml.language.generated.Module;
-import cml.language.generated.Task;
+import cml.language.generated.*;
 
 import java.util.Optional;
 
@@ -27,12 +24,11 @@ public class ModelFunctions
         return Optional.empty();
     }
 
-    public static Optional<TempConcept> conceptOf(TempModel model, String name)
+    public static Optional<Concept> conceptOf(Model model, String name)
     {
         return model.getConcepts()
                     .stream()
                     .filter(concept -> concept.getName().equals(name))
-                    .map(c -> (TempConcept)c)
                     .findFirst();
     }
 

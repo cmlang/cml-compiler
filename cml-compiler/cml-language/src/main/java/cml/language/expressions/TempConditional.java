@@ -1,5 +1,6 @@
 package cml.language.expressions;
 
+import cml.language.generated.Concept;
 import cml.language.generated.Conditional;
 import cml.language.generated.Expression;
 import cml.language.generated.Type;
@@ -7,6 +8,7 @@ import cml.language.types.TempNamedType;
 
 import java.util.Optional;
 
+import static cml.language.functions.ModelFunctions.conceptOf;
 import static cml.language.functions.TypeFunctions.firstGeneralizationAssignableFrom;
 import static cml.language.functions.TypeFunctions.isAssignableFrom;
 import static cml.language.generated.Conditional.extendConditional;
@@ -61,21 +63,27 @@ public class TempConditional extends ExpressionBase implements Conditional
         {
             return elseType;
         }
-        else if (thenType.getConcept().isPresent() && elseType.getConcept().isPresent())
+        else
         {
-            final Optional<Type> thenTypeGeneralization = firstGeneralizationAssignableFrom(thenType, elseType);
+            final Optional<Concept> concept1 = getModel().flatMap(m -> conceptOf(m, thenType.getName()));
+            final Optional<Concept> concept2 = getModel().flatMap(m -> conceptOf(m, elseType.getName()));
 
-            if (thenTypeGeneralization.isPresent())
+            if (concept1.isPresent() && concept2.isPresent())
             {
-                return thenTypeGeneralization.get();
-            }
-            else
-            {
-                final Optional<Type> elseTypeGeneralization = firstGeneralizationAssignableFrom(thenType, elseType);
+                final Optional<Type> thenTypeGeneralization = firstGeneralizationAssignableFrom(thenType, elseType);
 
-                if (elseTypeGeneralization.isPresent())
+                if (thenTypeGeneralization.isPresent())
                 {
-                    return elseTypeGeneralization.get();
+                    return thenTypeGeneralization.get();
+                }
+                else
+                {
+                    final Optional<Type> elseTypeGeneralization = firstGeneralizationAssignableFrom(thenType, elseType);
+
+                    if (elseTypeGeneralization.isPresent())
+                    {
+                        return elseTypeGeneralization.get();
+                    }
                 }
             }
         }
