@@ -29,3 +29,5 @@
 
     /diagnostic_id = name;
 }
+
+@function concept_of(m: MODEL, t: TYPE) = m.concepts | select: c -> c.name == t.name | first;

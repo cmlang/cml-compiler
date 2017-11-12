@@ -201,12 +201,6 @@ class ConceptImpl implements TempConcept
     }
 
     @Override
-    public List<Type> getPropertyConceptTypes()
-    {
-        return concept.getPropertyConceptTypes();
-    }
-
-    @Override
     public List<Association> getAssociations()
     {
         return concept.getAssociations();

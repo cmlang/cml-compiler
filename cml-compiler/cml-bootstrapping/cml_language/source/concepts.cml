@@ -36,8 +36,12 @@
     /printable_properties = all_properties | select: printable;
 
     /property_types = all_properties.type;
-    /property_concept_types = property_types | select: not primitive and present(concept);
-    /property_concepts = distinct(property_concept_types.concept);
+    /property_concepts =
+      property_types
+        | select: not primitive
+        | select: t -> present(concept_of(model as! MODEL, t))
+        | collect: t -> concept_of(model as! MODEL, t) as! CONCEPT
+        | distinct;
 
     /associations = model.associations | select: (association_ends | exists: associated_concept === self);
 
