@@ -41,4 +41,8 @@ function_result(function) ::= <<
 <({expression_<function.expression.type.kind>_to_<function.type.kind>})(function.expression)>
 >>
 
-path_root_call_self_field(path) ::= "<field_name(path)>"
+path_root_call_self_field(path) ::= <<
+<if(path.type.optional)>Optional.ofNullable(<endif><\\>
+<field_name(path)><\\>
+<if(path.type.optional)>)<endif>
+>>
