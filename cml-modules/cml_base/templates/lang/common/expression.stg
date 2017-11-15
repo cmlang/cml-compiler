@@ -82,7 +82,31 @@ expression_invocation(invocation) ::= <<
 >>
 
 expression_arg(param, args) ::= <<
-<({expression_<args.(param.name).type.kind>_to_<param.type.kind>})(args.(param.name))>
+<({arg_<args.(param.name).type.kind>_to_<param.type.kind>})(args.(param.name))>
+>>
+
+arg_required_to_required(arg) ::= <<
+<expression(arg)>
+>>
+
+arg_required_to_optional(arg) ::= <<
+Optional.of(<expression(arg)>)
+>>
+
+arg_required_to_sequence(arg) ::= <<
+Seq.of(<expression(arg)>).toList()
+>>
+
+arg_optional_to_optional(arg) ::= <<
+<expression(arg)>.orElse(<field_default_value(expr.type)>)
+>>
+
+arg_optional_to_sequence(arg) ::= <<
+seq(<expression(arg)>).toList()
+>>
+
+arg_sequence_to_sequence(arg) ::= <<
+seq(<expression(arg)>).toList()
 >>
 
 expression_type_check(type_check) ::= <<
