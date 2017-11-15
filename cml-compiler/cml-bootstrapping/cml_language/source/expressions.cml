@@ -161,10 +161,10 @@
     )
     else if present(thenType.concept) and present(elseType.concept) then
     (
-      if count(concept_lub) == 1 then first(concept_lub) as! TYPE;
+      if count(concept_lub) == 1 then first(concept_lub) as! TYPE
     )
 
-  /concept_lub = lower_upper_bound(thenType.concept, elseType.concept);
+  /concept_lub = lower_upper_bound(concept_of(model, thenType), concept_of(model, elseType));
 
   /undefined_type = UNDEFINED_TYPE(thenType.diagnostic_id & "|" & elseType.diagnostic_id);
 */

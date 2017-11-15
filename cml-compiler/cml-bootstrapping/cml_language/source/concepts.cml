@@ -39,8 +39,8 @@
     /property_concepts =
       property_types
         | select: not primitive
-        | select: t -> present(concept_of(model as! MODEL, t))
-        | collect: t -> concept_of(model as! MODEL, t) as! CONCEPT
+        | select: t -> present(concept_of(model, t))
+        | collect: t -> concept_of(model, t) as! CONCEPT
         | distinct;
 
     /associations = model.associations | select: (association_ends | exists: associated_concept === self);
